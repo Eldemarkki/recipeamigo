@@ -21,9 +21,9 @@ export default function Home(props: HomeProps) {
       <div>
         <Link href="/login">Login</Link>
       </div>
-      <div>
+      {props.user && <div>
         <Link href="/profile">Profile</Link>
-      </div>
+      </div>}
       {props.user && <div>
         Logged in as {typeof props.user === "string" ? props.user : props.user.sub}
       </div>}
