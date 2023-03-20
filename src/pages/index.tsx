@@ -1,7 +1,15 @@
 import Head from "next/head";
 import config from "../config";
+import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { getUserFromRequest } from "../utils/auth";
+import { JwtPayload } from "jsonwebtoken";
 
-export default function Home() {
+type HomeProps = {
+  user: string | JwtPayload | null;
+}
+
+export default function Home(props: HomeProps) {  
   return <>
     <Head>
       <title>{config.APP_NAME}</title>
@@ -10,6 +18,25 @@ export default function Home() {
     </Head>
     <main>
       <h1>{config.APP_NAME}</h1>
+      <div>
+        <Link href="/login">Login</Link>
+      </div>
+      <div>
+        <Link href="/profile">Profile</Link>
+      </div>
+      {props.user && <div>
+        Logged in as {typeof props.user === "string" ? props.user : props.user.sub}
+      </div>}
     </main>
   </>;
 }
+
+export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req }) => {
+  const user = await getUserFromRequest(req);
+
+  return {
+    props: {
+      user: user
+    },
+  };
+};
