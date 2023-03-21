@@ -30,11 +30,16 @@ export const getUserFromRequest = async (req: {
   const jwks = text;
   const signingKey = jwks.keys[0];
   const pem = jwkToPem(signingKey);
-  const isValid = verify(token, pem, { algorithms: ["RS256"] });
-  if (!isValid) {
+  try {
+    const isValid = verify(token, pem, { algorithms: ["RS256"] });
+    if (!isValid) {
+      return null;
+    }
+
+    const decoded = decode(token);
+    return decoded;
+  }
+  catch (e) {
     return null;
   }
-
-  const decoded = decode(token);
-  return decoded;
 };
