@@ -8,13 +8,14 @@ datasource db {
 }
 
 model Recipe {
-  id          String       @id @default(uuid())
-  name        String
-  description String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  userId      String
-  Ingredients Ingredient[]
+  id           String       @id @default(uuid())
+  name         String
+  description  String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  userId       String
+  ingredients  Ingredient[]
+  instructions String[]
 }
 
 model Ingredient {

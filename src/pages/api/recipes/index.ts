@@ -2,10 +2,21 @@ import { NextApiHandler } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { createRecipe, getAllRecipesForUser } from "../../../database/recipes";
 import z from "zod";
+import { IngredientUnit } from "@prisma/client";
 
-const createRecipeSchema = z.object({
+export const ingredientUnitSchema = z.nativeEnum(IngredientUnit);
+
+export const ingredientSchema = z.object({
   name: z.string(),
-  description: z.string()
+  quantity: z.number().nonnegative(),
+  unit: ingredientUnitSchema.optional()
+});
+
+export const createRecipeSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  ingredients: z.array(ingredientSchema),
+  instructions: z.array(z.string())
 });
 
 const handler: NextApiHandler = async (req, res) => {
