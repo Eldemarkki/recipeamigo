@@ -40,3 +40,15 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
     }
   });
 };
+
+export const getSingleRecipe = async (id: string) => {
+  const recipe = await prisma.recipe.findUnique({
+    where: {
+      id
+    },
+    include: {
+      ingredients: true
+    }
+  });
+  return recipe;
+};

@@ -17,6 +17,7 @@ export const RecipeCardGrid = (props: RecipeCardGridProps) => {
   return <Grid>
     {props.recipes.map(recipe => <RecipeCard
       key={recipe.id}
+      id={recipe.id}
       name={recipe.name}
       description={recipe.description}
     />)}

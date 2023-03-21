@@ -5,6 +5,8 @@ import { InstructionList } from "../../../components/recipeEngine/InstructionLis
 import styled from "styled-components";
 import { z } from "zod";
 import { createRecipeSchema } from "../../api/recipes";
+import { useRouter } from "next/router";
+import { Ingredient, Recipe } from "@prisma/client";
 
 const Container = styled.div({
   display: "flex",
@@ -58,16 +60,22 @@ const saveRecipe = async (name: string, description: string, ingredients: RawIng
     instructions
   };
 
-  await fetch("/api/recipes", {
+  const response = await fetch("/api/recipes", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(recipe)
   });
+
+  const data = await response.json();
+
+  return data as Recipe & { ingredients: Ingredient[] };
 };
 
 export default function NewRecipePage() {
+  const router = useRouter();
+
   const [name, setName] = useState("New recipe");
   const [description, setDescription] = useState("");
 
@@ -88,9 +96,11 @@ export default function NewRecipePage() {
   ]);
 
   return <Container>
-    <form onSubmit={(e) => {
+    <form onSubmit={async (e) => {
       e.preventDefault();
-      saveRecipe(name, description, ingredients, instructions);
+      // TODO: Show loading indicator while saving
+      const recipe = await saveRecipe(name, description, ingredients, instructions);
+      router.push("/recipe/" + recipe.id);
     }}>
       <TopRow>
         <div style={{

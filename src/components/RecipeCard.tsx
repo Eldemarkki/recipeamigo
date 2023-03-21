@@ -1,6 +1,8 @@
+import Link from "next/link";
 import styled from "styled-components";
 
 export type RecipeCardProps = {
+  id: string;
   name: string;
   description: string;
 }
@@ -24,7 +26,11 @@ const RecipeDescription = styled.p({
 
 export const RecipeCard = (props: RecipeCardProps) => {
   return <Container>
-    <RecipeName>{props.name}</RecipeName>
+    <Link href={`/recipe/${props.id}`}>
+      <RecipeName>
+        {props.name}
+      </RecipeName>
+    </Link>
     <RecipeDescription>{props.description}</RecipeDescription>
   </Container>;
 };
