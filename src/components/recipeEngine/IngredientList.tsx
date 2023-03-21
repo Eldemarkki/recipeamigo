@@ -10,8 +10,7 @@ export type IngredientListProps = {
 const Container = styled.div({
   display: "flex",
   flexDirection: "column",
-  width: 350,
-  gap: "2rem"
+  gap: "1rem"
 });
 
 const IngredientListContainer = styled.div({
@@ -39,7 +38,7 @@ export const IngredientList = ({ ingredients, addIngredient, removeIngredient }:
       ))}
     </IngredientListContainer>}
     <div>
-      <h2>New ingredient</h2>
+      <h3>New ingredient</h3>
       <IngredientForm addIngredient={addIngredient} />
     </div>
   </Container>;

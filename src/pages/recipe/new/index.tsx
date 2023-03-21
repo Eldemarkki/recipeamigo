@@ -2,6 +2,51 @@ import { useState } from "react";
 import { IngredientList } from "../../../components/recipeEngine/IngredientList";
 import { RawIngredient } from "../../../components/recipeEngine/IngredientForm";
 import { InstructionList } from "../../../components/recipeEngine/InstructionList";
+import styled from "styled-components";
+
+const Container = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  padding: "5rem",
+  gap: "2rem",
+});
+
+const SplitContainer = styled.main({
+  display: "flex",
+  gap: "10rem"
+});
+
+const LeftPanel = styled.div({
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  maxWidth: 350
+});
+
+const RightPanel = styled.div({
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+});
+
+const Title = styled.h1({
+  margin: 0
+});
+
+const TopRow = styled.div({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
+const AddRecipeButton = styled.button({
+  backgroundColor: "#f2c61d",
+  border: "3px solid #d9b526",
+  borderRadius: "1rem",
+  padding: "0.3rem 1.2rem",
+  textDecoration: "none",
+  fontSize: "1rem",
+});
 
 export default function NewRecipePage() {
   const [ingredients, setIngredients] = useState<RawIngredient[]>([{
@@ -20,19 +65,28 @@ export default function NewRecipePage() {
     "Mix eggs and milk",
   ]);
 
-  return <main style={{
-    margin: 300,
-  }}>
-    <h1>New recipe</h1>
-    {/* <IngredientList
-      ingredients={ingredients}
-      addIngredient={(ingredient) => setIngredients([...ingredients, ingredient])}
-      removeIngredient={(index) => setIngredients(ingredients.filter((_, i) => i !== index))}
-    /> */}
-    <InstructionList
-      instructions={instructions}
-      addInstruction={(instruction) => setInstructions([...instructions, instruction])}
-      removeInstruction={(index) => setInstructions(instructions.filter((_, i) => i !== index))}
-    />
-  </main>;
+  return <Container>
+    <TopRow>
+      <Title>New recipe</Title>
+      <AddRecipeButton>Save recipe</AddRecipeButton>
+    </TopRow>
+    <SplitContainer>
+      <LeftPanel>
+        <h2>Ingredients</h2>
+        <IngredientList
+          ingredients={ingredients}
+          addIngredient={(ingredient) => setIngredients([...ingredients, ingredient])}
+          removeIngredient={(index) => setIngredients(ingredients.filter((_, i) => i !== index))}
+        />
+      </LeftPanel>
+      <RightPanel>
+        <h2>Instructions</h2>
+        <InstructionList
+          instructions={instructions}
+          addInstruction={(instruction) => setInstructions([...instructions, instruction])}
+          removeInstruction={(index) => setInstructions(instructions.filter((_, i) => i !== index))}
+        />
+      </RightPanel>
+    </SplitContainer>
+  </Container >;
 }

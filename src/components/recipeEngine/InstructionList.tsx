@@ -7,7 +7,15 @@ export type InstructionListProps = {
   removeInstruction: (index: number) => void;
 }
 
-const Container = styled.ol({
+const Container = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+  maxWidth: 500
+});
+
+const ListContainer = styled.ol({
+  margin: 0,
   display: "flex",
   flexDirection: "column",
 });
@@ -35,8 +43,8 @@ const AddButton = styled.button({
 export const InstructionList = ({ instructions, addInstruction, removeInstruction }: InstructionListProps) => {
   const [newInstruction, setNewInstruction] = useState("");
 
-  return <div>
-    <Container>
+  return <Container>
+    <ListContainer>
       {instructions.map((instruction, index) => (
         <li key={instruction}>
           <InstructionListItem>
@@ -45,7 +53,7 @@ export const InstructionList = ({ instructions, addInstruction, removeInstructio
           </InstructionListItem>
         </li>
       ))}
-    </Container>
+    </ListContainer>
     <Form onSubmit={(e) => {
       e.preventDefault();
       addInstruction(newInstruction);
@@ -60,5 +68,5 @@ export const InstructionList = ({ instructions, addInstruction, removeInstructio
       />
       <AddButton type="submit">Add instruction</AddButton>
     </Form>
-  </div>;
+  </Container>;
 };
