@@ -8,10 +8,44 @@ datasource db {
 }
 
 model Recipe {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   name        String
   description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   userId      String
+  Ingredients Ingredient[]
+}
+
+model Ingredient {
+  id       String          @id @default(uuid())
+  name     String
+  quantity Float
+  unit     IngredientUnit?
+  recipe   Recipe          @relation(fields: [recipeId], references: [id])
+  recipeId String
+}
+
+enum IngredientUnit {
+  GRAM
+  CUP
+  TEASPOON
+  TABLESPOON
+  OUNCE
+  POUND
+  MILLILITER
+  DECILITER
+  LITER
+  PINCH
+  DASH
+  CLOVE
+  QUART
+  PINT
+  GALLON
+  KILOGRAM
+  SLICE
+  HANDFUL
+  CAN
+  BOTTLE
+  PACKAGE
 }
