@@ -48,7 +48,14 @@ const AddRecipeButton = styled.button({
   fontSize: "1rem",
 });
 
+const RecipeNameInput = styled.input({
+  fontSize: "2rem",
+});
+
 export default function NewRecipePage() {
+  const [name, setName] = useState("New recipe");
+  const [description, setDescription] = useState("");
+
   const [ingredients, setIngredients] = useState<RawIngredient[]>([{
     name: "Eggs",
     quantity: 12,
@@ -66,10 +73,35 @@ export default function NewRecipePage() {
   ]);
 
   return <Container>
-    <TopRow>
-      <Title>New recipe</Title>
-      <AddRecipeButton>Save recipe</AddRecipeButton>
-    </TopRow>
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      console.log("TODO: Saving recipe");
+    }}>
+      <TopRow>
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem"
+        }}>
+          <RecipeNameInput
+            type="text"
+            placeholder="Recipe name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </div>
+        <AddRecipeButton type="submit">Save recipe</AddRecipeButton>
+      </TopRow>
+    </form>
+    {/* TODO: Add h1 tag somewhere*/}
     <SplitContainer>
       <LeftPanel>
         <h2>Ingredients</h2>
