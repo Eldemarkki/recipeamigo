@@ -11,6 +11,7 @@
   "dependencies": {
     "@prisma/client": "^4.11.0",
     "@teamhanko/hanko-elements": "^0.2.2-alpha",
+    "@types/styled-components": "^5.1.26",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "jsonwebtoken": "^9.0.0",
@@ -18,6 +19,7 @@
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "styled-components": "^5.3.9",
     "typescript": "5.0.2",
     "zod": "^3.21.4"
   },

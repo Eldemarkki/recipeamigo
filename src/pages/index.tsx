@@ -1,42 +1,53 @@
-import Head from "next/head";
 import config from "../config";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../utils/auth";
 import { JwtPayload } from "jsonwebtoken";
+import { Recipe } from "@prisma/client";
+import { getAllRecipesForUser } from "../database/recipes";
+import { ConvertDates } from "../utils/types";
 
 type HomeProps = {
-  user: string | JwtPayload | null;
+  user: string | JwtPayload;
+  recipes: ConvertDates<Recipe>[];
 }
 
-export default function Home(props: HomeProps) {  
-  return <>
-    <Head>
-      <title>{config.APP_NAME}</title>
-      <meta name="description" content="Recipe sharing website" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-    </Head>
-    <main>
-      <h1>{config.APP_NAME}</h1>
-      <div>
-        <Link href="/login">Login</Link>
-      </div>
-      {props.user && <div>
-        <Link href="/profile">Profile</Link>
-      </div>}
-      {props.user && <div>
-        Logged in as {typeof props.user === "string" ? props.user : props.user.sub}
-      </div>}
-    </main>
-  </>;
+export default function Home(props: HomeProps) {
+  return <main>
+    <h1>{config.APP_NAME}</h1>
+    <Link href="/profile">Profile</Link>
+    <div>Logged in as {typeof props.user === "string" ? props.user : props.user.sub}</div>
+    <ul>
+      {props.recipes.map(recipe => <li key={recipe.id}>{recipe.name}</li>)}
+    </ul>
+  </main>;
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req }) => {
   const user = await getUserFromRequest(req);
 
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      }
+    };
+  }
+
+  const userId = typeof user === "string" ? null : user.sub;
+  if (!userId) throw new Error("User id is null");
+
+  const recipes = await getAllRecipesForUser(userId);
+
   return {
     props: {
-      user: user
+      user: user,
+      recipes: recipes.map(recipe => ({
+        ...recipe,
+        createdAt: recipe.createdAt.getTime(),
+        updatedAt: recipe.updatedAt.getTime(),
+      }))
     },
   };
 };
