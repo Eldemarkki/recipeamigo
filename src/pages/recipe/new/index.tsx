@@ -3,6 +3,8 @@ import { IngredientList } from "../../../components/recipeEngine/IngredientList"
 import { RawIngredient } from "../../../components/recipeEngine/IngredientForm";
 import { InstructionList } from "../../../components/recipeEngine/InstructionList";
 import styled from "styled-components";
+import { z } from "zod";
+import { createRecipeSchema } from "../../api/recipes";
 
 const Container = styled.div({
   display: "flex",
@@ -29,10 +31,6 @@ const RightPanel = styled.div({
   flexDirection: "column",
 });
 
-const Title = styled.h1({
-  margin: 0
-});
-
 const TopRow = styled.div({
   display: "flex",
   justifyContent: "space-between",
@@ -51,6 +49,23 @@ const AddRecipeButton = styled.button({
 const RecipeNameInput = styled.input({
   fontSize: "2rem",
 });
+
+const saveRecipe = async (name: string, description: string, ingredients: RawIngredient[], instructions: string[]) => {
+  const recipe: z.infer<typeof createRecipeSchema> = {
+    name,
+    description,
+    ingredients,
+    instructions
+  };
+
+  await fetch("/api/recipes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(recipe)
+  });
+};
 
 export default function NewRecipePage() {
   const [name, setName] = useState("New recipe");
@@ -75,7 +90,7 @@ export default function NewRecipePage() {
   return <Container>
     <form onSubmit={(e) => {
       e.preventDefault();
-      console.log("TODO: Saving recipe");
+      saveRecipe(name, description, ingredients, instructions);
     }}>
       <TopRow>
         <div style={{
