@@ -20,6 +20,8 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
       name: recipe.name,
       description: recipe.description,
       instructions: recipe.instructions,
+      quantity: recipe.quantity,
+      isPublic: recipe.isPublic,
       userId,
     }
   });

@@ -16,7 +16,9 @@ export const createRecipeSchema = z.object({
   name: z.string(),
   description: z.string(),
   ingredients: z.array(ingredientSchema),
-  instructions: z.array(z.string())
+  instructions: z.array(z.string()),
+  quantity: z.number().min(1),
+  isPublic: z.boolean()
 });
 
 const handler: NextApiHandler = async (req, res) => {

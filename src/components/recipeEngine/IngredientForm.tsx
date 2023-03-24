@@ -2,6 +2,7 @@ import { Ingredient, IngredientUnit } from "@prisma/client";
 import { useId, useState } from "react";
 import styled from "styled-components";
 import { capitalizeFirstLetter } from "../../utils/stringUtils";
+import { NumberInput } from "../forms/NumberInput";
 
 export type RawIngredient = Omit<Ingredient, "id" | "recipeId">;
 
@@ -37,10 +38,7 @@ const InputLabel = styled.label({
 
 export const IngredientForm = ({ addIngredient }: IngredientFormProps) => {
   const [ingredientName, setIngredientName] = useState("");
-
-  const [ingredientAmountRaw, setIngredientAmountRaw] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState(0);
-
   const [ingredientUnit, setIngredientUnit] = useState<IngredientUnit | null>(null);
 
   const ingredientNameId = useId();
@@ -55,7 +53,6 @@ export const IngredientForm = ({ addIngredient }: IngredientFormProps) => {
     });
     setIngredientName("");
     setIngredientAmount(0);
-    setIngredientAmountRaw("");
     setIngredientUnit(null);
   }}>
     <InputContainer>
@@ -70,29 +67,13 @@ export const IngredientForm = ({ addIngredient }: IngredientFormProps) => {
     </InputContainer>
     <InputContainer>
       <InputLabel htmlFor={ingredientAmountId}>Amount</InputLabel>
-      <input
+      <NumberInput
         id={ingredientAmountId}
-        value={ingredientAmountRaw}
-        onChange={(event) => {
-          setIngredientAmountRaw(event.target.value);
-        }}
-        onBlur={(event) => {
-          const val = event.target.value;
-          if (val === "") {
-            setIngredientAmountRaw("");
-            return setIngredientAmount(0);
-          }
-          const num = Number(val.replace(",", "."));
-          if (isNaN(num)) {
-            setIngredientAmountRaw("0");
-            return;
-          }
-          setIngredientAmountRaw(num.toString());
-          return setIngredientAmount(num);
-        }}
-        type="text"
         min={0}
         required
+        onChange={(val) => {
+          setIngredientAmount(val);
+        }}
       />
     </InputContainer>
     <InputContainer>

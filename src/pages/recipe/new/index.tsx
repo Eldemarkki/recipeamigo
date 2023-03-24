@@ -7,6 +7,7 @@ import { z } from "zod";
 import { createRecipeSchema } from "../../api/recipes";
 import { useRouter } from "next/router";
 import { Ingredient, Recipe } from "@prisma/client";
+import { NumberInput } from "../../../components/forms/NumberInput";
 
 const Container = styled.div({
   display: "flex",
@@ -52,12 +53,21 @@ const RecipeNameInput = styled.input({
   fontSize: "2rem",
 });
 
-const saveRecipe = async (name: string, description: string, ingredients: RawIngredient[], instructions: string[]) => {
+const saveRecipe = async (
+  name: string,
+  description: string,
+  ingredients: RawIngredient[],
+  instructions: string[],
+  quantity: number,
+  isPublic: boolean
+) => {
   const recipe: z.infer<typeof createRecipeSchema> = {
     name,
     description,
     ingredients,
-    instructions
+    instructions,
+    quantity,
+    isPublic
   };
 
   const response = await fetch("/api/recipes", {
@@ -95,12 +105,21 @@ export default function NewRecipePage() {
     "Mix eggs and milk",
   ]);
 
+  const [recipeQuantity, setRecipeQuantity] = useState(1);
+  const [isPublic, setIsPublic] = useState(false);
+
   return <Container>
     <form onSubmit={async (e) => {
       e.preventDefault();
       // TODO: Show loading indicator while saving
-      const recipe = await saveRecipe(name, description, ingredients, instructions);
-      router.push("/recipe/" + recipe.id);
+      const recipe = await saveRecipe(name, description, ingredients, instructions, recipeQuantity, isPublic);
+      if (recipe) {
+        router.push("/recipe/" + recipe.id);
+      }
+      else {
+        // TODO: Show a notification to the user that the recipe failed to save.
+        console.log("Failed to save recipe");
+      }
     }}>
       <TopRow>
         <div style={{
@@ -122,6 +141,21 @@ export default function NewRecipePage() {
             onChange={(e) => setDescription(e.target.value)}
             required
           />
+          <div>
+            <label htmlFor="recipe-quantity">Recipe quantity</label>
+            <NumberInput
+              id="recipe-quantity"
+              initialValue={1}
+              onChange={setRecipeQuantity}
+            />
+            <label htmlFor="is-public">Public</label>
+            <input
+              id="is-public"
+              type="checkbox"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+            />
+          </div>
         </div>
         <AddRecipeButton type="submit">Save recipe</AddRecipeButton>
       </TopRow>
