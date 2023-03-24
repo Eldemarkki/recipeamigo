@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IngredientList } from "../../../components/recipeEngine/IngredientList";
+import { EditableIngredientList } from "../../../components/recipeEngine/EditableIngredientList";
 import { RawIngredient } from "../../../components/recipeEngine/IngredientForm";
 import { InstructionList } from "../../../components/recipeEngine/InstructionList";
 import styled from "styled-components";
@@ -164,7 +164,7 @@ export default function NewRecipePage() {
     <SplitContainer>
       <LeftPanel>
         <h2>Ingredients</h2>
-        <IngredientList
+        <EditableIngredientList
           ingredients={ingredients}
           addIngredient={(ingredient) => setIngredients([...ingredients, ingredient])}
           removeIngredient={(index) => setIngredients(ingredients.filter((_, i) => i !== index))}

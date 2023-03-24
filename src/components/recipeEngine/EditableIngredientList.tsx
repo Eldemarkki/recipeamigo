@@ -25,7 +25,7 @@ const IngredientListItem = styled.li({
   gap: "0.3rem"
 });
 
-export const IngredientList = ({ ingredients, addIngredient, removeIngredient }: IngredientListProps) => {
+export const EditableIngredientList = ({ ingredients, addIngredient, removeIngredient }: IngredientListProps) => {
   return <Container>
     {ingredients.length > 0 && <IngredientListContainer>
       {ingredients.map((ingredient, index) => (
