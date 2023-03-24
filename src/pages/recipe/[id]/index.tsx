@@ -62,14 +62,17 @@ const RecipeQuantityPickerContainer = styled.div({
   maxWidth: 200,
 });
 
-export default function RecipePage(props: RecipePageProps) {
-  const originalQuantity = props.recipe.quantity;
+export default function RecipePage({ recipe }: RecipePageProps) {
+  const originalQuantity = recipe.quantity;
 
-  const [recipeAmount, setRecipeAmount] = useState(props.recipe.quantity);
+  const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
 
   return <Container>
     <TopRow>
-      <Title>{props.recipe.name}</Title>
+      <div>
+        <Title>{recipe.name}</Title>
+        <p>{recipe.description}</p>
+      </div>
       <RecipeQuantityPickerContainer>
         <RecipeQuantityPicker
           quantity={recipeAmount}
@@ -81,14 +84,14 @@ export default function RecipePage(props: RecipePageProps) {
       <IngredientsContainer>
         <IngredientsTitle>Ingredients</IngredientsTitle>
         <IngredientList
-          ingredients={props.recipe.ingredients}
+          ingredients={recipe.ingredients}
           originalRecipeQuantity={originalQuantity}
           recipeQuantity={recipeAmount}
         />
       </IngredientsContainer>
       <InstructionsContainer>
         <InstructionsTitle>Instructions</InstructionsTitle>
-        <InstructionsList instructions={props.recipe.instructions} />
+        <InstructionsList instructions={recipe.instructions} />
       </InstructionsContainer>
     </SplitContainer>
   </Container>;
