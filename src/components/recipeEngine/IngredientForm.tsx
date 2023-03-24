@@ -78,6 +78,7 @@ export const IngredientForm = ({ addIngredient }: IngredientFormProps) => {
     </InputContainer>
     <InputContainer>
       <select
+        value={ingredientUnit || ""}
         onChange={(e) => {
           const value = e.target.value as IngredientUnit | "";
           setIngredientUnit(value || null);
