@@ -40,7 +40,7 @@ const AddButton = styled.button({
   color: "inherit",
 });
 
-export const InstructionList = ({ instructions, addInstruction, removeInstruction }: InstructionListProps) => {
+export const EditableInstructionList = ({ instructions, addInstruction, removeInstruction }: InstructionListProps) => {
   const [newInstruction, setNewInstruction] = useState("");
 
   return <Container>

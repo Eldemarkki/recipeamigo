@@ -8,9 +8,9 @@ const Label = styled.label<{ isChecked: boolean }>(props => ({
   textDecoration: props.isChecked ? "line-through" : "none",
 }));
 
-export type IngredientListItemProps = React.PropsWithChildren<{}>;
+export type CrossOffText = React.PropsWithChildren<{}>;
 
-export const IngredientListItem = ({ children }: IngredientListItemProps) => {
+export const CrossOffText = ({ children }: CrossOffText) => {
   const [checked, setChecked] = useState(false);
 
   return <Label isChecked={checked}>

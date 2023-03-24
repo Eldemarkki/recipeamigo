@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { EditableIngredientList } from "../../../components/recipeEngine/EditableIngredientList";
 import { RawIngredient } from "../../../components/recipeEngine/IngredientForm";
-import { InstructionList } from "../../../components/recipeEngine/InstructionList";
+import { EditableInstructionList } from "../../../components/recipeEngine/EditableInstructionList";
 import styled from "styled-components";
 import { z } from "zod";
 import { createRecipeSchema } from "../../api/recipes";
@@ -172,7 +172,7 @@ export default function NewRecipePage() {
       </LeftPanel>
       <RightPanel>
         <h2>Instructions</h2>
-        <InstructionList
+        <EditableInstructionList
           instructions={instructions}
           addInstruction={(instruction) => setInstructions([...instructions, instruction])}
           removeInstruction={(index) => setInstructions(instructions.filter((_, i) => i !== index))}

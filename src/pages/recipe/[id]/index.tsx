@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { IngredientList } from "../../../components/recipeView/IngredientList";
+import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -17,11 +18,13 @@ export type RecipePageProps = {
 const Container = styled.main({
   display: "flex",
   flexDirection: "column",
-  padding: "5rem",
+  padding: "3rem 10rem",
+  gap: "2rem",
 });
 
 const Title = styled.h1({
   fontSize: "3rem",
+  margin: 0,
 });
 
 const IngredientsContainer = styled.div({
@@ -31,21 +34,63 @@ const IngredientsContainer = styled.div({
   maxWidth: 350
 });
 
+const SplitContainer = styled.div({
+  display: "flex",
+  gap: "8rem"
+});
+
+const InstructionsContainer = styled.div({
+  display: "flex",
+  flexDirection: "column",
+});
+
+const IngredientsTitle = styled.h2({
+  margin: 0,
+});
+
+const InstructionsTitle = styled.h2({
+  margin: 0,
+});
+
+const TopRow = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+});
+
+const RecipeQuantityPickerContainer = styled.div({
+  maxWidth: 200,
+});
+
 export default function RecipePage(props: RecipePageProps) {
   const originalQuantity = props.recipe.quantity;
 
   const [recipeAmount, setRecipeAmount] = useState(props.recipe.quantity);
 
   return <Container>
-    <Title>{props.recipe.name}</Title>
-    <IngredientsContainer>
-      <RecipeQuantityPicker quantity={recipeAmount} onChange={setRecipeAmount} />
-      <IngredientList
-        ingredients={props.recipe.ingredients}
-        originalRecipeQuantity={originalQuantity}
-        recipeQuantity={recipeAmount}
-      />
-    </IngredientsContainer>
+    <TopRow>
+      <Title>{props.recipe.name}</Title>
+      <RecipeQuantityPickerContainer>
+        <RecipeQuantityPicker
+          quantity={recipeAmount}
+          onChange={setRecipeAmount}
+        />
+      </RecipeQuantityPickerContainer>
+    </TopRow>
+    <SplitContainer>
+      <IngredientsContainer>
+        <IngredientsTitle>Ingredients</IngredientsTitle>
+        <IngredientList
+          ingredients={props.recipe.ingredients}
+          originalRecipeQuantity={originalQuantity}
+          recipeQuantity={recipeAmount}
+        />
+      </IngredientsContainer>
+      <InstructionsContainer>
+        <InstructionsTitle>Instructions</InstructionsTitle>
+        <InstructionsList instructions={props.recipe.instructions} />
+      </InstructionsContainer>
+    </SplitContainer>
   </Container>;
 }
 
