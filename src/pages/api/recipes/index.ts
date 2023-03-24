@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { getUserFromRequest } from "../../../utils/auth";
+import { getUserIdFromRequest } from "../../../utils/auth";
 import { createRecipe, getAllRecipesForUser } from "../../../database/recipes";
 import z from "zod";
 import { IngredientUnit } from "@prisma/client";
@@ -21,23 +21,20 @@ export const createRecipeSchema = z.object({
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === "GET") {
-    const user = await getUserFromRequest(req);
-    if (!user || typeof user === "string" || !user.sub) {
+    const userId = await getUserIdFromRequest(req);
+    if (!userId) {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
-    const userId = user.sub;
     const recipes = await getAllRecipesForUser(userId);
 
     return res.status(200).json(recipes);
   }
   else if (req.method === "POST") {
-    const user = await getUserFromRequest(req);
-    if (!user || typeof user === "string" || !user.sub) {
+    const userId = await getUserIdFromRequest(req);
+    if (!userId) {
       return res.status(401).json({ message: "Not authenticated" });
     }
-
-    const userId = user.sub;
 
     const body = createRecipeSchema.safeParse(req.body);
     if (!body.success) {

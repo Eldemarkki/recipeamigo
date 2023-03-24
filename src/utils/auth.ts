@@ -15,7 +15,7 @@ const getTokenFromRequest = (req: {
   return hankoCookie;
 };
 
-export const getUserFromRequest = async (req: {
+export const getUserIdFromRequest = async (req: {
   headers: { authorization?: string };
   cookies: { hanko?: string };
 }) => {
@@ -37,7 +37,23 @@ export const getUserFromRequest = async (req: {
     }
 
     const decoded = decode(token);
-    return decoded;
+
+    if (typeof decoded === "string") {
+      console.warn("Decoded user is a string");
+      return null;
+    }
+
+    if (!decoded) {
+      console.warn("Decoded user is null");
+      return null;
+    }
+
+    if (decoded.sub === undefined || decoded.sub === null) {
+      console.warn("Decoded user has no sub");
+      return null;
+    }
+
+    return decoded.sub;
   }
   catch (e) {
     return null;

@@ -1,8 +1,7 @@
 import config from "../config";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
-import { getUserFromRequest } from "../utils/auth";
-import { JwtPayload } from "jsonwebtoken";
+import { getUserIdFromRequest } from "../utils/auth";
 import { Recipe } from "@prisma/client";
 import { getAllRecipesForUser } from "../database/recipes";
 import { ConvertDates } from "../utils/types";
@@ -11,7 +10,7 @@ import styled from "styled-components";
 import { NewRecipeButton } from "../components/NewRecipeButton";
 
 type HomeProps = {
-  user: string | JwtPayload;
+  userId: string;
   recipes: ConvertDates<Recipe>[];
 }
 
@@ -34,7 +33,7 @@ export default function Home(props: HomeProps) {
     <h1>{config.APP_NAME}</h1>
     <div>
       <Link href="/profile">Profile</Link>
-      <div>Logged in as {typeof props.user === "string" ? props.user : props.user.sub}</div>
+      <div>Logged in as {props.userId}</div>
     </div>
     <div>
       <RecipesTitleRow>
@@ -47,9 +46,9 @@ export default function Home(props: HomeProps) {
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req }) => {
-  const user = await getUserFromRequest(req);
+  const userId = await getUserIdFromRequest(req);
 
-  if (!user) {
+  if (!userId) {
     return {
       redirect: {
         destination: "/login",
@@ -58,14 +57,11 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req })
     };
   }
 
-  const userId = typeof user === "string" ? null : user.sub;
-  if (!userId) throw new Error("User id is null");
-
   const recipes = await getAllRecipesForUser(userId);
 
   return {
     props: {
-      user: user,
+      userId: userId,
       recipes: recipes.map(recipe => ({
         ...recipe,
         createdAt: recipe.createdAt.getTime(),

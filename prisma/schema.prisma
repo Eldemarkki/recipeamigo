@@ -16,6 +16,8 @@ model Recipe {
   userId       String
   ingredients  Ingredient[]
   instructions String[]
+  quantity     Int
+  isPublic     Boolean
 }
 
 model Ingredient {

@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { getUserFromRequest } from "../../../utils/auth";
+import { getUserIdFromRequest } from "../../../utils/auth";
 import { getSingleRecipe } from "../../../database/recipes";
 import { Ingredient, Recipe } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
@@ -17,44 +17,48 @@ export default function RecipePage(props: RecipePageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (context) => {
-  const user = await getUserFromRequest(context.req);
-  if (!user) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-
-  if (typeof user === "string") {
-    throw new Error("User is a string");
-  }
-
-  const userId = user.sub;
-  if (!userId) {
-    throw new Error("User has no sub");
-  }
-
   const recipeId = context.query.id;
   if (typeof recipeId !== "string" || recipeId.length === 0) {
     throw new Error("Recipe id is not a string");
   }
 
+  const userId = await getUserIdFromRequest(context.req);
   const recipe = await getSingleRecipe(recipeId);
-  if (!recipe || recipe.userId !== userId) {
+
+  if (!recipe) {
     return {
       notFound: true,
     };
   }
 
+  if (recipe.isPublic) {
+    return {
+      props: {
+        recipe: {
+          ...recipe,
+          createdAt: recipe.createdAt.getTime(),
+          updatedAt: recipe.updatedAt.getTime(),
+        }
+      },
+    };
+  }
+
+  if (userId && userId === recipe.userId) {
+    return {
+      props: {
+        recipe: {
+          ...recipe,
+          createdAt: recipe.createdAt.getTime(),
+          updatedAt: recipe.updatedAt.getTime(),
+        }
+      },
+    };
+  }
+
   return {
-    props: {
-      recipe: {
-        ...recipe,
-        createdAt: recipe.createdAt.getTime(),
-        updatedAt: recipe.updatedAt.getTime(),
-      }
+    redirect: {
+      destination: "/login",
+      permanent: false,
     },
   };
 };
