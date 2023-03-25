@@ -59,7 +59,7 @@ const TopRow = styled.div({
 });
 
 const RecipeQuantityPickerContainer = styled.div({
-  maxWidth: 200,
+  maxWidth: 250,
 });
 
 export default function RecipePage({ recipe }: RecipePageProps) {

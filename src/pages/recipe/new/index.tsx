@@ -7,7 +7,7 @@ import { z } from "zod";
 import { createRecipeSchema } from "../../api/recipes";
 import { useRouter } from "next/router";
 import { Ingredient, Recipe } from "@prisma/client";
-import { NumberInput } from "../../../components/forms/NumberInput";
+import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 
 const Container = styled.div({
   display: "flex",
@@ -51,6 +51,14 @@ const AddRecipeButton = styled.button({
 
 const RecipeNameInput = styled.input({
   fontSize: "2rem",
+});
+
+const RecipeSettingsContainer = styled.div({
+  display: "flex",
+  flexDirection: "row",
+  gap: "1rem",
+  alignItems: "center",
+  justifyContent: "space-between",
 });
 
 const saveRecipe = async (
@@ -141,23 +149,21 @@ export default function NewRecipePage() {
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-          <div>
-            <label htmlFor="recipe-quantity">Recipe quantity</label>
-            <NumberInput
-              id="recipe-quantity"
-              required
-              min={1}
-              value={recipeQuantity}
+          <RecipeSettingsContainer>
+            <RecipeQuantityPicker
+              quantity={recipeQuantity}
               onChange={setRecipeQuantity}
             />
-            <label htmlFor="is-public">Public</label>
-            <input
-              id="is-public"
-              type="checkbox"
-              checked={isPublic}
-              onChange={(e) => setIsPublic(e.target.checked)}
-            />
-          </div>
+            <div>
+              <label htmlFor="is-public">Public</label>
+              <input
+                id="is-public"
+                type="checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+            </div>
+          </RecipeSettingsContainer>
         </div>
         <AddRecipeButton type="submit">Save recipe</AddRecipeButton>
       </TopRow>
