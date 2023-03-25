@@ -145,7 +145,9 @@ export default function NewRecipePage() {
             <label htmlFor="recipe-quantity">Recipe quantity</label>
             <NumberInput
               id="recipe-quantity"
-              initialValue={1}
+              required
+              min={1}
+              value={recipeQuantity}
               onChange={setRecipeQuantity}
             />
             <label htmlFor="is-public">Public</label>

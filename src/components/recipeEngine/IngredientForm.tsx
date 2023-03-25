@@ -71,9 +71,9 @@ export const IngredientForm = ({ addIngredient }: IngredientFormProps) => {
         id={ingredientAmountId}
         min={0}
         required
-        onChange={(val) => {
-          setIngredientAmount(val);
-        }}
+        value={ingredientAmount}
+        onChange={setIngredientAmount}
+        key={ingredientAmount}
       />
     </InputContainer>
     <InputContainer>

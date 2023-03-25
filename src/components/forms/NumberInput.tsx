@@ -2,33 +2,28 @@ import { DetailedHTMLProps, InputHTMLAttributes, useState } from "react";
 
 export type NumberInputProps = Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "onChange" | "onBlur" | "type"> & {
   onChange: (value: number) => void;
-  initialValue?: number;
+  min?: number;
+  max?: number;
 }
 
-export const NumberInput = ({ onChange, initialValue, ...props }: NumberInputProps) => {
-  const [valueRaw, setValueRaw] = useState(initialValue?.toString() ?? "");
+export const NumberInput = ({ onChange, value, min, max, ...props }: NumberInputProps) => {
+  const [rawValue, setRawValue] = useState(value?.toString() ?? "");
 
   return <input
-    value={valueRaw}
-    type="text" // TODO: Make this a number input, this is terrible. It's a quick fix to make onChange be always called, even when the value is invalid.
-    onChange={(event) => {
-      setValueRaw(event.target.value);
-      console.log(event.target.value);
+    type="text"
+    onBlur={e => {
+      const newValue = Number(e.target.value.replace(",", "."));
+      const clampedValue = Math.max(min ?? 0, Math.min(max ?? Infinity, newValue || 0));
+      setRawValue(clampedValue.toString());
+      onChange(clampedValue);
     }}
-    onBlur={(event) => {
-      const val = event.target.value;
-      if (val === "") {
-        setValueRaw("");
-        return onChange(0);
-      }
-      const num = Number(val.replace(",", "."));
-      if (isNaN(num)) {
-        setValueRaw("0");
-        return;
-      }
-      setValueRaw(num.toString());
-      onChange(num);
+    onChange={e => {
+      setRawValue(e.target.value);
     }}
+    value={rawValue}
+    inputMode="numeric"
+    min={min}
+    max={max}
     {...props}
   />;
 };
