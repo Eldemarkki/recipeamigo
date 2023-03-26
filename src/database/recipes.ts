@@ -8,7 +8,11 @@ export const getAllRecipesForUser = async (userId: string) => {
       userId
     },
     include: {
-      ingredients: true
+      ingredientSections: {
+        include: {
+          ingredients: true
+        }
+      }
     }
   });
   return recipes;
@@ -26,11 +30,28 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
     }
   });
 
-  await prisma.ingredient.createMany({
-    data: recipe.ingredients.map(ingredient => ({
-      ...ingredient,
+  await prisma.ingredientSection.createMany({
+    data: recipe.ingredientSections.map(ingredientSection => ({
+      name: ingredientSection.name,
       recipeId: createdRecipe.id
     })),
+  });
+
+  const ingredientSections = await prisma.ingredientSection.findMany({
+    where: {
+      recipeId: createdRecipe.id
+    }
+  });
+
+  await prisma.ingredient.createMany({
+    data: recipe.ingredientSections.flatMap((ingredientSection, index) => {
+      return ingredientSection.ingredients.map(ingredient => ({
+        name: ingredient.name,
+        quantity: ingredient.quantity,
+        unit: ingredient.unit,
+        ingredientSectionId: ingredientSections[index].id
+      }));
+    }),
   });
 
   return await prisma.recipe.findUnique({
@@ -38,7 +59,11 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
       id: createdRecipe.id
     },
     include: {
-      ingredients: true
+      ingredientSections: {
+        include: {
+          ingredients: true
+        }
+      }
     }
   });
 };
@@ -49,7 +74,11 @@ export const getSingleRecipe = async (id: string) => {
       id
     },
     include: {
-      ingredients: true
+      ingredientSections: {
+        include: {
+          ingredients: true
+        }
+      }
     }
   });
   return recipe;

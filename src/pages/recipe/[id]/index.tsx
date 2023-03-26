@@ -1,17 +1,20 @@
 import { GetServerSideProps } from "next";
 import { getUserIdFromRequest } from "../../../utils/auth";
 import { getSingleRecipe } from "../../../database/recipes";
-import { Ingredient, Recipe } from "@prisma/client";
+import { Ingredient, IngredientSection as IngredientSectionType, Recipe } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
 import styled from "styled-components";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { IngredientList } from "../../../components/recipeView/IngredientList";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
+import { IngredientSection } from "../../../components/recipeView/IngredientSection";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
-    ingredients: Ingredient[];
+    ingredientSections: (IngredientSectionType & {
+      ingredients: Ingredient[];
+    })[]
   }
 };
 
@@ -83,11 +86,12 @@ export default function RecipePage({ recipe }: RecipePageProps) {
     <SplitContainer>
       <IngredientsContainer>
         <IngredientsTitle>Ingredients</IngredientsTitle>
-        <IngredientList
-          ingredients={recipe.ingredients}
-          originalRecipeQuantity={originalQuantity}
+        {recipe.ingredientSections.map((section) => <IngredientSection
+          key={section.id}
+          section={section}
           recipeQuantity={recipeAmount}
-        />
+          originalRecipeQuantity={originalQuantity}
+        />)}
       </IngredientsContainer>
       <InstructionsContainer>
         <InstructionsTitle>Instructions</InstructionsTitle>

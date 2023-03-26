@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { EditableIngredientList } from "../../../components/recipeEngine/EditableIngredientList";
-import { RawIngredient } from "../../../components/recipeEngine/IngredientForm";
+import { RawIngredientSection } from "../../../components/recipeEngine/IngredientForm";
 import { EditableInstructionList } from "../../../components/recipeEngine/EditableInstructionList";
 import styled from "styled-components";
 import { z } from "zod";
 import { createRecipeSchema } from "../../api/recipes";
 import { useRouter } from "next/router";
-import { Ingredient, Recipe } from "@prisma/client";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
+import { createRecipe } from "../../../database/recipes";
 
 const Container = styled.div({
   display: "flex",
@@ -61,23 +61,7 @@ const RecipeSettingsContainer = styled.div({
   justifyContent: "space-between",
 });
 
-const saveRecipe = async (
-  name: string,
-  description: string,
-  ingredients: RawIngredient[],
-  instructions: string[],
-  quantity: number,
-  isPublic: boolean
-) => {
-  const recipe: z.infer<typeof createRecipeSchema> = {
-    name,
-    description,
-    ingredients,
-    instructions,
-    quantity,
-    isPublic
-  };
-
+const saveRecipe = async (recipe: z.infer<typeof createRecipeSchema>) => {
   const response = await fetch("/api/recipes", {
     method: "POST",
     headers: {
@@ -88,7 +72,7 @@ const saveRecipe = async (
 
   const data = await response.json();
 
-  return data as Recipe & { ingredients: Ingredient[] };
+  return data as ReturnType<Awaited<typeof createRecipe>>;
 };
 
 export default function NewRecipePage() {
@@ -97,14 +81,17 @@ export default function NewRecipePage() {
   const [name, setName] = useState("New recipe");
   const [description, setDescription] = useState("");
 
-  const [ingredients, setIngredients] = useState<RawIngredient[]>([{
-    name: "Eggs",
-    quantity: 12,
-    unit: null
-  }, {
-    name: "Milk",
-    quantity: 1,
-    unit: "LITER"
+  const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>([{
+    name: "Main ingredients",
+    ingredients: [{
+      name: "Eggs",
+      quantity: 12,
+      unit: null
+    }, {
+        name: "Milk",
+        quantity: 1,
+        unit: "LITER"
+      }]
   }]);
 
   const [instructions, setInstructions] = useState<string[]>([
@@ -120,7 +107,14 @@ export default function NewRecipePage() {
     <form onSubmit={async (e) => {
       e.preventDefault();
       // TODO: Show loading indicator while saving
-      const recipe = await saveRecipe(name, description, ingredients, instructions, recipeQuantity, isPublic);
+      const recipe = await saveRecipe({
+        name,
+        description,
+        ingredientSections: ingredientSections,
+        instructions,
+        quantity: recipeQuantity,
+        isPublic,
+      });
       if (recipe) {
         router.push("/recipe/" + recipe.id);
       }
@@ -172,10 +166,21 @@ export default function NewRecipePage() {
     <SplitContainer>
       <LeftPanel>
         <h2>Ingredients</h2>
+        {/* TODO: Implement adding multiple sections */}
         <EditableIngredientList
-          ingredients={ingredients}
-          addIngredient={(ingredient) => setIngredients([...ingredients, ingredient])}
-          removeIngredient={(index) => setIngredients(ingredients.filter((_, i) => i !== index))}
+          ingredients={ingredientSections[0].ingredients}
+          addIngredient={(ingredient) => {
+            setIngredientSections([{
+              ...ingredientSections[0],
+              ingredients: [...ingredientSections[0].ingredients, ingredient]
+            }]);
+          }}
+          removeIngredient={(index) => {
+            setIngredientSections([{
+              ...ingredientSections[0],
+              ingredients: ingredientSections[0].ingredients.filter((_, i) => i !== index)
+            }]);
+          }}
         />
       </LeftPanel>
       <RightPanel>

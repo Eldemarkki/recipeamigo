@@ -8,25 +8,33 @@ datasource db {
 }
 
 model Recipe {
-  id           String       @id @default(uuid())
-  name         String
-  description  String
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  userId       String
-  ingredients  Ingredient[]
-  instructions String[]
-  quantity     Int
-  isPublic     Boolean
+  id                 String              @id @default(uuid())
+  name               String
+  description        String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  userId             String
+  ingredientSections IngredientSection[]
+  instructions       String[]
+  quantity           Int
+  isPublic           Boolean
+}
+
+model IngredientSection {
+  id          String       @id @default(uuid())
+  name        String
+  recipeId    String
+  recipe      Recipe       @relation(fields: [recipeId], references: [id])
+  ingredients Ingredient[]
 }
 
 model Ingredient {
-  id       String          @id @default(uuid())
-  name     String
-  quantity Float
-  unit     IngredientUnit?
-  recipe   Recipe          @relation(fields: [recipeId], references: [id])
-  recipeId String
+  id                  String            @id @default(uuid())
+  name                String
+  quantity            Float
+  unit                IngredientUnit?
+  ingredientSection   IngredientSection @relation(fields: [ingredientSectionId], references: [id])
+  ingredientSectionId String
 }
 
 enum IngredientUnit {

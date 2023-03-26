@@ -1,10 +1,14 @@
-import { Ingredient, IngredientUnit } from "@prisma/client";
+import { Ingredient, IngredientSection, IngredientUnit } from "@prisma/client";
 import { useId, useState } from "react";
 import styled from "styled-components";
 import { capitalizeFirstLetter } from "../../utils/stringUtils";
 import { NumberInput } from "../forms/NumberInput";
 
-export type RawIngredient = Omit<Ingredient, "id" | "recipeId">;
+export type RawIngredient = Omit<Ingredient, "id" | "ingredientSectionId">;
+
+export type RawIngredientSection = Omit<IngredientSection, "id" | "recipeId"> & {
+  ingredients: RawIngredient[];
+}
 
 export type IngredientFormProps = {
   addIngredient: (ingredient: RawIngredient) => void;

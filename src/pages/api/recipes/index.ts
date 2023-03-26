@@ -12,10 +12,15 @@ export const ingredientSchema = z.object({
   unit: ingredientUnitSchema.optional().nullable()
 });
 
+export const ingredientSectionSchema = z.object({
+  name: z.string(),
+  ingredients: z.array(ingredientSchema)
+});
+
 export const createRecipeSchema = z.object({
   name: z.string(),
   description: z.string(),
-  ingredients: z.array(ingredientSchema),
+  ingredientSections: z.array(ingredientSectionSchema),
   instructions: z.array(z.string()),
   quantity: z.number().min(1),
   isPublic: z.boolean()
