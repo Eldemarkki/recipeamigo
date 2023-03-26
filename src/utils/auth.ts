@@ -1,6 +1,8 @@
 import { decode, verify } from "jsonwebtoken";
 import jwkToPem from "jwk-to-pem";
 import config from "../config";
+import { prisma } from "../db";
+import { UserProfile } from "@prisma/client";
 
 const getTokenFromRequest = (req: {
   headers: { authorization?: string };
@@ -15,7 +17,7 @@ const getTokenFromRequest = (req: {
   return hankoCookie;
 };
 
-export const getUserIdFromRequest = async (req: {
+export const getRawUserIdFromRequest = async (req: {
   headers: { authorization?: string };
   cookies: { hanko?: string };
 }) => {
@@ -24,6 +26,7 @@ export const getUserIdFromRequest = async (req: {
     return null;
   }
 
+  // TODO: Cache the jwk so we don't make too many requests to Hanko
   const response = await fetch(config.HANKO_URL + "/.well-known/jwks.json");
   const text = await response.json();
 
@@ -58,4 +61,42 @@ export const getUserIdFromRequest = async (req: {
   catch (e) {
     return null;
   }
+};
+
+export const getUserFromRequest = async (req: {
+  headers: { authorization?: string };
+  cookies: { hanko?: string };
+}): Promise<{
+  status: "Unauthorized";
+} | {
+  status: "OK";
+  userId: string;
+  userProfile: UserProfile
+} | {
+  status: "No profile";
+  userId: string;
+}> => {
+  const rawUserId = await getRawUserIdFromRequest(req);
+  if (!rawUserId) {
+    return { status: "Unauthorized" };
+  }
+
+  const userProfile = await prisma.userProfile.findUnique({
+    where: {
+      hankoId: rawUserId,
+    },
+  });
+
+  if (!userProfile) {
+    return {
+      status: "No profile",
+      userId: rawUserId,
+    };
+  }
+
+  return {
+    status: "OK",
+    userId: rawUserId,
+    userProfile,
+  };
 };

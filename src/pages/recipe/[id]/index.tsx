@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { getUserIdFromRequest } from "../../../utils/auth";
+import { getUserFromRequest } from "../../../utils/auth";
 import { getSingleRecipe } from "../../../database/recipes";
 import { Ingredient, IngredientSection as IngredientSectionType, Recipe } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
@@ -107,7 +107,7 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
     throw new Error("Recipe id is not a string");
   }
 
-  const userId = await getUserIdFromRequest(context.req);
+  const user = await getUserFromRequest(context.req);
   const recipe = await getSingleRecipe(recipeId);
 
   if (!recipe) {
@@ -128,7 +128,7 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
     };
   }
 
-  if (userId && userId === recipe.userId) {
+  if (user && (user.status === "No profile" || user.status === "OK")) {
     return {
       props: {
         recipe: {

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
-import { getUserIdFromRequest } from "../../utils/auth";
+import { getUserFromRequest } from "../../utils/auth";
 import { GetServerSideProps } from "next";
 
 export default function ProfilePage() {
@@ -12,12 +12,21 @@ export default function ProfilePage() {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const userId = await getUserIdFromRequest(req);
+  const user = await getUserFromRequest(req);
 
-  if (!userId) {
+  if (user.status === "Unauthorized") {
     return {
       redirect: {
         destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  if (user.status === "No profile") {
+    return {
+      redirect: {
+        destination: "/profile/create",
         permanent: false,
       },
     };

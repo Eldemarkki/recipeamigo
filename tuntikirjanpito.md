@@ -8,3 +8,7 @@
 | 21.3.2023 | 4      | Reseptin luomissivun tekeminen, UI ja API-routet                |
 | 24.3.2023 | 1      | Julkiset reseptit, reseptin annosmäärän lisääminen              |
 | 25.3.2023 | 1      | Reseptisivun luominen                                           |
+| 25.3.2023 | 1      | NumberInput-komponentin parantelu                               |
+| 26.3.2023 | 1      | Reseptin ainesosien jakaminen osiin                             |
+| 26.3.2023 | 1      | Käyttäjäprofiilien luominen                                     |
+
