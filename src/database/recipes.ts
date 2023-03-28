@@ -78,7 +78,8 @@ export const getSingleRecipe = async (id: string) => {
         include: {
           ingredients: true
         }
-      }
+      },
+      user: true
     }
   });
   return recipe;

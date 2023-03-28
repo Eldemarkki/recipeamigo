@@ -14,6 +14,7 @@ model Recipe {
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   userId             String
+  user               UserProfile         @relation(fields: [userId], references: [hankoId])
   ingredientSections IngredientSection[]
   instructions       String[]
   quantity           Int
@@ -62,7 +63,8 @@ enum IngredientUnit {
 }
 
 model UserProfile {
-  id        String @id @default(uuid())
-  username  String @unique
-  hankoId   String @unique
+  id       String   @id @default(uuid())
+  username String   @unique
+  hankoId  String   @unique
+  Recipe   Recipe[]
 }

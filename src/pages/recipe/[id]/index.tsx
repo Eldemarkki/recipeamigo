@@ -1,12 +1,11 @@
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { getSingleRecipe } from "../../../database/recipes";
-import { Ingredient, IngredientSection as IngredientSectionType, Recipe } from "@prisma/client";
+import { Ingredient, IngredientSection as IngredientSectionType, Recipe, UserProfile } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
 import styled from "styled-components";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
-import { IngredientList } from "../../../components/recipeView/IngredientList";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
 
@@ -14,7 +13,8 @@ export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
     ingredientSections: (IngredientSectionType & {
       ingredients: Ingredient[];
-    })[]
+    })[];
+    user: UserProfile;
   }
 };
 
@@ -74,6 +74,7 @@ export default function RecipePage({ recipe }: RecipePageProps) {
     <TopRow>
       <div>
         <Title>{recipe.name}</Title>
+        <p>Created by <b>{recipe.user.username}</b></p>
         <p>{recipe.description}</p>
       </div>
       <RecipeQuantityPickerContainer>

@@ -48,6 +48,13 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(400).json({ error: body.error });
     }
 
+    // This is to prevent users without a profile from creating public recipes by calling
+    // the API directly. It is required, because the frontend requires a username
+    // to display on public recipes.
+    if (body.data.isPublic && user.status === "No profile") {
+      return res.status(400).json({ error: "You must have a profile to be able to create public recipes" });
+    }
+
     const recipe = await createRecipe(user.userId, body.data);
 
     return res.status(200).json(recipe);
