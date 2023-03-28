@@ -8,6 +8,7 @@ import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
+import Link from "next/link";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -74,7 +75,7 @@ export default function RecipePage({ recipe }: RecipePageProps) {
     <TopRow>
       <div>
         <Title>{recipe.name}</Title>
-        <p>Created by <b>{recipe.user.username}</b></p>
+        <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link></p>
         <p>{recipe.description}</p>
       </div>
       <RecipeQuantityPickerContainer>

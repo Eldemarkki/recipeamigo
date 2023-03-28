@@ -66,5 +66,5 @@ model UserProfile {
   id       String   @id @default(uuid())
   username String   @unique
   hankoId  String   @unique
-  Recipe   Recipe[]
+  recipes  Recipe[]
 }
