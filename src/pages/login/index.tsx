@@ -14,6 +14,7 @@ const Title = styled.h1({
 
 const TitleGradientPart = styled.span({
   background: "linear-gradient(90deg, #FFB800 0%, #FF5E00 100%)",
+  WebkitBackgroundClip: "text",
   backgroundClip: "text",
   WebkitTextFillColor: "transparent",
 });

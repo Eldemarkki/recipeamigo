@@ -8,6 +8,8 @@ import { createRecipeSchema } from "../../api/recipes";
 import { useRouter } from "next/router";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { createRecipe } from "../../../database/recipes";
+import { GetServerSideProps } from "next";
+import { getUserFromRequest } from "../../../utils/auth";
 
 const Container = styled.div({
   display: "flex",
@@ -194,3 +196,19 @@ export default function NewRecipePage() {
     </SplitContainer>
   </Container >;
 }
+
+export const getServerSideProps: GetServerSideProps<{}> = async ({ req }) => {
+  const user = await getUserFromRequest(req);
+  if (user.status === "Unauthorized") {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
