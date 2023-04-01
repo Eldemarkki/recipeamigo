@@ -31,7 +31,7 @@ export default function Home({ recipes }: HomeProps) {
       <h2>My recipes</h2>
       <NewRecipeButton />
     </RecipesTitleRow>
-    <RecipeCardGrid recipes={recipes} />
+    <RecipeCardGrid showCreateButton recipes={recipes} />
   </Container>;
 }
 

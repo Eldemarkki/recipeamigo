@@ -16,7 +16,7 @@ const App = ({ Component, pageProps, router }: AppProps<Props>) => {
 
   return <>
     {showNavbar && <Navbar isLoggedIn={pageProps.isLoggedIn} />}
-    <Component {...pageProps} />;
+    <Component {...pageProps} />
   </>;
 };
 

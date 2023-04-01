@@ -13,3 +13,4 @@
 | 26.3.2023 | 1      | Käyttäjäprofiilien luominen                                                    |
 | 28.3.2023 | 1      | Näytä resepteissä linkki käyttäjän profiiliin, aloita käyttäjäsivujen luominen |
 | 1.4.2023  | 1      | Luo navigointipalkki                                                           |
+| 1.4.2023  | 1      | Reseptiruudukon parantelu                                                      |
