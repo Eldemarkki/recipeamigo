@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { IngredientForm, RawIngredient, RawIngredientSection } from "./IngredientForm";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { IngredientSectionForm } from "./IngredientSectionForm";
 
@@ -73,6 +73,28 @@ const IngredientSectionTitle = styled.h3({
   padding: 0,
 });
 
+const IngredientSectionTopRow = styled.div({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
+const DeleteIngredientSectionButton = styled.button({
+  backgroundColor: "transparent",
+  display: "flex",
+  justifyContent: "center",
+  aspectRatio: "1",
+  borderRadius: "15%",
+  alignItems: "center",
+  border: "none",
+  margin: 0,
+  "&:hover, &:focus": {
+    cursor: "pointer",
+    backgroundColor: "#ea2727",
+    color: "white",
+  },
+});
+
 export const EditableIngredientList = ({
   ingredientSections,
   addIngredient,
@@ -88,8 +110,17 @@ export const EditableIngredientList = ({
 
   return <Container>
     {ingredientSections.length > 0 && <IngredientSections>
-      {ingredientSections.map((ingredientSection) => <IngredientSectionContainer key={ingredientSection.name}>
-        <IngredientSectionTitle>{ingredientSection.name}</IngredientSectionTitle>
+      {ingredientSections.map((ingredientSection, ingredientSectionIndex) => <IngredientSectionContainer key={ingredientSection.name}>
+        <IngredientSectionTopRow>
+          <IngredientSectionTitle>{ingredientSection.name}</IngredientSectionTitle>
+          <DeleteIngredientSectionButton onClick={() => {
+            if (confirm(`Are you sure you want to delete the ingredient section "${ingredientSection.name}"?`)) {
+              removeIngredientSection(ingredientSectionIndex);
+            }
+          }}>
+            <TrashIcon />
+          </DeleteIngredientSectionButton>
+        </IngredientSectionTopRow>
         <IngredientList>
           {ingredientSection.ingredients.map((ingredient, index) => (
             <IngredientListItem key={ingredient.name}>
