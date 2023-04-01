@@ -1,8 +1,6 @@
-import config from "../config";
-import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../utils/auth";
-import { Recipe, UserProfile } from "@prisma/client";
+import { Recipe } from "@prisma/client";
 import { getAllRecipesForUser } from "../database/recipes";
 import { ConvertDates } from "../utils/types";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
@@ -10,8 +8,6 @@ import styled from "styled-components";
 import { NewRecipeButton } from "../components/NewRecipeButton";
 
 type HomeProps = {
-  userId: string;
-  userProfile: UserProfile;
   recipes: ConvertDates<Recipe>[];
 }
 
@@ -29,20 +25,13 @@ const RecipesTitleRow = styled.div({
   alignItems: "center",
 });
 
-export default function Home({ userProfile, recipes }: HomeProps) {
+export default function Home({ recipes }: HomeProps) {
   return <Container>
-    <h1>{config.APP_NAME}</h1>
-    <div>
-      <Link href="/profile">Profile</Link>
-      <div>Logged in as {userProfile.username}</div>
-    </div>
-    <div>
-      <RecipesTitleRow>
-        <h2>My recipes</h2>
-        <NewRecipeButton />
-      </RecipesTitleRow>
-      <RecipeCardGrid recipes={recipes} />
-    </div>
+    <RecipesTitleRow>
+      <h2>My recipes</h2>
+      <NewRecipeButton />
+    </RecipesTitleRow>
+    <RecipeCardGrid recipes={recipes} />
   </Container>;
 }
 
@@ -67,14 +56,10 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req })
     };
   }
 
-  const { userId, userProfile } = user;
-
-  const recipes = await getAllRecipesForUser(userId);
+  const recipes = await getAllRecipesForUser(user.userId);
 
   return {
     props: {
-      userId,
-      userProfile,
       recipes: recipes.map(recipe => ({
         ...recipe,
         createdAt: recipe.createdAt.getTime(),
