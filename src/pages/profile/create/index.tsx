@@ -65,8 +65,6 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
       message: "Username already taken"
     } | UserProfile;
 
-    console.log(data);
-
     if ("message" in data) {
       switch (data.message) {
         case "Not authenticated":

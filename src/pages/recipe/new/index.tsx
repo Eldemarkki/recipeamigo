@@ -170,19 +170,49 @@ export default function NewRecipePage() {
         <h2>Ingredients</h2>
         {/* TODO: Implement adding multiple sections */}
         <EditableIngredientList
-          ingredients={ingredientSections[0].ingredients}
-          addIngredient={(ingredient) => {
-            setIngredientSections([{
-              ...ingredientSections[0],
-              ingredients: [...ingredientSections[0].ingredients, ingredient]
-            }]);
+          ingredientSections={ingredientSections}
+          addIngredient={(ingredient, ingredientSectionName) => {
+            const sectionExists = ingredientSections.some(section => section.name === ingredientSectionName);
+            if (!sectionExists) {
+              setIngredientSections([...ingredientSections, {
+                name: ingredientSectionName,
+                ingredients: [ingredient]
+              }]);
+            }
+            else {
+              setIngredientSections(ingredientSections.map(section => {
+                if (section.name === ingredientSectionName) {
+                  return {
+                    ...section,
+                    ingredients: [...section.ingredients, ingredient]
+                  };
+                }
+                return section;
+              }));
+            }
           }}
-          removeIngredient={(index) => {
-            setIngredientSections([{
-              ...ingredientSections[0],
-              ingredients: ingredientSections[0].ingredients.filter((_, i) => i !== index)
-            }]);
+          removeIngredient={(index, ingredientSectionName) => {
+            const exists = ingredientSections.some(section => section.name === ingredientSectionName);
+            if (!exists) {
+              return;
+            }
+
+            setIngredientSections(ingredientSections.map(section => {
+              if (section.name === ingredientSectionName) {
+                return {
+                  ...section,
+                  ingredients: section.ingredients.filter((_, i) => i !== index)
+                };
+              }
+              return section;
+            }));
           }}
+          addIngredientSection={(name) => setIngredientSections([...ingredientSections, {
+            name,
+            ingredients: []
+          }])}
+          removeIngredientSection={(index) => setIngredientSections(ingredientSections.filter((_, i) => i !== index))
+          }
         />
       </LeftPanel>
       <RightPanel>
