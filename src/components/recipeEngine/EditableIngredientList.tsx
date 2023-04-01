@@ -79,7 +79,7 @@ const IngredientSectionTopRow = styled.div({
   alignItems: "center",
 });
 
-const DeleteIngredientSectionButton = styled.button({
+const DeleteButton = styled.button({
   backgroundColor: "transparent",
   display: "flex",
   justifyContent: "center",
@@ -113,18 +113,20 @@ export const EditableIngredientList = ({
       {ingredientSections.map((ingredientSection, ingredientSectionIndex) => <IngredientSectionContainer key={ingredientSection.name}>
         <IngredientSectionTopRow>
           <IngredientSectionTitle>{ingredientSection.name}</IngredientSectionTitle>
-          <DeleteIngredientSectionButton onClick={() => {
+          <DeleteButton onClick={() => {
             if (confirm(`Are you sure you want to delete the ingredient section "${ingredientSection.name}"?`)) {
               removeIngredientSection(ingredientSectionIndex);
             }
           }}>
             <TrashIcon />
-          </DeleteIngredientSectionButton>
+          </DeleteButton>
         </IngredientSectionTopRow>
         <IngredientList>
           {ingredientSection.ingredients.map((ingredient, index) => (
             <IngredientListItem key={ingredient.name}>
-              <button onClick={() => removeIngredient(index, ingredientSection.name)}>Remove</button>
+              <DeleteButton onClick={() => removeIngredient(index, ingredientSection.name)}>
+                <TrashIcon />
+              </DeleteButton>
               <span>
                 {ingredient.quantity}{ingredient.unit?.toLowerCase() || ""} {ingredient.name}
               </span>
