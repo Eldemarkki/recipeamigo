@@ -3,6 +3,8 @@ import { IngredientForm, RawIngredient, RawIngredientSection } from "./Ingredien
 import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { IngredientSectionForm } from "./IngredientSectionForm";
+import { Reorder } from "framer-motion";
+import { EditableIngredientListItem } from "./EditableIngredientListItem";
 
 export type IngredientListProps = {
   ingredientSections: RawIngredientSection[];
@@ -10,6 +12,7 @@ export type IngredientListProps = {
   removeIngredient: (index: number, ingredientSectionName: string) => void;
   addIngredientSection: (ingredientSectionName: string) => void;
   removeIngredientSection: (index: number) => void;
+  setIngredientSectionItems: (index: number, items: RawIngredient[]) => void;
 }
 
 const Container = styled.div({
@@ -24,11 +27,6 @@ const IngredientSections = styled.div({ // TODO: Make this <ul>
   gap: "0.5rem"
 });
 
-const IngredientListItem = styled.li({
-  display: "flex",
-  gap: "0.3rem"
-});
-
 const IngredientSectionContainer = styled.div({
   display: "flex",
   flexDirection: "column",
@@ -38,7 +36,7 @@ const IngredientSectionContainer = styled.div({
   borderRadius: "0.6rem",
 });
 
-const IngredientList = styled.ul({
+const IngredientList = styled(Reorder.Group)({
   display: "flex",
   flexDirection: "column",
   gap: "0.2rem",
@@ -101,6 +99,7 @@ export const EditableIngredientList = ({
   removeIngredient,
   addIngredientSection,
   removeIngredientSection,
+  setIngredientSectionItems,
 }: IngredientListProps) => {
   const [newItemType, setNewItemType] = useState<
     | { type: "ingredient", ingredientSectionName: string }
@@ -121,16 +120,20 @@ export const EditableIngredientList = ({
             <TrashIcon />
           </DeleteButton>
         </IngredientSectionTopRow>
-        <IngredientList>
+        <IngredientList
+          axis="y"
+          values={ingredientSection.ingredients}
+          onReorder={(items) => {
+            setIngredientSectionItems(ingredientSectionIndex, items as RawIngredient[]);
+          }}
+        >
           {ingredientSection.ingredients.map((ingredient, index) => (
-            <IngredientListItem key={ingredient.name}>
-              <DeleteButton onClick={() => removeIngredient(index, ingredientSection.name)}>
-                <TrashIcon />
-              </DeleteButton>
-              <span>
-                {ingredient.quantity}{ingredient.unit?.toLowerCase() || ""} {ingredient.name}
-              </span>
-            </IngredientListItem>))}
+            <EditableIngredientListItem
+              key={ingredient.name}
+              ingredient={ingredient}
+              onRemove={() => removeIngredient(index, ingredientSection.name)}
+            />
+          ))}
         </IngredientList>
         {newItemType && newItemType.type === "ingredient" && newItemType.ingredientSectionName === ingredientSection.name
           ? <IngredientForm
