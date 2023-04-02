@@ -212,7 +212,7 @@ export default function NewRecipePage() {
             ingredients: []
           }])}
           removeIngredientSection={(index) => setIngredientSections(ingredientSections.filter((_, i) => i !== index))}
-          setIngredientSectionItems={(index, ingredients) => {
+          setIngredientSectionIngredients={(index, ingredients) => {
             setIngredientSections(ingredientSections.map((section, i) => {
               if (i === index) {
                 return {
