@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { NumberInput } from "../forms/NumberInput";
+import { CircularButton } from "../button/Button";
+import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 
 const Container = styled.div({
   display: "flex",
@@ -21,17 +23,6 @@ const NumberInputStyled = styled(NumberInput)({
   textAlign: "center",
 });
 
-const ControlButton = styled.button({
-  borderRadius: "50%",
-  width: "1.5rem",
-  height: "1.5rem",
-  border: "1.5px solid black",
-  backgroundColor: "#00000000",
-  "&:hover": {
-    backgroundColor: "#00000022",
-  },
-});
-
 export type RecipeQuantityPickerProps = {
   quantity: number;
   onChange: (quantity: number) => void;
@@ -41,9 +32,13 @@ export const RecipeQuantityPicker = ({ quantity, onChange }: RecipeQuantityPicke
   return <Container>
     <span>Recipe quantity</span>
     <InputContainer>
-      <ControlButton type="button" onClick={() => onChange(Math.max(quantity - 1, 1))} aria-label="Decrease">-</ControlButton>
-      <NumberInputStyled value={quantity} onChange={onChange} key={quantity} />
-      <ControlButton type="button" onClick={() => onChange(quantity + 1)} aria-label="Increase">+</ControlButton>
+      <CircularButton type="button" onClick={() => onChange(Math.max(quantity - 1, 1))} aria-label="Decrease">
+        <MinusIcon />
+      </CircularButton>
+      <NumberInputStyled value={quantity} onChange={onChange} key={quantity} min={1} />
+      <CircularButton type="button" onClick={() => onChange(quantity + 1)} aria-label="Increase">
+        <PlusIcon />
+      </CircularButton>
     </InputContainer>
   </Container>;
 };

@@ -3,6 +3,7 @@ import { useId, useState } from "react";
 import styled from "styled-components";
 import { capitalizeFirstLetter } from "../../utils/stringUtils";
 import { NumberInput } from "../forms/NumberInput";
+import { Button } from "../button/Button";
 
 export type RawIngredient = Omit<Ingredient, "id" | "ingredientSectionId">;
 
@@ -16,16 +17,6 @@ export type IngredientFormProps = {
 }
 
 const units = Object.keys(IngredientUnit) as IngredientUnit[];
-
-const AddButton = styled.button({
-  backgroundColor: "#f2c61d",
-  border: "3px solid #d9b526",
-  borderRadius: "1rem",
-  padding: "0.2rem 0.5rem",
-  textDecoration: "none",
-  color: "inherit",
-  flex: 1
-});
 
 const Form = styled.form({
   display: "flex",
@@ -116,12 +107,12 @@ export const IngredientForm = ({ addIngredient, onCancel }: IngredientFormProps)
         </select>
       </InputContainer>
       <ButtonsContainer>
-        <AddButton type="button" onClick={onCancel}>
+        <Button style={{ flex: 1 }} type="button" onClick={onCancel} variant="secondary">
           Cancel
-        </AddButton>
-        <AddButton type="submit">
+        </Button>
+        <Button style={{ flex: 1 }} type="submit">
           Add ingredient
-        </AddButton>
+        </Button>
       </ButtonsContainer>
     </Form>
   </Container>;

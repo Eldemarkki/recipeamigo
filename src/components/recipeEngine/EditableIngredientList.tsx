@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IngredientSectionForm } from "./IngredientSectionForm";
 import { Reorder } from "framer-motion";
 import { EditableIngredientSection } from "./EditableIngredientSection";
+import { CircularButton } from "../button/Button";
 
 export type IngredientListProps = {
   ingredientSections: RawIngredientSection[];
@@ -28,22 +29,6 @@ const IngredientSections = styled(Reorder.Group)({
   gap: "0.5rem",
   padding: 0,
   margin: 0,
-});
-
-const AddIngredientButton = styled.button({
-  backgroundColor: "#f2c61d",
-  border: "3px solid #d9b526",
-  borderRadius: "50%",
-  textDecoration: "none",
-  color: "inherit",
-  aspectRatio: "1",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  "&:hover": {
-    backgroundColor: "#e5bb1b",
-    cursor: "pointer",
-  },
 });
 
 const IngredientSectionBottomSection = styled.div({
@@ -95,9 +80,11 @@ export const EditableIngredientList = ({
         onCancel={() => setNewItemType(null)}
       />
       : <IngredientSectionBottomSection>
-        <AddIngredientButton onClick={() => setNewItemType({ type: "section" })}>
+        <CircularButton
+          onClick={() => setNewItemType({ type: "section" })}
+        >
           <PlusIcon />
-        </AddIngredientButton>
+        </CircularButton>
       </IngredientSectionBottomSection>
     }
   </Container >;

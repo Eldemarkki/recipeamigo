@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { UserProfile } from "@prisma/client";
 import { useRouter } from "next/router";
+import { Button } from "../../../components/button/Button";
 
 export type CreateProfilePageProps = {
   userId: string;
@@ -24,15 +25,6 @@ const InnerContainer = styled.main({
   padding: "3rem 5rem",
   backgroundColor: "#f1f1f1",
   borderRadius: "1rem",
-});
-
-const CreateProfileButton = styled.button({
-  backgroundColor: "#f2c61d",
-  border: "3px solid #d9b526",
-  borderRadius: "1rem",
-  padding: "0.5rem 1rem",
-  textDecoration: "none",
-  color: "inherit"
 });
 
 const Form = styled.form({
@@ -107,7 +99,7 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
           pattern="[a-zA-Z0-9_]+"
           required
         />
-        <CreateProfileButton>Create profile</CreateProfileButton>
+        <Button>Create profile</Button>
       </Form>
     </InnerContainer>
   </Container>;

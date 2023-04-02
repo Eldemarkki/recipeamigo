@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { DeleteButton } from "../button/DeleteButton";
+import { Button } from "../button/Button";
 
 export type InstructionListProps = {
   instructions: string[];
@@ -23,21 +25,13 @@ const ListContainer = styled.ol({
 const InstructionListItem = styled.div({
   display: "flex",
   gap: "0.3rem",
+  justifyContent: "space-between",
 });
 
 const Form = styled.form({
   display: "flex",
   flexDirection: "column",
   gap: "1rem",
-});
-
-const AddButton = styled.button({
-  backgroundColor: "#f2c61d",
-  border: "3px solid #d9b526",
-  borderRadius: "1rem",
-  padding: "0.2rem 0.5rem",
-  textDecoration: "none",
-  color: "inherit",
 });
 
 export const EditableInstructionList = ({ instructions, addInstruction, removeInstruction }: InstructionListProps) => {
@@ -49,7 +43,7 @@ export const EditableInstructionList = ({ instructions, addInstruction, removeIn
         <li key={instruction}>
           <InstructionListItem>
             {instruction}
-            <button onClick={() => removeInstruction(index)}>-</button>
+            <DeleteButton onClick={() => removeInstruction(index)} />
           </InstructionListItem>
         </li>
       ))}
@@ -66,7 +60,7 @@ export const EditableInstructionList = ({ instructions, addInstruction, removeIn
         placeholder="New instruction"
         required
       />
-      <AddButton type="submit">Add instruction</AddButton>
+      <Button type="submit">Add instruction</Button>
     </Form>
   </Container>;
 };

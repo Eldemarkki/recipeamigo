@@ -1,24 +1,11 @@
-import { DragHandleDots2Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
 import styled from "styled-components";
 import { IngredientForm, RawIngredient, RawIngredientSection } from "./IngredientForm";
 import { Reorder, useDragControls } from "framer-motion";
 import { EditableIngredientListItem } from "./EditableIngredientListItem";
-
-const DeleteButton = styled.button({
-  backgroundColor: "transparent",
-  display: "flex",
-  justifyContent: "center",
-  aspectRatio: "1",
-  borderRadius: "15%",
-  alignItems: "center",
-  border: "none",
-  margin: 0,
-  "&:hover, &:focus": {
-    cursor: "pointer",
-    backgroundColor: "#ea2727",
-    color: "white",
-  },
-});
+import { DeleteButton } from "../button/DeleteButton";
+import { CircularButton } from "../button/Button";
+import { DragHandle } from "../misc/DragHandle";
 
 const Container = styled(Reorder.Item)({
   display: "flex",
@@ -55,28 +42,6 @@ const IngredientSectionBottomSection = styled.div({
   alignItems: "center",
 });
 
-const AddIngredientButton = styled.button({
-  backgroundColor: "#f2c61d",
-  border: "3px solid #d9b526",
-  borderRadius: "50%",
-  textDecoration: "none",
-  color: "inherit",
-  aspectRatio: "1",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  "&:hover": {
-    backgroundColor: "#e5bb1b",
-    cursor: "pointer",
-  },
-});
-
-const DragHandle = styled(DragHandleDots2Icon)({
-  "&:hover, &:focus": {
-    cursor: "grab",
-  },
-});
-
 export type EditableIngredientSectionProps = {
   ingredientSection: RawIngredientSection;
   onRemove: () => void;
@@ -107,18 +72,14 @@ export const EditableIngredientSection = ({
     dragControls={controls}
   >
     <TopRow>
-      <DragHandle
-        onPointerDown={(e) => controls.start(e)}
-      />
+      <DragHandle onPointerDown={(e) => controls.start(e)} />
       <Title>{ingredientSection.name}</Title>
       <DeleteButton onClick={() => {
         // TODO: Implement a more beautiful confirmation dialog
         if (confirm(`Are you sure you want to delete the ingredient section "${ingredientSection.name}"?`)) {
           onRemove();
         }
-      }}>
-        <TrashIcon />
-      </DeleteButton>
+      }} />
     </TopRow>
     <IngredientList
       axis="y"
@@ -140,9 +101,11 @@ export const EditableIngredientSection = ({
         addIngredient={addIngredient}
         onCancel={() => setNewItemType(null)} />
       : <IngredientSectionBottomSection>
-        <AddIngredientButton onClick={() => setNewItemType({ type: "ingredient", ingredientSectionName: ingredientSection.name })}>
+        <CircularButton
+          onClick={() => setNewItemType({ type: "ingredient", ingredientSectionName: ingredientSection.name })}
+        >
           <PlusIcon />
-        </AddIngredientButton>
+        </CircularButton>
       </IngredientSectionBottomSection>}
   </Container>;
 };

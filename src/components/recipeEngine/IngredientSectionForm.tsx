@@ -1,20 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { Button } from "../button/Button";
 
 const ButtonsContainer = styled.div({
   display: "flex",
   flexDirection: "row",
   gap: "1rem",
-});
-
-const Button = styled.button({
-  backgroundColor: "#f2c61d",
-  border: "3px solid #d9b526",
-  borderRadius: "1rem",
-  padding: "0.2rem 0.5rem",
-  textDecoration: "none",
-  color: "inherit",
-  flex: 1
 });
 
 const Title = styled.h3({
@@ -59,10 +50,10 @@ export const IngredientSectionForm = (props: IngredientSectionFormProps) => {
         required
       />
       <ButtonsContainer>
-        <Button type="button" onClick={props.onCancel}>
+        <Button style={{ flex: 1 }} type="button" onClick={props.onCancel} variant="secondary">
           Cancel
         </Button>
-        <Button type="submit">
+        <Button style={{ flex: 1 }} type="submit">
           Create
         </Button>
       </ButtonsContainer>

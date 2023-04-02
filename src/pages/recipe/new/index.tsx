@@ -10,6 +10,7 @@ import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuant
 import { createRecipe } from "../../../database/recipes";
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
+import { Button } from "../../../components/button/Button";
 
 const Container = styled.div({
   display: "flex",
@@ -39,16 +40,7 @@ const RightPanel = styled.div({
 const TopRow = styled.div({
   display: "flex",
   justifyContent: "space-between",
-  alignItems: "center",
-});
-
-const AddRecipeButton = styled.button({
-  backgroundColor: "#f2c61d",
-  border: "3px solid #d9b526",
-  borderRadius: "1rem",
-  padding: "0.3rem 1.2rem",
-  textDecoration: "none",
-  fontSize: "1rem",
+  alignItems: "flex-start",
 });
 
 const RecipeNameInput = styled.input({
@@ -129,7 +121,7 @@ export default function NewRecipePage() {
         <div style={{
           display: "flex",
           flexDirection: "column",
-          gap: "1rem"
+          gap: "1rem",
         }}>
           <RecipeNameInput
             type="text"
@@ -161,7 +153,7 @@ export default function NewRecipePage() {
             </div>
           </RecipeSettingsContainer>
         </div>
-        <AddRecipeButton type="submit">Save recipe</AddRecipeButton>
+        <Button style={{ padding: "0.5rem 1rem" }} type="submit">Save recipe</Button>
       </TopRow>
     </form>
     {/* TODO: Add h1 tag somewhere*/}
