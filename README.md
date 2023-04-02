@@ -18,8 +18,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Todo/Ideas
+## Features
 
+- [X] Passwordless login
+- [X] Public recipes
 - [ ] Edit single ingredient
 - [ ] Edit recipe
 - [ ] Recipe cover image upload
