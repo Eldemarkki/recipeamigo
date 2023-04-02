@@ -33,7 +33,10 @@ export const EditableIngredientListItem = ({
     dragListener={false}
     dragControls={controls}
   >
-    <DragHandle onPointerDown={(e) => controls.start(e)} />
+    <DragHandle onPointerDown={(e) => {
+      controls.start(e);
+      e.preventDefault();
+    }} />
     <DeleteButton onClick={onRemove} />
     <span>
       {ingredient.quantity}{ingredient.unit?.toLowerCase() || ""} {ingredient.name}

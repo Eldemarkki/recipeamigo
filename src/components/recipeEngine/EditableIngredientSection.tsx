@@ -72,7 +72,10 @@ export const EditableIngredientSection = ({
     dragControls={controls}
   >
     <TopRow>
-      <DragHandle onPointerDown={(e) => controls.start(e)} />
+      <DragHandle onPointerDown={(e) => {
+        controls.start(e);
+        e.preventDefault();
+      }} />
       <Title>{ingredientSection.name}</Title>
       <DeleteButton onClick={() => {
         // TODO: Implement a more beautiful confirmation dialog
