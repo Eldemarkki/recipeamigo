@@ -17,6 +17,24 @@ const getTokenFromRequest = (req: {
   return hankoCookie;
 };
 
+const cacheLimitMilliseconds = 1000 * 60; // 1 minute
+let cachedSigningKey: any | null = null;
+let lastFetchTime: number | null = null;
+
+const fetchSigningKey = async () => {
+  const response = await fetch(config.HANKO_URL + "/.well-known/jwks.json");
+
+  const jwks = await response.json();
+  const signingKey = jwks.keys[0];
+
+  lastFetchTime = Date.now();
+  cachedSigningKey = signingKey;
+
+  console.log("Fetched signing key");
+
+  return signingKey;
+};
+
 export const getRawUserIdFromRequest = async (req: {
   headers: { authorization?: string };
   cookies: { hanko?: string };
@@ -26,12 +44,9 @@ export const getRawUserIdFromRequest = async (req: {
     return null;
   }
 
-  // TODO: Cache the jwk so we don't make too many requests to Hanko
-  const response = await fetch(config.HANKO_URL + "/.well-known/jwks.json");
-  const text = await response.json();
+  const shouldRefetch = !cachedSigningKey || !lastFetchTime || (Date.now() - lastFetchTime) > cacheLimitMilliseconds;
+  const signingKey = shouldRefetch ? await fetchSigningKey() : cachedSigningKey;
 
-  const jwks = text;
-  const signingKey = jwks.keys[0];
   const pem = jwkToPem(signingKey);
   try {
     const isValid = verify(token, pem, { algorithms: ["RS256"] });
