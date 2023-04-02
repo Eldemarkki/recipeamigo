@@ -1,7 +1,7 @@
-import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+import { DragHandleDots2Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import styled from "styled-components";
 import { IngredientForm, RawIngredient, RawIngredientSection } from "./IngredientForm";
-import { Reorder } from "framer-motion";
+import { Reorder, useDragControls } from "framer-motion";
 import { EditableIngredientListItem } from "./EditableIngredientListItem";
 
 const DeleteButton = styled.button({
@@ -20,7 +20,7 @@ const DeleteButton = styled.button({
   },
 });
 
-const Container = styled.div({
+const Container = styled(Reorder.Item)({
   display: "flex",
   flexDirection: "column",
   border: "1px solid #bbb",
@@ -32,12 +32,13 @@ const Container = styled.div({
 const Title = styled.h3({
   margin: 0,
   padding: 0,
+  flex: 1
 });
 
 const TopRow = styled.div({
   display: "flex",
-  justifyContent: "space-between",
   alignItems: "center",
+  gap: "0.5rem"
 });
 
 const IngredientList = styled(Reorder.Group)({
@@ -70,6 +71,12 @@ const AddIngredientButton = styled.button({
   },
 });
 
+const DragHandle = styled(DragHandleDots2Icon)({
+  "&:hover, &:focus": {
+    cursor: "grab",
+  },
+});
+
 export type EditableIngredientSectionProps = {
   ingredientSection: RawIngredientSection;
   onRemove: () => void;
@@ -92,8 +99,17 @@ export const EditableIngredientSection = ({
   setNewItemType,
   addIngredient
 }: EditableIngredientSectionProps) => {
-  return <Container>
+  const controls = useDragControls();
+
+  return <Container
+    value={ingredientSection}
+    dragListener={false}
+    dragControls={controls}
+  >
     <TopRow>
+      <DragHandle
+        onPointerDown={(e) => controls.start(e)}
+      />
       <Title>{ingredientSection.name}</Title>
       <DeleteButton onClick={() => {
         // TODO: Implement a more beautiful confirmation dialog

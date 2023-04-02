@@ -223,6 +223,7 @@ export default function NewRecipePage() {
               return section;
             }));
           }}
+          setIngredientSections={(sections) => setIngredientSections(sections)}
         />
       </LeftPanel>
       <RightPanel>

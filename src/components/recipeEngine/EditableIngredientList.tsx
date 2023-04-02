@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import { IngredientForm, RawIngredient, RawIngredientSection } from "./IngredientForm";
-import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+import { RawIngredient, RawIngredientSection } from "./IngredientForm";
+import { PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { IngredientSectionForm } from "./IngredientSectionForm";
 import { Reorder } from "framer-motion";
-import { EditableIngredientListItem } from "./EditableIngredientListItem";
 import { EditableIngredientSection } from "./EditableIngredientSection";
 
 export type IngredientListProps = {
@@ -14,6 +13,7 @@ export type IngredientListProps = {
   addIngredientSection: (ingredientSectionName: string) => void;
   removeIngredientSection: (index: number) => void;
   setIngredientSectionIngredients: (index: number, items: RawIngredient[]) => void;
+  setIngredientSections: (items: RawIngredientSection[]) => void;
 }
 
 const Container = styled.div({
@@ -22,10 +22,12 @@ const Container = styled.div({
   gap: "1rem"
 });
 
-const IngredientSections = styled.div({ // TODO: Make this <ul>
+const IngredientSections = styled(Reorder.Group)({
   display: "flex",
   flexDirection: "column",
-  gap: "0.5rem"
+  gap: "0.5rem",
+  padding: 0,
+  margin: 0,
 });
 
 const AddIngredientButton = styled.button({
@@ -57,6 +59,7 @@ export const EditableIngredientList = ({
   addIngredientSection,
   removeIngredientSection,
   setIngredientSectionIngredients,
+  setIngredientSections
 }: IngredientListProps) => {
   const [newItemType, setNewItemType] = useState<
     | { type: "ingredient", ingredientSectionName: string }
@@ -65,7 +68,11 @@ export const EditableIngredientList = ({
   >(null);
 
   return <Container>
-    {ingredientSections.length > 0 && <IngredientSections>
+    {ingredientSections.length > 0 && <IngredientSections
+      onReorder={setIngredientSections}
+      values={ingredientSections}
+      axis="y"
+    >
       {ingredientSections.map((ingredientSection, ingredientSectionIndex) =>
         <EditableIngredientSection
           key={ingredientSection.name}
