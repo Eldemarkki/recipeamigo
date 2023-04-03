@@ -33,7 +33,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Mobile friendly
 - [ ] Print recipe
 - [ ] Export recipe (PDF, JSON)
-- [ ] Recipe time estimation (manual)
+- [X] Recipe time estimation (manual)
 - [ ] Browse recipes
   - [ ] Exclude recipes with certain ingredients
   - [ ] Only vegetarian, gluten-free, etc.

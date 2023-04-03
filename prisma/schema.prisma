@@ -8,18 +8,20 @@ datasource db {
 }
 
 model Recipe {
-  id                 String              @id @default(uuid())
-  name               String
-  description        String
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  userId             String
-  user               UserProfile         @relation(fields: [userId], references: [hankoId])
-  ingredientSections IngredientSection[]
-  instructions       String[]
-  quantity           Int
-  isPublic           Boolean
-  viewCount          Int                @default(0)
+  id                         String              @id @default(uuid())
+  name                       String
+  description                String
+  createdAt                  DateTime            @default(now())
+  updatedAt                  DateTime            @updatedAt
+  userId                     String
+  user                       UserProfile         @relation(fields: [userId], references: [hankoId])
+  ingredientSections         IngredientSection[]
+  instructions               String[]
+  quantity                   Int
+  isPublic                   Boolean
+  viewCount                  Int                 @default(0)
+  timeEstimateMinimumMinutes Int                 @default(0)
+  timeEstimateMaximumMinutes Int?
 }
 
 model IngredientSection {

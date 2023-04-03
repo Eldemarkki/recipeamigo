@@ -66,16 +66,34 @@ const RecipeQuantityPickerContainer = styled.div({
   maxWidth: 250,
 });
 
+type TimeEstimateType = null | "single" | "range";
+
+const getTimeEstimateType = (min: number, max: number | null): TimeEstimateType => {
+  if (min === 0 && max === null) {
+    return null;
+  }
+  if (max === null || min === max) {
+    return "single";
+  }
+  return "range";
+};
+
 export default function RecipePage({ recipe }: RecipePageProps) {
   const originalQuantity = recipe.quantity;
 
   const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
+
+  const timeEstimateType = getTimeEstimateType(recipe.timeEstimateMinimumMinutes, recipe.timeEstimateMaximumMinutes);
 
   return <Container>
     <TopRow>
       <div>
         <Title>{recipe.name}</Title>
         <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link> - Viewed {recipe.viewCount} {recipe.viewCount === 1 ? "time" : "times"}</p>
+        {timeEstimateType !== null && (timeEstimateType === "single" ?
+          <p>Time estimate: {recipe.timeEstimateMinimumMinutes} minutes</p> :
+          <p>Time estimate: {recipe.timeEstimateMinimumMinutes} - {recipe.timeEstimateMaximumMinutes} minutes</p>)
+        }
         <p>{recipe.description}</p>
       </div>
       <RecipeQuantityPickerContainer>

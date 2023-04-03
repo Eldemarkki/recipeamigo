@@ -11,6 +11,7 @@ import { createRecipe } from "../../../database/recipes";
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { Button } from "../../../components/button/Button";
+import { NumberInput } from "../../../components/forms/NumberInput";
 
 const Container = styled.div({
   display: "flex",
@@ -51,6 +52,13 @@ const RecipeSettingsContainer = styled.div({
   display: "flex",
   flexDirection: "row",
   gap: "1rem",
+  alignItems: "center",
+  justifyContent: "space-between",
+});
+
+const TimeEstimateContainer = styled.div({
+  display: "flex",
+  flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",
 });
@@ -97,6 +105,9 @@ export default function NewRecipePage() {
   const [recipeQuantity, setRecipeQuantity] = useState(1);
   const [isPublic, setIsPublic] = useState(false);
 
+  const [timeEstimateMin, setTimeEstimateMin] = useState(0);
+  const [timeEstimateMax, setTimeEstimateMax] = useState(0);
+
   return <Container>
     <form onSubmit={async (e) => {
       e.preventDefault();
@@ -108,6 +119,8 @@ export default function NewRecipePage() {
         instructions,
         quantity: recipeQuantity,
         isPublic,
+        timeEstimateMinimumMinutes: timeEstimateMin,
+        timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax
       });
       if (recipe) {
         router.push("/recipe/" + recipe.id);
@@ -152,6 +165,37 @@ export default function NewRecipePage() {
               />
             </div>
           </RecipeSettingsContainer>
+          <TimeEstimateContainer>
+            <span>Time estimate (optional)</span>
+            {/* TODO: Allow empty value (now it's just 0 if user tries to clear all) */}
+            <div>
+              <span>
+                <NumberInput
+                  value={timeEstimateMin}
+                  onChange={setTimeEstimateMin}
+                  min={0}
+                  style={{
+                    width: "3rem",
+                    textAlign: "center"
+                  }}
+                />
+                min{" "}
+              </span>
+              <span>to{" "}</span>
+              <span>
+                <NumberInput
+                  value={timeEstimateMax}
+                  onChange={setTimeEstimateMax}
+                  min={0}
+                  style={{
+                    width: "3rem",
+                    textAlign: "center"
+                  }}
+                />
+                min
+              </span>
+            </div>
+          </TimeEstimateContainer>
         </div>
         <Button style={{ padding: "0.5rem 1rem" }} type="submit">Save recipe</Button>
       </TopRow>
