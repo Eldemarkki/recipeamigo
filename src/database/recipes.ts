@@ -84,3 +84,26 @@ export const getSingleRecipe = async (id: string) => {
   });
   return recipe;
 };
+
+export const increaseViewCountForRecipe = async (id: string) => {
+  const recipe = await prisma.recipe.findUnique({
+    where: {
+      id
+    }
+  });
+
+  if (!recipe) {
+    throw new Error("Recipe not found");
+  }
+
+  const updatedRecipe = await prisma.recipe.update({
+    where: {
+      id
+    },
+    data: {
+      viewCount: recipe.viewCount + 1
+    }
+  });
+
+  return updatedRecipe;
+};

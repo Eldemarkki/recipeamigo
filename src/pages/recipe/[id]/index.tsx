@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
-import { getSingleRecipe } from "../../../database/recipes";
+import { getSingleRecipe, increaseViewCountForRecipe } from "../../../database/recipes";
 import { Ingredient, IngredientSection as IngredientSectionType, Recipe, UserProfile } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
 import styled from "styled-components";
@@ -75,7 +75,7 @@ export default function RecipePage({ recipe }: RecipePageProps) {
     <TopRow>
       <div>
         <Title>{recipe.name}</Title>
-        <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link></p>
+        <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link> - Viewed {recipe.viewCount} {recipe.viewCount === 1 ? "time" : "times"}</p>
         <p>{recipe.description}</p>
       </div>
       <RecipeQuantityPickerContainer>
@@ -119,6 +119,7 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
   }
 
   if (recipe.isPublic) {
+    await increaseViewCountForRecipe(recipeId);
     return {
       props: {
         recipe: {
@@ -131,6 +132,7 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
   }
 
   if (user && (user.status === "No profile" || user.status === "OK")) {
+    await increaseViewCountForRecipe(recipeId);
     return {
       props: {
         recipe: {

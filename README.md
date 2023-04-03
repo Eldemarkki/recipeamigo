@@ -45,7 +45,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Simple instructions-view (big font, no bloat)
 - [ ] Notes/tips/warnings among instructions
 - [ ] "I have these ingredients, what can I make?"
-- [ ] How many times has a recipe been viewed
+- [X] How many times has a recipe been viewed
 - [ ] Recipe importing (JSON)
 - [ ] Required tools (e.g. oven, blender, etc.)
 - [ ] Ingredient substitution (e.g. "use 1/2 cup of milk instead of 1/2 cup of cream")
@@ -54,3 +54,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] "Forking" a recipe (copying it to your own account, with a link to the original)
 - [ ] Text area for the "story" of the recipe that can be collapsed to hide it
 - [ ] Optional ingredients
+- [ ] Private share links (public/password protected)/Share with selected users

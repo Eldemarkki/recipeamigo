@@ -19,6 +19,7 @@ model Recipe {
   instructions       String[]
   quantity           Int
   isPublic           Boolean
+  viewCount          Int                @default(0)
 }
 
 model IngredientSection {
