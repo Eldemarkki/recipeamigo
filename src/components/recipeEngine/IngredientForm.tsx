@@ -12,8 +12,10 @@ export type RawIngredientSection = Omit<IngredientSection, "id" | "recipeId"> & 
 }
 
 export type IngredientFormProps = {
+  type: "new" | "edit",
   addIngredient: (ingredient: RawIngredient) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
+  initialIngredient?: Partial<RawIngredient>;
 }
 
 const units = Object.keys(IngredientUnit) as IngredientUnit[];
@@ -80,11 +82,16 @@ const OptionalCheckbox = styled.input({
   margin: 0,
 });
 
-export const IngredientForm = ({ addIngredient, onCancel }: IngredientFormProps) => {
-  const [ingredientName, setIngredientName] = useState("");
-  const [ingredientAmount, setIngredientAmount] = useState(0);
-  const [ingredientUnit, setIngredientUnit] = useState<IngredientUnit | null>(null);
-  const [ingredientOptional, setIngredientOptional] = useState(false);
+export const IngredientForm = ({
+  type,
+  addIngredient,
+  initialIngredient,
+  onCancel
+}: IngredientFormProps) => {
+  const [ingredientName, setIngredientName] = useState(initialIngredient?.name ?? "");
+  const [ingredientAmount, setIngredientAmount] = useState(initialIngredient?.quantity ?? 0);
+  const [ingredientUnit, setIngredientUnit] = useState<IngredientUnit | null>(initialIngredient?.unit ?? null);
+  const [ingredientOptional, setIngredientOptional] = useState(initialIngredient?.isOptional ?? false);
 
   const ingredientNameId = useId();
   const ingredientAmountId = useId();
@@ -92,7 +99,7 @@ export const IngredientForm = ({ addIngredient, onCancel }: IngredientFormProps)
   const ingredientOptionalId = useId();
 
   return <Container>
-    <Title>New ingredient</Title>
+    {type === "new" && <Title>New ingredient</Title>}
     <Form onSubmit={(e) => {
       e.preventDefault();
       addIngredient({
@@ -158,11 +165,11 @@ export const IngredientForm = ({ addIngredient, onCancel }: IngredientFormProps)
         </OptionalContainer>
       </InputsContainer>
       <ButtonsContainer>
-        <Button style={{ flex: 1 }} type="button" onClick={onCancel} variant="secondary">
+        {onCancel && <Button style={{ flex: 1 }} type="button" onClick={onCancel} variant="secondary">
           Cancel
-        </Button>
+        </Button>}
         <Button style={{ flex: 1 }} type="submit">
-          Add ingredient
+          {type === "new" ? "Add ingredient" : "Save"}
         </Button>
       </ButtonsContainer>
     </Form>

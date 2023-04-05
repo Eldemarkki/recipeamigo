@@ -68,6 +68,14 @@ export const EditableIngredientList = ({
           addIngredient={ingredient => addIngredient(ingredient, ingredientSection.name)}
           newItemType={newItemType}
           setNewItemType={setNewItemType}
+          onEditIngredient={(newIngredient, index) => {
+            setIngredientSectionIngredients(ingredientSectionIndex, ingredientSection.ingredients.map((ingredient, i) => {
+              if (i === index) {
+                return newIngredient;
+              }
+              return ingredient;
+            }));
+          }}
         />
       )}
     </IngredientSections>}

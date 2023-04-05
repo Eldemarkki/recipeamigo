@@ -85,15 +85,20 @@ export default function NewRecipePage() {
 
   const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>([{
     name: "Main ingredients",
-    ingredients: [{
-      name: "Eggs",
-      quantity: 12,
-      unit: null
-    }, {
+    ingredients: [
+      {
+        name: "Eggs",
+        quantity: 12,
+        unit: null,
+        isOptional: false
+      },
+      {
         name: "Milk",
         quantity: 1,
-        unit: "LITER"
-      }]
+        unit: "LITER",
+        isOptional: false
+      }
+    ]
   }]);
 
   const [instructions, setInstructions] = useState<string[]>([

@@ -18,4 +18,4 @@
 | 2.4.2023  | 2      | Salli ainesosien järjestyksen muuttaminen                                      |
 | 2.4.2023  | 1      | Luo jaettu Button-komponentti                                                  |
 | 3.4.2023  | 1      | Lisää reseptien näyttökerrat ja aika-arviot                                    |
-| 5.4.2023  | 1      | Lisää vapaaehtoiset ainesosat                                                  |
+| 5.4.2023  | 2      | Lisää vapaaehtoiset ainesosat, salli ainesosien muokkaaminen                   |

@@ -53,6 +53,7 @@ export type EditableIngredientSectionProps = {
   | null,
   setNewItemType: (newItemType: EditableIngredientSectionProps["newItemType"]) => void,
   addIngredient: (ingredient: RawIngredient) => void,
+  onEditIngredient: (ingredient: RawIngredient, index: number) => void,
 };
 
 export const EditableIngredientSection = ({
@@ -62,7 +63,8 @@ export const EditableIngredientSection = ({
   onRemoveIngredient,
   newItemType,
   setNewItemType,
-  addIngredient
+  addIngredient,
+  onEditIngredient
 }: EditableIngredientSectionProps) => {
   const controls = useDragControls();
 
@@ -95,12 +97,14 @@ export const EditableIngredientSection = ({
         <EditableIngredientListItem
           key={ingredient.name}
           ingredient={ingredient}
+          onEditIngredient={i => onEditIngredient(i, index)}
           onRemove={() => onRemoveIngredient(index)}
         />
       ))}
     </IngredientList>
     {newItemType && newItemType.type === "ingredient" && newItemType.ingredientSectionName === ingredientSection.name
       ? <IngredientForm
+        type="new"
         addIngredient={addIngredient}
         onCancel={() => setNewItemType(null)} />
       : <IngredientSectionBottomSection>
