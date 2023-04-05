@@ -67,8 +67,7 @@ enum IngredientUnit {
 }
 
 model UserProfile {
-  id       String   @id @default(uuid())
+  hankoId  String   @id @unique
   username String   @unique
-  hankoId  String   @unique
   recipes  Recipe[]
 }
