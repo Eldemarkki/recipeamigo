@@ -53,5 +53,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Ingredient bank (standardized ingredient names so that they can be translated)
 - [ ] "Forking" a recipe (copying it to your own account, with a link to the original)
 - [ ] Text area for the "story" of the recipe that can be collapsed to hide it
-- [ ] Optional ingredients
+- [X] Optional ingredients
 - [ ] Private share links (public/password protected)/Share with selected users

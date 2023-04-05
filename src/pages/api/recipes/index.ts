@@ -9,7 +9,8 @@ export const ingredientUnitSchema = z.nativeEnum(IngredientUnit);
 export const ingredientSchema = z.object({
   name: z.string(),
   quantity: z.number().nonnegative(),
-  unit: ingredientUnitSchema.optional().nullable()
+  unit: ingredientUnitSchema.optional().nullable(),
+  isOptional: z.boolean().optional()
 });
 
 export const ingredientSectionSchema = z.object({

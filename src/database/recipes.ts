@@ -51,7 +51,8 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
         name: ingredient.name,
         quantity: ingredient.quantity,
         unit: ingredient.unit,
-        ingredientSectionId: ingredientSections[index].id
+        isOptional: ingredient.isOptional,
+        ingredientSectionId: ingredientSections[index].id,
       }));
     }),
   });

@@ -21,7 +21,7 @@ export type EditableIngredientListItemProps = {
   onRemove: () => void;
 }
 
-
+// TODO: Merge this with the component in IngredientList.tsx
 export const EditableIngredientListItem = ({
   ingredient,
   onRemove,
@@ -39,7 +39,7 @@ export const EditableIngredientListItem = ({
     }} />
     <DeleteButton onClick={onRemove} />
     <span>
-      {ingredient.quantity}{ingredient.unit?.toLowerCase() || ""} {ingredient.name}
+      {ingredient.quantity}{ingredient.unit?.toLowerCase() || ""} {ingredient.name}{ingredient.isOptional && " (optional)"}
     </span>
   </IngredientListItem>;
 };

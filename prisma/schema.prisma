@@ -39,6 +39,7 @@ model Ingredient {
   unit                IngredientUnit?
   ingredientSection   IngredientSection @relation(fields: [ingredientSectionId], references: [id])
   ingredientSectionId String
+  isOptional          Boolean           @default(false)
 }
 
 enum IngredientUnit {

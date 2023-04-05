@@ -51,13 +51,45 @@ const Container = styled.div({
   gap: "0.5rem",
 });
 
+const AmountRow = styled.div({
+  display: "flex",
+  flexDirection: "row",
+  gap: "0.5rem",
+  alignItems: "end",
+});
+
+const IngredientAmountInputContainer = styled.div({
+  display: "flex",
+  flex: 1
+});
+
+const InputsContainer = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.5rem",
+});
+
+const OptionalContainer = styled.div({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: "0.2rem",
+});
+
+const OptionalCheckbox = styled.input({
+  margin: 0,
+});
+
 export const IngredientForm = ({ addIngredient, onCancel }: IngredientFormProps) => {
   const [ingredientName, setIngredientName] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState(0);
   const [ingredientUnit, setIngredientUnit] = useState<IngredientUnit | null>(null);
+  const [ingredientOptional, setIngredientOptional] = useState(false);
 
   const ingredientNameId = useId();
   const ingredientAmountId = useId();
+  const ingredientUnitId = useId();
+  const ingredientOptionalId = useId();
 
   return <Container>
     <Title>New ingredient</Title>
@@ -67,45 +99,64 @@ export const IngredientForm = ({ addIngredient, onCancel }: IngredientFormProps)
         name: ingredientName,
         quantity: ingredientAmount,
         unit: ingredientUnit,
+        isOptional: ingredientOptional,
       });
       setIngredientName("");
       setIngredientAmount(0);
       setIngredientUnit(null);
     }}>
-      <InputContainer>
-        <InputLabel htmlFor={ingredientNameId}>Ingredient name</InputLabel>
-        <input
-          id={ingredientNameId}
-          value={ingredientName}
-          onChange={(event) => setIngredientName(event.target.value)}
-          type="text"
-          required
-        />
-      </InputContainer>
-      <InputContainer>
-        <InputLabel htmlFor={ingredientAmountId}>Amount</InputLabel>
-        <NumberInput
-          id={ingredientAmountId}
-          min={0}
-          required
-          value={ingredientAmount}
-          onChange={setIngredientAmount}
-          key={ingredientAmount}
-        />
-      </InputContainer>
-      <InputContainer>
-        <select
-          value={ingredientUnit || ""}
-          onChange={(e) => {
-            const value = e.target.value as IngredientUnit | "";
-            setIngredientUnit(value || null);
-          }}
-          aria-label="Unit"
-        >
-          <option value="">No unit</option>
-          {units.map((unit) => <option key={unit} value={unit}>{capitalizeFirstLetter(unit)}</option>)}
-        </select>
-      </InputContainer>
+      <InputsContainer>
+        <InputContainer>
+          <InputLabel htmlFor={ingredientNameId}>Ingredient name</InputLabel>
+          <input
+            id={ingredientNameId}
+            value={ingredientName}
+            onChange={(event) => setIngredientName(event.target.value)}
+            type="text"
+            required
+          />
+        </InputContainer>
+        <AmountRow>
+          <InputContainer style={{ flex: 1 }}>
+            <InputLabel htmlFor={ingredientAmountId}>Amount</InputLabel>
+            <IngredientAmountInputContainer>
+              <NumberInput
+                id={ingredientAmountId}
+                min={0}
+                required
+                value={ingredientAmount}
+                onChange={setIngredientAmount}
+                key={ingredientAmount}
+                style={{ flex: 1 }}
+              />
+            </IngredientAmountInputContainer>
+          </InputContainer>
+          <InputContainer>
+            <InputLabel htmlFor={ingredientUnitId}>Unit</InputLabel>
+            <select
+              id={ingredientUnitId}
+              value={ingredientUnit || ""}
+              onChange={(e) => {
+                const value = e.target.value as IngredientUnit | "";
+                setIngredientUnit(value || null);
+              }}
+              aria-label="Unit"
+            >
+              <option value="">No unit</option>
+              {units.map((unit) => <option key={unit} value={unit}>{capitalizeFirstLetter(unit)}</option>)}
+            </select>
+          </InputContainer>
+        </AmountRow>
+        <OptionalContainer>
+          <OptionalCheckbox
+            id={ingredientOptionalId}
+            type="checkbox"
+            checked={ingredientOptional}
+            onChange={(e) => setIngredientOptional(e.target.checked)}
+          />
+          <InputLabel htmlFor={ingredientOptionalId}>Optional</InputLabel>
+        </OptionalContainer>
+      </InputsContainer>
       <ButtonsContainer>
         <Button style={{ flex: 1 }} type="button" onClick={onCancel} variant="secondary">
           Cancel

@@ -31,7 +31,7 @@ export const IngredientList = ({
     {ingredients.map((ingredient) => (
       <ListItem key={ingredient.id}>
         <CrossOffText>
-          {ingredient.quantity / originalRecipeQuantity * recipeQuantity} {ingredient.unit?.toLowerCase()} {ingredient.name}
+          {ingredient.quantity / originalRecipeQuantity * recipeQuantity} {ingredient.unit?.toLowerCase()} {ingredient.name}{ingredient.isOptional && " (optional)"}
         </CrossOffText>
       </ListItem>
     ))}
