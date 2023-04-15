@@ -1,7 +1,7 @@
 import config from "../config";
 import { prisma } from "../db";
 import { UserProfile } from "@prisma/client";
-import { importJWK, jwtVerify } from "jose";
+import { createRemoteJWKSet, jwtVerify } from "jose";
 
 const getTokenFromRequest = (req: {
   headers: { authorization?: string };
@@ -16,23 +16,7 @@ const getTokenFromRequest = (req: {
   return hankoCookie;
 };
 
-const cacheLimitMilliseconds = 1000 * 60; // 1 minute
-let cachedSigningKey: any | null = null;
-let lastFetchTime: number | null = null;
-
-const fetchSigningKey = async () => {
-  const response = await fetch(config.HANKO_URL + "/.well-known/jwks.json");
-
-  const jwks = await response.json();
-  const signingKey = jwks.keys[0];
-
-  lastFetchTime = Date.now();
-  cachedSigningKey = signingKey;
-
-  console.log("Fetched signing key");
-
-  return signingKey;
-};
+const JWKS = createRemoteJWKSet(new URL("/.well-known/jwks.json", config.HANKO_URL));
 
 export const getRawUserIdFromRequest = async (req: {
   headers: { authorization?: string };
@@ -47,23 +31,9 @@ export const getRawUserIdFromRequest = async (req: {
     return null;
   }
 
-  const shouldRefetch = !cachedSigningKey || !lastFetchTime || (Date.now() - lastFetchTime) > cacheLimitMilliseconds;
-  const signingKey = shouldRefetch ? await fetchSigningKey() : cachedSigningKey;
-
-  const pem = await importJWK(signingKey, "RS256");
   try {
-    const decoded = await jwtVerify(token, pem, { algorithms: ["RS256"] });
+    const decoded = await jwtVerify(token, JWKS, { algorithms: ["RS256"] });
     if (!decoded) {
-      return null;
-    }
-
-    if (typeof decoded === "string") {
-      console.warn("Decoded user is a string");
-      return null;
-    }
-
-    if (!decoded) {
-      console.warn("Decoded user is null");
       return null;
     }
 
