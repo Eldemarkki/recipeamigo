@@ -25,12 +25,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run unit tests
+        run: npm run test:unit:ci
+
       - name: Run migrations
         run: npx prisma migrate deploy
         env:
           DATABASE_URL: postgresql://recipeamigo-test-user:recipeamigo-test-password@localhost:5433/recipeamigo-test-database
 
       - name: Connect to PostgreSQL
-        run: npm run test:github
+        run: npm test:integration:ci
         env:
           DATABASE_URL: postgresql://recipeamigo-test-user:recipeamigo-test-password@localhost:5433/recipeamigo-test-database
