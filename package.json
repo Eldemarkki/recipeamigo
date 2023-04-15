@@ -9,12 +9,12 @@
     "lint": "next lint",
     "migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
     "test:unit": "dotenv -e .env.local.test -- vitest unit.test.ts",
-    "test:integration": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts --threads false",
+    "test:integration": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts",
     "test:start_database": "docker run --name recipeamigo-test-database -p 5433:5432 -e POSTGRES_USER=recipeamigo-test-user -e POSTGRES_PASSWORD=recipeamigo-test-password -e POSTGRES_DB=recipeamigo-test-database --rm postgres:15 &",
     "test:stop_database": "docker stop recipeamigo-test-database",
-    "test": "npm run test:start_database && sleep 5 && dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run --threads false && npm run test:stop_database",
+    "test": "npm run test:start_database && sleep 5 && dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run && npm run test:stop_database",
     "test:unit:ci": "vitest unit.test.ts",
-    "test:integration:ci": "prisma migrate deploy && vitest run integration.test.ts --threads false"
+    "test:integration:ci": "prisma migrate deploy && vitest run integration.test.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",
