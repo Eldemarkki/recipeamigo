@@ -1,8 +1,7 @@
-import { decode, verify } from "jsonwebtoken";
-import jwkToPem from "jwk-to-pem";
 import config from "../config";
 import { prisma } from "../db";
 import { UserProfile } from "@prisma/client";
+import { importJWK, jwtVerify } from "jose";
 
 const getTokenFromRequest = (req: {
   headers: { authorization?: string };
@@ -51,14 +50,12 @@ export const getRawUserIdFromRequest = async (req: {
   const shouldRefetch = !cachedSigningKey || !lastFetchTime || (Date.now() - lastFetchTime) > cacheLimitMilliseconds;
   const signingKey = shouldRefetch ? await fetchSigningKey() : cachedSigningKey;
 
-  const pem = jwkToPem(signingKey);
+  const pem = await importJWK(signingKey, "RS256");
   try {
-    const isValid = verify(token, pem, { algorithms: ["RS256"] });
-    if (!isValid) {
+    const decoded = await jwtVerify(token, pem, { algorithms: ["RS256"] });
+    if (!decoded) {
       return null;
     }
-
-    const decoded = decode(token);
 
     if (typeof decoded === "string") {
       console.warn("Decoded user is a string");
@@ -70,12 +67,13 @@ export const getRawUserIdFromRequest = async (req: {
       return null;
     }
 
-    if (decoded.sub === undefined || decoded.sub === null) {
+    const userId = decoded.payload.sub;
+    if (!userId) {
       console.warn("Decoded user has no sub");
       return null;
     }
 
-    return decoded.sub;
+    return userId;
   }
   catch (e) {
     return null;
