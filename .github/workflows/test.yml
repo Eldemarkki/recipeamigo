@@ -1,0 +1,36 @@
+name: Run unit & integration tests
+on: push
+
+jobs:
+  recipeamigo-test:
+    runs-on: ubuntu-latest
+    container: node:18.16.0
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: recipeamigo-test-user
+          POSTGRES_PASSWORD: recipeamigo-test-password
+          POSTGRES_DB: recipeamigo-test-database
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://recipeamigo-test-user:recipeamigo-test-password@localhost:5433/recipeamigo-test-database
+
+      - name: Connect to PostgreSQL
+        run: npm run test:github
+        env:
+          DATABASE_URL: postgresql://recipeamigo-test-user:recipeamigo-test-password@localhost:5433/recipeamigo-test-database
