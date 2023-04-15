@@ -36,7 +36,7 @@ jobs:
         run: npx prisma migrate deploy
         env:
           DATABASE_URL: postgresql://recipeamigo-test-user:recipeamigo-test-password@postgres:5432/recipeamigo-test-database
-      - name: Connect to PostgreSQL
+      - name: Run integration tests
         run: npm run test:integration:ci
         env:
           DATABASE_URL: postgresql://recipeamigo-test-user:recipeamigo-test-password@postgres:5432/recipeamigo-test-database
