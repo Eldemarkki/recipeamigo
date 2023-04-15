@@ -39,6 +39,10 @@ export const getRawUserIdFromRequest = async (req: {
   headers: { authorization?: string };
   cookies: { hanko?: string };
 }) => {
+  if (process.env.NODE_ENV === "test") {
+    return req.headers.authorization;
+  }
+
   const token = getTokenFromRequest(req);
   if (!token) {
     return null;
