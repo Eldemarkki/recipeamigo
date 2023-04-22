@@ -124,7 +124,7 @@ export default function RecipePage({ recipe }: RecipePageProps) {
 export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (context) => {
   const recipeId = context.query.id;
   if (typeof recipeId !== "string" || recipeId.length === 0) {
-    throw new Error("Recipe id is not a string");
+    throw new Error("Recipe id is not a string. This should never happen.");
   }
 
   const user = await getUserFromRequest(context.req);

@@ -26,7 +26,7 @@ export default function UserPage({ user }: UserPageProps) {
 export const getServerSideProps: GetServerSideProps<UserPageProps> = async (context) => {
   const username = context.params?.username;
   if (typeof username !== "string") {
-    throw new Error("Invalid username. This should never happen");
+    throw new Error("Username is not a string. This should never happen");
   }
 
   const visitingUser = await getUserAndPublicRecipesByUsername(username);
