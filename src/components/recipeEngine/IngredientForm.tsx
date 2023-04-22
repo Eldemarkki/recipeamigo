@@ -5,9 +5,9 @@ import { capitalizeFirstLetter } from "../../utils/stringUtils";
 import { NumberInput } from "../forms/NumberInput";
 import { Button } from "../button/Button";
 
-export type RawIngredient = Omit<Ingredient, "id" | "ingredientSectionId">;
+export type RawIngredient = Omit<Ingredient, "id" | "ingredientSectionId" | "order">;
 
-export type RawIngredientSection = Omit<IngredientSection, "id" | "recipeId"> & {
+export type RawIngredientSection = Omit<IngredientSection, "id" | "recipeId" | "order"> & {
   ingredients: RawIngredient[];
 }
 

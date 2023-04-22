@@ -120,7 +120,13 @@ export default function NewRecipePage() {
       const recipe = await saveRecipe({
         name,
         description,
-        ingredientSections: ingredientSections,
+        ingredientSections: ingredientSections.map((section) => ({
+          ...section,
+          ingredients: section.ingredients.map((ingredient) => ({
+            ...ingredient,
+            unit: ingredient.unit ?? undefined
+          }))
+        })),
         instructions,
         quantity: recipeQuantity,
         isPublic,

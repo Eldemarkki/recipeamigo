@@ -27,19 +27,23 @@ model Recipe {
 model IngredientSection {
   id          String       @id @default(uuid())
   name        String
+  order       Int          
   recipeId    String
   recipe      Recipe       @relation(fields: [recipeId], references: [id])
   ingredients Ingredient[]
+  @@unique([recipeId, order])
 }
 
 model Ingredient {
   id                  String            @id @default(uuid())
   name                String
+  order               Int
   quantity            Float
   unit                IngredientUnit?
   ingredientSection   IngredientSection @relation(fields: [ingredientSectionId], references: [id])
   ingredientSectionId String
   isOptional          Boolean           @default(false)
+  @@unique([ingredientSectionId, order])
 }
 
 enum IngredientUnit {

@@ -9,13 +9,13 @@ export const ingredientUnitSchema = z.nativeEnum(IngredientUnit);
 export const ingredientSchema = z.object({
   name: z.string(),
   quantity: z.number().nonnegative(),
-  unit: ingredientUnitSchema.optional().nullable(),
-  isOptional: z.boolean().optional()
+  unit: ingredientUnitSchema.optional(),
+  isOptional: z.boolean().optional(),
 });
 
 export const ingredientSectionSchema = z.object({
   name: z.string(),
-  ingredients: z.array(ingredientSchema)
+  ingredients: z.array(ingredientSchema),
 });
 
 export const createRecipeSchema = z.object({
@@ -62,6 +62,8 @@ const handler: NextApiHandler = async (req, res) => {
 
     return res.status(200).json(recipe);
   }
+
+  return res.status(405).end();
 };
 
 export default handler;

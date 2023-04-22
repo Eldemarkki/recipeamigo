@@ -1,6 +1,9 @@
-import { createRecipe, getAllRecipesForUser } from "./recipes";
+import { createRecipe, editRecipe, getAllRecipesForUser, getSingleRecipe } from "./recipes";
 import { createUserToDatabase } from "../utils/tests/testUtils";
 import { createRandomRecipe } from "../utils/tests/recipes";
+import { z } from "zod";
+import { editRecipeSchema } from "../pages/api/recipes/[id]";
+import { Ingredient, IngredientSection, Recipe, UserProfile } from "@prisma/client";
 
 describe("recipes", () => {
   it("should return empty array when user has no recipes", async () => {
@@ -36,5 +39,130 @@ describe("recipes", () => {
     expect(recipes2).toHaveLength(1);
     expect(recipes1[0]).toEqual(newRecipe1);
     expect(recipes2[0]).toEqual(newRecipe2);
+  });
+});
+
+const compareRecipes = (actual: Recipe & {
+  ingredientSections: (IngredientSection & {
+    ingredients: Ingredient[];
+  })[];
+}, expected: z.infer<typeof editRecipeSchema>, original: Recipe & {
+  ingredientSections: (IngredientSection & {
+    ingredients: Ingredient[];
+  })[];
+  }) => {
+  const { ingredientSections: expectedIngredientSections, instructions: expectedInstructions, ...expectedBasic } = expected;
+  const { ingredientSections: actualIngredientSections, instructions: actualInstructions, ...actualBasic } = actual;
+
+  expect(actualBasic).toEqual(expect.objectContaining({
+    ...expectedBasic,
+    id: original.id,
+    userId: original.userId,
+    createdAt: original.createdAt,
+    updatedAt: expect.any(Date),
+  }));
+
+  const hasIngredientSections = !!expectedIngredientSections;
+  expect(actualIngredientSections).toEqual((expectedIngredientSections ?? original.ingredientSections).map((section, sectionIndex) => ({
+    ...section,
+    id: (hasIngredientSections && "id" in section) ? section.id : expect.any(String),
+    recipeId: original.id,
+    order: sectionIndex,
+    ingredients: section.ingredients?.map((ingredient, ingredientIndex) => ({
+      ...ingredient,
+      order: ingredientIndex,
+      ingredientSectionId: (hasIngredientSections && "id" in section) ? section.id : expect.any(String),
+      id: "id" in ingredient ? ingredient.id : expect.any(String),
+      isOptional: ingredient.isOptional
+        ?? original.ingredientSections
+          .flatMap(section => section.ingredients)
+          .find(i => "id" in ingredient && i.id === ingredient.id)?.isOptional
+        ?? false,
+    }))
+  })));
+
+  expect(actualInstructions).toEqual(expectedInstructions ?? original.instructions);
+};
+
+describe("editRecipes", () => {
+  it("should update basic recipe properties", async () => {
+    const userId = await createUserToDatabase();
+    const recipe = await createRecipe(userId, createRandomRecipe());
+
+    const editedRecipe: z.infer<typeof editRecipeSchema> = {
+      description: "Updated description",
+      name: "Updated recipe name",
+      quantity: 100,
+      isPublic: !recipe.isPublic,
+      timeEstimateMinimumMinutes: 10000,
+      timeEstimateMaximumMinutes: 100000,
+    };
+
+    const actual = await editRecipe(recipe.id, editedRecipe);
+
+    compareRecipes(actual, editedRecipe, recipe);
+  });
+
+  it("should update recipe ingredients", async () => {
+    const userId = await createUserToDatabase();
+    const recipe = await createRecipe(userId, createRandomRecipe());
+
+    const editedRecipe: z.infer<typeof editRecipeSchema> = {
+      ingredientSections: [
+        {
+          id: recipe.ingredientSections[0].id,
+          name: "Updated ingredient section name",
+          ingredients: [
+            {
+              id: recipe.ingredientSections[0].ingredients[0].id,
+              quantity: 1,
+              name: "Updated ingredient name",
+              unit: "TABLESPOON" as const,
+            },
+            {
+              quantity: 2,
+              name: "New ingredient name",
+              unit: "DASH" as const,
+            }
+          ],
+        },
+        {
+          name: "New ingredient section name",
+          ingredients: [
+            {
+              quantity: 3,
+              name: "New ingredient name 1",
+              unit: "PINCH" as const,
+            },
+            {
+              quantity: 3,
+              name: "New ingredient name 2",
+              unit: "PINT" as const,
+            }
+          ],
+        }
+      ],
+    };
+
+    const actual = await editRecipe(recipe.id, editedRecipe);
+
+    compareRecipes(actual, editedRecipe, recipe);
+  });
+
+  it("should update recipe instructions", async () => {
+    const userId = await createUserToDatabase();
+    const recipe = await createRecipe(userId, createRandomRecipe());
+
+    const editedRecipe: z.infer<typeof editRecipeSchema> = {
+      instructions: [
+        "Updated instruction 1",
+        "Updated instruction 2",
+        "Updated instruction 3"
+      ]
+    };
+
+    const actual = await editRecipe(recipe.id, editedRecipe);
+
+    compareRecipes(actual, editedRecipe, recipe);
   });
 });
