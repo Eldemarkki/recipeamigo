@@ -20,64 +20,65 @@ export const getAllRecipesForUser = async (userId: string) => {
 };
 
 export const createRecipe = async (userId: string, recipe: z.infer<typeof createRecipeSchema>) => {
-  const createdRecipe = await prisma.recipe.create({
-    data: {
-      name: recipe.name,
-      description: recipe.description,
-      instructions: recipe.instructions,
-      quantity: recipe.quantity,
-      isPublic: recipe.isPublic,
-      userId,
-      timeEstimateMinimumMinutes: recipe.timeEstimateMinimumMinutes,
-      timeEstimateMaximumMinutes: recipe.timeEstimateMaximumMinutes,
-    }
-  });
+  return await prisma.$transaction(async (prisma) => {
+    const createdRecipe = await prisma.recipe.create({
+      data: {
+        name: recipe.name,
+        description: recipe.description,
+        instructions: recipe.instructions,
+        quantity: recipe.quantity,
+        isPublic: recipe.isPublic,
+        userId,
+        timeEstimateMinimumMinutes: recipe.timeEstimateMinimumMinutes,
+        timeEstimateMaximumMinutes: recipe.timeEstimateMaximumMinutes,
+      }
+    });
 
-  await prisma.ingredientSection.createMany({
-    data: recipe.ingredientSections.map((ingredientSection, index) => ({
-      name: ingredientSection.name,
-      recipeId: createdRecipe.id,
-      order: index
-    })),
-  });
+    await prisma.ingredientSection.createMany({
+      data: recipe.ingredientSections.map((ingredientSection, index) => ({
+        name: ingredientSection.name,
+        recipeId: createdRecipe.id,
+        order: index
+      })),
+    });
 
-  const ingredientSections = await prisma.ingredientSection.findMany({
-    where: {
-      recipeId: createdRecipe.id
-    }
-  });
+    const ingredientSections = await prisma.ingredientSection.findMany({
+      where: {
+        recipeId: createdRecipe.id
+      }
+    });
 
-  await prisma.ingredient.createMany({
-    data: recipe.ingredientSections.flatMap((ingredientSection, ingredientSectionIndex) => {
-      return ingredientSection.ingredients.map((ingredient, ingredientIndex) => ({
-        name: ingredient.name,
-        quantity: ingredient.quantity,
-        unit: ingredient.unit,
-        isOptional: ingredient.isOptional,
-        ingredientSectionId: ingredientSections[ingredientSectionIndex].id,
-        order: ingredientIndex
-      }));
-    }),
-  });
+    await prisma.ingredient.createMany({
+      data: recipe.ingredientSections.flatMap((ingredientSection, ingredientSectionIndex) => {
+        return ingredientSection.ingredients.map((ingredient, ingredientIndex) => ({
+          name: ingredient.name,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+          isOptional: ingredient.isOptional,
+          ingredientSectionId: ingredientSections[ingredientSectionIndex].id,
+          order: ingredientIndex
+        }));
+      }),
+    });
 
-  const recipeWithIngredients = await prisma.recipe.findUnique({
-    where: {
-      id: createdRecipe.id
-    },
-    include: {
-      ingredientSections: {
-        include: {
-          ingredients: true
+    const recipeWithIngredients = await prisma.recipe.findUnique({
+      where: {
+        id: createdRecipe.id
+      },
+      include: {
+        ingredientSections: {
+          include: {
+            ingredients: true
+          }
         }
       }
-    }
+    });
+
+    if (!recipeWithIngredients) throw new Error("Recipe not found after creation. This should never happen.");
+
+    return recipeWithIngredients;
   });
-
-  if (!recipeWithIngredients) throw new Error("Recipe not found after creation. This should never happen.");
-
-  return recipeWithIngredients;
 };
-
 
 export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof editRecipeSchema>) => {
   return await prisma.$transaction(async (prisma) => {
