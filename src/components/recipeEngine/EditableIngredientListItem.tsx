@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { IngredientForm, RawIngredient } from "./IngredientForm";
 import { DeleteButton } from "../button/DeleteButton";
 import { useEffect, useRef, useState } from "react";
+import { IngredientText } from "../IngredientText";
 
 const IngredientListItem = styled(Reorder.Item)({
   display: "flex",
@@ -87,7 +88,6 @@ const EditButton = styled.button({
   },
 });
 
-// TODO: Merge this with the component in IngredientList.tsx
 export const EditableIngredientListItem = ({
   ingredient,
   onEditIngredient,
@@ -128,7 +128,7 @@ export const EditableIngredientListItem = ({
       <Pencil1Icon />
     </EditButton>
     <span>
-      {ingredient.quantity}{ingredient.unit?.toLowerCase() || ""} {ingredient.name}{ingredient.isOptional && " (optional)"}
+      <IngredientText ingredient={ingredient} />
     </span>
   </IngredientListItem>;
 };

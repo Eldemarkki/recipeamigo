@@ -1,6 +1,7 @@
 import { Ingredient } from "@prisma/client";
 import styled from "styled-components";
 import { CrossOffText } from "./CrossOffText";
+import { IngredientText } from "../IngredientText";
 
 const List = styled.ul({
   display: "flex",
@@ -31,7 +32,11 @@ export const IngredientList = ({
     {ingredients.map((ingredient) => (
       <ListItem key={ingredient.id}>
         <CrossOffText>
-          {ingredient.quantity / originalRecipeQuantity * recipeQuantity} {ingredient.unit?.toLowerCase()} {ingredient.name}{ingredient.isOptional && " (optional)"}
+          <IngredientText
+            ingredient={ingredient}
+            originalRecipeQuantity={originalRecipeQuantity}
+            recipeQuantity={recipeQuantity}
+          />
         </CrossOffText>
       </ListItem>
     ))}
