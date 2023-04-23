@@ -53,4 +53,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] "Forking" a recipe (copying it to your own account, with a link to the original)
 - [ ] Text area for the "story" of the recipe that can be collapsed to hide it
 - [X] Optional ingredients
-- [ ] Private share links (public/password protected)/Share with selected users
+- [ ] Share links
+  - [ ] Public (those who have the link)
+  - [ ] Password protected
+  - [ ] Share with selected registered users
