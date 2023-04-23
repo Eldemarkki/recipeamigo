@@ -1,0 +1,17 @@
+.deleteButtonComponent {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 15%;
+  align-items: center;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+}
+
+.deleteButtonComponent:hover,
+.deleteButtonComponent:focus {
+  background-color: #ea2727;
+  color: white;
+}

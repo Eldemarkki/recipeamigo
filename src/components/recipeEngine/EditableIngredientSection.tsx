@@ -1,46 +1,11 @@
 import { PlusIcon } from "@radix-ui/react-icons";
-import styled from "styled-components";
 import { IngredientForm, RawIngredient, RawIngredientSection } from "./IngredientForm";
 import { Reorder, useDragControls } from "framer-motion";
 import { EditableIngredientListItem } from "./EditableIngredientListItem";
 import { DeleteButton } from "../button/DeleteButton";
 import { CircularButton } from "../button/Button";
 import { DragHandle } from "../misc/DragHandle";
-
-const Container = styled(Reorder.Item)({
-  display: "flex",
-  flexDirection: "column",
-  border: "1px solid #bbb",
-  padding: "0.5rem",
-  gap: "0.7rem",
-  borderRadius: "0.6rem",
-});
-
-const Title = styled.h3({
-  margin: 0,
-  padding: 0,
-  flex: 1
-});
-
-const TopRow = styled.div({
-  display: "flex",
-  alignItems: "center",
-  gap: "0.5rem"
-});
-
-const IngredientList = styled(Reorder.Group)({
-  display: "flex",
-  flexDirection: "column",
-  gap: "0.2rem",
-  margin: 0,
-  padding: 0,
-});
-
-const IngredientSectionBottomSection = styled.div({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
+import styles from "./EditableIngredientSection.module.css";
 
 export type EditableIngredientSectionProps = {
   ingredientSection: RawIngredientSection;
@@ -68,25 +33,27 @@ export const EditableIngredientSection = ({
 }: EditableIngredientSectionProps) => {
   const controls = useDragControls();
 
-  return <Container
+  return <Reorder.Item
+    className={styles.container}
     value={ingredientSection}
     dragListener={false}
     dragControls={controls}
   >
-    <TopRow>
+    <div className={styles.topRow}>
       <DragHandle onPointerDown={(e) => {
         controls.start(e);
         e.preventDefault();
       }} />
-      <Title>{ingredientSection.name}</Title>
+      <h3 className={styles.title}>{ingredientSection.name}</h3>
       <DeleteButton onClick={() => {
         // TODO: Implement a more beautiful confirmation dialog
         if (confirm(`Are you sure you want to delete the ingredient section "${ingredientSection.name}"?`)) {
           onRemove();
         }
       }} />
-    </TopRow>
-    <IngredientList
+    </div>
+    <Reorder.Group
+      className={styles.ingredientList}
       axis="y"
       values={ingredientSection.ingredients}
       onReorder={(items) => {
@@ -101,18 +68,18 @@ export const EditableIngredientSection = ({
           onRemove={() => onRemoveIngredient(index)}
         />
       ))}
-    </IngredientList>
+    </Reorder.Group>
     {newItemType && newItemType.type === "ingredient" && newItemType.ingredientSectionName === ingredientSection.name
       ? <IngredientForm
         type="new"
         addIngredient={addIngredient}
         onCancel={() => setNewItemType(null)} />
-      : <IngredientSectionBottomSection>
+      : <div className={styles.ingredientSectionBottomSection}>
         <CircularButton
           onClick={() => setNewItemType({ type: "ingredient", ingredientSectionName: ingredientSection.name })}
         >
           <PlusIcon />
         </CircularButton>
-      </IngredientSectionBottomSection>}
-  </Container>;
+      </div>}
+  </Reorder.Item>;
 };

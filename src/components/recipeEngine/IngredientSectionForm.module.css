@@ -1,0 +1,25 @@
+.buttonsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.title {
+  margin: 0;
+  padding: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.container {
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #bbb;
+  padding: 0.5rem;
+  border-radius: 0.6rem;
+}

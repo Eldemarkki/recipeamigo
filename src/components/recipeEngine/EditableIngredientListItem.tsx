@@ -1,34 +1,11 @@
-import { DragHandleDots2Icon, Pencil1Icon } from "@radix-ui/react-icons";
+import { Pencil1Icon } from "@radix-ui/react-icons";
 import { Reorder, useDragControls } from "framer-motion";
-import styled from "styled-components";
 import { IngredientForm, RawIngredient } from "./IngredientForm";
 import { DeleteButton } from "../button/DeleteButton";
 import { useEffect, useRef, useState } from "react";
 import { IngredientText } from "../IngredientText";
-
-const IngredientListItem = styled(Reorder.Item)({
-  display: "flex",
-  gap: "0.3rem",
-  alignItems: "center",
-});
-
-const DragHandle = styled(DragHandleDots2Icon)({
-  "&:hover, &:focus": {
-    cursor: "grab",
-  },
-});
-
-const Dialog = styled.dialog({
-  padding: "3rem 5rem",
-  border: "none",
-  boxShadow: "0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1)",
-  borderRadius: "0.5rem",
-  "::backdrop": {
-    pointerEvents: "none",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    backdropFilter: "blur(8px)",
-  }
-});
+import { DragHandle } from "../misc/DragHandle";
+import styles from "./EditableIngredientListItem.module.css";
 
 export type EditableIngredientListItemProps = {
   ingredient: RawIngredient;
@@ -63,30 +40,15 @@ const EditModal = ({
     };
   }, [onClose, open, dialogRef]);
 
-  return <Dialog ref={dialogRef} open={open}>
+  return <dialog className={styles.dialog} ref={dialogRef} open={open}>
     <h1>Editing {ingredient.name}</h1>
     <IngredientForm
       type="edit"
       addIngredient={onEditIngredient}
       initialIngredient={ingredient}
     />
-  </Dialog>;
+  </dialog>;
 };
-
-const EditButton = styled.button({
-  backgroundColor: "transparent",
-  display: "flex",
-  justifyContent: "center",
-  aspectRatio: "1",
-  borderRadius: "15%",
-  alignItems: "center",
-  border: "none",
-  margin: 0,
-  "&:hover, &:focus": {
-    cursor: "pointer",
-    backgroundColor: "#f2c61d",
-  },
-});
 
 export const EditableIngredientListItem = ({
   ingredient,
@@ -97,7 +59,8 @@ export const EditableIngredientListItem = ({
   const controls = useDragControls();
   const [isEditing, setIsEditing] = useState(false);
 
-  return <IngredientListItem
+  return <Reorder.Item
+    className={styles.ingredientListItem}
     value={ingredient}
     dragListener={false}
     dragControls={controls}
@@ -116,19 +79,21 @@ export const EditableIngredientListItem = ({
         setIsEditing(false);
       }}
     />
-    <DragHandle onPointerDown={(e) => {
-      controls.start(e);
-      e.preventDefault();
-    }} />
+    <DragHandle
+      onPointerDown={(e) => {
+        controls.start(e);
+        e.preventDefault();
+      }}
+    />
     <DeleteButton onClick={onRemove} />
-    <EditButton onClick={() => {
+    <button className={styles.editButton} onClick={() => {
       setIsEditing(true);
       if (ref.current) ref.current.showModal();
     }}>
       <Pencil1Icon />
-    </EditButton>
+    </button>
     <span>
       <IngredientText ingredient={ingredient} />
     </span>
-  </IngredientListItem>;
+  </Reorder.Item>;
 };

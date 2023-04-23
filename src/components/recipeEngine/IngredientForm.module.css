@@ -1,0 +1,61 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputLabel {
+  font-size: 0.8rem;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.title {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.amountRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.ingredientAmountInputContainer {
+  display: flex;
+  flex: 1;
+}
+
+.inputsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.optionalContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.optionalCheckbox {
+  margin: 0;
+}

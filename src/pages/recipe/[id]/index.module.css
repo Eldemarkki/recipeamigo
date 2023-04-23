@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem 10rem;
+  gap: 2rem;
+}
+
+.title {
+  font-size: 3rem;
+  margin: 0px;
+}
+
+.ingredientsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 350px;
+}
+
+.splitContainer {
+  display: flex;
+  gap: 8rem;
+}
+
+.instructionsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.ingredientsTitle {
+  margin: 0px;
+}
+
+.instructionsTitle {
+  margin: 0px;
+}
+
+.topRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.recipeQuantityPickerContainer {
+  max-width: 250px;
+}

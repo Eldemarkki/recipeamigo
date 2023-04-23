@@ -1,6 +1,6 @@
 import { Ingredient, IngredientSection as IngredientSectionType } from "@prisma/client";
 import { IngredientList } from "./IngredientList";
-import styled from "styled-components";
+import styles from "./IngredientSection.module.css";
 
 export type IngredientSectionProps = {
   section: IngredientSectionType & {
@@ -10,23 +10,13 @@ export type IngredientSectionProps = {
   originalRecipeQuantity: number;
 };
 
-const Container = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  gap: "0.5rem",
-});
-
-const Title = styled.h3({
-  margin: 0,
-});
-
 export const IngredientSection = ({ section, recipeQuantity, originalRecipeQuantity }: IngredientSectionProps) => {
-  return <Container>
-    <Title>{section.name}</Title>
+  return <div className={styles.container}>
+    <h3 className={styles.title}>{section.name}</h3>
     <IngredientList
       ingredients={section.ingredients}
       recipeQuantity={recipeQuantity}
       originalRecipeQuantity={originalRecipeQuantity}
     />
-  </Container>;
+  </div>;
 };

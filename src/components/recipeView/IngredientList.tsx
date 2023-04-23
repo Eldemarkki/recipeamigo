@@ -1,21 +1,7 @@
 import { Ingredient } from "@prisma/client";
-import styled from "styled-components";
 import { CrossOffText } from "./CrossOffText";
 import { IngredientText } from "../IngredientText";
-
-const List = styled.ul({
-  display: "flex",
-  flexDirection: "column",
-  listStyle: "none",
-  padding: 0,
-  margin: 0,
-  gap: "0.5rem",
-});
-
-const ListItem = styled.li({
-  backgroundColor: "#f1f1f1",
-  padding: "0.3rem 0.6rem",
-});
+import styles from "./IngredientList.module.css";
 
 export type IngredientListProps = {
   ingredients: Ingredient[];
@@ -28,9 +14,9 @@ export const IngredientList = ({
   originalRecipeQuantity,
   recipeQuantity,
 }: IngredientListProps) => {
-  return <List>
+  return <ul className={styles.list}>
     {ingredients.map((ingredient) => (
-      <ListItem key={ingredient.id}>
+      <li className={styles.listItem} key={ingredient.id}>
         <CrossOffText>
           <IngredientText
             ingredient={ingredient}
@@ -38,7 +24,7 @@ export const IngredientList = ({
             recipeQuantity={recipeQuantity}
           />
         </CrossOffText>
-      </ListItem>
+      </li>
     ))}
-  </List>;
+  </ul>;
 };

@@ -1,37 +1,14 @@
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
-import styled from "styled-components";
 import { useState } from "react";
 import { UserProfile } from "@prisma/client";
 import { useRouter } from "next/router";
 import { Button } from "../../../components/button/Button";
+import styles from "./page.module.css";
 
 export type CreateProfilePageProps = {
   userId: string;
 }
-
-const Container = styled.div({
-  display: "flex",
-  minHeight: "100vh",
-  justifyContent: "center",
-  alignItems: "center",
-  padding: "3rem",
-});
-
-const InnerContainer = styled.main({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-  padding: "3rem 5rem",
-  backgroundColor: "#f1f1f1",
-  borderRadius: "1rem",
-});
-
-const Form = styled.form({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-});
 
 export default function CreateProfilePage(props: CreateProfilePageProps) {
   const [profileName, setProfileName] = useState("");
@@ -82,13 +59,16 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
     }
   };
 
-  return <Container>
-    <InnerContainer>
+  return <div className={styles.container}>
+    <div className={styles.innerContainer}>
       <h1>What should we call you?</h1>
-      <Form onSubmit={async (e) => {
-        e.preventDefault();
-        await saveProfile();
-      }}>
+      <form
+        className={styles.form}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          await saveProfile();
+        }}
+      >
         <input
           type="text"
           value={profileName}
@@ -100,9 +80,9 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
           required
         />
         <Button>Create profile</Button>
-      </Form>
-    </InnerContainer>
-  </Container>;
+      </form>
+    </div>
+  </div>;
 }
 
 export const getServerSideProps: GetServerSideProps<CreateProfilePageProps> = async ({ req }) => {

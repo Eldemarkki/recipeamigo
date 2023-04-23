@@ -1,0 +1,13 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 0.5rem;
+}
+
+.listItem {
+  background-color: #f1f1f1;
+  padding: 0.3rem 0.6rem;
+}

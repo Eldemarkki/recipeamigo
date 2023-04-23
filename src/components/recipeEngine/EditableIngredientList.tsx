@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { RawIngredient, RawIngredientSection } from "./IngredientForm";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
@@ -6,6 +5,7 @@ import { IngredientSectionForm } from "./IngredientSectionForm";
 import { Reorder } from "framer-motion";
 import { EditableIngredientSection } from "./EditableIngredientSection";
 import { CircularButton } from "../button/Button";
+import styles from "./EditableIngredientList.module.css";
 
 export type IngredientListProps = {
   ingredientSections: RawIngredientSection[];
@@ -16,26 +16,6 @@ export type IngredientListProps = {
   setIngredientSectionIngredients: (index: number, items: RawIngredient[]) => void;
   setIngredientSections: (items: RawIngredientSection[]) => void;
 }
-
-const Container = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem"
-});
-
-const IngredientSections = styled(Reorder.Group)({
-  display: "flex",
-  flexDirection: "column",
-  gap: "0.5rem",
-  padding: 0,
-  margin: 0,
-});
-
-const IngredientSectionBottomSection = styled.div({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
 
 export const EditableIngredientList = ({
   ingredientSections,
@@ -52,8 +32,9 @@ export const EditableIngredientList = ({
     | null
   >(null);
 
-  return <Container>
-    {ingredientSections.length > 0 && <IngredientSections
+  return <div className={styles.container}>
+    {ingredientSections.length > 0 && <Reorder.Group
+      className={styles.ingredientSections}
       onReorder={setIngredientSections}
       values={ingredientSections}
       axis="y"
@@ -78,7 +59,7 @@ export const EditableIngredientList = ({
           }}
         />
       )}
-    </IngredientSections>}
+    </Reorder.Group>}
     {(newItemType && newItemType.type === "section")
       ? <IngredientSectionForm
         addIngredientSection={ingredientSectionName => {
@@ -87,13 +68,13 @@ export const EditableIngredientList = ({
         }}
         onCancel={() => setNewItemType(null)}
       />
-      : <IngredientSectionBottomSection>
+      : <div className={styles.ingredientSectionBottomSection}>
         <CircularButton
           onClick={() => setNewItemType({ type: "section" })}
         >
           <PlusIcon />
         </CircularButton>
-      </IngredientSectionBottomSection>
+      </div>
     }
-  </Container >;
+  </div>;
 };

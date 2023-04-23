@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import styled from "styled-components";
 import PlaceholderImage from "../images/recipe_placeholder.jpg";
+import styles from "./RecipeCard.module.css";
 
 export type RecipeCardProps = {
   id: string;
@@ -9,29 +9,8 @@ export type RecipeCardProps = {
   description: string;
 }
 
-const Container = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  border: "1px solid black",
-  borderRadius: "0.5rem",
-  gap: "1rem",
-  minHeight: "16rem",
-});
-
-const RecipeName = styled.h3({
-  margin: 0,
-});
-
-const RecipeDescription = styled.p({
-  margin: 0,
-});
-
-const RecipeInfoContainer = styled.div({
-  padding: "0 1rem",
-});
-
 export const RecipeCard = (props: RecipeCardProps) => {
-  return <Container>
+  return <div className={styles.container}>
     <div style={{
       position: "relative",
       width: "100%",
@@ -50,13 +29,13 @@ export const RecipeCard = (props: RecipeCardProps) => {
         }}
       />
     </div>
-    <RecipeInfoContainer>
+    <div className={styles.recipeInfoContainer}>
       <Link href={`/recipe/${props.id}`}>
-        <RecipeName>
+        <h3 className={styles.recipeName}>
           {props.name}
-        </RecipeName>
+        </h3>
       </Link>
-      <RecipeDescription>{props.description}</RecipeDescription>
-    </RecipeInfoContainer>
-  </Container>;
+      <p className={styles.recipeDescription}>{props.description}</p>
+    </div>
+  </div>;
 };

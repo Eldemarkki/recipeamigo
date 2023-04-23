@@ -1,0 +1,34 @@
+.buttonComponent {
+  border-width: 3px;
+  border-style: solid;
+  color: inherit;
+  display: flex;
+  justify-content: center;
+  border-radius: 1rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.primary {
+  background-color: #f2c61d;
+  border-color: #d9b526;
+}
+
+.primary:hover {
+  background-color: #e1bd2b;
+}
+
+.secondary {
+  background-color: transparent;
+  border-color: #f5d34b;
+}
+
+.buttonComponent.secondary:hover {
+  border-color: #e1bd2b;
+}
+
+.circular {
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  display: flex;
+}

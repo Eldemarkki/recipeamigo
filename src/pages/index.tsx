@@ -4,35 +4,21 @@ import { Recipe } from "@prisma/client";
 import { getAllRecipesForUser } from "../database/recipes";
 import { ConvertDates } from "../utils/types";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
-import styled from "styled-components";
 import { NewRecipeButton } from "../components/NewRecipeButton";
+import styles from "./page.module.css";
 
 type HomeProps = {
   recipes: ConvertDates<Recipe>[];
 }
 
-const Container = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  padding: "3rem 5rem",
-  gap: "1.5rem"
-});
-
-const RecipesTitleRow = styled.div({
-  display: "flex",
-  flexDirection: "row",
-  gap: "2rem",
-  alignItems: "center",
-});
-
 export default function Home({ recipes }: HomeProps) {
-  return <Container>
-    <RecipesTitleRow>
+  return <div className={styles.container}>
+    <div className={styles.recipesTitleRow}>
       <h2>My recipes</h2>
       <NewRecipeButton />
-    </RecipesTitleRow>
+    </div>
     <RecipeCardGrid showCreateButton recipes={recipes} />
-  </Container>;
+  </div>;
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req }) => {

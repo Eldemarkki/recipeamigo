@@ -1,0 +1,12 @@
+.linkButton {
+  background-color: #f2c61d;
+  border: 3px solid #d9b526;
+  color: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  cursor: pointer;
+}

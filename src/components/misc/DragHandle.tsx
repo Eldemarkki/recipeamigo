@@ -1,8 +1,6 @@
 import { DragHandleDots2Icon } from "@radix-ui/react-icons";
-import styled from "styled-components";
+import styles from "./DragHandle.module.css";
+import { IconProps } from "@radix-ui/react-icons/dist/types";
 
-export const DragHandle = styled(DragHandleDots2Icon)({
-  "&:hover, &:focus": {
-    cursor: "grab",
-  },
-});
+export const DragHandle = (props: IconProps) =>
+  <DragHandleDots2Icon {...props} className={styles.dragHandle} />;

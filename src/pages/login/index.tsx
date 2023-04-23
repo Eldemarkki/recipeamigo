@@ -1,35 +1,9 @@
 import dynamic from "next/dynamic";
-import styled from "styled-components";
 import config from "../../config";
+import styles from "./page.module.css";
 const HankoAuth = dynamic(() => import("../../components/auth/HankoAuth"), {
   ssr: false,
   loading: () => <p>Loading...</p>
-});
-
-const Title = styled.h1({
-  fontSize: "4rem",
-  fontWeight: "bold",
-  fontFamily: "Inter"
-});
-
-const TitleGradientPart = styled.span({
-  background: "linear-gradient(90deg, #FFB800 0%, #FF5E00 100%)",
-  WebkitBackgroundClip: "text",
-  backgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-});
-
-const Container = styled.div({
-  display: "flex",
-  height: "100vh",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
-const InnerContainer = styled.main({
-  display: "flex",
-  flexDirection: "column",
-  gap: "4rem",
 });
 
 // Currently the app name is "Recipeamigo" and the "Recipe" part should have a gradient.
@@ -47,12 +21,12 @@ const ensureAppNameStyle = () => {
 
 export default function Home() {
   const { appNameFirst, appNameSecond } = ensureAppNameStyle();
-  return <Container>
-    <InnerContainer>
-      <Title>
-        <TitleGradientPart>{appNameFirst}</TitleGradientPart>{appNameSecond}
-      </Title>
+  return <div className={styles.container}>
+    <div className={styles.innerContainer}>
+      <h1 className={styles.title}>
+        <span className={styles.titleGradientPart}>{appNameFirst}</span>{appNameSecond}
+      </h1>
       <HankoAuth />
-    </InnerContainer>
-  </Container>;
+    </div>
+  </div>;
 }

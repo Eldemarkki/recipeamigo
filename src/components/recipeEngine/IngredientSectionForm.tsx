@@ -1,32 +1,6 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { Button } from "../button/Button";
-
-const ButtonsContainer = styled.div({
-  display: "flex",
-  flexDirection: "row",
-  gap: "1rem",
-});
-
-const Title = styled.h3({
-  margin: 0,
-  padding: 0,
-});
-
-const Form = styled.form({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-});
-
-const Container = styled.div({
-  gap: "0.5rem",
-  display: "flex",
-  flexDirection: "column",
-  border: "1px solid #bbb",
-  padding: "0.5rem",
-  borderRadius: "0.6rem",
-});
+import styles from "./IngredientSectionForm.module.css";
 
 export type IngredientSectionFormProps = {
   addIngredientSection: (ingredientSectionName: string) => void;
@@ -36,9 +10,9 @@ export type IngredientSectionFormProps = {
 export const IngredientSectionForm = (props: IngredientSectionFormProps) => {
   const [sectionName, setSectionName] = useState("");
 
-  return <Container>
-    <Title>New section</Title>
-    <Form onSubmit={(e) => {
+  return <div className={styles.container}>
+    <h3 className={styles.title}>New section</h3>
+    <form className={styles.form} onSubmit={(e) => {
       e.preventDefault();
       props.addIngredientSection(sectionName);
     }}>
@@ -49,14 +23,14 @@ export const IngredientSectionForm = (props: IngredientSectionFormProps) => {
         placeholder="Section name"
         required
       />
-      <ButtonsContainer>
+      <div className={styles.buttonsContainer}>
         <Button style={{ flex: 1 }} type="button" onClick={props.onCancel} variant="secondary">
           Cancel
         </Button>
         <Button style={{ flex: 1 }} type="submit">
           Create
         </Button>
-      </ButtonsContainer>
-    </Form>
-  </Container>;
+      </div>
+    </form>
+  </div>;
 };

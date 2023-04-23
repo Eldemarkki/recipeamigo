@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.innerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 3rem 5rem;
+  background-color: #f1f1f1;
+  border-radius: 1rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

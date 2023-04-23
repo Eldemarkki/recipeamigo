@@ -3,12 +3,12 @@ import { getUserFromRequest } from "../../../utils/auth";
 import { getSingleRecipe, increaseViewCountForRecipe } from "../../../database/recipes";
 import { Ingredient, IngredientSection as IngredientSectionType, Recipe, UserProfile } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
-import styled from "styled-components";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
 import Link from "next/link";
+import styles from "./index.module.css";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -18,53 +18,6 @@ export type RecipePageProps = {
     user: UserProfile;
   }
 };
-
-const Container = styled.main({
-  display: "flex",
-  flexDirection: "column",
-  padding: "3rem 10rem",
-  gap: "2rem",
-});
-
-const Title = styled.h1({
-  fontSize: "3rem",
-  margin: 0,
-});
-
-const IngredientsContainer = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-  maxWidth: 350
-});
-
-const SplitContainer = styled.div({
-  display: "flex",
-  gap: "8rem"
-});
-
-const InstructionsContainer = styled.div({
-  display: "flex",
-  flexDirection: "column",
-});
-
-const IngredientsTitle = styled.h2({
-  margin: 0,
-});
-
-const InstructionsTitle = styled.h2({
-  margin: 0,
-});
-
-const TopRow = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-});
-
-const RecipeQuantityPickerContainer = styled.div({
-  maxWidth: 250,
-});
 
 type TimeEstimateType = null | "single" | "range";
 
@@ -85,10 +38,10 @@ export default function RecipePage({ recipe }: RecipePageProps) {
 
   const timeEstimateType = getTimeEstimateType(recipe.timeEstimateMinimumMinutes, recipe.timeEstimateMaximumMinutes);
 
-  return <Container>
-    <TopRow>
+  return <main className={styles.container}>
+    <div className={styles.topRow}>
       <div>
-        <Title>{recipe.name}</Title>
+        <h3 className={styles.title}>{recipe.name}</h3>
         <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link> - Viewed {recipe.viewCount} {recipe.viewCount === 1 ? "time" : "times"}</p>
         {timeEstimateType !== null && (timeEstimateType === "single" ?
           <p>Time estimate: {recipe.timeEstimateMinimumMinutes} minutes</p> :
@@ -96,29 +49,29 @@ export default function RecipePage({ recipe }: RecipePageProps) {
         }
         <p>{recipe.description}</p>
       </div>
-      <RecipeQuantityPickerContainer>
+      <div className={styles.recipeQuantityPickerContainer}>
         <RecipeQuantityPicker
           quantity={recipeAmount}
           onChange={setRecipeAmount}
         />
-      </RecipeQuantityPickerContainer>
-    </TopRow>
-    <SplitContainer>
-      <IngredientsContainer>
-        <IngredientsTitle>Ingredients</IngredientsTitle>
+      </div>
+    </div>
+    <div className={styles.splitContainer}>
+      <div className={styles.ingredientsContainer}>
+        <h2 className={styles.ingredientsTitle}>Ingredients</h2>
         {recipe.ingredientSections.map((section) => <IngredientSection
           key={section.id}
           section={section}
           recipeQuantity={recipeAmount}
           originalRecipeQuantity={originalQuantity}
         />)}
-      </IngredientsContainer>
-      <InstructionsContainer>
-        <InstructionsTitle>Instructions</InstructionsTitle>
+      </div>
+      <div className={styles.instructionsContainer}>
+        <h2 className={styles.instructionsTitle}>Instructions</h2>
         <InstructionsList instructions={recipe.instructions} />
-      </InstructionsContainer>
-    </SplitContainer>
-  </Container>;
+      </div>
+    </div>
+  </main>;
 }
 
 export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (context) => {

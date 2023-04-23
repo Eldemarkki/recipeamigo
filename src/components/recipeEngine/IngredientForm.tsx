@@ -1,9 +1,9 @@
 import { Ingredient, IngredientSection, IngredientUnit } from "@prisma/client";
 import { useId, useState } from "react";
-import styled from "styled-components";
 import { capitalizeFirstLetter } from "../../utils/stringUtils";
 import { NumberInput } from "../forms/NumberInput";
 import { Button } from "../button/Button";
+import styles from "./IngredientForm.module.css";
 
 export type RawIngredient = Omit<Ingredient, "id" | "ingredientSectionId" | "order">;
 
@@ -19,68 +19,6 @@ export type IngredientFormProps = {
 }
 
 const units = Object.keys(IngredientUnit) as IngredientUnit[];
-
-const Form = styled.form({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-});
-
-const InputContainer = styled.div({
-  display: "flex",
-  flexDirection: "column",
-});
-
-const InputLabel = styled.label({
-  fontSize: "0.8rem",
-});
-
-const ButtonsContainer = styled.div({
-  display: "flex",
-  flex: 1,
-  flexDirection: "row",
-  gap: "1rem",
-});
-
-const Title = styled.h4({
-  margin: 0,
-  padding: 0,
-});
-
-const Container = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  gap: "0.5rem",
-});
-
-const AmountRow = styled.div({
-  display: "flex",
-  flexDirection: "row",
-  gap: "0.5rem",
-  alignItems: "end",
-});
-
-const IngredientAmountInputContainer = styled.div({
-  display: "flex",
-  flex: 1
-});
-
-const InputsContainer = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  gap: "0.5rem",
-});
-
-const OptionalContainer = styled.div({
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-  gap: "0.2rem",
-});
-
-const OptionalCheckbox = styled.input({
-  margin: 0,
-});
 
 export const IngredientForm = ({
   type,
@@ -98,9 +36,9 @@ export const IngredientForm = ({
   const ingredientUnitId = useId();
   const ingredientOptionalId = useId();
 
-  return <Container>
-    {type === "new" && <Title>New ingredient</Title>}
-    <Form onSubmit={(e) => {
+  return <div className={styles.container}>
+    {type === "new" && <h4 className={styles.title}>New ingredient</h4>}
+    <form className={styles.form} onSubmit={(e) => {
       e.preventDefault();
       addIngredient({
         name: ingredientName,
@@ -112,9 +50,9 @@ export const IngredientForm = ({
       setIngredientAmount(0);
       setIngredientUnit(null);
     }}>
-      <InputsContainer>
-        <InputContainer>
-          <InputLabel htmlFor={ingredientNameId}>Ingredient name</InputLabel>
+      <div className={styles.inputsContainer}>
+        <div className={styles.inputContainer}>
+          <label className={styles.inputLabel} htmlFor={ingredientNameId}>Ingredient name</label>
           <input
             id={ingredientNameId}
             value={ingredientName}
@@ -122,11 +60,11 @@ export const IngredientForm = ({
             type="text"
             required
           />
-        </InputContainer>
-        <AmountRow>
-          <InputContainer style={{ flex: 1 }}>
-            <InputLabel htmlFor={ingredientAmountId}>Amount</InputLabel>
-            <IngredientAmountInputContainer>
+        </div>
+        <div className={styles.amountRow}>
+          <div className={styles.inputContainer} style={{ flex: 1 }}>
+            <label className={styles.inputLabel} htmlFor={ingredientAmountId}>Amount</label>
+            <div className={styles.ingredientAmountInputContainer}>
               <NumberInput
                 id={ingredientAmountId}
                 min={0}
@@ -136,10 +74,10 @@ export const IngredientForm = ({
                 key={ingredientAmount}
                 style={{ flex: 1 }}
               />
-            </IngredientAmountInputContainer>
-          </InputContainer>
-          <InputContainer>
-            <InputLabel htmlFor={ingredientUnitId}>Unit</InputLabel>
+            </div>
+          </div>
+          <div className={styles.inputContainer}>
+            <label className={styles.inputLabel} htmlFor={ingredientUnitId}>Unit</label>
             <select
               id={ingredientUnitId}
               value={ingredientUnit || ""}
@@ -152,26 +90,27 @@ export const IngredientForm = ({
               <option value="">No unit</option>
               {units.map((unit) => <option key={unit} value={unit}>{capitalizeFirstLetter(unit)}</option>)}
             </select>
-          </InputContainer>
-        </AmountRow>
-        <OptionalContainer>
-          <OptionalCheckbox
+          </div>
+        </div>
+        <div className={styles.optionalContainer}>
+          <input
+            className={styles.optionalCheckbox}
             id={ingredientOptionalId}
             type="checkbox"
             checked={ingredientOptional}
             onChange={(e) => setIngredientOptional(e.target.checked)}
           />
-          <InputLabel htmlFor={ingredientOptionalId}>Optional</InputLabel>
-        </OptionalContainer>
-      </InputsContainer>
-      <ButtonsContainer>
+          <label className={styles.inputLabel} htmlFor={ingredientOptionalId}>Optional</label>
+        </div>
+      </div>
+      <div className={styles.buttonsContainer}>
         {onCancel && <Button style={{ flex: 1 }} type="button" onClick={onCancel} variant="secondary">
           Cancel
         </Button>}
         <Button style={{ flex: 1 }} type="submit">
           {type === "new" ? "Add ingredient" : "Save"}
         </Button>
-      </ButtonsContainer>
-    </Form>
-  </Container>;
+      </div>
+    </form>
+  </div>;
 };

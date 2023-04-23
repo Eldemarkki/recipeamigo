@@ -1,7 +1,7 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { DeleteButton } from "../button/DeleteButton";
 import { Button } from "../button/Button";
+import styles from "./EditableInstructionList.module.css";
 
 export type InstructionListProps = {
   instructions: string[];
@@ -9,46 +9,21 @@ export type InstructionListProps = {
   removeInstruction: (index: number) => void;
 }
 
-const Container = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-  maxWidth: 500
-});
-
-const ListContainer = styled.ol({
-  margin: 0,
-  display: "flex",
-  flexDirection: "column",
-});
-
-const InstructionListItem = styled.div({
-  display: "flex",
-  gap: "0.3rem",
-  justifyContent: "space-between",
-});
-
-const Form = styled.form({
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-});
-
 export const EditableInstructionList = ({ instructions, addInstruction, removeInstruction }: InstructionListProps) => {
   const [newInstruction, setNewInstruction] = useState("");
 
-  return <Container>
-    <ListContainer>
+  return <div className={styles.container}>
+    <ol className={styles.listContainer}>
       {instructions.map((instruction, index) => (
         <li key={instruction}>
-          <InstructionListItem>
+          <div className={styles.instructionListItem}>
             {instruction}
             <DeleteButton onClick={() => removeInstruction(index)} />
-          </InstructionListItem>
+          </div>
         </li>
       ))}
-    </ListContainer>
-    <Form onSubmit={(e) => {
+    </ol>
+    <form className={styles.form} onSubmit={(e) => {
       e.preventDefault();
       addInstruction(newInstruction);
       setNewInstruction("");
@@ -61,6 +36,6 @@ export const EditableInstructionList = ({ instructions, addInstruction, removeIn
         required
       />
       <Button type="submit">Add instruction</Button>
-    </Form>
-  </Container>;
+    </form>
+  </div>;
 };
