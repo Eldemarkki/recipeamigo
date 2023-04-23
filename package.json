@@ -22,6 +22,7 @@
     "@teamhanko/hanko-elements": "^0.4.0-alpha",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
+    "filenamify": "^6.0.0",
     "framer-motion": "^10.12.4",
     "jose": "^4.14.1",
     "next": "13.3.1",

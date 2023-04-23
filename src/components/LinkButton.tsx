@@ -1,14 +1,11 @@
 import Link from "next/link";
 import styles from "./LinkButton.module.css";
-import { PropsWithChildren } from "react";
-import { Url } from "next/dist/shared/lib/router/router";
+import { ComponentProps } from "react";
 
-export const LinkButton = ({ href, children }: PropsWithChildren<{
-  href: Url
-}>) => {
+export const LinkButton = ({ children, ...props }: ComponentProps<typeof Link>) => {
   return <Link
+    {...props}
     className={styles.linkButton}
-    href={href}
   >
     {children}
   </Link>;

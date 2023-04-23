@@ -32,8 +32,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Mobile friendly
 - [ ] Print recipe
 - [ ] Export recipe
+  - [X] JSON
   - [ ] PDF
-  - [ ] JSON
   - [ ] Markdown
 - [X] Recipe time estimation (manual)
 - [ ] Browse recipes

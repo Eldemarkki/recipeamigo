@@ -10,6 +10,8 @@ import { IngredientSection } from "../../../components/recipeView/IngredientSect
 import Link from "next/link";
 import styles from "./index.module.css";
 import { LinkButton } from "../../../components/LinkButton";
+import filenamify from "filenamify";
+import { Button } from "../../../components/button/Button";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -17,7 +19,8 @@ export type RecipePageProps = {
       ingredients: Ingredient[];
     })[];
     user: UserProfile;
-  }
+  },
+  exportFileName: string,
 };
 
 type TimeEstimateType = null | "single" | "range";
@@ -32,7 +35,16 @@ const getTimeEstimateType = (min: number, max: number | null): TimeEstimateType 
   return "range";
 };
 
-export default function RecipePage({ recipe }: RecipePageProps) {
+const exportRecipe = (data: string, filename: string) => {
+  const a = document.createElement("a");
+  const url = URL.createObjectURL(new Blob([data], { type: "text/json" }));
+  a.href = url;
+  a.download = filename;
+  a.click();
+  window.URL.revokeObjectURL(url);
+};
+
+export default function RecipePage({ recipe, exportFileName }: RecipePageProps) {
   const originalQuantity = recipe.quantity;
 
   const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
@@ -44,9 +56,20 @@ export default function RecipePage({ recipe }: RecipePageProps) {
       <div>
         <div className={styles.titleRow}>
           <h3 className={styles.title}>{recipe.name}</h3>
-          <LinkButton href={`/recipe/${recipe.id}/edit`}>
-            Edit
-          </LinkButton>
+          <div className={styles.titleRowButtons}>
+            <Button onClick={() => {
+              exportRecipe(JSON.stringify({
+                ...recipe,
+                createdAt: new Date(recipe.createdAt),
+                updatedAt: new Date(recipe.updatedAt),
+              }), exportFileName);
+            }}>
+              Export
+            </Button>
+            <LinkButton href={`/recipe/${recipe.id}/edit`}>
+              Edit
+            </LinkButton>
+          </div>
         </div>
         <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link> - Viewed {recipe.viewCount} {recipe.viewCount === 1 ? "time" : "times"}</p>
         {timeEstimateType !== null && (timeEstimateType === "single" ?
@@ -103,11 +126,13 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
           ...recipe,
           createdAt: recipe.createdAt.getTime(),
           updatedAt: recipe.updatedAt.getTime(),
-        }
+        },
+        exportFileName: filenamify(recipe.name, { replacement: "_" }),
       },
     };
   }
 
+  // TODO: Check to make sure user is not allowed to view other people's private recipes
   if (user && (user.status === "No profile" || user.status === "OK")) {
     await increaseViewCountForRecipe(recipeId);
     return {
@@ -116,7 +141,8 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
           ...recipe,
           createdAt: recipe.createdAt.getTime(),
           updatedAt: recipe.updatedAt.getTime(),
-        }
+        },
+        exportFileName: filenamify(recipe.name + ".json", { replacement: "_" }),
       },
     };
   }
