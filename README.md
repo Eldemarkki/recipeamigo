@@ -31,7 +31,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Metric/Imperial conversion
 - [ ] Mobile friendly
 - [ ] Print recipe
-- [ ] Export recipe (PDF, JSON)
+- [ ] Export recipe
+  - [ ] PDF
+  - [ ] JSON
+  - [ ] Markdown
 - [X] Recipe time estimation (manual)
 - [ ] Browse recipes
   - [ ] Exclude recipes with certain ingredients
