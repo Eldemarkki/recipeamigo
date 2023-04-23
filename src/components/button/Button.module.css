@@ -9,6 +9,10 @@
   cursor: pointer;
 }
 
+.buttonComponent:not(.circular) {
+  padding: 0.5rem 1rem;
+}
+
 .primary {
   background-color: #f2c61d;
   border-color: #d9b526;

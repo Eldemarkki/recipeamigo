@@ -9,6 +9,7 @@ import { InstructionsList } from "../../../components/recipeView/InstructionsLis
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
 import Link from "next/link";
 import styles from "./index.module.css";
+import { LinkButton } from "../../../components/LinkButton";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -41,7 +42,12 @@ export default function RecipePage({ recipe }: RecipePageProps) {
   return <main className={styles.container}>
     <div className={styles.topRow}>
       <div>
-        <h3 className={styles.title}>{recipe.name}</h3>
+        <div className={styles.titleRow}>
+          <h3 className={styles.title}>{recipe.name}</h3>
+          <LinkButton href={`/recipe/${recipe.id}/edit`}>
+            Edit
+          </LinkButton>
+        </div>
         <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link> - Viewed {recipe.viewCount} {recipe.viewCount === 1 ? "time" : "times"}</p>
         {timeEstimateType !== null && (timeEstimateType === "single" ?
           <p>Time estimate: {recipe.timeEstimateMinimumMinutes} minutes</p> :

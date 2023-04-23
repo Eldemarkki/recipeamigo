@@ -4,7 +4,7 @@ import { Recipe } from "@prisma/client";
 import { getAllRecipesForUser } from "../database/recipes";
 import { ConvertDates } from "../utils/types";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
-import { NewRecipeButton } from "../components/NewRecipeButton";
+import { LinkButton } from "../components/LinkButton";
 import styles from "./page.module.css";
 
 type HomeProps = {
@@ -15,7 +15,9 @@ export default function Home({ recipes }: HomeProps) {
   return <div className={styles.container}>
     <div className={styles.recipesTitleRow}>
       <h2>My recipes</h2>
-      <NewRecipeButton />
+      <LinkButton href="/recipe/new">
+        New recipe
+      </LinkButton>
     </div>
     <RecipeCardGrid showCreateButton recipes={recipes} />
   </div>;

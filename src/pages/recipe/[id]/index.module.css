@@ -44,3 +44,9 @@
 .recipeQuantityPickerContainer {
   max-width: 250px;
 }
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
