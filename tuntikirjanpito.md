@@ -21,3 +21,4 @@
 | 5.4.2023  | 2      | Lisää vapaaehtoiset ainesosat, salli ainesosien muokkaaminen                   |
 | 15.4.2023 | 2      | Vitest ja testaamisen setup                                                    |
 | 23.4.2023 | 6      | Endpoint reseptien muokkaamiselle                                              |
+| 23.4.2023 | 2      | Vaihda styled-component CSS modulesiin, luo sivu reseptien muokkaukselle       |
