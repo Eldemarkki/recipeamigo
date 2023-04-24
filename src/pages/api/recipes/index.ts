@@ -1,8 +1,11 @@
-import { NextApiHandler } from "next";
+import { NextApiHandler, NextApiRequest } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { createRecipe, getAllRecipesForUser } from "../../../database/recipes";
 import z from "zod";
 import { IngredientUnit } from "@prisma/client";
+import formidable from "formidable";
+import { S3 } from "@aws-sdk/client-s3";
+import { createReadStream } from "fs";
 
 export const ingredientUnitSchema = z.nativeEnum(IngredientUnit);
 
@@ -29,6 +32,69 @@ export const createRecipeSchema = z.object({
   timeEstimateMaximumMinutes: z.number().min(0).optional()
 });
 
+export const config = {
+  api: {
+    bodyParser: false,
+  }
+};
+
+const parseBodyAndUploadCoverImage = async (req: NextApiRequest, uploadFileName: string, userStatus: string): Promise<z.infer<typeof createRecipeSchema>> => {
+  return new Promise((resolve, reject) => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (_err, fields, files) => {
+      if (!("recipe" in fields)) {
+        return reject("No recipe field in request");
+      }
+
+      if (typeof fields.recipe !== "string") {
+        return reject("Recipe field is not a string");
+      }
+
+      const body = createRecipeSchema.safeParse(JSON.parse(fields.recipe));
+      if (!body.success) {
+        return reject(body.error);
+      }
+
+      // This is to prevent users without a profile from creating public recipes by calling
+      // the API directly. It is required, because the frontend requires a username
+      // to display on public recipes.
+      if (body.data.isPublic && userStatus === "No profile") {
+        return reject("You must have a profile to be able to create public recipes");
+      }
+
+      if ("coverImage" in files) {
+        const file = files.coverImage;
+        if (Array.isArray(file)) {
+          return reject("Cover image is not a single file");
+        }
+
+        const mime = file.mimetype;
+        const extension = (mime ?? "image/png").split("/")[1];
+
+        var fileStream = createReadStream(file.filepath);
+
+        const s3 = new S3({
+          endpoint: process.env.S3_ENDPOINT,
+          credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? ""
+          },
+          region: "region", // This can be whatever, but it's required
+          forcePathStyle: true,
+        });
+
+        await s3.putObject({
+          Bucket: process.env.S3_BUCKET_NAME ?? "",
+          Key: uploadFileName + "." + extension,
+          Body: fileStream,
+        });
+      }
+
+      resolve(body.data);
+    });
+  });
+};
+
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === "GET") {
     const user = await getUserFromRequest(req);
@@ -46,20 +112,9 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
-    const body = createRecipeSchema.safeParse(req.body);
-    if (!body.success) {
-      return res.status(400).json({ error: body.error });
-    }
-
-    // This is to prevent users without a profile from creating public recipes by calling
-    // the API directly. It is required, because the frontend requires a username
-    // to display on public recipes.
-    if (body.data.isPublic && user.status === "No profile") {
-      return res.status(400).json({ error: "You must have a profile to be able to create public recipes" });
-    }
-
-    const recipe = await createRecipe(user.userId, body.data);
-
+    const filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const body = await parseBodyAndUploadCoverImage(req, filename, user.status);
+    const recipe = await createRecipe(user.userId, body);
     return res.status(200).json(recipe);
   }
 

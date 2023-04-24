@@ -14,13 +14,16 @@ import { NumberInput } from "../../../components/forms/NumberInput";
 import styles from "./index.module.css";
 import { Dropzone } from "../../../components/dropzone/Dropzone";
 
-const saveRecipe = async (recipe: z.infer<typeof createRecipeSchema>) => {
+const saveRecipe = async (recipe: z.infer<typeof createRecipeSchema>, coverImage: File | null) => {
+  const formData = new FormData();
+  formData.append("recipe", JSON.stringify(recipe));
+  if (coverImage) {
+    formData.append("coverImage", coverImage);
+  }
+
   const response = await fetch("/api/recipes", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(recipe)
+    body: formData
   });
 
   const data = await response.json();
@@ -33,6 +36,7 @@ export default function NewRecipePage() {
 
   const [name, setName] = useState("New recipe");
   const [description, setDescription] = useState("");
+  const [previewImage, setCoverImage] = useState<File | null>(null);
 
   const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>([{
     name: "Main ingredients",
@@ -83,7 +87,7 @@ export default function NewRecipePage() {
         isPublic,
         timeEstimateMinimumMinutes: timeEstimateMin,
         timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax
-      });
+      }, previewImage);
       if (recipe) {
         router.push("/recipe/" + recipe.id);
       }
@@ -159,7 +163,7 @@ export default function NewRecipePage() {
               </span>
             </div>
           </div>
-          <Dropzone />
+          <Dropzone onDrop={f => setCoverImage(f)} />
         </div>
         <Button style={{ padding: "0.5rem 1rem" }} type="submit">Save recipe</Button>
       </div>
