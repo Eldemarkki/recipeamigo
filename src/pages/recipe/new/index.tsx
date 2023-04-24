@@ -12,6 +12,7 @@ import { getUserFromRequest } from "../../../utils/auth";
 import { Button } from "../../../components/button/Button";
 import { NumberInput } from "../../../components/forms/NumberInput";
 import styles from "./index.module.css";
+import { Dropzone } from "../../../components/dropzone/Dropzone";
 
 const saveRecipe = async (recipe: z.infer<typeof createRecipeSchema>) => {
   const response = await fetch("/api/recipes", {
@@ -158,6 +159,7 @@ export default function NewRecipePage() {
               </span>
             </div>
           </div>
+          <Dropzone />
         </div>
         <Button style={{ padding: "0.5rem 1rem" }} type="submit">Save recipe</Button>
       </div>
