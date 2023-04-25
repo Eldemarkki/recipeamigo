@@ -23,7 +23,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [X] Passwordless login
 - [X] Public recipes
 - [X] Edit recipe
-- [ ] Recipe cover image upload
+- [X] Recipe cover image upload
 - [ ] Recipe image gallery
 - [ ] Reference ingredient in instructions
 - [ ] Themes (light/dark/others)
