@@ -6,6 +6,7 @@ import { IngredientUnit } from "@prisma/client";
 import formidable from "formidable";
 import { S3 } from "@aws-sdk/client-s3";
 import { createReadStream } from "fs";
+import { randomUUID } from "crypto";
 
 export const ingredientUnitSchema = z.nativeEnum(IngredientUnit);
 
@@ -38,8 +39,9 @@ export const config = {
   }
 };
 
-const parseBodyAndUploadCoverImage = async (req: NextApiRequest, uploadFileName: string, userStatus: string): Promise<z.infer<typeof createRecipeSchema> & {
-  coverImageUrl?: string
+const getBodyAndCoverImage = async (req: NextApiRequest): Promise<{
+  body: unknown,
+  file?: formidable.File,
 }> => {
   return new Promise((resolve, reject) => {
     const form = new formidable.IncomingForm();
@@ -52,54 +54,22 @@ const parseBodyAndUploadCoverImage = async (req: NextApiRequest, uploadFileName:
         return reject("Recipe field is not a string");
       }
 
-      const body = createRecipeSchema.safeParse(JSON.parse(fields.recipe));
-      if (!body.success) {
-        return reject(body.error);
-      }
+      const body = JSON.parse(fields.recipe);
 
-      // This is to prevent users without a profile from creating public recipes by calling
-      // the API directly. It is required, because the frontend requires a username
-      // to display on public recipes.
-      if (body.data.isPublic && userStatus === "No profile") {
-        return reject("You must have a profile to be able to create public recipes");
-      }
-
-      let coverImageUrl: string | undefined = undefined;
       if ("coverImage" in files) {
         const file = files.coverImage;
         if (Array.isArray(file)) {
           return reject("Cover image is not a single file");
         }
 
-        const mime = file.mimetype;
-        const extension = (mime ?? "image/png").split("/")[1];
-
-        var fileStream = createReadStream(file.filepath);
-
-        const s3 = new S3({
-          endpoint: process.env.S3_ENDPOINT,
-          credentials: {
-            accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
-            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? ""
-          },
-          region: "region", // This can be whatever, but it's required
-          forcePathStyle: true,
+        resolve({
+          body,
+          file,
         });
-
-        const key = uploadFileName + "." + extension;
-        await s3.putObject({
-          Bucket: process.env.S3_BUCKET_NAME ?? "",
-          Key: key,
-          Body: fileStream,
-          ACL: "public-read", // TODO: Check if this can be made more private
-        });
-
-        coverImageUrl = process.env.S3_ENDPOINT + "/" + process.env.S3_BUCKET_NAME + "/" + key;
       }
 
       resolve({
-        ...body.data,
-        coverImageUrl
+        body
       });
     });
   });
@@ -122,9 +92,42 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
-    const filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    const body = await parseBodyAndUploadCoverImage(req, filename, user.status);
-    const recipe = await createRecipe(user.userId, body);
+    const { body, file } = await getBodyAndCoverImage(req);
+
+    let coverImageUrl: string | undefined = undefined;
+    if (file) {
+      const s3 = new S3({
+        endpoint: process.env.S3_ENDPOINT,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? ""
+        },
+        region: "region", // This can be whatever, but it's required
+        forcePathStyle: true,
+      });
+
+      const key = randomUUID();
+
+      await s3.putObject({
+        Bucket: process.env.S3_BUCKET_NAME ?? "",
+        Key: key,
+        Body: createReadStream(file.filepath),
+        ACL: "public-read", // TODO: Check if this can be made more private
+      });
+
+      coverImageUrl = process.env.S3_ENDPOINT + "/" + process.env.S3_BUCKET_NAME + "/" + key;
+    }
+
+    const recipeBody = createRecipeSchema.safeParse(body);
+
+    if (!recipeBody.success) {
+      return res.status(400).json({ message: recipeBody.error });
+    }
+
+    const recipe = await createRecipe(user.userId, {
+      ...recipeBody.data,
+      coverImageUrl
+    });
     return res.status(200).json(recipe);
   }
 
