@@ -83,7 +83,9 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
   });
 };
 
-export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof editRecipeSchema>) => {
+export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof editRecipeSchema> & {
+  coverImageUrl?: string | undefined | null
+}) => {
   return await prisma.$transaction(async (prisma) => {
     const originalRecipe = await prisma.recipe.findUnique({
       where: {
@@ -156,6 +158,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
         isPublic: editedRecipe.isPublic,
         timeEstimateMinimumMinutes: editedRecipe.timeEstimateMinimumMinutes,
         timeEstimateMaximumMinutes: editedRecipe.timeEstimateMaximumMinutes,
+        coverImageUrl: editedRecipe.coverImageUrl
       }
     });
 
@@ -261,7 +264,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
               }
               else {
                 // This should be created
-                const newIng = await prisma.ingredient.create({
+                await prisma.ingredient.create({
                   data: {
                     name: ingredient.name,
                     quantity: ingredient.quantity,

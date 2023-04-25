@@ -14,14 +14,18 @@ import { Ingredient, IngredientSection, Recipe } from "@prisma/client";
 import { editRecipeSchema } from "../../../api/recipes/[id]";
 import { RawIngredientSection } from "../../../../components/recipeEngine/IngredientForm";
 import { ConvertDates } from "../../../../utils/types";
+import { Dropzone } from "../../../../components/dropzone/Dropzone";
 
-const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSchema>) => {
+const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSchema>, coverImage: File | null) => {
+  const formData = new FormData();
+  formData.append("recipe", JSON.stringify(recipe));
+  if (coverImage) {
+    formData.append("coverImage", coverImage);
+  }
+
   await fetch(`/api/recipes/${recipeId}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(recipe)
+    body: formData
   });
 };
 
@@ -38,6 +42,7 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
 
   const [name, setName] = useState(initialRecipe.name);
   const [description, setDescription] = useState(initialRecipe.description);
+  const [coverImage, setCoverImage] = useState<File | null>(null);
 
   const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>(
     initialRecipe.ingredientSections.map(s => ({
@@ -64,6 +69,8 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
       e.preventDefault();
       // TODO: Show loading indicator while saving
       try {
+        const shouldDeleteCoverImage = coverImage === null && initialRecipe.coverImageUrl !== null;
+
         await editRecipe(initialRecipe.id, {
           name,
           description,
@@ -78,8 +85,9 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
           quantity: recipeQuantity,
           isPublic,
           timeEstimateMinimumMinutes: timeEstimateMin,
-          timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax
-        });
+          timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax,
+          shouldDeleteCoverImage
+        }, coverImage);
 
         router.push("/recipe/" + initialRecipe.id);
       }
@@ -155,6 +163,10 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
               </span>
             </div>
           </div>
+          <Dropzone
+            initialPreviewUrl={initialRecipe.coverImageUrl}
+            onDrop={f => setCoverImage(f)}
+          />
         </div>
         <Button style={{ padding: "0.5rem 1rem" }} type="submit">Save recipe</Button>
       </div>

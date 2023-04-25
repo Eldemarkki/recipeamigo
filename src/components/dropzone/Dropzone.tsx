@@ -6,10 +6,11 @@ import { DeleteButton } from "../button/DeleteButton";
 
 export type DropzoneProps = {
   onDrop: (file: File | null) => void;
+  initialPreviewUrl?: string | undefined | null;
 }
 
-export const Dropzone = ({ onDrop }: DropzoneProps) => {
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+export const Dropzone = ({ onDrop, initialPreviewUrl }: DropzoneProps) => {
+  const [previewImage, setPreviewImage] = useState(initialPreviewUrl);
 
   const onDropHandler = useCallback((acceptedFile: File) => {
     onDrop(acceptedFile);
@@ -17,7 +18,7 @@ export const Dropzone = ({ onDrop }: DropzoneProps) => {
       setPreviewImage(URL.createObjectURL(acceptedFile));
     }
     else {
-      setPreviewImage(null);
+      setPreviewImage(undefined);
     }
   }, [onDrop]);
 
@@ -35,7 +36,7 @@ export const Dropzone = ({ onDrop }: DropzoneProps) => {
   return <div className={styles.container}>
     <div className={styles.topRow}>
       <label htmlFor={inputId}>Cover image</label>
-      {previewImage && <DeleteButton type="button" onClick={() => setPreviewImage(null)} />}
+      {previewImage && <DeleteButton type="button" onClick={() => setPreviewImage(undefined)} />}
     </div>
     <div {...getRootProps()} className={styles.dropzone}>
       <input {...getInputProps()} id={inputId} />
@@ -43,8 +44,8 @@ export const Dropzone = ({ onDrop }: DropzoneProps) => {
         <Image
           src={previewImage}
           alt=""
-          width={200}
-          height={200}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className={styles.previewImage}
         /> :
         <p className={styles.dragText}>
