@@ -19,7 +19,9 @@ export const getAllRecipesForUser = async (userId: string) => {
   return recipes;
 };
 
-export const createRecipe = async (userId: string, recipe: z.infer<typeof createRecipeSchema>) => {
+export const createRecipe = async (userId: string, recipe: z.infer<typeof createRecipeSchema> & {
+  coverImageUrl?: string | undefined
+}) => {
   return await prisma.$transaction(async (prisma) => {
     const createdRecipe = await prisma.recipe.create({
       data: {
@@ -31,6 +33,7 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
         userId,
         timeEstimateMinimumMinutes: recipe.timeEstimateMinimumMinutes,
         timeEstimateMaximumMinutes: recipe.timeEstimateMaximumMinutes,
+        coverImageUrl: recipe.coverImageUrl
       }
     });
 

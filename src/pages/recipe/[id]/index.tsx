@@ -12,6 +12,7 @@ import styles from "./index.module.css";
 import { LinkButton } from "../../../components/LinkButton";
 import filenamify from "filenamify";
 import { Button } from "../../../components/button/Button";
+import Image from "next/image";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -52,6 +53,14 @@ export default function RecipePage({ recipe, exportFileName }: RecipePageProps) 
   const timeEstimateType = getTimeEstimateType(recipe.timeEstimateMinimumMinutes, recipe.timeEstimateMaximumMinutes);
 
   return <main className={styles.container}>
+    {recipe.coverImageUrl && <div className={styles.coverImageContainer}>
+      <Image
+        className={styles.coverImage}
+        src={recipe.coverImageUrl}
+        alt=""
+        fill
+      />
+    </div>}
     <div className={styles.topRow}>
       <div>
         <div className={styles.titleRow}>

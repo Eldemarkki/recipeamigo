@@ -17,6 +17,7 @@ export const RecipeCardGrid = (props: RecipeCardGridProps) => {
       id={recipe.id}
       name={recipe.name}
       description={recipe.description}
+      coverImageUrl={recipe.coverImageUrl}
     />)}
   </div>;
 };

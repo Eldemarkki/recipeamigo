@@ -38,7 +38,9 @@ export const config = {
   }
 };
 
-const parseBodyAndUploadCoverImage = async (req: NextApiRequest, uploadFileName: string, userStatus: string): Promise<z.infer<typeof createRecipeSchema>> => {
+const parseBodyAndUploadCoverImage = async (req: NextApiRequest, uploadFileName: string, userStatus: string): Promise<z.infer<typeof createRecipeSchema> & {
+  coverImageUrl?: string
+}> => {
   return new Promise((resolve, reject) => {
     const form = new formidable.IncomingForm();
     form.parse(req, async (_err, fields, files) => {
@@ -62,6 +64,7 @@ const parseBodyAndUploadCoverImage = async (req: NextApiRequest, uploadFileName:
         return reject("You must have a profile to be able to create public recipes");
       }
 
+      let coverImageUrl: string | undefined = undefined;
       if ("coverImage" in files) {
         const file = files.coverImage;
         if (Array.isArray(file)) {
@@ -83,14 +86,21 @@ const parseBodyAndUploadCoverImage = async (req: NextApiRequest, uploadFileName:
           forcePathStyle: true,
         });
 
+        const key = uploadFileName + "." + extension;
         await s3.putObject({
           Bucket: process.env.S3_BUCKET_NAME ?? "",
-          Key: uploadFileName + "." + extension,
+          Key: key,
           Body: fileStream,
+          ACL: "public-read", // TODO: Check if this can be made more private
         });
+
+        coverImageUrl = process.env.S3_ENDPOINT + "/" + process.env.S3_BUCKET_NAME + "/" + key;
       }
 
-      resolve(body.data);
+      resolve({
+        ...body.data,
+        coverImageUrl
+      });
     });
   });
 };

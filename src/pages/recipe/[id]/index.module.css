@@ -55,3 +55,12 @@
   display: flex;
   gap: 1rem;
 }
+
+.coverImageContainer {
+  position: relative;
+  height: 350px;
+}
+
+.coverImage {
+  object-fit: cover;
+}
