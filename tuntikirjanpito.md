@@ -24,3 +24,4 @@
 | 23.4.2023 | 2      | Vaihda styled-component CSS modulesiin, luo sivu reseptien muokkaukselle       |
 | 24.4.2023 | 4      | Reseptien kansikuvien upload, S3 (Minio) integrointi                           |
 | 25.4.2023 | 2      | Kansikuvien näyttäminen, muokkaaminen ja poistaminen                           |
+| Yhteensä  | 41     |                                                                                |
