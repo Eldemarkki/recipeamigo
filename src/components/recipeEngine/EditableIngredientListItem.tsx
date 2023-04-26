@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { IngredientText } from "../IngredientText";
 import { DragHandle } from "../misc/DragHandle";
 import styles from "./EditableIngredientListItem.module.css";
+import { EditButton } from "../button/EditButton";
 
 export type EditableIngredientListItemProps = {
   ingredient: RawIngredient;
@@ -86,12 +87,12 @@ export const EditableIngredientListItem = ({
       }}
     />
     <DeleteButton onClick={onRemove} />
-    <button className={styles.editButton} onClick={() => {
-      setIsEditing(true);
-      if (ref.current) ref.current.showModal();
-    }}>
-      <Pencil1Icon />
-    </button>
+    <EditButton
+      onClick={() => {
+        setIsEditing(true);
+        if (ref.current) ref.current.showModal();
+      }}
+    />
     <span>
       <IngredientText ingredient={ingredient} />
     </span>

@@ -1,7 +1,6 @@
 .linkButton {
-  background-color: #f2c61d;
-  border: 3px solid #d9b526;
-  color: inherit;
+  background-color: var(--primary);
+  color: var(--text-black);
   display: flex;
   justify-content: center;
   align-items: center;

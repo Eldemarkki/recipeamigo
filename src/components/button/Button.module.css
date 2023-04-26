@@ -1,7 +1,5 @@
 .buttonComponent {
-  border-width: 3px;
-  border-style: solid;
-  color: inherit;
+  border: none;
   display: flex;
   justify-content: center;
   border-radius: 1rem;
@@ -14,21 +12,21 @@
 }
 
 .primary {
-  background-color: #f2c61d;
-  border-color: #d9b526;
+  background-color: var(--primary);
+  color: var(--text-black);
 }
 
 .primary:hover {
-  background-color: #e1bd2b;
+  background-color: var(--primary-shade-1);
 }
 
 .secondary {
   background-color: transparent;
-  border-color: #f5d34b;
+  border: 2px solid var(--primary);
 }
 
-.buttonComponent.secondary:hover {
-  border-color: #e1bd2b;
+.secondary:hover {
+  background-color: var(--button-secondary-hover-background);
 }
 
 .circular {

@@ -47,6 +47,17 @@ export const config = {
   }
 };
 
+const allowedErrors = {
+  noRecipeField: "No recipe field in request",
+  recipeNotString: "Recipe field is not a string",
+  coverImageNotSingleFile: "Cover image is not a single file",
+} as const;
+
+type AllowedErrorKey = keyof typeof allowedErrors;
+type AllowedErrorValue = typeof allowedErrors[AllowedErrorKey];
+
+const allowedErrorValues = Object.values(allowedErrors) as AllowedErrorValue[];
+
 const getBodyAndCoverImage = async (req: NextApiRequest): Promise<{
   body: unknown,
   file?: formidable.File,
@@ -55,11 +66,11 @@ const getBodyAndCoverImage = async (req: NextApiRequest): Promise<{
     const form = new formidable.IncomingForm();
     form.parse(req, async (_err, fields, files) => {
       if (!("recipe" in fields)) {
-        return reject("No recipe field in request");
+        return reject(allowedErrors.noRecipeField);
       }
 
       if (typeof fields.recipe !== "string") {
-        return reject("Recipe field is not a string");
+        return reject(allowedErrors.recipeNotString);
       }
 
       const body = JSON.parse(fields.recipe);
@@ -67,7 +78,7 @@ const getBodyAndCoverImage = async (req: NextApiRequest): Promise<{
       if ("coverImage" in files) {
         const file = files.coverImage;
         if (Array.isArray(file)) {
-          return reject("Cover image is not a single file");
+          return reject(allowedErrors.coverImageNotSingleFile);
         }
 
         resolve({
@@ -101,54 +112,63 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(404).end();
     }
 
-    const { body, file } = await getBodyAndCoverImage(req);
+    try {
+      const { body, file } = await getBodyAndCoverImage(req);
 
-    const recipeParsed = editRecipeSchema.safeParse(body);
+      const recipeParsed = editRecipeSchema.safeParse(body);
 
-    const s3 = new S3({
-      endpoint: process.env.S3_ENDPOINT,
-      credentials: {
-        accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? ""
-      },
-      region: "region", // This can be whatever, but it's required
-      forcePathStyle: true,
-    });
-
-    const originalCoverImageKey = originalRecipe.coverImageUrl?.split("/").pop();
-    const shouldDeleteOld = file || (recipeParsed.success && recipeParsed.data.shouldDeleteCoverImage);
-
-    if (shouldDeleteOld && originalCoverImageKey) {
-      await s3.deleteObject({
-        Bucket: process.env.S3_BUCKET_NAME ?? "",
-        Key: originalCoverImageKey,
-      });
-    }
-
-    let coverImageUrl: string | undefined = undefined;
-    if (file) {
-      const key = randomUUID();
-
-      await s3.putObject({
-        Bucket: process.env.S3_BUCKET_NAME ?? "",
-        Key: key,
-        Body: createReadStream(file.filepath),
-        ACL: "public-read", // TODO: Check if this can be made more private
+      const s3 = new S3({
+        endpoint: process.env.S3_ENDPOINT,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? ""
+        },
+        region: "region", // This can be whatever, but it's required
+        forcePathStyle: true,
       });
 
-      coverImageUrl = process.env.S3_ENDPOINT + "/" + process.env.S3_BUCKET_NAME + "/" + key;
-    }
+      const originalCoverImageKey = originalRecipe.coverImageUrl?.split("/").pop();
+      const shouldDeleteOld = file || (recipeParsed.success && recipeParsed.data.shouldDeleteCoverImage);
 
-    if (recipeParsed.success) {
-      const edited = await editRecipe(id, {
-        ...recipeParsed.data,
-        coverImageUrl: coverImageUrl ?? (shouldDeleteOld ? null : undefined)
-      });
+      if (shouldDeleteOld && originalCoverImageKey) {
+        await s3.deleteObject({
+          Bucket: process.env.S3_BUCKET_NAME ?? "",
+          Key: originalCoverImageKey,
+        });
+      }
 
-      return res.status(200).json(edited);
+      let coverImageUrl: string | undefined = undefined;
+      if (file) {
+        const key = randomUUID();
+
+        await s3.putObject({
+          Bucket: process.env.S3_BUCKET_NAME ?? "",
+          Key: key,
+          Body: createReadStream(file.filepath),
+          ACL: "public-read", // TODO: Check if this can be made more private
+        });
+
+        coverImageUrl = process.env.S3_ENDPOINT + "/" + process.env.S3_BUCKET_NAME + "/" + key;
+      }
+
+      if (recipeParsed.success) {
+        const edited = await editRecipe(id, {
+          ...recipeParsed.data,
+          coverImageUrl: coverImageUrl ?? (shouldDeleteOld ? null : undefined)
+        });
+
+        return res.status(200).json(edited);
+      }
+      else {
+        return res.status(400).json({ error: recipeParsed.error });
+      }
     }
-    else {
-      return res.status(400).json(recipeParsed.error);
+    catch (e) {
+      if (typeof e === "string" && allowedErrorValues.includes(e as any)) {
+        return res.status(400).json({ error: e });
+      }
+
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 

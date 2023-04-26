@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  border: 1px solid var(--text);
   border-radius: 0.5rem;
   gap: 1rem;
   min-height: 16rem;

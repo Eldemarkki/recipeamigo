@@ -7,7 +7,7 @@ import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
-import Link from "next/link";
+import { Link } from "../../../components/link/Link";
 import styles from "./index.module.css";
 import { LinkButton } from "../../../components/LinkButton";
 import filenamify from "filenamify";

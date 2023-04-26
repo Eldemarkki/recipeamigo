@@ -7,6 +7,6 @@
 }
 
 .listItem {
-  background-color: #f1f1f1;
+  background-color: var(--background-color-secondary);
   padding: 0.3rem 0.6rem;
 }

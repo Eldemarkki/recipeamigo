@@ -1,6 +1,6 @@
 .dropzone {
   display: flex;
-  border: 1px dashed black;
+  border: 1px dashed var(--text);
   min-height: 200px;
   align-items: center;
   justify-content: center;
@@ -17,7 +17,7 @@
 }
 
 .dragText {
-  color: #aaa;
+  color: var(--discreet);
   z-index: 1;
 }
 

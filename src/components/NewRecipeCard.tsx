@@ -1,6 +1,6 @@
 import { PlusIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
 import styles from "./NewRecipeCard.module.css";
+import { Link } from "./link/Link";
 
 export const NewRecipeCard = () => {
   return <Link className={styles.link} href="/recipe/new">

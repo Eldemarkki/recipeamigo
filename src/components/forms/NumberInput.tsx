@@ -1,15 +1,17 @@
-import { DetailedHTMLProps, InputHTMLAttributes, useState } from "react";
+import { ComponentProps, useState } from "react";
+import styles from "./NumberInput.module.css";
 
-export type NumberInputProps = Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "onChange" | "onBlur" | "type"> & {
+export type NumberInputProps = Omit<ComponentProps<"input">, "onChange" | "onBlur" | "type"> & {
   onChange: (value: number) => void;
   min?: number;
   max?: number;
 }
 
-export const NumberInput = ({ onChange, value, min, max, ...props }: NumberInputProps) => {
+export const NumberInput = ({ onChange, value, min, max, className, ...props }: NumberInputProps) => {
   const [rawValue, setRawValue] = useState(value?.toString() ?? "");
 
   return <input
+    className={className ? className + " " + styles.numberInput : styles.numberInput}
     type="text"
     onBlur={e => {
       const newValue = Number(e.target.value.replace(",", "."));

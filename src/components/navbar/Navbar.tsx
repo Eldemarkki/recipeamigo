@@ -1,5 +1,5 @@
 import config from "../../config";
-import Link from "next/link";
+import { Link } from "../link/Link";
 import styles from "./Navbar.module.css";
 
 export type NavbarProps = {

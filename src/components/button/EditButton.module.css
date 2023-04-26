@@ -1,8 +1,8 @@
-.deleteButtonComponent {
+.editButton {
   background-color: transparent;
   display: flex;
   justify-content: center;
-  aspect-ratio: 1;
+  aspect-ratio: 1/1;
   border-radius: 15%;
   align-items: center;
   border: none;
@@ -11,8 +11,8 @@
   color: var(--text);
 }
 
-.deleteButtonComponent:hover,
-.deleteButtonComponent:focus {
-  background-color: var(--danger);
-  color: var(--text-white);
+.editButton:hover,
+.editButton:focus {
+  background-color: var(--primary);
+  color: var(--text-black);
 }
