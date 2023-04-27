@@ -41,7 +41,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - [ ] Only vegetarian, gluten-free, etc.
   - [ ] Less than X minutes
 - [ ] Recipe tags/categories
-- [ ] Likes
+- [X] Likes
 - [ ] Save recipes to private/public collections
 - [ ] Embedded timer ("cook for 5 minutes", click to start timer)
 - [ ] Simple instructions-view (big font, no bloat)

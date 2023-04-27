@@ -23,15 +23,17 @@ model Recipe {
   timeEstimateMinimumMinutes Int                 @default(0)
   timeEstimateMaximumMinutes Int?
   coverImageUrl              String?
+  likes                      Like[]
 }
 
 model IngredientSection {
   id          String       @id @default(uuid())
   name        String
-  order       Int          
+  order       Int
   recipeId    String
   recipe      Recipe       @relation(fields: [recipeId], references: [id])
   ingredients Ingredient[]
+
   @@unique([recipeId, order])
 }
 
@@ -44,6 +46,7 @@ model Ingredient {
   ingredientSection   IngredientSection @relation(fields: [ingredientSectionId], references: [id])
   ingredientSectionId String
   isOptional          Boolean           @default(false)
+
   @@unique([ingredientSectionId, order])
 }
 
@@ -75,4 +78,15 @@ model UserProfile {
   hankoId  String   @id @unique
   username String   @unique
   recipes  Recipe[]
+  likes    Like[]
+}
+
+model Like {
+  recipe    Recipe      @relation(fields: [recipeId], references: [id])
+  recipeId  String
+  user      UserProfile @relation(fields: [userId], references: [hankoId])
+  userId    String
+  createdAt DateTime    @default(now())
+
+  @@id([recipeId, userId])
 }

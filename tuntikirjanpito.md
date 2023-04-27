@@ -25,4 +25,5 @@
 | 24.4.2023 | 4      | Reseptien kansikuvien upload, S3 (Minio) integrointi                           |
 | 25.4.2023 | 2      | Kansikuvien näyttäminen, muokkaaminen ja poistaminen                           |
 | 26.4.2023 | 3      | Tumman teeman parantelu, tykkäysten lisääminen                                 |
-| Yhteensä  | 44     |                                                                                |
+| 27.4.2023 | 1      | Tykkäysten viimeistely                                                         |
+| Yhteensä  | 45     |                                                                                |

@@ -13,6 +13,7 @@ import { LinkButton } from "../../../components/LinkButton";
 import filenamify from "filenamify";
 import { Button } from "../../../components/button/Button";
 import Image from "next/image";
+import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -20,9 +21,15 @@ export type RecipePageProps = {
       ingredients: Ingredient[];
     })[];
     user: UserProfile;
+    likeCount: number;
   },
   exportFileName: string,
-};
+} & ({
+  userId: null,
+} | {
+  userId: string,
+  likeStatus: boolean,
+})
 
 type TimeEstimateType = null | "single" | "range";
 
@@ -45,8 +52,28 @@ const exportRecipe = (data: string, filename: string) => {
   window.URL.revokeObjectURL(url);
 };
 
-export default function RecipePage({ recipe, exportFileName }: RecipePageProps) {
+export default function RecipePage(props: RecipePageProps) {
+  const { recipe, exportFileName } = props;
+  const [likeCount, setLikeCount] = useState(recipe.likeCount);
+  const [likeStatus, setLikeStatus] = useState(props.userId ? props.likeStatus : null);
+
   const originalQuantity = recipe.quantity;
+
+  const likeRecipe = async () => {
+    fetch(`/api/recipes/${recipe.id}/like`, {
+      method: "POST",
+    });
+    setLikeCount(likeCount + 1);
+    setLikeStatus(true);
+  };
+
+  const unlikeRecipe = async () => {
+    await fetch(`/api/recipes/${recipe.id}/unlike`, {
+      method: "POST",
+    });
+    setLikeCount(likeCount - 1);
+    setLikeStatus(false);
+  };
 
   const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
 
@@ -75,12 +102,20 @@ export default function RecipePage({ recipe, exportFileName }: RecipePageProps) 
             }}>
               Export
             </Button>
-            <LinkButton href={`/recipe/${recipe.id}/edit`}>
+            {props.userId && recipe.user.hankoId === props.userId && <LinkButton href={`/recipe/${recipe.id}/edit`}>
               Edit
-            </LinkButton>
+            </LinkButton>}
           </div>
         </div>
         <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link> - Viewed {recipe.viewCount} {recipe.viewCount === 1 ? "time" : "times"}</p>
+        {props.userId && recipe.user.hankoId !== props.userId &&
+          <Button
+            variant="secondary"
+            onClick={likeStatus === true ? unlikeRecipe : likeRecipe}
+          >
+            {likeStatus ? "Unlike" : "Like"}
+          </Button>}
+        <p>{likeCount} {likeCount === 1 ? "like" : "likes"}</p>
         {timeEstimateType !== null && (timeEstimateType === "single" ?
           <p>Time estimate: {recipe.timeEstimateMinimumMinutes} minutes</p> :
           <p>Time estimate: {recipe.timeEstimateMinimumMinutes} - {recipe.timeEstimateMaximumMinutes} minutes</p>)
@@ -127,6 +162,27 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
     };
   }
 
+  const userIsRecipeOwner = user.status !== "Unauthorized" && user.userId === recipe.userId;
+  if (recipe.isPublic === false && !userIsRecipeOwner) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const likeCount = await getLikeCountForRecipe(recipeId);
+
+  const likeStatusAndAnonymity: ({
+    userId: null,
+  } | {
+    userId: string,
+    likeStatus: boolean,
+  }) = user.status === "Unauthorized" ? {
+    userId: null
+  } : {
+      userId: user.userId,
+      likeStatus: !!(await getLikeStatus(user.userId, recipeId)),
+    };
+
   if (recipe.isPublic) {
     await increaseViewCountForRecipe(recipeId);
     return {
@@ -135,8 +191,10 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
           ...recipe,
           createdAt: recipe.createdAt.getTime(),
           updatedAt: recipe.updatedAt.getTime(),
+          likeCount,
         },
         exportFileName: filenamify(recipe.name, { replacement: "_" }),
+        ...likeStatusAndAnonymity
       },
     };
   }
@@ -150,8 +208,10 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
           ...recipe,
           createdAt: recipe.createdAt.getTime(),
           updatedAt: recipe.updatedAt.getTime(),
+          likeCount,
         },
         exportFileName: filenamify(recipe.name + ".json", { replacement: "_" }),
+        ...likeStatusAndAnonymity
       },
     };
   }

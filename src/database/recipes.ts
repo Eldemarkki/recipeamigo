@@ -117,7 +117,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
     });
     const hasAccessToAllIngredientSections = ingredientSections.every(ingredientSection => ingredientSection.recipeId === recipeId);
     if (!hasAccessToAllIngredientSections) {
-      throw new Error("Can not move ingredient section to another recipe");
+      throw new Error("Cannot move ingredient section to another recipe");
     }
 
     const ingredientIds = (editedRecipe.ingredientSections ?? [])
@@ -142,7 +142,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
 
     const hasAccessToAllIngredients = ingredients.every(ingredient => ingredient.ingredientSection.recipeId === recipeId);
     if (!hasAccessToAllIngredients) {
-      throw new Error("Can not move ingredient to another recipe");
+      throw new Error("Cannot move ingredient to another recipe");
     }
 
     // edit basic fields of recipe
