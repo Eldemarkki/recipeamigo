@@ -1,0 +1,14 @@
+.dialog {
+  background-color: var(--background-color);
+  color: var(--text);
+  padding: 3rem 5rem;
+  border: none;
+  box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.dialog::backdrop {
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
