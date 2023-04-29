@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req, l
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "en", ["home"])),
+      ...(await serverSideTranslations(locale ?? "en")),
       recipes: recipes.map(recipe => ({
         ...recipe,
         createdAt: recipe.createdAt.getTime(),

@@ -1,1 +1,7 @@
-{}
+{
+  "navbar": {
+    "home": "Etusivu",
+    "settings": "Asetukset",
+    "profile": "Profiili"
+  }
+}
