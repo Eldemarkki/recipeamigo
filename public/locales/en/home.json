@@ -1,4 +1,5 @@
 {
   "myRecipes": "My recipes",
-  "newRecipeButton": "New recipe"
+  "newRecipeButton": "New recipe",
+  "newRecipeButtonLong": "Create new recipe"
 }
