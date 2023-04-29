@@ -12,12 +12,6 @@ html[data-theme='light'] {
   --new-recipe-card-hover-background: #00000011;
   --danger: #ea2727;
   --discreet: #aaa;
-
-  hanko-auth,
-  hanko-profile {
-    --color: var(--text-black);
-    --color-shade-2: var(--background-color-secondary);
-  }
 }
 
 @mixin dark-mode {
@@ -29,12 +23,12 @@ html[data-theme='light'] {
   --primary-shade-1: #dfb81c;
   --button-secondary-hover-background: #7a662957;
   --new-recipe-card-hover-background: #FFFFFF11;
+}
 
-  hanko-auth,
-  hanko-profile {
-    --color: #dbdbdb;
-    --color-shade-2: var(--background-color-secondary);
-  }
+hanko-auth,
+hanko-profile {
+  --color: var(--text);
+  --color-shade-2: var(--background-color-secondary);
 }
 
 @media (prefers-color-scheme: dark) {
