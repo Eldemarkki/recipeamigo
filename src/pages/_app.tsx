@@ -2,6 +2,7 @@ import type { AppContext, AppInitialProps, AppProps } from "next/app";
 import "../styles/index.scss";
 import { Navbar } from "../components/navbar/Navbar";
 import { useTheme } from "../hooks/useTheme";
+import { appWithTranslation } from "next-i18next";
 
 export type Props = {
   isLoggedIn: boolean
@@ -38,4 +39,4 @@ App.getInitialProps = async ({ ctx }: AppContext): Promise<AppInitialProps<Props
   };
 };
 
-export default App;
+export default appWithTranslation(App);

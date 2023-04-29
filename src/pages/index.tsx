@@ -6,24 +6,26 @@ import { ConvertDates } from "../utils/types";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
 import { LinkButton } from "../components/LinkButton";
 import styles from "./page.module.css";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 type HomeProps = {
   recipes: ConvertDates<Recipe>[];
 }
 
 export default function Home({ recipes }: HomeProps) {
+  const { t } = useTranslation("home");
+
   return <div className={styles.container}>
     <div className={styles.recipesTitleRow}>
-      <h2>My recipes</h2>
-      <LinkButton href="/recipe/new">
-        New recipe
-      </LinkButton>
+      <h2>{t("myRecipes")}</h2>
+      <LinkButton href="/recipe/new">{t("newRecipeButton")}</LinkButton>
     </div>
     <RecipeCardGrid showCreateButton recipes={recipes} />
   </div>;
 }
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req, locale }) => {
   const user = await getUserFromRequest(req);
 
   if (user.status === "Unauthorized") {
@@ -48,6 +50,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req })
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? "en", ["home"])),
       recipes: recipes.map(recipe => ({
         ...recipe,
         createdAt: recipe.createdAt.getTime(),
