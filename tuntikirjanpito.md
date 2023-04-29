@@ -27,4 +27,5 @@
 | 26.4.2023 | 3      | Tumman teeman parantelu, tykkäysten lisääminen                                 |
 | 27.4.2023 | 1      | Tykkäysten viimeistely                                                         |
 | 29.4.2023 | 1      | Dialog-komponentin refactorointi                                               |
-| Yhteensä  | 46     |                                                                                |
+| 29.4.2023 | 1      | Teemavalintakomponentin luominen                                               |
+| Yhteensä  | 47     |                                                                                |

@@ -18,6 +18,9 @@ export const Navbar = ({ isLoggedIn }: NavbarProps) => {
         <li>
           <Link href="/">Home</Link>
         </li>
+        <li>
+          <Link href="/settings">Settings</Link>
+        </li>
         {isLoggedIn &&
           <li>
             <Link href="/profile">Profile</Link>

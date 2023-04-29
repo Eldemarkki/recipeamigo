@@ -1,6 +1,7 @@
 import type { AppContext, AppInitialProps, AppProps } from "next/app";
-import "../styles/index.css";
+import "../styles/index.scss";
 import { Navbar } from "../components/navbar/Navbar";
+import { useTheme } from "../hooks/useTheme";
 
 export type Props = {
   isLoggedIn: boolean
@@ -13,6 +14,7 @@ const navbarHiddenPaths = [
 
 const App = ({ Component, pageProps, router }: AppProps<Props>) => {
   const showNavbar = !navbarHiddenPaths.includes(router.pathname);
+  useTheme();
 
   return <>
     {showNavbar && <Navbar isLoggedIn={pageProps.isLoggedIn} />}
