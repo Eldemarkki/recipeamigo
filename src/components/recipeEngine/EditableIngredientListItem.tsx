@@ -7,6 +7,7 @@ import { DragHandle } from "../misc/DragHandle";
 import styles from "./EditableIngredientListItem.module.css";
 import { EditButton } from "../button/EditButton";
 import { Dialog } from "../dialog/Dialog";
+import { useTranslation } from "next-i18next";
 
 export type EditableIngredientListItemProps = {
   ingredient: RawIngredient;
@@ -19,6 +20,7 @@ export const EditableIngredientListItem = ({
   onEditIngredient,
   onRemove,
 }: EditableIngredientListItemProps) => {
+  const { t } = useTranslation();
   const controls = useDragControls();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -32,7 +34,7 @@ export const EditableIngredientListItem = ({
       open={isEditing}
       onClickOutside={() => setIsEditing(false)}
     >
-      <h1>Editing {ingredient.name}</h1>
+      <h1>{t("recipeView:edit.editingIngredientTitle", { ingredientName: ingredient.name })}</h1>
       <IngredientForm
         type="edit"
         addIngredient={newIngredient => {

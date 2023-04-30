@@ -15,6 +15,8 @@ import { editRecipeSchema } from "../../../api/recipes/[id]";
 import { RawIngredientSection } from "../../../../components/recipeEngine/IngredientForm";
 import { ConvertDates } from "../../../../utils/types";
 import { Dropzone } from "../../../../components/dropzone/Dropzone";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { Trans, useTranslation } from "next-i18next";
 
 const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSchema>, coverImage: File | null) => {
   const formData = new FormData();
@@ -38,6 +40,7 @@ export type EditRecipePageProps = {
 }
 
 export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePageProps) {
+  const { t } = useTranslation("recipeView");
   const router = useRouter();
 
   const [name, setName] = useState(initialRecipe.name);
@@ -105,14 +108,14 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
           <input
             className={styles.recipeNameInput}
             type="text"
-            placeholder="Recipe name"
+            placeholder={t("edit.recipeName")}
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
           <input
             type="text"
-            placeholder="Description"
+            placeholder={t("edit.description")}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
@@ -123,7 +126,7 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
               onChange={setRecipeQuantity}
             />
             <div>
-              <label htmlFor="is-public">Public</label>
+              <label htmlFor="is-public">{t("edit.isPublic")}</label>
               <input
                 id="is-public"
                 type="checkbox"
@@ -133,10 +136,10 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
             </div>
           </div>
           <div className={styles.timeEstimateContainer}>
-            <span>Time estimate (optional)</span>
+            <span>{t("edit.timeEstimateTitle")}</span>
             {/* TODO: Allow empty value (now it's just 0 if user tries to clear all) */}
             <div>
-              <span>
+              <Trans i18nKey="recipeView:edit.timeEstimate">
                 <NumberInput
                   value={timeEstimateMin}
                   onChange={setTimeEstimateMin}
@@ -146,10 +149,8 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
                     textAlign: "center"
                   }}
                 />
-                min{" "}
-              </span>
-              <span>to{" "}</span>
-              <span>
+                <span>min{" "}</span>
+                <span>to{" "}</span>
                 <NumberInput
                   value={timeEstimateMax}
                   onChange={setTimeEstimateMax}
@@ -159,8 +160,8 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
                     textAlign: "center"
                   }}
                 />
-                min
-              </span>
+                <span>min</span>
+              </Trans>
             </div>
           </div>
           <Dropzone
@@ -168,13 +169,13 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
             onDrop={f => setCoverImage(f)}
           />
         </div>
-        <Button style={{ padding: "0.5rem 1rem" }} type="submit">Save recipe</Button>
+        <Button style={{ padding: "0.5rem 1rem" }} type="submit">{t("edit.saveRecipe")}</Button>
       </div>
     </form>
     {/* TODO: Add h1 tag somewhere*/}
     <main className={styles.splitContainer}>
       <div className={styles.leftPanel}>
-        <h2>Ingredients</h2>
+        <h2>{t("ingredientsTitle")}</h2>
         {/* TODO: Implement adding multiple sections */}
         <EditableIngredientList
           ingredientSections={ingredientSections}
@@ -234,7 +235,7 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
         />
       </div>
       <div className={styles.rightPanel}>
-        <h2>Instructions</h2>
+        <h2>{t("instructionsTitle")}</h2>
         <EditableInstructionList
           instructions={instructions}
           addInstruction={(instruction) => setInstructions([...instructions, instruction])}
@@ -245,7 +246,7 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
   </div >;
 }
 
-export const getServerSideProps: GetServerSideProps<EditRecipePageProps> = async ({ req, params }) => {
+export const getServerSideProps: GetServerSideProps<EditRecipePageProps> = async ({ req, params, locale }) => {
   const user = await getUserFromRequest(req);
   if (user.status === "Unauthorized") {
     return {
@@ -272,6 +273,7 @@ export const getServerSideProps: GetServerSideProps<EditRecipePageProps> = async
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? "en")),
       recipe: {
         ...recipe,
         createdAt: recipe.createdAt.getDate(),

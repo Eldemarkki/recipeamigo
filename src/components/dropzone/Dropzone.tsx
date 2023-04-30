@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone";
 import styles from "./Dropzone.module.css";
 import Image from "next/image";
 import { DeleteButton } from "../button/DeleteButton";
+import { useTranslation } from "next-i18next";
 
 export type DropzoneProps = {
   onDrop: (file: File | null) => void;
@@ -10,6 +11,7 @@ export type DropzoneProps = {
 }
 
 export const Dropzone = ({ onDrop, initialPreviewUrl }: DropzoneProps) => {
+  const { t } = useTranslation("recipeView");
   const [previewImage, setPreviewImage] = useState(initialPreviewUrl);
 
   const onDropHandler = useCallback((acceptedFile: File) => {
@@ -35,7 +37,7 @@ export const Dropzone = ({ onDrop, initialPreviewUrl }: DropzoneProps) => {
 
   return <div className={styles.container}>
     <div className={styles.topRow}>
-      <label htmlFor={inputId}>Cover image</label>
+      <label htmlFor={inputId}>{t("coverImageDropzone.title")}</label>
       {previewImage && <DeleteButton type="button" onClick={() => setPreviewImage(undefined)} />}
     </div>
     <div {...getRootProps()} className={styles.dropzone}>
@@ -50,8 +52,8 @@ export const Dropzone = ({ onDrop, initialPreviewUrl }: DropzoneProps) => {
         /> :
         <p className={styles.dragText}>
           {isDragActive
-            ? "Drop the files here..."
-            : "Drag & drop some files here, or click to select files"
+            ? t("coverImageDropzone.dragActive")
+            : t("coverImageDropzone.dragInactive")
           }
         </p>}
     </div>

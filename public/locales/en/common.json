@@ -6,6 +6,8 @@
   },
   "actions": {
     "export": "Export",
-    "edit": "Edit"
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "save": "Save"
   }
 }

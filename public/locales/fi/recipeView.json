@@ -18,5 +18,32 @@
     "increase": "Kasvata"
   },
   "ingredientsTitle": "Ainesosat",
-  "instructionsTitle": "Ohjeet"
+  "instructionsTitle": "Ohjeet",
+  "edit": {
+    "recipeName": "Reseptin nimi",
+    "description": "Kuvaus",
+    "isPublic": "Julkinen",
+    "timeEstimateTitle": "Aika-arvio (vapaaehtoinen)",
+    "timeEstimate": "<0></0>min - <3></3>min",
+    "saveRecipe": "Tallenna resepti",
+    "editingIngredientTitle": "Muokataan {{ingredientName}}",
+    "instructions": {
+      "newInstructionPlaceholder": "Uusi ohje",
+      "addInstructionButton": "Lisää ohje"
+    },
+    "ingredients": {
+      "newIngredientTitle": "Uusi ainesosa",
+      "ingredientName": "Ainesosan nimi",
+      "amount": "Määrä",
+      "unit": "Otsikko",
+      "noUnit": "Ei yksikköä",
+      "isOptional": "Vapaaehtoinen",
+      "addIngredientButton": "Lisää ainesosa"
+    }
+  },
+  "coverImageDropzone": {
+    "title": "Kansikuva",
+    "dragActive": "Pudota kuva tänne ...",
+    "dragInactive": "Raahaa ja pudota kuva tänne, tai klikkaa valitaksesi kuva."
+  }
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DeleteButton } from "../button/DeleteButton";
 import { Button } from "../button/Button";
 import styles from "./EditableInstructionList.module.css";
+import { useTranslation } from "next-i18next";
 
 export type InstructionListProps = {
   instructions: string[];
@@ -10,6 +11,7 @@ export type InstructionListProps = {
 }
 
 export const EditableInstructionList = ({ instructions, addInstruction, removeInstruction }: InstructionListProps) => {
+  const { t } = useTranslation("recipeView");
   const [newInstruction, setNewInstruction] = useState("");
 
   return <div className={styles.container}>
@@ -32,10 +34,10 @@ export const EditableInstructionList = ({ instructions, addInstruction, removeIn
         type="text"
         value={newInstruction}
         onChange={(e) => setNewInstruction(e.target.value)}
-        placeholder="New instruction"
+        placeholder={t("edit.instructions.newInstructionPlaceholder")}
         required
       />
-      <Button type="submit">Add instruction</Button>
+      <Button type="submit">{t("edit.instructions.newInstructionPlaceholder")}</Button>
     </form>
   </div>;
 };

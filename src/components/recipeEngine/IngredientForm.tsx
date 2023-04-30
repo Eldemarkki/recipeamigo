@@ -4,6 +4,7 @@ import { capitalizeFirstLetter } from "../../utils/stringUtils";
 import { NumberInput } from "../forms/NumberInput";
 import { Button } from "../button/Button";
 import styles from "./IngredientForm.module.css";
+import { useTranslation } from "next-i18next";
 
 export type RawIngredient = Omit<Ingredient, "id" | "ingredientSectionId" | "order">;
 
@@ -26,6 +27,8 @@ export const IngredientForm = ({
   initialIngredient,
   onCancel
 }: IngredientFormProps) => {
+  const { t } = useTranslation();
+
   const [ingredientName, setIngredientName] = useState(initialIngredient?.name ?? "");
   const [ingredientAmount, setIngredientAmount] = useState(initialIngredient?.quantity ?? 0);
   const [ingredientUnit, setIngredientUnit] = useState<IngredientUnit | null>(initialIngredient?.unit ?? null);
@@ -37,7 +40,7 @@ export const IngredientForm = ({
   const ingredientOptionalId = useId();
 
   return <div className={styles.container}>
-    {type === "new" && <h4 className={styles.title}>New ingredient</h4>}
+    {type === "new" && <h4 className={styles.title}>{t("recipeView:edit.ingredients.newIngredientTitle")}</h4>}
     <form className={styles.form} onSubmit={(e) => {
       e.preventDefault();
       addIngredient({
@@ -52,7 +55,7 @@ export const IngredientForm = ({
     }}>
       <div className={styles.inputsContainer}>
         <div className={styles.inputContainer}>
-          <label className={styles.inputLabel} htmlFor={ingredientNameId}>Ingredient name</label>
+          <label className={styles.inputLabel} htmlFor={ingredientNameId}>{t("recipeView:edit.ingredients.ingredientName")}</label>
           <input
             id={ingredientNameId}
             value={ingredientName}
@@ -63,7 +66,7 @@ export const IngredientForm = ({
         </div>
         <div className={styles.amountRow}>
           <div className={styles.inputContainer} style={{ flex: 1 }}>
-            <label className={styles.inputLabel} htmlFor={ingredientAmountId}>Amount</label>
+            <label className={styles.inputLabel} htmlFor={ingredientAmountId}>{t("recipeView:edit.ingredients.amount")}</label>
             <div className={styles.ingredientAmountInputContainer}>
               <NumberInput
                 id={ingredientAmountId}
@@ -77,7 +80,7 @@ export const IngredientForm = ({
             </div>
           </div>
           <div className={styles.inputContainer}>
-            <label className={styles.inputLabel} htmlFor={ingredientUnitId}>Unit</label>
+            <label className={styles.inputLabel} htmlFor={ingredientUnitId}>{t("recipeView:edit.ingredients.unit")}</label>
             <select
               id={ingredientUnitId}
               value={ingredientUnit || ""}
@@ -87,7 +90,7 @@ export const IngredientForm = ({
               }}
               aria-label="Unit"
             >
-              <option value="">No unit</option>
+              <option value="">{t("recipeView:edit.ingredients.noUnit")}</option>
               {units.map((unit) => <option key={unit} value={unit}>{capitalizeFirstLetter(unit)}</option>)}
             </select>
           </div>
@@ -100,15 +103,15 @@ export const IngredientForm = ({
             checked={ingredientOptional}
             onChange={(e) => setIngredientOptional(e.target.checked)}
           />
-          <label className={styles.inputLabel} htmlFor={ingredientOptionalId}>Optional</label>
+          <label className={styles.inputLabel} htmlFor={ingredientOptionalId}>{t("recipeView:edit.ingredients.isOptional")}</label>
         </div>
       </div>
       <div className={styles.buttonsContainer}>
         {onCancel && <Button style={{ flex: 1 }} type="button" onClick={onCancel} variant="secondary">
-          Cancel
+          {t("common:actions.cancel")}
         </Button>}
         <Button style={{ flex: 1 }} type="submit">
-          {type === "new" ? "Add ingredient" : "Save"}
+          {type === "new" ? t("recipeView:edit.ingredients.addIngredientButton") : t("common:actions.save")}
         </Button>
       </div>
     </form>
