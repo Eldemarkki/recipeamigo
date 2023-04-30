@@ -3,5 +3,9 @@
     "home": "Home",
     "settings": "Settings",
     "profile": "Profile"
+  },
+  "actions": {
+    "export": "Export",
+    "edit": "Edit"
   }
 }

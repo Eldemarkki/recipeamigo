@@ -14,6 +14,8 @@ import filenamify from "filenamify";
 import { Button } from "../../../components/button/Button";
 import Image from "next/image";
 import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { Trans, useTranslation } from "next-i18next";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -53,6 +55,7 @@ const exportRecipe = (data: string, filename: string) => {
 };
 
 export default function RecipePage(props: RecipePageProps) {
+  const { t } = useTranslation();
   const { recipe, exportFileName } = props;
   const [likeCount, setLikeCount] = useState(recipe.likeCount);
   const [likeStatus, setLikeStatus] = useState(props.userId ? props.likeStatus : null);
@@ -100,25 +103,28 @@ export default function RecipePage(props: RecipePageProps) {
                 updatedAt: new Date(recipe.updatedAt),
               }), exportFileName);
             }}>
-              Export
+              {t("actions.export")}
             </Button>
             {props.userId && recipe.user.hankoId === props.userId && <LinkButton href={`/recipe/${recipe.id}/edit`}>
-              Edit
+              {t("actions.edit")}
             </LinkButton>}
           </div>
         </div>
-        <p>Created by <Link href={`/user/${recipe.user.username}`}>{recipe.user.username}</Link> - Viewed {recipe.viewCount} {recipe.viewCount === 1 ? "time" : "times"}</p>
+        <Trans i18nKey="recipeView:line" username={recipe.user.username} count={recipe.viewCount}>
+          {/* @ts-ignore, https://github.com/i18next/react-i18next/issues/1543, https://github.com/i18next/react-i18next/issues/1504 */}
+          Created by <Link href={`/user/${recipe.user.username}`}>{{ username: recipe.user.username }}</Link> - Viewed {{ count: recipe.viewCount }} {recipe.viewCount === 1 ? "time" : "times"}
+        </Trans>
         {props.userId && recipe.user.hankoId !== props.userId &&
           <Button
             variant="secondary"
             onClick={likeStatus === true ? unlikeRecipe : likeRecipe}
           >
-            {likeStatus ? "Unlike" : "Like"}
+            {likeStatus ? t("recipeView:likes.likeButton") : t("recipeView:likes.unlikeButton")}
           </Button>}
-        <p>{likeCount} {likeCount === 1 ? "like" : "likes"}</p>
+        <p>{t("recipeView:likes.likeCountText", { count: recipe.likeCount })}</p>
         {timeEstimateType !== null && (timeEstimateType === "single" ?
-          <p>Time estimate: {recipe.timeEstimateMinimumMinutes} minutes</p> :
-          <p>Time estimate: {recipe.timeEstimateMinimumMinutes} - {recipe.timeEstimateMaximumMinutes} minutes</p>)
+          <p>{t("recipeView:timeEstimate.single", { count: recipe.timeEstimateMinimumMinutes })}</p> :
+          <p>{t("recipeView:timeEstimate.range", { min: recipe.timeEstimateMinimumMinutes, max: recipe.timeEstimateMaximumMinutes })}</p>)
         }
         <p>{recipe.description}</p>
       </div>
@@ -131,7 +137,7 @@ export default function RecipePage(props: RecipePageProps) {
     </div>
     <div className={styles.splitContainer}>
       <div className={styles.ingredientsContainer}>
-        <h2 className={styles.ingredientsTitle}>Ingredients</h2>
+        <h2 className={styles.ingredientsTitle}>{t("recipeView:ingredientsTitle")}</h2>
         {recipe.ingredientSections.map((section) => <IngredientSection
           key={section.id}
           section={section}
@@ -140,20 +146,20 @@ export default function RecipePage(props: RecipePageProps) {
         />)}
       </div>
       <div className={styles.instructionsContainer}>
-        <h2 className={styles.instructionsTitle}>Instructions</h2>
+        <h2 className={styles.instructionsTitle}>{t("recipeView:instructionsTitle")}</h2>
         <InstructionsList instructions={recipe.instructions} />
       </div>
     </div>
   </main>;
 }
 
-export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (context) => {
-  const recipeId = context.query.id;
+export const getServerSideProps: GetServerSideProps<RecipePageProps> = async ({ query, req, locale }) => {
+  const recipeId = query.id;
   if (typeof recipeId !== "string" || recipeId.length === 0) {
     throw new Error("Recipe id is not a string. This should never happen.");
   }
 
-  const user = await getUserFromRequest(context.req);
+  const user = await getUserFromRequest(req);
   const recipe = await getSingleRecipe(recipeId);
 
   if (!recipe) {
@@ -187,6 +193,7 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
     await increaseViewCountForRecipe(recipeId);
     return {
       props: {
+        ...(await serverSideTranslations(locale ?? "en")),
         recipe: {
           ...recipe,
           createdAt: recipe.createdAt.getTime(),
@@ -204,6 +211,7 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async (co
     await increaseViewCountForRecipe(recipeId);
     return {
       props: {
+        ...(await serverSideTranslations(locale ?? "en")),
         recipe: {
           ...recipe,
           createdAt: recipe.createdAt.getTime(),

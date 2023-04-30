@@ -3,5 +3,9 @@
     "home": "Etusivu",
     "settings": "Asetukset",
     "profile": "Profiili"
+  },
+  "actions": {
+    "export": "Vie",
+    "edit": "Muokkaa"
   }
 }

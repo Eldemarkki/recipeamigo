@@ -1,0 +1,22 @@
+{
+  "line_one": "Created by <1>{{username}}</1> - Viewed {{count}} time",
+  "line_other": "Created by <1>{{username}}</1> - Viewed {{count}} times",
+  "timeEstimate": {
+    "single_one": "Time estimate: {{count}} minute",
+    "single_other": "Time estimate: {{count}} minutes",
+    "range": "Time estimate: {{min}} - {{max}} minutes"
+  },
+  "likes": {
+    "likeCountText_one": "{{count}} like",
+    "likeCountText_other": "{{count}} likes",
+    "likeButton": "Like",
+    "unlikeButton": "Unlike"
+  },
+  "recipeQuantity": {
+    "title": "Recipe quantity",
+    "decrease": "Decrease",
+    "increase": "Increase"
+  },
+  "ingredientsTitle": "Ingredients",
+  "instructionsTitle": "Instructions"
+}
