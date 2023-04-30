@@ -5,12 +5,15 @@ import { UserProfile } from "@prisma/client";
 import { useRouter } from "next/router";
 import { Button } from "../../../components/button/Button";
 import styles from "./page.module.css";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export type CreateProfilePageProps = {
   userId: string;
 }
 
 export default function CreateProfilePage(props: CreateProfilePageProps) {
+  const { t } = useTranslation();
   const [profileName, setProfileName] = useState("");
 
   const router = useRouter();
@@ -42,15 +45,15 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
         case "Profile already exists":
           setProfileName("");
           // TODO: Show better error message
-          alert("Profile already exists");
+          alert(t("profile:errors.profileAlreadyExists"));
           break;
         case "Username already taken":
           // TODO: Show better error message
-          alert("Username already taken");
+          alert(t("errors.usernameAlreadyTaken"));
           break;
         default:
           // TODO: Show better error message
-          alert("Unknown error");
+          alert(t("errors.unknownError"));
           break;
       }
     }
@@ -61,7 +64,7 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
 
   return <div className={styles.container}>
     <div className={styles.innerContainer}>
-      <h1>What should we call you?</h1>
+      <h1>{t("profile:question")}</h1>
       <form
         className={styles.form}
         onSubmit={async (e) => {
@@ -73,19 +76,19 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
           type="text"
           value={profileName}
           onChange={(e) => setProfileName(e.target.value)}
-          placeholder="GreenSpaceBean123"
+          placeholder={t("profile:placeholderName")}
           minLength={3}
           maxLength={32}
           pattern="[a-zA-Z0-9_]+"
           required
         />
-        <Button>Create profile</Button>
+        <Button>{t("profile:createProfileButton")}</Button>
       </form>
     </div>
   </div>;
 }
 
-export const getServerSideProps: GetServerSideProps<CreateProfilePageProps> = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps<CreateProfilePageProps> = async ({ req, locale }) => {
   const user = await getUserFromRequest(req);
 
   if (user.status === "Unauthorized") {
@@ -108,6 +111,7 @@ export const getServerSideProps: GetServerSideProps<CreateProfilePageProps> = as
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? "en")),
       userId: user.userId,
     },
   };

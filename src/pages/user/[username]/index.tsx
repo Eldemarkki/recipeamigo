@@ -3,6 +3,8 @@ import { getUserAndPublicRecipesByUsername } from "../../../database/users";
 import { Recipe, UserProfile } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
 import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export type UserPageProps = {
   user: UserProfile & {
@@ -11,14 +13,16 @@ export type UserPageProps = {
 };
 
 export default function UserPage({ user }: UserPageProps) {
+  const { t } = useTranslation();
+
   return <div>
     <h1>{user.username}</h1>
-    <h2>Recipes</h2>
+    <h2>{t("userPage:recipesTitle")}</h2>
     {user.recipes.length > 0 ?
       <>
-        <p>{user.recipes.length} {user.recipes.length === 1 ? "recipe" : "recipes"}</p>
+        <p>{t("userPage:recipeCount", { count: user.recipes.length })}</p>
         <RecipeCardGrid recipes={user.recipes} />
-      </> : <p>This user doesn&apos;t have any public recipes.</p>
+      </> : <p>{t("userPage:noRecipes")}</p>
     }
   </div>;
 }
@@ -38,6 +42,7 @@ export const getServerSideProps: GetServerSideProps<UserPageProps> = async (cont
 
   return {
     props: {
+      ...(await serverSideTranslations(context.locale ?? "en")),
       user: {
         ...visitingUser,
         recipes: visitingUser.recipes.map((recipe) => ({

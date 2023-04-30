@@ -1,0 +1,6 @@
+{
+  "recipesTitle": "Reseptit",
+  "recipeCount_one": "{{count}} resepti",
+  "recipeCount_other": "{{count}} reseptiä",
+  "noRecipes": "Tällä käyttäjällä ei ole julkisia reseptejä."
+}
