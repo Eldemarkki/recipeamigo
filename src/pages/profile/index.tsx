@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { getUserFromRequest } from "../../utils/auth";
 import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function ProfilePage() {
   const HankoProfile = dynamic(() => import("../../components/auth/HankoProfile"), { ssr: false });
@@ -11,7 +12,7 @@ export default function ProfilePage() {
   </Suspense>;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, locale }) => {
   const user = await getUserFromRequest(req);
 
   if (user.status === "Unauthorized") {
@@ -33,6 +34,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   }
 
   return {
-    props: {},
+    props: {
+      ...(await serverSideTranslations(locale ?? "en"))
+    },
   };
 };

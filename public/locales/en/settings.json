@@ -1,0 +1,9 @@
+{
+  "themes": {
+    "themeTitle": "Theme",
+    "systemTheme": "System",
+    "lightTheme": "Light",
+    "darkTheme": "Dark"
+  },
+  "settingsTitle": "Settings"
+}

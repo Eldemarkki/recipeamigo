@@ -1,0 +1,9 @@
+{
+  "themes": {
+    "themeTitle": "Väriteema",
+    "systemTheme": "Järjestelmä",
+    "lightTheme": "Vaalea",
+    "darkTheme": "Tumma"
+  },
+  "settingsTitle": "Asetukset"
+}

@@ -12,12 +12,13 @@ const setTheme = (theme: Theme) => {
   }
 };
 
-export const useTheme = () => {
+export const useTheme = (afterLoading?: (theme: Theme) => void) => {
   useEffect(() => {
     const initialTheme = localStorage.getItem("theme");
     const theme = isTheme(initialTheme) ? initialTheme : "system";
+    afterLoading?.(theme);
     setTheme(theme);
-  }, []);
+  }, [afterLoading]);
 
   return (theme: Theme) => {
     localStorage.setItem("theme", theme);
