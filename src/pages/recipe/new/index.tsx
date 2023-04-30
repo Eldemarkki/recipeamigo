@@ -13,6 +13,8 @@ import { Button } from "../../../components/button/Button";
 import { NumberInput } from "../../../components/forms/NumberInput";
 import styles from "./index.module.css";
 import { Dropzone } from "../../../components/dropzone/Dropzone";
+import { Trans, useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const saveRecipe = async (recipe: z.infer<typeof createRecipeSchema>, coverImage: File | null) => {
   const formData = new FormData();
@@ -32,35 +34,16 @@ const saveRecipe = async (recipe: z.infer<typeof createRecipeSchema>, coverImage
 };
 
 export default function NewRecipePage() {
+  const { t } = useTranslation();
   const router = useRouter();
 
-  const [name, setName] = useState("New recipe");
+  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [previewImage, setCoverImage] = useState<File | null>(null);
 
-  const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>([{
-    name: "Main ingredients",
-    ingredients: [
-      {
-        name: "Eggs",
-        quantity: 12,
-        unit: null,
-        isOptional: false
-      },
-      {
-        name: "Milk",
-        quantity: 1,
-        unit: "LITER",
-        isOptional: false
-      }
-    ]
-  }]);
+  const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>([]);
 
-  const [instructions, setInstructions] = useState<string[]>([
-    "Put eggs in a bowl",
-    "Put milk in a bowl",
-    "Mix eggs and milk",
-  ]);
+  const [instructions, setInstructions] = useState<string[]>([]);
 
   const [recipeQuantity, setRecipeQuantity] = useState(1);
   const [isPublic, setIsPublic] = useState(false);
@@ -105,14 +88,14 @@ export default function NewRecipePage() {
           <input
             className={styles.recipeNameInput}
             type="text"
-            placeholder="Recipe name"
+            placeholder={t("recipeView:edit.recipeName")}
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
           <input
             type="text"
-            placeholder="Description"
+            placeholder={t("recipeView:edit.description")}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
@@ -123,7 +106,7 @@ export default function NewRecipePage() {
               onChange={setRecipeQuantity}
             />
             <div>
-              <label htmlFor="is-public">Public</label>
+              <label htmlFor="is-public">{t("recipeView:edit.isPublic")}</label>
               <input
                 id="is-public"
                 type="checkbox"
@@ -133,10 +116,10 @@ export default function NewRecipePage() {
             </div>
           </div>
           <div className={styles.timeEstimateContainer}>
-            <span>Time estimate (optional)</span>
+            <span>{t("recipeView:edit.timeEstimateTitle")}</span>
             {/* TODO: Allow empty value (now it's just 0 if user tries to clear all) */}
             <div>
-              <span>
+              <Trans i18nKey="recipeView:edit.timeEstimate">
                 <NumberInput
                   value={timeEstimateMin}
                   onChange={setTimeEstimateMin}
@@ -146,10 +129,8 @@ export default function NewRecipePage() {
                     textAlign: "center"
                   }}
                 />
-                min{" "}
-              </span>
-              <span>to{" "}</span>
-              <span>
+                <span>min{" "}</span>
+                <span>to{" "}</span>
                 <NumberInput
                   value={timeEstimateMax}
                   onChange={setTimeEstimateMax}
@@ -159,19 +140,19 @@ export default function NewRecipePage() {
                     textAlign: "center"
                   }}
                 />
-                min
-              </span>
+                <span>min</span>
+              </Trans>
             </div>
           </div>
           <Dropzone onDrop={f => setCoverImage(f)} />
         </div>
-        <Button style={{ padding: "0.5rem 1rem" }} type="submit">Save recipe</Button>
+        <Button style={{ padding: "0.5rem 1rem" }} type="submit">{t("recipeView:createRecipe")}</Button>
       </div>
     </form>
     {/* TODO: Add h1 tag somewhere*/}
     <main className={styles.splitContainer}>
       <div className={styles.leftPanel}>
-        <h2>Ingredients</h2>
+        <h2>{t("recipeView:ingredientsTitle")}</h2>
         {/* TODO: Implement adding multiple sections */}
         <EditableIngredientList
           ingredientSections={ingredientSections}
@@ -231,7 +212,7 @@ export default function NewRecipePage() {
         />
       </div>
       <div className={styles.rightPanel}>
-        <h2>Instructions</h2>
+        <h2>{t("recipeView:instructionsTitle")}</h2>
         <EditableInstructionList
           instructions={instructions}
           addInstruction={(instruction) => setInstructions([...instructions, instruction])}
@@ -242,7 +223,7 @@ export default function NewRecipePage() {
   </div>;
 }
 
-export const getServerSideProps: GetServerSideProps<{}> = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps<{}> = async ({ req, locale }) => {
   const user = await getUserFromRequest(req);
   if (user.status === "Unauthorized") {
     return {
@@ -254,6 +235,8 @@ export const getServerSideProps: GetServerSideProps<{}> = async ({ req }) => {
   }
 
   return {
-    props: {},
+    props: {
+      ...(await serverSideTranslations(locale ?? "en"))
+    },
   };
 };

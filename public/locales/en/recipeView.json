@@ -39,8 +39,13 @@
       "noUnit": "No unit",
       "isOptional": "Optional",
       "addIngredientButton": "Add ingredient"
+    },
+    "ingredientSections": {
+      "newSectionTitle": "New section",
+      "sectionName": "Section name"
     }
   },
+  "createRecipe": "Create recipe",
   "coverImageDropzone": {
     "title": "Cover image",
     "dragActive": "Drop the image here ...",

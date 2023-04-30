@@ -39,8 +39,13 @@
       "noUnit": "Ei yksikköä",
       "isOptional": "Vapaaehtoinen",
       "addIngredientButton": "Lisää ainesosa"
+    },
+    "ingredientSections": {
+      "newSectionTitle": "Uusi osio",
+      "sectionName": "Osion nimi"
     }
   },
+  "createRecipe": "Luo resepti",
   "coverImageDropzone": {
     "title": "Kansikuva",
     "dragActive": "Pudota kuva tänne ...",

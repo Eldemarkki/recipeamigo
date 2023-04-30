@@ -8,6 +8,7 @@
     "export": "Vie",
     "edit": "Muokkaa",
     "cancel": "Peruuta",
-    "save": "Tallenna"
+    "save": "Tallenna",
+    "create": "Luo"
   }
 }
