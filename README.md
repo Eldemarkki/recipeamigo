@@ -27,7 +27,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Recipe image gallery
 - [ ] Reference ingredient in instructions
 - [X] Themes (light/dark/others)
-- [ ] Localization (English, Finnish)
+- [X] Localization (English, Finnish)
 - [ ] Metric/Imperial conversion
 - [ ] Mobile friendly
 - [ ] Print recipe

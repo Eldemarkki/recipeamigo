@@ -29,5 +29,5 @@
 | 29.4.2023 | 1      | Dialog-komponentin refactorointi                                               |
 | 29.4.2023 | 1      | Teemavalintakomponentin luominen                                               |
 | 29.4.2023 | 2      | Kielikäännösten aloittaminen                                                   |
-| 30.4.2023 | 2      | Kielikäännösten jatkaminen                                                     |
-| Yhteensä  | 51     |                                                                                |
+| 30.4.2023 | 3      | Kielikäännösten jatkaminen ja viimeistely                                      |
+| Yhteensä  | 52     |                                                                                |
