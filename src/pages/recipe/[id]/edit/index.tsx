@@ -10,9 +10,9 @@ import { Button } from "../../../../components/button/Button";
 import { NumberInput } from "../../../../components/forms/NumberInput";
 import styles from "./index.module.css";
 import { getSingleRecipe } from "../../../../database/recipes";
-import { Ingredient, IngredientSection, Recipe } from "@prisma/client";
+import { Ingredient, IngredientSection, Instruction, Recipe } from "@prisma/client";
 import { editRecipeSchema } from "../../../api/recipes/[id]";
-import { RawIngredientSection } from "../../../../components/recipeEngine/IngredientForm";
+import { RawIngredientSection, RawInstruction } from "../../../../components/recipeEngine/IngredientForm";
 import { ConvertDates } from "../../../../utils/types";
 import { Dropzone } from "../../../../components/dropzone/Dropzone";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -36,6 +36,7 @@ export type EditRecipePageProps = {
     ingredientSections: (IngredientSection & {
       ingredients: Ingredient[];
     })[];
+    instructions: Instruction[];
   }
 }
 
@@ -47,10 +48,14 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
   const [description, setDescription] = useState(initialRecipe.description);
   const [coverImage, setCoverImage] = useState<File | null>(null);
 
-  const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>(
+  const [ingredientSections, setIngredientSections] = useState<((RawIngredientSection & {
+    id?: string;
+  }))[]>(
     initialRecipe.ingredientSections.map(s => ({
+      id: s.id,
       name: s.name,
       ingredients: s.ingredients.map(i => ({
+        id: i.id,
         name: i.name,
         quantity: i.quantity,
         unit: i.unit,
@@ -59,7 +64,12 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
     }))
   );
 
-  const [instructions, setInstructions] = useState(initialRecipe.instructions);
+  const [instructions, setInstructions] = useState<(RawInstruction & {
+    id?: string;
+  })[]>(initialRecipe.instructions.map(i => ({
+    id: i.id,
+    description: i.description,
+  })));
 
   const [recipeQuantity, setRecipeQuantity] = useState(initialRecipe.quantity);
   const [isPublic, setIsPublic] = useState(initialRecipe.isPublic);

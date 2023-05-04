@@ -1,9 +1,9 @@
-import { createRecipe, editRecipe, getAllRecipesForUser, getSingleRecipe } from "./recipes";
+import { createRecipe, editRecipe, getAllRecipesForUser } from "./recipes";
 import { createUserToDatabase } from "../utils/tests/testUtils";
 import { createRandomRecipe } from "../utils/tests/recipes";
 import { z } from "zod";
 import { editRecipeSchema } from "../pages/api/recipes/[id]";
-import { Ingredient, IngredientSection, Recipe, UserProfile } from "@prisma/client";
+import { Ingredient, IngredientSection, Instruction, Recipe } from "@prisma/client";
 
 describe("recipes", () => {
   it("should return empty array when user has no recipes", async () => {
@@ -46,10 +46,12 @@ const compareRecipes = (actual: Recipe & {
   ingredientSections: (IngredientSection & {
     ingredients: Ingredient[];
   })[];
+  instructions: Instruction[];
 }, expected: z.infer<typeof editRecipeSchema>, original: Recipe & {
   ingredientSections: (IngredientSection & {
     ingredients: Ingredient[];
   })[];
+  instructions: Instruction[];
   }) => {
   const { ingredientSections: expectedIngredientSections, instructions: expectedInstructions, ...expectedBasic } = expected;
   const { ingredientSections: actualIngredientSections, instructions: actualInstructions, ...actualBasic } = actual;
@@ -78,10 +80,15 @@ const compareRecipes = (actual: Recipe & {
           .flatMap(section => section.ingredients)
           .find(i => "id" in ingredient && i.id === ingredient.id)?.isOptional
         ?? false,
-    }))
+    })),
   })));
 
-  expect(actualInstructions).toEqual(expectedInstructions ?? original.instructions);
+  expect(actualInstructions).toEqual((expectedInstructions ?? original.instructions).map((instruction, instructionIndex) => ({
+    ...instruction,
+    id: "id" in instruction ? instruction.id : expect.any(String),
+    recipeId: original.id,
+    order: instructionIndex,
+  })));
 };
 
 describe("editRecipes", () => {
@@ -155,9 +162,21 @@ describe("editRecipes", () => {
 
     const editedRecipe: z.infer<typeof editRecipeSchema> = {
       instructions: [
-        "Updated instruction 1",
-        "Updated instruction 2",
-        "Updated instruction 3"
+        {
+          id: recipe.instructions[0].id,
+          description: "Updated instruction 1",
+        },
+        {
+          id: recipe.instructions[1].id,
+          description: "Updated instruction 2",
+        },
+        {
+          description: "New instruction 1",
+        },
+        {
+          id: recipe.instructions[2].id,
+          description: "Updated instruction 4",
+        },
       ]
     };
 

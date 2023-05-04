@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EditableIngredientList } from "../../../components/recipeEngine/EditableIngredientList";
-import { RawIngredientSection } from "../../../components/recipeEngine/IngredientForm";
+import { RawIngredientSection, RawInstruction } from "../../../components/recipeEngine/IngredientForm";
 import { EditableInstructionList } from "../../../components/recipeEngine/EditableInstructionList";
 import { z } from "zod";
 import { createRecipeSchema } from "../../api/recipes";
@@ -43,7 +43,7 @@ export default function NewRecipePage() {
 
   const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>([]);
 
-  const [instructions, setInstructions] = useState<string[]>([]);
+  const [instructions, setInstructions] = useState<RawInstruction[]>([]);
 
   const [recipeQuantity, setRecipeQuantity] = useState(1);
   const [isPublic, setIsPublic] = useState(false);

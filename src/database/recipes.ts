@@ -13,7 +13,8 @@ export const getAllRecipesForUser = async (userId: string) => {
         include: {
           ingredients: true
         }
-      }
+      },
+      instructions: true
     }
   });
   return recipes;
@@ -27,7 +28,6 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
       data: {
         name: recipe.name,
         description: recipe.description,
-        instructions: recipe.instructions,
         quantity: recipe.quantity,
         isPublic: recipe.isPublic,
         userId,
@@ -35,6 +35,14 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
         timeEstimateMaximumMinutes: recipe.timeEstimateMaximumMinutes,
         coverImageUrl: recipe.coverImageUrl
       }
+    });
+
+    await prisma.instruction.createMany({
+      data: recipe.instructions.map((instruction, index) => ({
+        description: instruction.description,
+        recipeId: createdRecipe.id,
+        order: index
+      })),
     });
 
     await prisma.ingredientSection.createMany({
@@ -73,7 +81,8 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
           include: {
             ingredients: true
           }
-        }
+        },
+        instructions: true
       }
     });
 
@@ -96,7 +105,8 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
           include: {
             ingredients: true
           }
-        }
+        },
+        instructions: true
       }
     });
 
@@ -104,18 +114,18 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
       throw new Error("Recipe not found");
     }
 
-    const ingredientSectionIds = (editedRecipe.ingredientSections ?? [])
+    const touchedIngredientSectionIds = (editedRecipe.ingredientSections ?? [])
       .map(ingredientSection => "id" in ingredientSection ? ingredientSection.id : undefined)
       .filter((id): id is string => id !== undefined);
 
-    const ingredientSections = await prisma.ingredientSection.findMany({
+    const touchedIngredientSections = await prisma.ingredientSection.findMany({
       where: {
         id: {
-          in: ingredientSectionIds
+          in: touchedIngredientSectionIds
         }
       }
     });
-    const hasAccessToAllIngredientSections = ingredientSections.every(ingredientSection => ingredientSection.recipeId === recipeId);
+    const hasAccessToAllIngredientSections = touchedIngredientSections.every(ingredientSection => ingredientSection.recipeId === recipeId);
     if (!hasAccessToAllIngredientSections) {
       throw new Error("Cannot move ingredient section to another recipe");
     }
@@ -145,7 +155,23 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
       throw new Error("Cannot move ingredient to another recipe");
     }
 
-    // edit basic fields of recipe
+    const touchedInstructionIds = (editedRecipe.instructions ?? [])
+      .map(instruction => "id" in instruction ? instruction.id : undefined)
+      .filter((id): id is string => id !== undefined);
+
+    const instructions = await prisma.instruction.findMany({
+      where: {
+        id: {
+          in: touchedInstructionIds
+        }
+      },
+    });
+
+    const hasAccessToAllInstructions = instructions.every(instruction => instruction.recipeId === recipeId);
+    if (!hasAccessToAllInstructions) {
+      throw new Error("Cannot move instruction to another recipe");
+    }
+
     await prisma.recipe.update({
       where: {
         id: recipeId
@@ -153,7 +179,6 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
       data: {
         name: editedRecipe.name,
         description: editedRecipe.description,
-        instructions: editedRecipe.instructions,
         quantity: editedRecipe.quantity,
         isPublic: editedRecipe.isPublic,
         timeEstimateMinimumMinutes: editedRecipe.timeEstimateMinimumMinutes,
@@ -324,6 +349,66 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
       };
     }
 
+    if (editedRecipe.instructions) {
+      // Delete any instructions that were removed
+      const instructionsToRemove = originalRecipe.instructions.filter(originalInstruction => {
+        return !editedRecipe.instructions?.some(instruction => "id" in instruction && instruction.id === originalInstruction.id);
+      });
+
+      await prisma.instruction.deleteMany({
+        where: {
+          id: {
+            in: instructionsToRemove.map(instruction => instruction.id)
+          },
+          recipe: {
+            userId: originalRecipe.userId
+          }
+        }
+      });
+
+      // make all orders negative to allow the them to be changed correctly
+      for (let i = 0; i < editedRecipe.instructions.length; i++) {
+        const instruction = editedRecipe.instructions[i];
+        if ("id" in instruction) {
+          await prisma.instruction.update({
+            where: {
+              id: instruction.id
+            },
+            data: {
+              order: -i
+            }
+          });
+        }
+      }
+
+      for (let i = 0; i < editedRecipe.instructions.length; i++) {
+        const instruction = editedRecipe.instructions[i];
+
+        if ("id" in instruction) {
+          // This should be updated
+          await prisma.instruction.update({
+            where: {
+              id: instruction.id
+            },
+            data: {
+              description: instruction.description,
+              order: i,
+            }
+          });
+        }
+        else {
+          // This should be created
+          await prisma.instruction.create({
+            data: {
+              description: instruction.description,
+              recipeId,
+              order: i
+            }
+          });
+        }
+      }
+    }
+
     const result = await prisma.recipe.findUnique({
       where: {
         id: recipeId
@@ -333,7 +418,8 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
           include: {
             ingredients: true
           }
-        }
+        },
+        instructions: true
       }
     });
 
@@ -356,6 +442,7 @@ export const getSingleRecipe = async (id: string) => {
           ingredients: true
         }
       },
+      instructions: true,
       user: true
     }
   });

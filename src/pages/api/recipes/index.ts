@@ -22,11 +22,15 @@ export const ingredientSectionSchema = z.object({
   ingredients: z.array(ingredientSchema),
 });
 
+export const instructionSchema = z.object({
+  description: z.string(),
+});
+
 export const createRecipeSchema = z.object({
   name: z.string(),
   description: z.string(),
   ingredientSections: z.array(ingredientSectionSchema),
-  instructions: z.array(z.string()),
+  instructions: z.array(instructionSchema),
   quantity: z.number().min(1),
   isPublic: z.boolean(),
   timeEstimateMinimumMinutes: z.number().min(0).optional(),

@@ -3,10 +3,13 @@ import { DeleteButton } from "../button/DeleteButton";
 import { Button } from "../button/Button";
 import styles from "./EditableInstructionList.module.css";
 import { useTranslation } from "next-i18next";
+import { RawInstruction } from "./IngredientForm";
 
 export type InstructionListProps = {
-  instructions: string[];
-  addInstruction: (instruction: string) => void;
+  instructions: (RawInstruction & {
+    id?: string
+  })[];
+  addInstruction: (instruction: RawInstruction) => void;
   removeInstruction: (index: number) => void;
 }
 
@@ -17,9 +20,9 @@ export const EditableInstructionList = ({ instructions, addInstruction, removeIn
   return <div className={styles.container}>
     <ol className={styles.listContainer}>
       {instructions.map((instruction, index) => (
-        <li key={instruction}>
+        <li key={instruction.description}>
           <div className={styles.instructionListItem}>
-            {instruction}
+            {instruction.description}
             <DeleteButton onClick={() => removeInstruction(index)} />
           </div>
         </li>
@@ -27,7 +30,9 @@ export const EditableInstructionList = ({ instructions, addInstruction, removeIn
     </ol>
     <form className={styles.form} onSubmit={(e) => {
       e.preventDefault();
-      addInstruction(newInstruction);
+      addInstruction({
+        description: newInstruction,
+      });
       setNewInstruction("");
     }}>
       <input

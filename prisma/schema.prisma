@@ -16,7 +16,7 @@ model Recipe {
   userId                     String
   user                       UserProfile         @relation(fields: [userId], references: [hankoId])
   ingredientSections         IngredientSection[]
-  instructions               String[]
+  instructions               Instruction[]
   quantity                   Int
   isPublic                   Boolean
   viewCount                  Int                 @default(0)
@@ -24,6 +24,16 @@ model Recipe {
   timeEstimateMaximumMinutes Int?
   coverImageUrl              String?
   likes                      Like[]
+}
+
+model Instruction {
+  id          String   @id @default(uuid())
+  order       Int
+  description String
+  recipeId    String
+  recipe      Recipe   @relation(fields: [recipeId], references: [id])
+
+  @@unique([recipeId, order])
 }
 
 model IngredientSection {

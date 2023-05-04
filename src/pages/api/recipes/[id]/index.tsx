@@ -29,11 +29,18 @@ const editingIngredientSchema = z.object({
   ingredients: newIngredientSectionsSchema
 }).strict());
 
+const editingInstructionsSchema = z.object({
+  id: z.string().uuid(),
+  description: z.string()
+}).strict().or(z.object({
+  description: z.string()
+}).strict());
+
 export const editRecipeSchema = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
   ingredientSections: z.array(editingIngredientSchema).optional(),
-  instructions: z.array(z.string()).optional(),
+  instructions: z.array(editingInstructionsSchema).optional(),
   quantity: z.number().min(1).optional(),
   isPublic: z.boolean().optional(),
   timeEstimateMinimumMinutes: z.number().min(0).optional(),

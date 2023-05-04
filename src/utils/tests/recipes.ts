@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createRecipeSchema, ingredientSchema, ingredientSectionSchema } from "../../pages/api/recipes";
+import { createRecipeSchema, ingredientSchema, ingredientSectionSchema, instructionSchema } from "../../pages/api/recipes";
 import { createRandomArray, createRandomBoolean, createRandomNumber, createRandomString } from "./testUtils";
 import { IngredientUnit } from "@prisma/client";
 
@@ -21,11 +21,15 @@ export const createRandomIngredientSection = (): z.infer<typeof ingredientSectio
   ingredients: createRandomArray(createRandomNumber(1, 10), createRandomIngredient)
 });
 
+export const createRandomInstruction = (): z.infer<typeof instructionSchema> => ({
+  description: createRandomString(30)
+});
+
 export const createRandomRecipe = (): z.infer<typeof createRecipeSchema> => ({
   name: createRandomString(10),
   description: createRandomString(10),
   ingredientSections: createRandomArray(createRandomNumber(1, 5), createRandomIngredientSection),
-  instructions: createRandomArray(createRandomNumber(1, 10), () => createRandomString(10)),
+  instructions: createRandomArray(createRandomNumber(1, 10), createRandomInstruction),
   quantity: createRandomNumber(1, 10),
   isPublic: createRandomBoolean(),
   timeEstimateMinimumMinutes: createRandomNumber(0, 10),

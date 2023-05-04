@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { getSingleRecipe, increaseViewCountForRecipe } from "../../../database/recipes";
-import { Ingredient, IngredientSection as IngredientSectionType, Recipe, UserProfile } from "@prisma/client";
+import { Ingredient, IngredientSection as IngredientSectionType, Instruction, Recipe, UserProfile } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
@@ -22,6 +22,7 @@ export type RecipePageProps = {
     ingredientSections: (IngredientSectionType & {
       ingredients: Ingredient[];
     })[];
+    instructions: Instruction[];
     user: UserProfile;
     likeCount: number;
   },
