@@ -250,6 +250,7 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
           instructions={instructions}
           addInstruction={(instruction) => setInstructions([...instructions, instruction])}
           removeInstruction={(index) => setInstructions(instructions.filter((_, i) => i !== index))}
+          setInstructions={setInstructions}
         />
       </div>
     </main>

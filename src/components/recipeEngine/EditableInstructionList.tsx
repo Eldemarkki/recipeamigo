@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { DeleteButton } from "../button/DeleteButton";
 import { Button } from "../button/Button";
 import styles from "./EditableInstructionList.module.css";
 import { useTranslation } from "next-i18next";
 import { RawInstruction } from "./IngredientForm";
+import { Reorder } from "framer-motion";
+import { EditableInstructionListItem } from "./EditableInstructionListItem";
 
 export type InstructionListProps = {
   instructions: (RawInstruction & {
@@ -11,23 +12,30 @@ export type InstructionListProps = {
   })[];
   addInstruction: (instruction: RawInstruction) => void;
   removeInstruction: (index: number) => void;
+  setInstructions: (instructions: (RawInstruction & {
+    id?: string
+  })[]) => void;
 }
 
-export const EditableInstructionList = ({ instructions, addInstruction, removeInstruction }: InstructionListProps) => {
+export const EditableInstructionList = ({ instructions, addInstruction, removeInstruction, setInstructions }: InstructionListProps) => {
   const { t } = useTranslation("recipeView");
   const [newInstruction, setNewInstruction] = useState("");
 
   return <div className={styles.container}>
-    <ol className={styles.listContainer}>
+    <Reorder.Group
+      onReorder={setInstructions}
+      values={instructions}
+      axis="y"
+      className={styles.listContainer}
+    >
       {instructions.map((instruction, index) => (
-        <li key={instruction.description}>
-          <div className={styles.instructionListItem}>
-            {instruction.description}
-            <DeleteButton onClick={() => removeInstruction(index)} />
-          </div>
-        </li>
+        <EditableInstructionListItem
+          key={instruction.id + "-" + instruction.description}
+          instruction={instruction}
+          onRemoveInstruction={() => removeInstruction(index)}
+        />
       ))}
-    </ol>
+    </Reorder.Group>
     <form className={styles.form} onSubmit={(e) => {
       e.preventDefault();
       addInstruction({

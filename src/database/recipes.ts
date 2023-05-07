@@ -11,10 +11,21 @@ export const getAllRecipesForUser = async (userId: string) => {
     include: {
       ingredientSections: {
         include: {
-          ingredients: true
+          ingredients: {
+            orderBy: {
+              order: "asc"
+            }
+          }
+        },
+        orderBy: {
+          order: "asc"
         }
       },
-      instructions: true
+      instructions: {
+        orderBy: {
+          order: "asc"
+        }
+      },
     }
   });
   return recipes;
@@ -79,10 +90,21 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
       include: {
         ingredientSections: {
           include: {
-            ingredients: true
+            ingredients: {
+              orderBy: {
+                order: "asc"
+              }
+            }
+          },
+          orderBy: {
+            order: "asc"
           }
         },
-        instructions: true
+        instructions: {
+          orderBy: {
+            order: "asc"
+          }
+        },
       }
     });
 
@@ -95,7 +117,7 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
 export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof editRecipeSchema> & {
   coverImageUrl?: string | undefined | null
 }) => {
-  return await prisma.$transaction(async (prisma) => {
+  await prisma.$transaction(async (prisma) => {
     const originalRecipe = await prisma.recipe.findUnique({
       where: {
         id: recipeId
@@ -236,7 +258,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
               id: ingredientSection.id
             },
             data: {
-              order: -i
+              order: -i - 1
             }
           });
         }
@@ -250,7 +272,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
             id: ingredientId
           },
           data: {
-            order: -i
+            order: -i - 1
           }
         });
       }
@@ -266,6 +288,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
             },
             data: {
               name: ingredientSection.name,
+              order: ingredientSectionIndex
             }
           });
 
@@ -375,7 +398,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
               id: instruction.id
             },
             data: {
-              order: -i
+              order: -i - 1
             }
           });
         }
@@ -409,26 +432,15 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
       }
     }
 
-    const result = await prisma.recipe.findUnique({
-      where: {
-        id: recipeId
-      },
-      include: {
-        ingredientSections: {
-          include: {
-            ingredients: true
-          }
-        },
-        instructions: true
-      }
-    });
-
-    if (!result) {
-      throw new Error("Recipe not found after editing. This should never happen");
-    }
-
-    return result;
   });
+
+  const result = getSingleRecipe(recipeId);
+
+  if (!result) {
+    throw new Error("Recipe not found after editing. This should never happen");
+  }
+
+  return result;
 };
 
 export const getSingleRecipe = async (id: string) => {
@@ -439,12 +451,23 @@ export const getSingleRecipe = async (id: string) => {
     include: {
       ingredientSections: {
         include: {
-          ingredients: true
+          ingredients: {
+            orderBy: {
+              order: "asc"
+            }
+          }
+        },
+        orderBy: {
+          order: "asc"
         }
       },
-      instructions: true,
+      instructions: {
+        orderBy: {
+          order: "asc"
+        }
+      },
       user: true
-    }
+    },
   });
   return recipe;
 };
@@ -460,7 +483,7 @@ export const increaseViewCountForRecipe = async (id: string) => {
     throw new Error("Recipe not found");
   }
 
-  const updatedRecipe = await prisma.recipe.update({
+  await prisma.recipe.update({
     where: {
       id
     },
@@ -468,6 +491,4 @@ export const increaseViewCountForRecipe = async (id: string) => {
       viewCount: recipe.viewCount + 1
     }
   });
-
-  return updatedRecipe;
 };

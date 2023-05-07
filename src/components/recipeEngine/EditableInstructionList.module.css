@@ -6,15 +6,11 @@
 }
 
 .listContainer {
-  margin: 0;
+  margin: 0px;
   display: flex;
   flex-direction: column;
-}
-
-.instructionListItem {
-  display: flex;
-  gap: 0.3rem;
-  justify-content: space-between;
+  list-style: none;
+  padding: 0px;
 }
 
 .form {

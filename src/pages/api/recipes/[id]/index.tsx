@@ -13,28 +13,28 @@ const newIngredientSchema = z.object({
   quantity: z.number().nonnegative(),
   unit: ingredientUnitSchema.optional(),
   isOptional: z.boolean().optional()
-}).strict();
+});
 
 const editIngredientSchema = newIngredientSchema.partial().and(z.object({ id: z.string().uuid() }));
 
 const newIngredientSectionsSchema = z.array(editIngredientSchema.or(newIngredientSchema));
-const editIngredientSectionsSchema = z.array(editIngredientSchema.or(newIngredientSchema)).optional();
+const editIngredientSectionsSchema = z.array(editIngredientSchema.or(newIngredientSchema));
 
 const editingIngredientSchema = z.object({
   id: z.string().uuid(),
-  name: z.string(),
-  ingredients: editIngredientSectionsSchema
-}).strict().or(z.object({
+  name: z.string().optional(),
+  ingredients: editIngredientSectionsSchema.optional()
+}).or(z.object({
   name: z.string(),
   ingredients: newIngredientSectionsSchema
-}).strict());
+}));
 
 const editingInstructionsSchema = z.object({
   id: z.string().uuid(),
   description: z.string()
-}).strict().or(z.object({
+}).or(z.object({
   description: z.string()
-}).strict());
+}));
 
 export const editRecipeSchema = z.object({
   name: z.string().optional(),
@@ -46,7 +46,7 @@ export const editRecipeSchema = z.object({
   timeEstimateMinimumMinutes: z.number().min(0).optional(),
   timeEstimateMaximumMinutes: z.number().min(0).optional(),
   shouldDeleteCoverImage: z.boolean().optional(),
-}).strict();
+});
 
 export const config = {
   api: {
@@ -124,6 +124,10 @@ const handler: NextApiHandler = async (req, res) => {
 
       const recipeParsed = editRecipeSchema.safeParse(body);
 
+      if (!recipeParsed.success) {
+        return res.status(400).json({ error: recipeParsed.error });
+      }
+
       const s3 = new S3({
         endpoint: process.env.S3_ENDPOINT,
         credentials: {
@@ -158,23 +162,19 @@ const handler: NextApiHandler = async (req, res) => {
         coverImageUrl = process.env.S3_ENDPOINT + "/" + process.env.S3_BUCKET_NAME + "/" + key;
       }
 
-      if (recipeParsed.success) {
-        const edited = await editRecipe(id, {
-          ...recipeParsed.data,
-          coverImageUrl: coverImageUrl ?? (shouldDeleteOld ? null : undefined)
-        });
+      const edited = await editRecipe(id, {
+        ...recipeParsed.data,
+        coverImageUrl: coverImageUrl ?? (shouldDeleteOld ? null : undefined)
+      });
 
-        return res.status(200).json(edited);
-      }
-      else {
-        return res.status(400).json({ error: recipeParsed.error });
-      }
+      return res.status(200).json(edited);
     }
     catch (e) {
       if (typeof e === "string" && allowedErrorValues.includes(e as any)) {
         return res.status(400).json({ error: e });
       }
 
+      console.error(e);
       return res.status(500).json({ error: "Internal server error" });
     }
   }
