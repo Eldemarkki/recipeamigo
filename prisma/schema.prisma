@@ -24,14 +24,15 @@ model Recipe {
   timeEstimateMaximumMinutes Int?
   coverImageUrl              String?
   likes                      Like[]
+  tags                       Tag[]
 }
 
 model Instruction {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
   order       Int
   description String
   recipeId    String
-  recipe      Recipe   @relation(fields: [recipeId], references: [id])
+  recipe      Recipe @relation(fields: [recipeId], references: [id])
 
   @@unique([recipeId, order])
 }
@@ -99,4 +100,14 @@ model Like {
   createdAt DateTime    @default(now())
 
   @@id([recipeId, userId])
+}
+
+model Tag {
+  text     String
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String
+  order    Int
+
+  @@id([recipeId, text])
+  @@unique([recipeId, order])
 }

@@ -15,6 +15,7 @@ import styles from "./index.module.css";
 import { Dropzone } from "../../../components/dropzone/Dropzone";
 import { Trans, useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { TagSelect } from "../../../components/tag/TagSelect";
 
 const saveRecipe = async (recipe: z.infer<typeof createRecipeSchema>, coverImage: File | null) => {
   const formData = new FormData();
@@ -40,6 +41,7 @@ export default function NewRecipePage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [previewImage, setCoverImage] = useState<File | null>(null);
+  const [tags, setTags] = useState<string[]>([]);
 
   const [ingredientSections, setIngredientSections] = useState<RawIngredientSection[]>([]);
 
@@ -69,7 +71,8 @@ export default function NewRecipePage() {
         quantity: recipeQuantity,
         isPublic,
         timeEstimateMinimumMinutes: timeEstimateMin,
-        timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax
+        timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax,
+        tags
       }, previewImage);
       if (recipe) {
         router.push("/recipe/" + recipe.id);
@@ -145,6 +148,10 @@ export default function NewRecipePage() {
             </div>
           </div>
           <Dropzone onDrop={f => setCoverImage(f)} />
+          <TagSelect
+            tags={tags}
+            setTags={setTags}
+          />
         </div>
         <Button style={{ padding: "0.5rem 1rem" }} type="submit">{t("recipeView:createRecipe")}</Button>
       </div>

@@ -1,0 +1,32 @@
+.tag {
+  border-radius: 99999px;
+  padding: 0.25rem 0.8rem;
+  background-color: var(--background-color-secondary);
+  color: var(--text);
+  width: fit-content;
+  font-size: 0.9rem;
+  border: 2px solid var(--tag-border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lactoseFree {
+  background-color: var(--tag-lactoseFree-background-color);
+  color: var(--tag-lactoseFree-text-color);
+}
+
+.vegetarian {
+  background-color: var(--tag-vegetarian-background-color);
+  color: var(--tag-vegetarian-text-color);
+}
+
+.vegan {
+  background-color: var(--tag-vegan-background-color);
+  color: var(--tag-vegan-text-color);
+}
+
+.glutenFree {
+  background-color: var(--tag-glutenFree-background-color);
+  color: var(--tag-glutenFree-text-color);
+}

@@ -7,11 +7,21 @@ html[data-theme='light'] {
   --text: var(--text-black);
   --text-inverted: var(--text-white);
   --primary: #f2c61d;
+  --primary-light: #fde47d;
   --primary-shade-1: #dfb81c;
   --button-secondary-hover-background: #ffd4503b;
   --new-recipe-card-hover-background: #00000011;
   --danger: #ea2727;
   --discreet: #aaa;
+  --tag-vegetarian-background-color: #d4fbd4;
+  --tag-vegetarian-text-color: #084a08;
+  --tag-vegan-background-color: #f5f5dc;
+  --tag-vegan-text-color: #614016;
+  --tag-lactoseFree-background-color: #f0f8ff;
+  --tag-lactoseFree-text-color: #20409f;
+  --tag-glutenFree-background-color: #fffaf0;
+  --tag-glutenFree-text-color: #905208;
+  --tag-border-color: #0003;
 }
 
 @mixin dark-mode {
@@ -23,6 +33,15 @@ html[data-theme='light'] {
   --primary-shade-1: #dfb81c;
   --button-secondary-hover-background: #7a662957;
   --new-recipe-card-hover-background: #FFFFFF11;
+  --tag-vegetarian-background-color: #0d360d;
+  --tag-vegetarian-text-color: #d4fbd4;
+  --tag-vegan-background-color: #614016;
+  --tag-vegan-text-color: #f6ecdf;
+  --tag-lactoseFree-background-color: #20409f;
+  --tag-lactoseFree-text-color: #f0f8ff;
+  --tag-glutenFree-background-color: #905208;
+  --tag-glutenFree-text-color: #fffaf0;
+  --tag-border-color: #fff2;
 }
 
 hanko-auth,

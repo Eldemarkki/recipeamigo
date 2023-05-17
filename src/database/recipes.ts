@@ -26,6 +26,11 @@ export const getAllRecipesForUser = async (userId: string) => {
           order: "asc"
         }
       },
+      tags: {
+        orderBy: {
+          order: "asc"
+        }
+      },
     }
   });
   return recipes;
@@ -83,6 +88,16 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
       }),
     });
 
+    if (recipe.tags && recipe.tags.length > 0) {
+      await prisma.tag.createMany({
+        data: recipe.tags.map((tag, tagIndex) => ({
+          text: tag,
+          recipeId: createdRecipe.id,
+          order: tagIndex
+        }))
+      });
+    }
+
     const recipeWithIngredients = await prisma.recipe.findUnique({
       where: {
         id: createdRecipe.id
@@ -105,6 +120,11 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
             order: "asc"
           }
         },
+        tags: {
+          orderBy: {
+            order: "asc"
+          }
+        }
       }
     });
 
@@ -432,6 +452,22 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
       }
     }
 
+    if (editedRecipe.tags) {
+      // TODO: Allow reordering while preserving ids
+      await prisma.tag.deleteMany({
+        where: {
+          recipeId,
+        },
+      });
+
+      await prisma.tag.createMany({
+        data: editedRecipe.tags.map((tag, tagIndex) => ({
+          text: tag.text,
+          recipeId,
+          order: tagIndex
+        }))
+      });
+    }
   });
 
   const result = getSingleRecipe(recipeId);
@@ -462,6 +498,11 @@ export const getSingleRecipe = async (id: string) => {
         }
       },
       instructions: {
+        orderBy: {
+          order: "asc"
+        }
+      },
+      tags: {
         orderBy: {
           order: "asc"
         }

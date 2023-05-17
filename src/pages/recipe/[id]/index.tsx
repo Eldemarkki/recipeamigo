@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { getSingleRecipe, increaseViewCountForRecipe } from "../../../database/recipes";
-import { Ingredient, IngredientSection as IngredientSectionType, Instruction, Recipe, UserProfile } from "@prisma/client";
+import { Ingredient, IngredientSection as IngredientSectionType, Instruction, Recipe, Tag, UserProfile } from "@prisma/client";
 import { ConvertDates } from "../../../utils/types";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
@@ -16,6 +16,7 @@ import Image from "next/image";
 import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Trans, useTranslation } from "next-i18next";
+import { TagList } from "../../../components/recipeView/TagList";
 
 export type RecipePageProps = {
   recipe: ConvertDates<Recipe> & {
@@ -23,6 +24,7 @@ export type RecipePageProps = {
       ingredients: Ingredient[];
     })[];
     instructions: Instruction[];
+    tags: Tag[];
     user: UserProfile;
     likeCount: number;
   },
@@ -111,6 +113,7 @@ export default function RecipePage(props: RecipePageProps) {
             </LinkButton>}
           </div>
         </div>
+        {recipe.tags.length > 0 && <TagList tags={recipe.tags} />}
         <Trans i18nKey="recipeView:line" username={recipe.user.username} count={recipe.viewCount}>
           {/* @ts-ignore, https://github.com/i18next/react-i18next/issues/1543, https://github.com/i18next/react-i18next/issues/1504 */}
           Created by <Link href={`/user/${recipe.user.username}`}>{{ username: recipe.user.username }}</Link> - Viewed {{ count: recipe.viewCount }} {recipe.viewCount === 1 ? "time" : "times"}

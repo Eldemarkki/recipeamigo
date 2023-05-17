@@ -26,6 +26,8 @@ export const instructionSchema = z.object({
   description: z.string(),
 });
 
+export const tagSchema = z.string().min(1);
+
 export const createRecipeSchema = z.object({
   name: z.string(),
   description: z.string(),
@@ -34,7 +36,8 @@ export const createRecipeSchema = z.object({
   quantity: z.number().min(1),
   isPublic: z.boolean(),
   timeEstimateMinimumMinutes: z.number().min(0).optional(),
-  timeEstimateMaximumMinutes: z.number().min(0).optional()
+  timeEstimateMaximumMinutes: z.number().min(0).optional(),
+  tags: z.array(tagSchema).refine((tags) => new Set(tags).size === tags.length, { message: "Tags must be unique" }).optional(),
 });
 
 export const config = {

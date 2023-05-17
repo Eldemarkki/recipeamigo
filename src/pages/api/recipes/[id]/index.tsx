@@ -36,6 +36,13 @@ const editingInstructionsSchema = z.object({
   description: z.string()
 }));
 
+const tagSchema = z.object({
+  id: z.string().uuid(),
+  text: z.string(),
+}).or(z.object({
+  text: z.string()
+}));
+
 export const editRecipeSchema = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
@@ -45,6 +52,7 @@ export const editRecipeSchema = z.object({
   isPublic: z.boolean().optional(),
   timeEstimateMinimumMinutes: z.number().min(0).optional(),
   timeEstimateMaximumMinutes: z.number().min(0).optional(),
+  tags: z.array(tagSchema).refine((tags) => new Set(tags).size === tags.length, { message: "Tags must be unique" }).optional(),
   shouldDeleteCoverImage: z.boolean().optional(),
 });
 

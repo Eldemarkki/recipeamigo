@@ -10,13 +10,14 @@ import { Button } from "../../../../components/button/Button";
 import { NumberInput } from "../../../../components/forms/NumberInput";
 import styles from "./index.module.css";
 import { getSingleRecipe } from "../../../../database/recipes";
-import { Ingredient, IngredientSection, Instruction, Recipe } from "@prisma/client";
+import { Ingredient, IngredientSection, Instruction, Recipe, Tag } from "@prisma/client";
 import { editRecipeSchema } from "../../../api/recipes/[id]";
 import { RawIngredientSection, RawInstruction } from "../../../../components/recipeEngine/IngredientForm";
 import { ConvertDates } from "../../../../utils/types";
 import { Dropzone } from "../../../../components/dropzone/Dropzone";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Trans, useTranslation } from "next-i18next";
+import { TagSelect } from "../../../../components/tag/TagSelect";
 
 const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSchema>, coverImage: File | null) => {
   const formData = new FormData();
@@ -37,6 +38,7 @@ export type EditRecipePageProps = {
       ingredients: Ingredient[];
     })[];
     instructions: Instruction[];
+    tags: Tag[];
   }
 }
 
@@ -47,6 +49,10 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
   const [name, setName] = useState(initialRecipe.name);
   const [description, setDescription] = useState(initialRecipe.description);
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [tags, setTags] = useState<{
+    id?: string;
+    text: string;
+  }[]>(initialRecipe.tags);
 
   const [ingredientSections, setIngredientSections] = useState<((RawIngredientSection & {
     id?: string;
@@ -99,6 +105,7 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
           isPublic,
           timeEstimateMinimumMinutes: timeEstimateMin,
           timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax,
+          tags: tags,
           shouldDeleteCoverImage
         }, coverImage);
 
@@ -177,6 +184,10 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
           <Dropzone
             initialPreviewUrl={initialRecipe.coverImageUrl}
             onDrop={f => setCoverImage(f)}
+          />
+          <TagSelect
+            tags={tags.map(t => t.text)}
+            setTags={newTags => setTags(newTags.map(t => ({ text: t })))}
           />
         </div>
         <Button style={{ padding: "0.5rem 1rem" }} type="submit">{t("edit.saveRecipe")}</Button>
