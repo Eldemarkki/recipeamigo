@@ -6,7 +6,12 @@ const nextConfig = {
   images: {
     domains: process.env.IMAGE_HOSTS.split(" ")
   },
-  i18n
+  i18n,
+  experimental: {
+    swcPlugins: [
+      ["next-superjson-plugin", {}]
+    ]
+  }
 };
 
 module.exports = nextConfig;

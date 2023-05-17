@@ -2,7 +2,6 @@ import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { getSingleRecipe, increaseViewCountForRecipe } from "../../../database/recipes";
 import { Ingredient, IngredientSection as IngredientSectionType, Instruction, Recipe, Tag, UserProfile } from "@prisma/client";
-import { ConvertDates } from "../../../utils/types";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
@@ -19,7 +18,7 @@ import { Trans, useTranslation } from "next-i18next";
 import { TagList } from "../../../components/recipeView/TagList";
 
 export type RecipePageProps = {
-  recipe: ConvertDates<Recipe> & {
+  recipe: Recipe & {
     ingredientSections: (IngredientSectionType & {
       ingredients: Ingredient[];
     })[];
@@ -200,8 +199,6 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async ({ 
         ...(await serverSideTranslations(locale ?? "en")),
         recipe: {
           ...recipe,
-          createdAt: recipe.createdAt.getTime(),
-          updatedAt: recipe.updatedAt.getTime(),
           likeCount,
         },
         exportFileName: filenamify(recipe.name, { replacement: "_" }),
@@ -218,8 +215,6 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async ({ 
         ...(await serverSideTranslations(locale ?? "en")),
         recipe: {
           ...recipe,
-          createdAt: recipe.createdAt.getTime(),
-          updatedAt: recipe.updatedAt.getTime(),
           likeCount,
         },
         exportFileName: filenamify(recipe.name + ".json", { replacement: "_" }),

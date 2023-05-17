@@ -13,7 +13,6 @@ import { getSingleRecipe } from "../../../../database/recipes";
 import { Ingredient, IngredientSection, Instruction, Recipe, Tag } from "@prisma/client";
 import { editRecipeSchema } from "../../../api/recipes/[id]";
 import { RawIngredientSection, RawInstruction } from "../../../../components/recipeEngine/IngredientForm";
-import { ConvertDates } from "../../../../utils/types";
 import { Dropzone } from "../../../../components/dropzone/Dropzone";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Trans, useTranslation } from "next-i18next";
@@ -33,7 +32,7 @@ const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSch
 };
 
 export type EditRecipePageProps = {
-  recipe: ConvertDates<Recipe> & {
+  recipe: Recipe & {
     ingredientSections: (IngredientSection & {
       ingredients: Ingredient[];
     })[];
@@ -265,7 +264,7 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
         />
       </div>
     </main>
-  </div >;
+  </div>;
 }
 
 export const getServerSideProps: GetServerSideProps<EditRecipePageProps> = async ({ req, params, locale }) => {
@@ -296,11 +295,7 @@ export const getServerSideProps: GetServerSideProps<EditRecipePageProps> = async
   return {
     props: {
       ...(await serverSideTranslations(locale ?? "en")),
-      recipe: {
-        ...recipe,
-        createdAt: recipe.createdAt.getDate(),
-        updatedAt: recipe.updatedAt.getDate(),
-      }
+      recipe
     },
   };
 };

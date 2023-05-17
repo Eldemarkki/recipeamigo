@@ -2,7 +2,6 @@ import { GetServerSideProps } from "next";
 import { getUserFromRequest } from "../utils/auth";
 import { Recipe } from "@prisma/client";
 import { getAllRecipesForUser } from "../database/recipes";
-import { ConvertDates } from "../utils/types";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
 import { LinkButton } from "../components/LinkButton";
 import styles from "./page.module.css";
@@ -10,7 +9,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
 type HomeProps = {
-  recipes: ConvertDates<Recipe>[];
+  recipes: Recipe[];
 }
 
 export default function Home({ recipes }: HomeProps) {
@@ -51,11 +50,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req, l
   return {
     props: {
       ...(await serverSideTranslations(locale ?? "en")),
-      recipes: recipes.map(recipe => ({
-        ...recipe,
-        createdAt: recipe.createdAt.getTime(),
-        updatedAt: recipe.updatedAt.getTime(),
-      }))
+      recipes
     },
   };
 };

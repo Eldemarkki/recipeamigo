@@ -470,7 +470,7 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
     }
   });
 
-  const result = getSingleRecipe(recipeId);
+  const result = await getSingleRecipe(recipeId);
 
   if (!result) {
     throw new Error("Recipe not found after editing. This should never happen");

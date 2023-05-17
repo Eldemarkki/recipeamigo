@@ -32,4 +32,5 @@
 | 30.4.2023 | 3      | Kielikäännösten jatkaminen ja viimeistely                                      |
 | 4.5.2023  | 1      | Reseptiohjeiden siirtäminen omaan tauluun                                      |
 | 17.5.2023 | 4      | Reseptien tagit/kategoriat                                                     |
-| Yhteensä  | 57     |                                                                                |
+| 17.5.2023 | 1      | Pieniä parannuksia                                                             |
+| Yhteensä  | 58     |                                                                                |
