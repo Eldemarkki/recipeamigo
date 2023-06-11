@@ -1,10 +1,10 @@
 import { Ingredient, IngredientSection, IngredientUnit, Instruction } from "@prisma/client";
 import { useId, useState } from "react";
-import { capitalizeFirstLetter } from "../../utils/stringUtils";
 import { NumberInput } from "../forms/NumberInput";
 import { Button } from "../button/Button";
 import styles from "./IngredientForm.module.css";
 import { useTranslation } from "next-i18next";
+import { UnitSelect } from "./UnitSelect";
 
 export type RawIngredient = Omit<Ingredient, "id" | "ingredientSectionId" | "order">;
 
@@ -83,18 +83,10 @@ export const IngredientForm = ({
           </div>
           <div className={styles.inputContainer}>
             <label className={styles.inputLabel} htmlFor={ingredientUnitId}>{t("recipeView:edit.ingredients.unit")}</label>
-            <select
-              id={ingredientUnitId}
-              value={ingredientUnit || ""}
-              onChange={(e) => {
-                const value = e.target.value as IngredientUnit | "";
-                setIngredientUnit(value || null);
-              }}
-              aria-label="Unit"
-            >
-              <option value="">{t("recipeView:edit.ingredients.noUnit")}</option>
-              {units.map((unit) => <option key={unit} value={unit}>{capitalizeFirstLetter(unit)}</option>)}
-            </select>
+            <UnitSelect
+              value={ingredientUnit}
+              onChange={setIngredientUnit}
+            />
           </div>
         </div>
         <div className={styles.optionalContainer}>

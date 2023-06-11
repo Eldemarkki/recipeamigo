@@ -1,0 +1,25 @@
+{
+  "unitSelect": {
+    "GRAM": "Gram",
+    "CUP": "Cup",
+    "TEASPOON": "Teaspoon",
+    "TABLESPOON": "Tablespoon",
+    "OUNCE": "Ounce",
+    "POUND": "Pound",
+    "MILLILITER": "Milliliter",
+    "DECILITER": "Deciliter",
+    "LITER": "Liter",
+    "PINCH": "Pinch",
+    "DASH": "Dash",
+    "CLOVE": "Clove",
+    "QUART": "Quart",
+    "PINT": "Pint",
+    "GALLON": "Gallon",
+    "KILOGRAM": "Kilogram",
+    "SLICE": "Slice",
+    "HANDFUL": "Handful",
+    "CAN": "Can",
+    "BOTTLE": "Bottle",
+    "PACKAGE": "Package"
+  }
+}

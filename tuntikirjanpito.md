@@ -33,4 +33,5 @@
 | 4.5.2023  | 1      | Reseptiohjeiden siirtäminen omaan tauluun                                      |
 | 17.5.2023 | 4      | Reseptien tagit/kategoriat                                                     |
 | 17.5.2023 | 1      | Pieniä parannuksia                                                             |
-| Yhteensä  | 58     |                                                                                |
+| 11.6.2023 | 2      | Yksikkövalitsimen luominen                                                     |
+| Yhteensä  | 60     |                                                                                |

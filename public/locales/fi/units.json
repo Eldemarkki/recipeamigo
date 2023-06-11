@@ -1,0 +1,25 @@
+{
+  "unitSelect": {
+    "GRAM": "Gramma",
+    "CUP": "Kuppi",
+    "TEASPOON": "Teelusikka",
+    "TABLESPOON": "Ruokalusikka",
+    "OUNCE": "Unssi",
+    "POUND": "Pauna",
+    "MILLILITER": "Millilitra",
+    "DECILITER": "Desilitra",
+    "LITER": "Litra",
+    "PINCH": "Ripaus",
+    "DASH": "Ripaus",
+    "CLOVE": "Kynsi",
+    "QUART": "Kvartti",
+    "PINT": "Pintti",
+    "GALLON": "Gallona",
+    "KILOGRAM": "Kilogramma",
+    "SLICE": "Viipale",
+    "HANDFUL": "Kourallinen",
+    "CAN": "Tölkki",
+    "BOTTLE": "Pullo",
+    "PACKAGE": "Paketti"
+  }
+}
