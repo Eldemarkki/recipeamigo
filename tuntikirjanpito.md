@@ -34,4 +34,5 @@
 | 17.5.2023 | 4      | Reseptien tagit/kategoriat                                                     |
 | 17.5.2023 | 1      | Pieniä parannuksia                                                             |
 | 11.6.2023 | 2      | Yksikkövalitsimen luominen                                                     |
-| Yhteensä  | 60     |                                                                                |
+| 27.6.2023 | 4      | Ainesosavalitsimen luominen, ainesosien kielikäännökset                        |
+| Yhteensä  | 64     |                                                                                |
