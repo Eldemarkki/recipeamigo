@@ -38,7 +38,9 @@
       "unit": "Otsikko",
       "noUnit": "Ei yksikköä",
       "isOptional": "Vapaaehtoinen",
-      "addIngredientButton": "Lisää ainesosa"
+      "addIngredientButton": "Lisää ainesosa",
+      "selectPlaceholder": "Kirjoita luodaksesi tai etsiäksesi...",
+      "newIngredientPrompt": "Luo {{name}}"
     },
     "ingredientSections": {
       "newSectionTitle": "Uusi osio",

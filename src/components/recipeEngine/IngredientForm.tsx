@@ -5,6 +5,7 @@ import { Button } from "../button/Button";
 import styles from "./IngredientForm.module.css";
 import { useTranslation } from "next-i18next";
 import { UnitSelect } from "./UnitSelect";
+import { IngredientSelect } from "../IngredientSelect";
 
 export type RawIngredient = Omit<Ingredient, "id" | "ingredientSectionId" | "order">;
 
@@ -21,8 +22,6 @@ export type IngredientFormProps = {
   initialIngredient?: Partial<RawIngredient>;
 }
 
-const units = Object.keys(IngredientUnit) as IngredientUnit[];
-
 export const IngredientForm = ({
   type,
   addIngredient,
@@ -31,12 +30,11 @@ export const IngredientForm = ({
 }: IngredientFormProps) => {
   const { t } = useTranslation();
 
-  const [ingredientName, setIngredientName] = useState(initialIngredient?.name ?? "");
+  const [ingredientName, setIngredientName] = useState<string | null>(initialIngredient?.name ?? null);
   const [ingredientAmount, setIngredientAmount] = useState(initialIngredient?.quantity ?? 0);
   const [ingredientUnit, setIngredientUnit] = useState<IngredientUnit | null>(initialIngredient?.unit ?? null);
   const [ingredientOptional, setIngredientOptional] = useState(initialIngredient?.isOptional ?? false);
 
-  const ingredientNameId = useId();
   const ingredientAmountId = useId();
   const ingredientUnitId = useId();
   const ingredientOptionalId = useId();
@@ -46,7 +44,7 @@ export const IngredientForm = ({
     <form className={styles.form} onSubmit={(e) => {
       e.preventDefault();
       addIngredient({
-        name: ingredientName,
+        name: ingredientName || "",
         quantity: ingredientAmount,
         unit: ingredientUnit,
         isOptional: ingredientOptional,
@@ -57,13 +55,9 @@ export const IngredientForm = ({
     }}>
       <div className={styles.inputsContainer}>
         <div className={styles.inputContainer}>
-          <label className={styles.inputLabel} htmlFor={ingredientNameId}>{t("recipeView:edit.ingredients.ingredientName")}</label>
-          <input
-            id={ingredientNameId}
-            value={ingredientName}
-            onChange={(event) => setIngredientName(event.target.value)}
-            type="text"
-            required
+          <IngredientSelect
+            ingredient={ingredientName}
+            setIngredient={setIngredientName}
           />
         </div>
         <div className={styles.amountRow}>

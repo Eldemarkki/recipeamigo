@@ -38,7 +38,9 @@
       "unit": "Unit",
       "noUnit": "No unit",
       "isOptional": "Optional",
-      "addIngredientButton": "Add ingredient"
+      "addIngredientButton": "Add ingredient",
+      "selectPlaceholder": "Type to create or search...",
+      "newIngredientPrompt": "Create {{name}}"
     },
     "ingredientSections": {
       "newSectionTitle": "New section",
