@@ -18,7 +18,7 @@
     "sumHours": "node ./sumHours.js"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.350.0",
+    "@aws-sdk/client-s3": "^3.360.0",
     "@prisma/client": "^4.15.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@teamhanko/hanko-elements": "^0.4.0-alpha",
