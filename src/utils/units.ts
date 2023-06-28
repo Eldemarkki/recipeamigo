@@ -1,7 +1,7 @@
 import type { IngredientUnit } from "@prisma/client";
-import { TFuncKey } from "i18next";
+import type { ParseKeys } from "i18next";
 
-type UnitTranslationKey = `units:unitSelect.${TFuncKey<"units", "unitSelect">}`;
+type UnitTranslationKey = `units:${ParseKeys<"units">}`;
 
 export const UNIT_SELECT_TRANSLATION_KEYS: Record<IngredientUnit, UnitTranslationKey> = {
   GRAM: "units:unitSelect.GRAM",

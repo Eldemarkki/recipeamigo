@@ -35,4 +35,6 @@
 | 17.5.2023 | 1      | Pieniä parannuksia                                                             |
 | 11.6.2023 | 2      | Yksikkövalitsimen luominen                                                     |
 | 27.6.2023 | 4      | Ainesosavalitsimen luominen, ainesosien kielikäännökset                        |
-| Yhteensä  | 64     |                                                                                |
+| 27.6.2023 | 1      | Riippuvuuksien päivittäminen                                                   |
+| 28.6.2023 | 1      | Riippuvuuksien päivittäminen                                                   |
+| Yhteensä  | 66     |                                                                                |

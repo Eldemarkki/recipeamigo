@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import styles from "./Tag.module.css";
 import { DeleteButton } from "../button/DeleteButton";
-import { TFuncKey } from "i18next";
+import { ParseKeys } from "i18next";
 
 export enum TagType {
   LactoseFree = "lactoseFree",
@@ -29,7 +29,7 @@ export const tagPrefixes: Record<TagType, string> = {
   [TagType.Vegetarian]: "🥕",
 };
 
-export const tagTranslationKeys: Record<TagType, `tags:${TFuncKey<"tags">}`> = {
+export const tagTranslationKeys: Record<TagType, `tags:${ParseKeys<"tags">}`> = {
   [TagType.LactoseFree]: "tags:lactoseFree",
   [TagType.GlutenFree]: "tags:glutenFree",
   [TagType.Vegan]: "tags:vegan",

@@ -10,24 +10,22 @@ export type UnitSelectProps = {
 
 const units = Object.keys(IngredientUnit) as IngredientUnit[];
 
-type UnitOrEmpty = IngredientUnit | "";
-
 export const UnitSelect = (props: UnitSelectProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["recipeView", "units"]);
 
-  const options: { value: UnitOrEmpty; label: string; }[] = [
-    { value: "", label: t("recipeView:edit.ingredients.noUnit") },
+  const options = [
+    { value: "", label: t("edit.ingredients.noUnit") },
     ...units.map((unit) => ({
       value: unit,
       label: t(UNIT_SELECT_TRANSLATION_KEYS[unit])
     })),
-  ];
+  ] as const;
 
   return <Select
     options={options}
     value={props.value ? { value: props.value, label: t(UNIT_SELECT_TRANSLATION_KEYS[props.value]) } : {
-      value: "" as UnitOrEmpty,
-      label: t("recipeView:edit.ingredients.noUnit"),
+      value: "" as const,
+      label: t("edit.ingredients.noUnit"),
     }}
     onChange={(option) => {
       const value = option && option.value !== "" ? option.value : null;
