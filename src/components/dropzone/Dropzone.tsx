@@ -35,10 +35,7 @@ export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps)
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
     accept: {
-      ".jpg": ["image/jpeg"],
-      ".jpeg": ["image/jpeg"],
-      ".png": ["image/png"],
-      ".gif": ["image/gif"],
+      "image/*": [".jpeg", ".jpg", ".png"],
     },
     maxSize: 1024 * 1024 * 5, // 5 MB
     onDrop: (acceptedFiles, rejections) => {
