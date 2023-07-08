@@ -37,4 +37,6 @@
 | 27.6.2023 | 4      | Ainesosavalitsimen luominen, ainesosien kielikäännökset                        |
 | 27.6.2023 | 1      | Riippuvuuksien päivittäminen                                                   |
 | 28.6.2023 | 1      | Riippuvuuksien päivittäminen                                                   |
-| Yhteensä  | 66     |                                                                                |
+| 7.7.2023  | 2      | Muuta S3 käyttämään presigned URL:ja kansikuvien tallentamiseen/lataamiseen    |
+| 8.7.2023  | 2      | Muuta S3 käyttämään presigned URL:ja kansikuvien tallentamiseen/lataamiseen    |
+| Yhteensä  | 70     |                                                                                |
