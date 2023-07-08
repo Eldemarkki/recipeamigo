@@ -71,7 +71,7 @@ const handler = (async (req, res) => {
     if (recipeBody.data.hasCoverImage) {
       coverImageName = randomUUID();
       coverImageUploadUrl = recipeBody.data.hasCoverImage
-        ? await s3.presignedPutObject(DEFAULT_BUCKET_NAME, coverImageName)
+        ? await s3.presignedPutObject(DEFAULT_BUCKET_NAME, coverImageName) // TODO: Add checks on file size and type
         : null;
     }
 

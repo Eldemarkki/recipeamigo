@@ -1,9 +1,10 @@
 import { useCallback, useId, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { ErrorCode, useDropzone } from "react-dropzone";
 import styles from "./Dropzone.module.css";
 import Image from "next/image";
 import { DeleteButton } from "../button/DeleteButton";
 import { useTranslation } from "next-i18next";
+import { removeDuplicateStrings } from "../../utils/arrayUtils";
 
 export type DropzoneProps = {
   onDrop: (file: File | null) => void;
@@ -14,6 +15,12 @@ export type DropzoneProps = {
 export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps) => {
   const { t } = useTranslation("recipeView");
   const [previewImage, setPreviewImage] = useState(initialPreviewUrl);
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const removeImage = () => {
+    setPreviewImage(undefined);
+    onRemove?.();
+  };
 
   const onDropHandler = useCallback((acceptedFile: File) => {
     onDrop(acceptedFile);
@@ -28,10 +35,38 @@ export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps)
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
     accept: {
-      "image/*": [".jpg", ".jpeg", ".png", ".gif"]
+      ".jpg": ["image/jpeg"],
+      ".jpeg": ["image/jpeg"],
+      ".png": ["image/png"],
+      ".gif": ["image/gif"],
     },
     maxSize: 1024 * 1024 * 5, // 5 MB
-    onDrop: (acceptedFiles) => onDropHandler(acceptedFiles[0])
+    onDrop: (acceptedFiles, rejections) => {
+      if (acceptedFiles.length === 1) {
+        setErrors([]);
+        onDropHandler(acceptedFiles[0]);
+      }
+      else if (rejections.length === 1) {
+        console.log(rejections);
+        rejections[0].errors.forEach(error => {
+          if (error.code === ErrorCode.FileTooLarge) {
+            setErrors(oldErrors => removeDuplicateStrings([...oldErrors, t("coverImageDropzone.errors.fileIsTooLarge")]));
+          }
+          else if (error.code === ErrorCode.FileInvalidType) {
+            setErrors(oldErrors => removeDuplicateStrings([...oldErrors, t("coverImageDropzone.errors.unsupportedFileType")]));
+          }
+          else {
+            setErrors(oldErrors => removeDuplicateStrings([...oldErrors, t("coverImageDropzone.errors.unexpectedError")]));
+          }
+        });
+        removeImage();
+      }
+      else {
+        setErrors(oldErrors => removeDuplicateStrings([...oldErrors, t("coverImageDropzone.errors.unexpectedError")]));
+        console.log("Unexpected error");
+        removeImage();
+      }
+    }
   });
 
   const inputId = useId();
@@ -39,10 +74,7 @@ export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps)
   return <div className={styles.container}>
     <div className={styles.topRow}>
       <label htmlFor={inputId}>{t("coverImageDropzone.title")}</label>
-      {previewImage && <DeleteButton type="button" onClick={() => {
-        setPreviewImage(undefined);
-        onRemove?.();
-      }} />}
+      {previewImage && <DeleteButton type="button" onClick={removeImage} />}
     </div>
     <div {...getRootProps()} className={styles.dropzone}>
       <input {...getInputProps()} id={inputId} />
@@ -55,11 +87,9 @@ export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps)
           className={styles.previewImage}
         /> :
         <p className={styles.dragText}>
-          {isDragActive
-            ? t("coverImageDropzone.dragActive")
-            : t("coverImageDropzone.dragInactive")
-          }
+          {isDragActive ? t("coverImageDropzone.dragActive") : t("coverImageDropzone.dragInactive")}
         </p>}
     </div>
+    {errors.length > 0 && <p className={styles.errorText}>{errors.join(" ")}</p>}
   </div>;
 };

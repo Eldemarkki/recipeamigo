@@ -101,6 +101,7 @@ const handler = (async (req, res) => {
       let coverImageUploadUrl: string | undefined = undefined;
       const newCoverImageName = randomUUID();
       if (coverImageAction === "replace") {
+        // TODO: Add checks on file size and type
         coverImageUploadUrl = await s3.presignedPutObject(DEFAULT_BUCKET_NAME, newCoverImageName);
       }
 

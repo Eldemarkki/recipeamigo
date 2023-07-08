@@ -51,6 +51,11 @@
   "coverImageDropzone": {
     "title": "Kansikuva",
     "dragActive": "Pudota kuva tänne ...",
-    "dragInactive": "Raahaa ja pudota kuva tänne, tai klikkaa valitaksesi kuva."
+    "dragInactive": "Raahaa ja pudota kuva tänne, tai klikkaa valitaksesi kuva.",
+    "errors": {
+      "fileIsTooLarge": "Kuva on liian suuri.",
+      "unsupportedFileType": "Kuvan täytyy olla joko PNG, JPEG, JPG, tai GIF.",
+      "unexpectedError": "Tuntematon virhe."
+    }
   }
 }

@@ -31,3 +31,10 @@
   flex-direction: column;
   gap: 0.3rem;
 }
+
+.errorText {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--danger);
+  text-align: center;
+}

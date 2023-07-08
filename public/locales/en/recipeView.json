@@ -51,6 +51,11 @@
   "coverImageDropzone": {
     "title": "Cover image",
     "dragActive": "Drop the image here ...",
-    "dragInactive": "Drag and drop an image here, or click to select an image to upload."
+    "dragInactive": "Drag and drop an image here, or click to select an image to upload.",
+    "errors": {
+      "fileIsTooLarge": "Image is too large.",
+      "unsupportedFileType": "The image must be either PNG, JPEG, JPG, or GIF.",
+      "unexpectedError": "Unexpected error."
+    }
   }
 }
