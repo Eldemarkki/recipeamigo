@@ -39,4 +39,5 @@
 | 28.6.2023 | 1      | Riippuvuuksien päivittäminen                                                   |
 | 7.7.2023  | 2      | Muuta S3 käyttämään presigned URL:ja kansikuvien tallentamiseen/lataamiseen    |
 | 8.7.2023  | 2      | Muuta S3 käyttämään presigned URL:ja kansikuvien tallentamiseen/lataamiseen    |
-| Yhteensä  | 70     |                                                                                |
+| 8.7.2023  | 3      | Julkaise Next.js-palvelin Verceliin, ja Minio ja tietokanta VPS:lle            |
+| Yhteensä  | 73     |                                                                                |
