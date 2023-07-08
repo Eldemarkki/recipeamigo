@@ -1,6 +1,5 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { getUserFromRequest } from "../utils/auth";
-import { Recipe } from "@prisma/client";
 import { getAllRecipesForUser } from "../database/recipes";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
 import { LinkButton } from "../components/LinkButton";
@@ -8,11 +7,7 @@ import styles from "./page.module.css";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
-type HomeProps = {
-  recipes: Recipe[];
-}
-
-export default function Home({ recipes }: HomeProps) {
+export default function Home({ recipes }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { t } = useTranslation("home");
 
   return <div className={styles.container}>
@@ -24,7 +19,7 @@ export default function Home({ recipes }: HomeProps) {
   </div>;
 }
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req, locale }) => {
+export const getServerSideProps = (async ({ req, locale }) => {
   const user = await getUserFromRequest(req);
 
   if (user.status === "Unauthorized") {
@@ -53,4 +48,4 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req, l
       recipes
     },
   };
-};
+}) satisfies GetServerSideProps;

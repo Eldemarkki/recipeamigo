@@ -1,12 +1,10 @@
 import { z } from "zod";
 import { ingredientUnitSchema } from "..";
-import { NextApiHandler, NextApiRequest } from "next";
+import { NextApiHandler } from "next";
 import { getUserFromRequest } from "../../../../utils/auth";
-import { editRecipe, getSingleRecipe } from "../../../../database/recipes";
-import formidable from "formidable";
-import { S3 } from "@aws-sdk/client-s3";
+import { editRecipe, getSingleRecipe, getSingleRecipeWithoutCoverImageUrl } from "../../../../database/recipes";
 import { randomUUID } from "crypto";
-import { createReadStream } from "fs";
+import { DEFAULT_BUCKET_NAME, s3 } from "../../../../s3";
 
 const newIngredientSchema = z.object({
   name: z.string(),
@@ -53,14 +51,12 @@ export const editRecipeSchema = z.object({
   timeEstimateMinimumMinutes: z.number().min(0).optional(),
   timeEstimateMaximumMinutes: z.number().min(0).optional(),
   tags: z.array(tagSchema).refine((tags) => new Set(tags).size === tags.length, { message: "Tags must be unique" }).optional(),
-  shouldDeleteCoverImage: z.boolean().optional(),
+  coverImageAction: z.union([
+    z.literal("keep"),
+    z.literal("remove"),
+    z.literal("replace")
+  ]).optional().default("keep"),
 });
-
-export const config = {
-  api: {
-    bodyParser: false,
-  }
-};
 
 const allowedErrors = {
   noRecipeField: "No recipe field in request",
@@ -73,44 +69,7 @@ type AllowedErrorValue = typeof allowedErrors[AllowedErrorKey];
 
 const allowedErrorValues = Object.values(allowedErrors) as AllowedErrorValue[];
 
-const getBodyAndCoverImage = async (req: NextApiRequest): Promise<{
-  body: unknown,
-  file?: formidable.File,
-}> => {
-  return new Promise((resolve, reject) => {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (_err, fields, files) => {
-      if (!("recipe" in fields)) {
-        return reject(allowedErrors.noRecipeField);
-      }
-
-      if (typeof fields.recipe !== "string") {
-        return reject(allowedErrors.recipeNotString);
-      }
-
-      const body = JSON.parse(fields.recipe);
-
-      if ("coverImage" in files) {
-        const file = files.coverImage;
-        if (Array.isArray(file)) {
-          return reject(allowedErrors.coverImageNotSingleFile);
-        }
-
-        resolve({
-          body,
-          file,
-        });
-      }
-
-      resolve({
-        body
-      });
-    });
-  });
-};
-
-
-const handler: NextApiHandler = async (req, res) => {
+const handler = (async (req, res) => {
   if (req.method === "PUT") {
     const id = req.query.id;
     if (typeof id !== "string") {
@@ -122,60 +81,40 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(401).end();
     }
 
-    const originalRecipe = await getSingleRecipe(id);
+    const originalRecipe = await getSingleRecipeWithoutCoverImageUrl(id);
     if (originalRecipe === null || originalRecipe.userId !== user.userId) {
       return res.status(404).end();
     }
 
     try {
-      const { body, file } = await getBodyAndCoverImage(req);
-
-      const recipeParsed = editRecipeSchema.safeParse(body);
+      const recipeParsed = editRecipeSchema.safeParse(req.body);
 
       if (!recipeParsed.success) {
         return res.status(400).json({ error: recipeParsed.error });
       }
 
-      const s3 = new S3({
-        endpoint: process.env.S3_ENDPOINT,
-        credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? ""
-        },
-        region: "region", // This can be whatever, but it's required
-        forcePathStyle: true,
-      });
-
-      const originalCoverImageKey = originalRecipe.coverImageUrl?.split("/").pop();
-      const shouldDeleteOld = file || (recipeParsed.success && recipeParsed.data.shouldDeleteCoverImage);
-
-      if (shouldDeleteOld && originalCoverImageKey) {
-        await s3.deleteObject({
-          Bucket: process.env.S3_BUCKET_NAME ?? "",
-          Key: originalCoverImageKey,
-        });
+      const coverImageAction = recipeParsed.data.coverImageAction;
+      if ((coverImageAction === "remove" || coverImageAction === "replace") && originalRecipe.coverImageName) {
+        await s3.removeObject(DEFAULT_BUCKET_NAME, originalRecipe.coverImageName);
       }
 
-      let coverImageUrl: string | undefined = undefined;
-      if (file) {
-        const key = randomUUID();
-
-        await s3.putObject({
-          Bucket: process.env.S3_BUCKET_NAME ?? "",
-          Key: key,
-          Body: createReadStream(file.filepath),
-          ACL: "public-read", // TODO: Check if this can be made more private
-        });
-
-        coverImageUrl = process.env.S3_ENDPOINT + "/" + process.env.S3_BUCKET_NAME + "/" + key;
+      let coverImageUploadUrl: string | undefined = undefined;
+      const newCoverImageName = randomUUID();
+      if (coverImageAction === "replace") {
+        coverImageUploadUrl = await s3.presignedPutObject(DEFAULT_BUCKET_NAME, newCoverImageName);
       }
 
-      const edited = await editRecipe(id, {
-        ...recipeParsed.data,
-        coverImageUrl: coverImageUrl ?? (shouldDeleteOld ? null : undefined)
-      });
+      const coverImageNameForPrisma = {
+        keep: undefined,
+        remove: null,
+        replace: newCoverImageName
+      }[coverImageAction];
+      const edited = await editRecipe(id, recipeParsed.data, coverImageNameForPrisma);
 
-      return res.status(200).json(edited);
+      return res.status(200).json({
+        recipe: edited,
+        coverImageUploadUrl
+      });
     }
     catch (e) {
       if (typeof e === "string" && allowedErrorValues.includes(e as any)) {
@@ -188,6 +127,6 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   return res.status(405).end();
-};
+}) satisfies NextApiHandler;
 
 export default handler;

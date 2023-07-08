@@ -2,43 +2,64 @@ import { z } from "zod";
 import { prisma } from "../db";
 import { createRecipeSchema } from "../pages/api/recipes";
 import { editRecipeSchema } from "../pages/api/recipes/[id]";
+import type { UUID } from "crypto";
+import { DEFAULT_BUCKET_NAME, s3 } from "../s3";
 
 export const getAllRecipesForUser = async (userId: string) => {
   const recipes = await prisma.recipe.findMany({
     where: {
-      userId
+      userId,
     },
     include: {
       ingredientSections: {
         include: {
           ingredients: {
             orderBy: {
-              order: "asc"
-            }
-          }
+              order: "asc",
+            },
+          },
         },
         orderBy: {
-          order: "asc"
-        }
+          order: "asc",
+        },
       },
       instructions: {
         orderBy: {
-          order: "asc"
-        }
+          order: "asc",
+        },
       },
       tags: {
         orderBy: {
-          order: "asc"
-        }
+          order: "asc",
+        },
       },
-    }
+    },
   });
-  return recipes;
+
+  const recipesWithCoverImageUrls = await Promise.all(
+    recipes.map(async (recipe) => {
+      const coverImageUrl = recipe.coverImageName
+        ? await s3.presignedGetObject(
+            DEFAULT_BUCKET_NAME,
+            recipe?.coverImageName
+          )
+        : undefined;
+
+      return {
+        ...recipe,
+        coverImageUrl,
+      };
+    })
+  );
+
+  return recipesWithCoverImageUrls;
 };
 
-export const createRecipe = async (userId: string, recipe: z.infer<typeof createRecipeSchema> & {
-  coverImageUrl?: string | undefined
-}) => {
+export const createRecipe = async (
+  userId: string,
+  recipe: z.infer<typeof createRecipeSchema>,
+  coverImageName: UUID | null
+) => {
   return await prisma.$transaction(async (prisma) => {
     const createdRecipe = await prisma.recipe.create({
       data: {
@@ -49,15 +70,15 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
         userId,
         timeEstimateMinimumMinutes: recipe.timeEstimateMinimumMinutes,
         timeEstimateMaximumMinutes: recipe.timeEstimateMaximumMinutes,
-        coverImageUrl: recipe.coverImageUrl
-      }
+        coverImageName,
+      },
     });
 
     await prisma.instruction.createMany({
       data: recipe.instructions.map((instruction, index) => ({
         description: instruction.description,
         recipeId: createdRecipe.id,
-        order: index
+        order: index,
       })),
     });
 
@@ -65,27 +86,32 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
       data: recipe.ingredientSections.map((ingredientSection, index) => ({
         name: ingredientSection.name,
         recipeId: createdRecipe.id,
-        order: index
+        order: index,
       })),
     });
 
     const ingredientSections = await prisma.ingredientSection.findMany({
       where: {
-        recipeId: createdRecipe.id
-      }
+        recipeId: createdRecipe.id,
+      },
     });
 
     await prisma.ingredient.createMany({
-      data: recipe.ingredientSections.flatMap((ingredientSection, ingredientSectionIndex) => {
-        return ingredientSection.ingredients.map((ingredient, ingredientIndex) => ({
-          name: ingredient.name,
-          quantity: ingredient.quantity,
-          unit: ingredient.unit,
-          isOptional: ingredient.isOptional,
-          ingredientSectionId: ingredientSections[ingredientSectionIndex].id,
-          order: ingredientIndex
-        }));
-      }),
+      data: recipe.ingredientSections.flatMap(
+        (ingredientSection, ingredientSectionIndex) => {
+          return ingredientSection.ingredients.map(
+            (ingredient, ingredientIndex) => ({
+              name: ingredient.name,
+              quantity: ingredient.quantity,
+              unit: ingredient.unit,
+              isOptional: ingredient.isOptional,
+              ingredientSectionId:
+                ingredientSections[ingredientSectionIndex].id,
+              order: ingredientIndex,
+            })
+          );
+        }
+      ),
     });
 
     if (recipe.tags && recipe.tags.length > 0) {
@@ -93,63 +119,68 @@ export const createRecipe = async (userId: string, recipe: z.infer<typeof create
         data: recipe.tags.map((tag, tagIndex) => ({
           text: tag,
           recipeId: createdRecipe.id,
-          order: tagIndex
-        }))
+          order: tagIndex,
+        })),
       });
     }
 
     const recipeWithIngredients = await prisma.recipe.findUnique({
       where: {
-        id: createdRecipe.id
+        id: createdRecipe.id,
       },
       include: {
         ingredientSections: {
           include: {
             ingredients: {
               orderBy: {
-                order: "asc"
-              }
-            }
+                order: "asc",
+              },
+            },
           },
           orderBy: {
-            order: "asc"
-          }
+            order: "asc",
+          },
         },
         instructions: {
           orderBy: {
-            order: "asc"
-          }
+            order: "asc",
+          },
         },
         tags: {
           orderBy: {
-            order: "asc"
-          }
-        }
-      }
+            order: "asc",
+          },
+        },
+      },
     });
 
-    if (!recipeWithIngredients) throw new Error("Recipe not found after creation. This should never happen.");
+    if (!recipeWithIngredients)
+      throw new Error(
+        "Recipe not found after creation. This should never happen."
+      );
 
     return recipeWithIngredients;
   });
 };
 
-export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof editRecipeSchema> & {
-  coverImageUrl?: string | undefined | null
-}) => {
+export const editRecipe = async (
+  recipeId: string,
+  editedRecipe: z.infer<typeof editRecipeSchema>,
+  coverImageName?: string | undefined | null
+) => {
   await prisma.$transaction(async (prisma) => {
     const originalRecipe = await prisma.recipe.findUnique({
       where: {
-        id: recipeId
+        id: recipeId,
       },
       include: {
         ingredientSections: {
           include: {
-            ingredients: true
-          }
+            ingredients: true,
+          },
         },
-        instructions: true
-      }
+        instructions: true,
+      },
     });
 
     if (!originalRecipe) {
@@ -157,66 +188,76 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
     }
 
     const touchedIngredientSectionIds = (editedRecipe.ingredientSections ?? [])
-      .map(ingredientSection => "id" in ingredientSection ? ingredientSection.id : undefined)
+      .map((ingredientSection) =>
+        "id" in ingredientSection ? ingredientSection.id : undefined
+      )
       .filter((id): id is string => id !== undefined);
 
     const touchedIngredientSections = await prisma.ingredientSection.findMany({
       where: {
         id: {
-          in: touchedIngredientSectionIds
-        }
-      }
+          in: touchedIngredientSectionIds,
+        },
+      },
     });
-    const hasAccessToAllIngredientSections = touchedIngredientSections.every(ingredientSection => ingredientSection.recipeId === recipeId);
+    const hasAccessToAllIngredientSections = touchedIngredientSections.every(
+      (ingredientSection) => ingredientSection.recipeId === recipeId
+    );
     if (!hasAccessToAllIngredientSections) {
       throw new Error("Cannot move ingredient section to another recipe");
     }
 
     const ingredientIds = (editedRecipe.ingredientSections ?? [])
-      .flatMap(ingredientSection => ingredientSection.ingredients)
-      .map(ingredient => (ingredient && "id" in ingredient) ? ingredient.id : undefined)
+      .flatMap((ingredientSection) => ingredientSection.ingredients)
+      .map((ingredient) =>
+        ingredient && "id" in ingredient ? ingredient.id : undefined
+      )
       .filter((id): id is string => id !== undefined);
 
     const ingredients = await prisma.ingredient.findMany({
       where: {
         id: {
-          in: ingredientIds
-        }
+          in: ingredientIds,
+        },
       },
       select: {
         ingredientSection: {
           select: {
-            recipeId: true
-          }
-        }
-      }
+            recipeId: true,
+          },
+        },
+      },
     });
 
-    const hasAccessToAllIngredients = ingredients.every(ingredient => ingredient.ingredientSection.recipeId === recipeId);
+    const hasAccessToAllIngredients = ingredients.every(
+      (ingredient) => ingredient.ingredientSection.recipeId === recipeId
+    );
     if (!hasAccessToAllIngredients) {
       throw new Error("Cannot move ingredient to another recipe");
     }
 
     const touchedInstructionIds = (editedRecipe.instructions ?? [])
-      .map(instruction => "id" in instruction ? instruction.id : undefined)
+      .map((instruction) => ("id" in instruction ? instruction.id : undefined))
       .filter((id): id is string => id !== undefined);
 
     const instructions = await prisma.instruction.findMany({
       where: {
         id: {
-          in: touchedInstructionIds
-        }
+          in: touchedInstructionIds,
+        },
       },
     });
 
-    const hasAccessToAllInstructions = instructions.every(instruction => instruction.recipeId === recipeId);
+    const hasAccessToAllInstructions = instructions.every(
+      (instruction) => instruction.recipeId === recipeId
+    );
     if (!hasAccessToAllInstructions) {
       throw new Error("Cannot move instruction to another recipe");
     }
 
     await prisma.recipe.update({
       where: {
-        id: recipeId
+        id: recipeId,
       },
       data: {
         name: editedRecipe.name,
@@ -225,48 +266,67 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
         isPublic: editedRecipe.isPublic,
         timeEstimateMinimumMinutes: editedRecipe.timeEstimateMinimumMinutes,
         timeEstimateMaximumMinutes: editedRecipe.timeEstimateMaximumMinutes,
-        coverImageUrl: editedRecipe.coverImageUrl
-      }
+        coverImageName,
+      },
     });
 
     if (editedRecipe.ingredientSections) {
       // Delete any ingredients that were removed
-      const ingredientsToRemove = originalRecipe.ingredientSections.flatMap(originalIngredientSection => {
-        return originalIngredientSection.ingredients.filter(originalIngredient => {
-          return !editedRecipe.ingredientSections?.some(ingredientSection =>
-            "id" in ingredientSection
-            && ingredientSection.id === originalIngredientSection.id
-            && ingredientSection.ingredients?.some(ingredient => "id" in ingredient && ingredient.id === originalIngredient.id));
-        });
-      });
+      const ingredientsToRemove = originalRecipe.ingredientSections.flatMap(
+        (originalIngredientSection) => {
+          return originalIngredientSection.ingredients.filter(
+            (originalIngredient) => {
+              return !editedRecipe.ingredientSections?.some(
+                (ingredientSection) =>
+                  "id" in ingredientSection &&
+                  ingredientSection.id === originalIngredientSection.id &&
+                  ingredientSection.ingredients?.some(
+                    (ingredient) =>
+                      "id" in ingredient &&
+                      ingredient.id === originalIngredient.id
+                  )
+              );
+            }
+          );
+        }
+      );
 
       await prisma.ingredient.deleteMany({
         where: {
           id: {
-            in: ingredientsToRemove.map(ingredient => ingredient.id)
+            in: ingredientsToRemove.map((ingredient) => ingredient.id),
           },
           ingredientSection: {
             recipe: {
-              userId: originalRecipe.userId
-            }
-          }
-        }
+              userId: originalRecipe.userId,
+            },
+          },
+        },
       });
 
       // Delete any ingredient sections that were removed
-      const ingredientSectionsToRemove = originalRecipe.ingredientSections.filter(originalIngredientSection => {
-        return !editedRecipe.ingredientSections?.some(ingredientSection => "id" in ingredientSection && ingredientSection.id === originalIngredientSection.id);
-      });
+      const ingredientSectionsToRemove =
+        originalRecipe.ingredientSections.filter(
+          (originalIngredientSection) => {
+            return !editedRecipe.ingredientSections?.some(
+              (ingredientSection) =>
+                "id" in ingredientSection &&
+                ingredientSection.id === originalIngredientSection.id
+            );
+          }
+        );
 
       await prisma.ingredientSection.deleteMany({
         where: {
           id: {
-            in: ingredientSectionsToRemove.map(ingredientSection => ingredientSection.id)
+            in: ingredientSectionsToRemove.map(
+              (ingredientSection) => ingredientSection.id
+            ),
           },
           recipe: {
-            userId: originalRecipe.userId
-          }
-        }
+            userId: originalRecipe.userId,
+          },
+        },
       });
 
       // make all orders negative to allow the them to be changed correctly
@@ -275,11 +335,11 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
         if ("id" in ingredientSection) {
           await prisma.ingredientSection.update({
             where: {
-              id: ingredientSection.id
+              id: ingredientSection.id,
             },
             data: {
-              order: -i - 1
-            }
+              order: -i - 1,
+            },
           });
         }
       }
@@ -289,48 +349,56 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
 
         await prisma.ingredient.update({
           where: {
-            id: ingredientId
+            id: ingredientId,
           },
           data: {
-            order: -i - 1
-          }
+            order: -i - 1,
+          },
         });
       }
 
-      for (let ingredientSectionIndex = 0; ingredientSectionIndex < editedRecipe.ingredientSections.length; ingredientSectionIndex++) {
-        const ingredientSection = editedRecipe.ingredientSections[ingredientSectionIndex];
+      for (
+        let ingredientSectionIndex = 0;
+        ingredientSectionIndex < editedRecipe.ingredientSections.length;
+        ingredientSectionIndex++
+      ) {
+        const ingredientSection =
+          editedRecipe.ingredientSections[ingredientSectionIndex];
 
         if ("id" in ingredientSection) {
           // This should be updated
           await prisma.ingredientSection.update({
             where: {
-              id: ingredientSection.id
+              id: ingredientSection.id,
             },
             data: {
               name: ingredientSection.name,
-              order: ingredientSectionIndex
-            }
+              order: ingredientSectionIndex,
+            },
           });
 
           if (ingredientSection.ingredients !== undefined) {
-            for (let ingredientIndex = 0; ingredientIndex < ingredientSection.ingredients.length; ingredientIndex++) {
+            for (
+              let ingredientIndex = 0;
+              ingredientIndex < ingredientSection.ingredients.length;
+              ingredientIndex++
+            ) {
               const ingredient = ingredientSection.ingredients[ingredientIndex];
               if ("id" in ingredient) {
                 // This should be updated
                 await prisma.ingredient.update({
                   where: {
-                    id: ingredient.id
+                    id: ingredient.id,
                   },
                   data: {
                     name: ingredient.name,
                     quantity: ingredient.quantity,
                     unit: ingredient.unit,
                     isOptional: ingredient.isOptional,
-                    order: ingredientIndex
-                  }
+                    order: ingredientIndex,
+                  },
                 });
-              }
-              else {
+              } else {
                 // This should be created
                 await prisma.ingredient.create({
                   data: {
@@ -339,30 +407,34 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
                     unit: ingredient.unit,
                     isOptional: ingredient.isOptional,
                     ingredientSectionId: ingredientSection.id,
-                    order: ingredientIndex
-                  }
+                    order: ingredientIndex,
+                  },
                 });
               }
-            };
-          }
-        }
-        else {
-          // This should be created
-          const createdIngredientSection = await prisma.ingredientSection.create({
-            data: {
-              name: ingredientSection.name,
-              recipeId,
-              order: ingredientSectionIndex
             }
-          });
+          }
+        } else {
+          // This should be created
+          const createdIngredientSection =
+            await prisma.ingredientSection.create({
+              data: {
+                name: ingredientSection.name,
+                recipeId,
+                order: ingredientSectionIndex,
+              },
+            });
 
-          for (let ingredientIndex = 0; ingredientIndex < ingredientSection.ingredients.length; ingredientIndex++) {
+          for (
+            let ingredientIndex = 0;
+            ingredientIndex < ingredientSection.ingredients.length;
+            ingredientIndex++
+          ) {
             const ingredient = ingredientSection.ingredients[ingredientIndex];
             if ("id" in ingredient) {
               // This should be updated
               await prisma.ingredient.update({
                 where: {
-                  id: ingredient.id
+                  id: ingredient.id,
                 },
                 data: {
                   name: ingredient.name,
@@ -370,11 +442,10 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
                   unit: ingredient.unit,
                   isOptional: ingredient.isOptional,
                   ingredientSectionId: createdIngredientSection.id,
-                  order: ingredientIndex
-                }
+                  order: ingredientIndex,
+                },
               });
-            }
-            else {
+            } else {
               // This should be created
               await prisma.ingredient.create({
                 data: {
@@ -383,30 +454,35 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
                   unit: ingredient.unit,
                   isOptional: ingredient.isOptional,
                   ingredientSectionId: createdIngredientSection.id,
-                  order: ingredientIndex
-                }
+                  order: ingredientIndex,
+                },
               });
             }
-          };
+          }
         }
-      };
+      }
     }
 
     if (editedRecipe.instructions) {
       // Delete any instructions that were removed
-      const instructionsToRemove = originalRecipe.instructions.filter(originalInstruction => {
-        return !editedRecipe.instructions?.some(instruction => "id" in instruction && instruction.id === originalInstruction.id);
-      });
+      const instructionsToRemove = originalRecipe.instructions.filter(
+        (originalInstruction) => {
+          return !editedRecipe.instructions?.some(
+            (instruction) =>
+              "id" in instruction && instruction.id === originalInstruction.id
+          );
+        }
+      );
 
       await prisma.instruction.deleteMany({
         where: {
           id: {
-            in: instructionsToRemove.map(instruction => instruction.id)
+            in: instructionsToRemove.map((instruction) => instruction.id),
           },
           recipe: {
-            userId: originalRecipe.userId
-          }
-        }
+            userId: originalRecipe.userId,
+          },
+        },
       });
 
       // make all orders negative to allow the them to be changed correctly
@@ -415,11 +491,11 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
         if ("id" in instruction) {
           await prisma.instruction.update({
             where: {
-              id: instruction.id
+              id: instruction.id,
             },
             data: {
-              order: -i - 1
-            }
+              order: -i - 1,
+            },
           });
         }
       }
@@ -431,22 +507,21 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
           // This should be updated
           await prisma.instruction.update({
             where: {
-              id: instruction.id
+              id: instruction.id,
             },
             data: {
               description: instruction.description,
               order: i,
-            }
+            },
           });
-        }
-        else {
+        } else {
           // This should be created
           await prisma.instruction.create({
             data: {
               description: instruction.description,
               recipeId,
-              order: i
-            }
+              order: i,
+            },
           });
         }
       }
@@ -464,13 +539,13 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
         data: editedRecipe.tags.map((tag, tagIndex) => ({
           text: tag.text,
           recipeId,
-          order: tagIndex
-        }))
+          order: tagIndex,
+        })),
       });
     }
   });
 
-  const result = await getSingleRecipe(recipeId);
+  const result = await getSingleRecipeWithoutCoverImageUrl(recipeId);
 
   if (!result) {
     throw new Error("Recipe not found after editing. This should never happen");
@@ -479,45 +554,61 @@ export const editRecipe = async (recipeId: string, editedRecipe: z.infer<typeof 
   return result;
 };
 
-export const getSingleRecipe = async (id: string) => {
+export const getSingleRecipeWithoutCoverImageUrl = async (id: string) => {
   const recipe = await prisma.recipe.findUnique({
     where: {
-      id
+      id,
     },
     include: {
       ingredientSections: {
         include: {
           ingredients: {
             orderBy: {
-              order: "asc"
-            }
-          }
+              order: "asc",
+            },
+          },
         },
         orderBy: {
-          order: "asc"
-        }
+          order: "asc",
+        },
       },
       instructions: {
         orderBy: {
-          order: "asc"
-        }
+          order: "asc",
+        },
       },
       tags: {
         orderBy: {
-          order: "asc"
-        }
+          order: "asc",
+        },
       },
-      user: true
+      user: true,
     },
   });
+
   return recipe;
+};
+
+export const getSingleRecipe = async (id: string) => {
+  const recipe = await getSingleRecipeWithoutCoverImageUrl(id);
+  if (!recipe) return null;
+
+  return {
+    ...recipe,
+    coverImageUrl: recipe.coverImageName
+      ? await s3.presignedGetObject(
+          process.env.S3_BUCKET_NAME ?? "",
+          recipe?.coverImageName
+        )
+      : undefined,
+  };
 };
 
 export const increaseViewCountForRecipe = async (id: string) => {
   const recipe = await prisma.recipe.findUnique({
     where: {
-      id
-    }
+      id,
+    },
   });
 
   if (!recipe) {
@@ -526,10 +617,10 @@ export const increaseViewCountForRecipe = async (id: string) => {
 
   await prisma.recipe.update({
     where: {
-      id
+      id,
     },
     data: {
-      viewCount: recipe.viewCount + 1
-    }
+      viewCount: recipe.viewCount + 1,
+    },
   });
 };

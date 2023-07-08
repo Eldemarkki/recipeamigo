@@ -4,13 +4,12 @@ import { EditableInstructionList } from "../../../../components/recipeEngine/Edi
 import { z } from "zod";
 import { useRouter } from "next/router";
 import { RecipeQuantityPicker } from "../../../../components/recipeView/RecipeQuantityPicker";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { getUserFromRequest } from "../../../../utils/auth";
 import { Button } from "../../../../components/button/Button";
 import { NumberInput } from "../../../../components/forms/NumberInput";
 import styles from "./index.module.css";
 import { getSingleRecipe } from "../../../../database/recipes";
-import { Ingredient, IngredientSection, Instruction, Recipe, Tag } from "@prisma/client";
 import { editRecipeSchema } from "../../../api/recipes/[id]";
 import { RawIngredientSection, RawInstruction } from "../../../../components/recipeEngine/IngredientForm";
 import { Dropzone } from "../../../../components/dropzone/Dropzone";
@@ -19,35 +18,45 @@ import { Trans, useTranslation } from "next-i18next";
 import { TagSelect } from "../../../../components/tag/TagSelect";
 
 const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSchema>, coverImage: File | null) => {
-  const formData = new FormData();
-  formData.append("recipe", JSON.stringify(recipe));
-  if (coverImage) {
-    formData.append("coverImage", coverImage);
-  }
-
-  await fetch(`/api/recipes/${recipeId}`, {
+  const response = await fetch(`/api/recipes/${recipeId}`, {
     method: "PUT",
-    body: formData
+    body: JSON.stringify(recipe),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
+
+  const data = await response.json() as Awaited<ReturnType<typeof editRecipe>> & {
+    coverImageUploadUrl: string
+  };
+
+  if (recipe.coverImageAction === "replace" && coverImage) {
+    await fetch(data.coverImageUploadUrl, {
+      method: "PUT",
+      body: coverImage,
+      headers: {
+        "Content-Type": coverImage.type,
+      },
+    });
+  }
 };
 
-export type EditRecipePageProps = {
-  recipe: Recipe & {
-    ingredientSections: (IngredientSection & {
-      ingredients: Ingredient[];
-    })[];
-    instructions: Instruction[];
-    tags: Tag[];
-  }
-}
-
-export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePageProps) {
+export default function EditRecipePage({ recipe: initialRecipe }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { t } = useTranslation("recipeView");
   const router = useRouter();
 
   const [name, setName] = useState(initialRecipe.name);
   const [description, setDescription] = useState(initialRecipe.description);
-  const [coverImage, setCoverImage] = useState<File | null>(null);
+
+  // TODO: This can probably be simplified
+  const [coverImage, setCoverImage] = useState<File | {
+    url: string;
+  } | {
+    removed: true
+  } | null>(initialRecipe.coverImageUrl ? {
+    url: initialRecipe.coverImageUrl,
+  } : null);
+
   const [tags, setTags] = useState<{
     id?: string;
     text: string;
@@ -87,7 +96,20 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
       e.preventDefault();
       // TODO: Show loading indicator while saving
       try {
-        const shouldDeleteCoverImage = coverImage === null && initialRecipe.coverImageUrl !== null;
+        const coverImageAction: "remove" | "keep" | "replace" = (() => {
+          if (coverImage === null) {
+            return "keep";
+          }
+          else if ("removed" in coverImage) {
+            return "remove";
+          }
+          else if ("url" in coverImage) {
+            return "keep";
+          }
+          else {
+            return "replace";
+          }
+        })();
 
         await editRecipe(initialRecipe.id, {
           name,
@@ -105,8 +127,8 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
           timeEstimateMinimumMinutes: timeEstimateMin,
           timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax,
           tags: tags,
-          shouldDeleteCoverImage
-        }, coverImage);
+          coverImageAction,
+        }, coverImage instanceof File ? coverImage : null);
 
         router.push("/recipe/" + initialRecipe.id);
       }
@@ -182,7 +204,12 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
           </div>
           <Dropzone
             initialPreviewUrl={initialRecipe.coverImageUrl}
-            onDrop={f => setCoverImage(f)}
+            onDrop={f => {
+              setCoverImage(f);
+            }}
+            onRemove={() => {
+              setCoverImage({ removed: true });
+            }}
           />
           <TagSelect
             tags={tags.map(t => t.text)}
@@ -267,7 +294,7 @@ export default function EditRecipePage({ recipe: initialRecipe }: EditRecipePage
   </div>;
 }
 
-export const getServerSideProps: GetServerSideProps<EditRecipePageProps> = async ({ req, params, locale }) => {
+export const getServerSideProps = (async ({ req, params, locale }) => {
   const user = await getUserFromRequest(req);
   if (user.status === "Unauthorized") {
     return {
@@ -298,4 +325,4 @@ export const getServerSideProps: GetServerSideProps<EditRecipePageProps> = async
       recipe
     },
   };
-};
+}) satisfies GetServerSideProps;

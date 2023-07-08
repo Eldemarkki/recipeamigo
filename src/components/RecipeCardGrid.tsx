@@ -1,11 +1,15 @@
-import { Recipe } from "@prisma/client";
 import { RecipeCard } from "./RecipeCard";
 import { NewRecipeCard } from "./NewRecipeCard";
 import styles from "./RecipeCardGrid.module.css";
 
 export type RecipeCardGridProps = {
   showCreateButton?: boolean | undefined | null;
-  recipes: Recipe[];
+  recipes: {
+    id: string;
+    name: string;
+    description: string;
+    coverImageUrl?: string | undefined | null;
+  }[];
 };
 
 export const RecipeCardGrid = (props: RecipeCardGridProps) => {

@@ -8,9 +8,10 @@ import { useTranslation } from "next-i18next";
 export type DropzoneProps = {
   onDrop: (file: File | null) => void;
   initialPreviewUrl?: string | undefined | null;
+  onRemove?: () => void;
 }
 
-export const Dropzone = ({ onDrop, initialPreviewUrl }: DropzoneProps) => {
+export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps) => {
   const { t } = useTranslation("recipeView");
   const [previewImage, setPreviewImage] = useState(initialPreviewUrl);
 
@@ -38,7 +39,10 @@ export const Dropzone = ({ onDrop, initialPreviewUrl }: DropzoneProps) => {
   return <div className={styles.container}>
     <div className={styles.topRow}>
       <label htmlFor={inputId}>{t("coverImageDropzone.title")}</label>
-      {previewImage && <DeleteButton type="button" onClick={() => setPreviewImage(undefined)} />}
+      {previewImage && <DeleteButton type="button" onClick={() => {
+        setPreviewImage(undefined);
+        onRemove?.();
+      }} />}
     </div>
     <div {...getRootProps()} className={styles.dropzone}>
       <input {...getInputProps()} id={inputId} />

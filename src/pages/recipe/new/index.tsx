@@ -18,20 +18,24 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { TagSelect } from "../../../components/tag/TagSelect";
 
 const saveRecipe = async (recipe: z.infer<typeof createRecipeSchema>, coverImage: File | null) => {
-  const formData = new FormData();
-  formData.append("recipe", JSON.stringify(recipe));
-  if (coverImage) {
-    formData.append("coverImage", coverImage);
-  }
-
   const response = await fetch("/api/recipes", {
     method: "POST",
-    body: formData
+    body: JSON.stringify(recipe),
+    headers: {
+      "Content-Type": "application/json"
+    }
   });
 
-  const data = await response.json();
+  const data = await response.json() as { recipe: Awaited<ReturnType<typeof createRecipe>>, coverImageUploadUrl: string };
 
-  return data as ReturnType<Awaited<typeof createRecipe>>;
+  if (data.coverImageUploadUrl) {
+    await fetch(data.coverImageUploadUrl, {
+      method: "PUT",
+      body: coverImage
+    });
+  }
+
+  return data.recipe;
 };
 
 export default function NewRecipePage() {
@@ -72,7 +76,8 @@ export default function NewRecipePage() {
         isPublic,
         timeEstimateMinimumMinutes: timeEstimateMin,
         timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax,
-        tags
+        tags,
+        hasCoverImage: previewImage !== null
       }, previewImage);
       if (recipe) {
         router.push("/recipe/" + recipe.id);

@@ -22,7 +22,7 @@ model Recipe {
   viewCount                  Int                 @default(0)
   timeEstimateMinimumMinutes Int                 @default(0)
   timeEstimateMaximumMinutes Int?
-  coverImageUrl              String?
+  coverImageName             String?
   likes                      Like[]
   tags                       Tag[]
 }

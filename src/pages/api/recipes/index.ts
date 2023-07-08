@@ -1,12 +1,10 @@
-import { NextApiHandler, NextApiRequest } from "next";
+import { NextApiHandler } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { createRecipe, getAllRecipesForUser } from "../../../database/recipes";
 import z from "zod";
 import { IngredientUnit } from "@prisma/client";
-import formidable from "formidable";
-import { S3 } from "@aws-sdk/client-s3";
-import { createReadStream } from "fs";
-import { randomUUID } from "crypto";
+import { UUID, randomUUID } from "crypto";
+import { DEFAULT_BUCKET_NAME, s3 } from "../../../s3";
 
 export const ingredientUnitSchema = z.nativeEnum(IngredientUnit);
 
@@ -37,52 +35,16 @@ export const createRecipeSchema = z.object({
   isPublic: z.boolean(),
   timeEstimateMinimumMinutes: z.number().min(0).optional(),
   timeEstimateMaximumMinutes: z.number().min(0).optional(),
-  tags: z.array(tagSchema).refine((tags) => new Set(tags).size === tags.length, { message: "Tags must be unique" }).optional(),
+  tags: z
+    .array(tagSchema)
+    .refine((tags) => new Set(tags).size === tags.length, {
+      message: "Tags must be unique",
+    })
+    .optional(),
+  hasCoverImage: z.boolean().optional(),
 });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  }
-};
-
-const getBodyAndCoverImage = async (req: NextApiRequest): Promise<{
-  body: unknown,
-  file?: formidable.File,
-}> => {
-  return new Promise((resolve, reject) => {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (_err, fields, files) => {
-      if (!("recipe" in fields)) {
-        return reject("No recipe field in request");
-      }
-
-      if (typeof fields.recipe !== "string") {
-        return reject("Recipe field is not a string");
-      }
-
-      const body = JSON.parse(fields.recipe);
-
-      if ("coverImage" in files) {
-        const file = files.coverImage;
-        if (Array.isArray(file)) {
-          return reject("Cover image is not a single file");
-        }
-
-        resolve({
-          body,
-          file,
-        });
-      }
-
-      resolve({
-        body
-      });
-    });
-  });
-};
-
-const handler: NextApiHandler = async (req, res) => {
+const handler = (async (req, res) => {
   if (req.method === "GET") {
     const user = await getUserFromRequest(req);
     if (user.status === "Unauthorized") {
@@ -92,53 +54,40 @@ const handler: NextApiHandler = async (req, res) => {
     const recipes = await getAllRecipesForUser(user.userId);
 
     return res.status(200).json(recipes);
-  }
-  else if (req.method === "POST") {
+  } else if (req.method === "POST") {
     const user = await getUserFromRequest(req);
     if (user.status === "Unauthorized") {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
-    const { body, file } = await getBodyAndCoverImage(req);
-
-    let coverImageUrl: string | undefined = undefined;
-    if (file) {
-      const s3 = new S3({
-        endpoint: process.env.S3_ENDPOINT,
-        credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? ""
-        },
-        region: "region", // This can be whatever, but it's required
-        forcePathStyle: true,
-      });
-
-      const key = randomUUID();
-
-      await s3.putObject({
-        Bucket: process.env.S3_BUCKET_NAME ?? "",
-        Key: key,
-        Body: createReadStream(file.filepath),
-        ACL: "public-read", // TODO: Check if this can be made more private
-      });
-
-      coverImageUrl = process.env.S3_ENDPOINT + "/" + process.env.S3_BUCKET_NAME + "/" + key;
-    }
-
-    const recipeBody = createRecipeSchema.safeParse(body);
+    const recipeBody = createRecipeSchema.safeParse(req.body);
 
     if (!recipeBody.success) {
       return res.status(400).json({ message: recipeBody.error });
     }
 
-    const recipe = await createRecipe(user.userId, {
-      ...recipeBody.data,
-      coverImageUrl
+    let coverImageName: UUID | null = null;
+    let coverImageUploadUrl: string | null = null;
+    if (recipeBody.data.hasCoverImage) {
+      coverImageName = randomUUID();
+      coverImageUploadUrl = recipeBody.data.hasCoverImage
+        ? await s3.presignedPutObject(DEFAULT_BUCKET_NAME, coverImageName)
+        : null;
+    }
+
+    const recipe = await createRecipe(
+      user.userId,
+      recipeBody.data,
+      coverImageName
+    );
+
+    return res.status(200).json({
+      recipe,
+      coverImageUploadUrl,
     });
-    return res.status(200).json(recipe);
   }
 
   return res.status(405).end();
-};
+}) satisfies NextApiHandler;
 
 export default handler;

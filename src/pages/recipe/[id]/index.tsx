@@ -1,7 +1,6 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { getSingleRecipe, increaseViewCountForRecipe } from "../../../database/recipes";
-import { Ingredient, IngredientSection as IngredientSectionType, Instruction, Recipe, Tag, UserProfile } from "@prisma/client";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
@@ -16,24 +15,6 @@ import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Trans, useTranslation } from "next-i18next";
 import { TagList } from "../../../components/recipeView/TagList";
-
-export type RecipePageProps = {
-  recipe: Recipe & {
-    ingredientSections: (IngredientSectionType & {
-      ingredients: Ingredient[];
-    })[];
-    instructions: Instruction[];
-    tags: Tag[];
-    user: UserProfile;
-    likeCount: number;
-  },
-  exportFileName: string,
-} & ({
-  userId: null,
-} | {
-  userId: string,
-  likeStatus: boolean,
-})
 
 type TimeEstimateType = null | "single" | "range";
 
@@ -56,10 +37,10 @@ const exportRecipe = (data: string, filename: string) => {
   window.URL.revokeObjectURL(url);
 };
 
-export default function RecipePage(props: RecipePageProps) {
+export default function RecipePage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { t } = useTranslation();
   const { recipe, exportFileName } = props;
-  const [likeCount, setLikeCount] = useState(recipe.likeCount);
+  const [likeCount, setLikeCount] = useState(props.likeCount);
   const [likeStatus, setLikeStatus] = useState(props.userId ? props.likeStatus : null);
 
   const originalQuantity = recipe.quantity;
@@ -82,7 +63,7 @@ export default function RecipePage(props: RecipePageProps) {
 
   const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
 
-  const timeEstimateType = getTimeEstimateType(recipe.timeEstimateMinimumMinutes, recipe.timeEstimateMaximumMinutes);
+  const timeEstimateType = getTimeEstimateType(recipe.timeEstimateMinimumMinutes ?? 0, recipe.timeEstimateMaximumMinutes);
 
   return <main className={styles.container}>
     {recipe.coverImageUrl && <div className={styles.coverImageContainer}>
@@ -124,7 +105,7 @@ export default function RecipePage(props: RecipePageProps) {
           >
             {likeStatus ? t("recipeView:likes.likeButton") : t("recipeView:likes.unlikeButton")}
           </Button>}
-        <p>{t("recipeView:likes.likeCountText", { count: recipe.likeCount })}</p>
+        <p>{t("recipeView:likes.likeCountText", { count: likeCount })}</p>
         {timeEstimateType !== null && (timeEstimateType === "single" ?
           <p>{t("recipeView:timeEstimate.single", { count: recipe.timeEstimateMinimumMinutes })}</p> :
           <p>{t("recipeView:timeEstimate.range", { min: recipe.timeEstimateMinimumMinutes, max: recipe.timeEstimateMaximumMinutes })}</p>)
@@ -156,7 +137,7 @@ export default function RecipePage(props: RecipePageProps) {
   </main>;
 }
 
-export const getServerSideProps: GetServerSideProps<RecipePageProps> = async ({ query, req, locale }) => {
+export const getServerSideProps = (async ({ query, req, locale }) => {
   const recipeId = query.id;
   if (typeof recipeId !== "string" || recipeId.length === 0) {
     throw new Error("Recipe id is not a string. This should never happen.");
@@ -197,10 +178,8 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async ({ 
     return {
       props: {
         ...(await serverSideTranslations(locale ?? "en")),
-        recipe: {
-          ...recipe,
-          likeCount,
-        },
+        recipe,
+        likeCount,
         exportFileName: filenamify(recipe.name, { replacement: "_" }),
         ...likeStatusAndAnonymity
       },
@@ -213,10 +192,8 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async ({ 
     return {
       props: {
         ...(await serverSideTranslations(locale ?? "en")),
-        recipe: {
-          ...recipe,
-          likeCount,
-        },
+        recipe,
+        likeCount,
         exportFileName: filenamify(recipe.name + ".json", { replacement: "_" }),
         ...likeStatusAndAnonymity
       },
@@ -229,4 +206,4 @@ export const getServerSideProps: GetServerSideProps<RecipePageProps> = async ({ 
       permanent: false,
     },
   };
-};
+}) satisfies GetServerSideProps;
