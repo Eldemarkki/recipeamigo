@@ -15,6 +15,8 @@ import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Trans, useTranslation } from "next-i18next";
 import { TagList } from "../../../components/recipeView/TagList";
+import { recipeToMarkdown } from "../../../utils/exportUtils";
+import { Locale } from "../../../i18next";
 
 type TimeEstimateType = null | "single" | "range";
 
@@ -38,8 +40,8 @@ const exportRecipe = (data: string, filename: string) => {
 };
 
 export default function RecipePage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { t } = useTranslation();
-  const { recipe, exportFileName } = props;
+  const { t, i18n } = useTranslation();
+  const { recipe, exportJsonFilename, exportMarkdownFilename } = props;
   const [likeCount, setLikeCount] = useState(props.likeCount);
   const [likeStatus, setLikeStatus] = useState(props.userId ? props.likeStatus : null);
 
@@ -80,13 +82,22 @@ export default function RecipePage(props: InferGetServerSidePropsType<typeof get
           <h3 className={styles.title}>{recipe.name}</h3>
           <div className={styles.titleRowButtons}>
             <Button onClick={() => {
+              exportRecipe(recipeToMarkdown({
+                ...recipe,
+                createdAt: new Date(recipe.createdAt),
+                updatedAt: new Date(recipe.updatedAt),
+              }, i18n.language as Locale), exportMarkdownFilename);
+            }}>
+              {t("actions.exportAsMarkdown")}
+            </Button>
+            <Button onClick={() => {
               exportRecipe(JSON.stringify({
                 ...recipe,
                 createdAt: new Date(recipe.createdAt),
                 updatedAt: new Date(recipe.updatedAt),
-              }), exportFileName);
+              }), exportJsonFilename);
             }}>
-              {t("actions.export")}
+              {t("actions.exportAsJson")}
             </Button>
             {props.userId && recipe.user.clerkId === props.userId && <LinkButton href={`/recipe/${recipe.id}/edit`}>
               {t("actions.edit")}
@@ -173,6 +184,9 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
       likeStatus: !!(await getLikeStatus(user.userId, recipeId)),
     };
 
+  const exportJsonFilename = filenamify(recipe.name + ".json", { replacement: "_" });
+  const exportMarkdownFilename = filenamify(recipe.name + ".md", { replacement: "_" });
+
   if (recipe.isPublic) {
     await increaseViewCountForRecipe(recipeId);
     return {
@@ -180,7 +194,8 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
         ...(await serverSideTranslations(locale ?? "en")),
         recipe,
         likeCount,
-        exportFileName: filenamify(recipe.name, { replacement: "_" }),
+        exportJsonFilename,
+        exportMarkdownFilename,
         ...likeStatusAndAnonymity
       },
     };
@@ -194,7 +209,8 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
         ...(await serverSideTranslations(locale ?? "en")),
         recipe,
         likeCount,
-        exportFileName: filenamify(recipe.name + ".json", { replacement: "_" }),
+        exportJsonFilename,
+        exportMarkdownFilename,
         ...likeStatusAndAnonymity
       },
     };

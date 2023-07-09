@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Export recipe
   - [X] JSON
   - [ ] PDF
-  - [ ] Markdown
+  - [X] Markdown
 - [X] Recipe time estimation (manual)
 - [ ] Browse recipes
   - [ ] Exclude recipes with certain ingredients

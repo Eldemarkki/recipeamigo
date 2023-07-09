@@ -2,10 +2,13 @@ import { IngredientUnit } from "@prisma/client";
 import { Locale } from "../i18next";
 import { capitalize } from "../utils/stringUtils";
 
-const englishUnits: Record<IngredientUnit, {
-  singular: string;
-  plural: string;
-}> = {
+const englishUnits: Record<
+  IngredientUnit,
+  {
+    singular: string;
+    plural: string;
+  }
+> = {
   GRAM: { singular: "gram", plural: "grams" },
   CUP: { singular: "cup", plural: "cups" },
   TEASPOON: { singular: "teaspoon", plural: "teaspoons" },
@@ -26,13 +29,16 @@ const englishUnits: Record<IngredientUnit, {
   HANDFUL: { singular: "handful", plural: "handfuls" },
   CAN: { singular: "can", plural: "cans" },
   BOTTLE: { singular: "bottle", plural: "bottles" },
-  PACKAGE: { singular: "package", plural: "packages" }
+  PACKAGE: { singular: "package", plural: "packages" },
 } as const;
 
-const finnishUnits: Record<IngredientUnit, {
-  singular: string;
-  plural: string;
-}> = {
+const finnishUnits: Record<
+  IngredientUnit,
+  {
+    singular: string;
+    plural: string;
+  }
+> = {
   GRAM: { singular: "gramma", plural: "grammaa" },
   CUP: { singular: "kuppi", plural: "kuppia" },
   TEASPOON: { singular: "teelusikka", plural: "teelusikkaa" },
@@ -53,17 +59,17 @@ const finnishUnits: Record<IngredientUnit, {
   HANDFUL: { singular: "kourallinen", plural: "kourallista" },
   CAN: { singular: "tölkki", plural: "tölkkiä" },
   BOTTLE: { singular: "pullo", plural: "pulloa" },
-  PACKAGE: { singular: "paketti", plural: "pakettia" }
+  PACKAGE: { singular: "paketti", plural: "pakettia" },
 } as const;
 
 export const englishIngredients = {
   tomato: { singular: "tomato", plural: "tomatoes" },
-  garlic: { singular: "garlic", plural: "garlic" }
+  garlic: { singular: "garlic", plural: "garlic" },
 } as const;
 
 const finnishIngredients = {
   tomato: { singular: "tomaatti", plural: "tomaattia" },
-  garlic: { singular: "valkosipuli", plural: "valkosipulia" }
+  garlic: { singular: "valkosipuli", plural: "valkosipulia" },
 } as const;
 
 export type IngredientType = keyof typeof englishIngredients;
@@ -73,7 +79,7 @@ const ingredientsLocaleMap = {
   fi: finnishIngredients,
 } as const;
 
-const unitsLocaleMap = {
+export const unitsLocaleMap = {
   en: englishUnits,
   fi: finnishUnits,
 } as const;
@@ -81,13 +87,17 @@ const unitsLocaleMap = {
 const getRequiredAmountType = (amount: number, unit: IngredientUnit | null) => {
   if (unit !== null) {
     return "plural";
-  }
-  else {
+  } else {
     return amount === 1 ? "singular" : "plural";
   }
 };
 
-export const getIngredientText = (ingredient: IngredientType, amount: number, unit: IngredientUnit | null, language: Locale) => {
+export const getIngredientText = (
+  ingredient: IngredientType,
+  amount: number,
+  unit: IngredientUnit | null,
+  language: Locale
+) => {
   const ingredientText = ingredientsLocaleMap[language][ingredient];
   const requiredAmountType = getRequiredAmountType(amount, unit);
   const finalIngredientText = ingredientText[requiredAmountType];
@@ -105,11 +115,16 @@ export const getIngredientText = (ingredient: IngredientType, amount: number, un
   return `${amount} ${finalUnitText} ${finalIngredientText}`;
 };
 
-export const isIngredientType = (ingredient: string): ingredient is IngredientType => {
+export const isIngredientType = (
+  ingredient: string
+): ingredient is IngredientType => {
   return Object.keys(englishIngredients).includes(ingredient);
 };
 
-export const getIngredientDropdownLabel = (ingredient: string, language: Locale) => {
+export const getIngredientDropdownLabel = (
+  ingredient: string,
+  language: Locale
+) => {
   if (isIngredientType(ingredient)) {
     return capitalize(ingredientsLocaleMap[language][ingredient].singular);
   }

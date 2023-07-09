@@ -41,4 +41,6 @@
 | 8.7.2023  | 2      | Muuta S3 käyttämään presigned URL:ja kansikuvien tallentamiseen/lataamiseen    |
 | 8.7.2023  | 3      | Julkaise Next.js-palvelin Verceliin, ja Minio ja tietokanta VPS:lle            |
 | 9.7.2023  | 3      | Vaihda Hanko:sta Clerk:iin                                                     |
-| Yhteensä  | 76     |                                                                                |
+| 9.7.2023  | 1      | Reseptin muokkausnäkymän asettelun parantelua, pieniä yleisiä parannuksia      |
+| 9.7.2023  | 1      | Markdown export -ominaisuus                                                    |
+| Yhteensä  | 78     |                                                                                |

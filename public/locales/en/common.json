@@ -5,7 +5,8 @@
     "profile": "Profile"
   },
   "actions": {
-    "export": "Export",
+    "exportAsJson": "Export as JSON",
+    "exportAsMarkdown": "Export as Markdown",
     "edit": "Edit",
     "cancel": "Cancel",
     "save": "Save",

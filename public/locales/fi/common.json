@@ -5,7 +5,8 @@
     "profile": "Profiili"
   },
   "actions": {
-    "export": "Vie",
+    "exportAsJson": "Vie JSON-muodossa",
+    "exportAsMarkdown": "Vie Markdown-muodossa",
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "save": "Tallenna",
