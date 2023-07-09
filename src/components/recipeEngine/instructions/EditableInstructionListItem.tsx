@@ -1,8 +1,8 @@
 import { Reorder, useDragControls } from "framer-motion";
-import { RawInstruction } from "./IngredientForm";
+import { RawInstruction } from "../ingredients/IngredientForm";
 import styles from "./EditableInstructionListItem.module.css";
-import { DeleteButton } from "../button/DeleteButton";
-import { DragHandle } from "../misc/DragHandle";
+import { DeleteButton } from "../../button/DeleteButton";
+import { DragHandle } from "../../misc/DragHandle";
 
 export type InstructionListProps = {
   instruction: RawInstruction & {

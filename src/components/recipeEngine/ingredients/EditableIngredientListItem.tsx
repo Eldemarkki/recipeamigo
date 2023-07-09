@@ -1,12 +1,12 @@
 import { Reorder, useDragControls } from "framer-motion";
 import { IngredientForm, RawIngredient } from "./IngredientForm";
-import { DeleteButton } from "../button/DeleteButton";
+import { DeleteButton } from "../../button/DeleteButton";
 import { useState } from "react";
-import { IngredientText } from "../IngredientText";
-import { DragHandle } from "../misc/DragHandle";
+import { IngredientText } from "../../IngredientText";
+import { DragHandle } from "../../misc/DragHandle";
 import styles from "./EditableIngredientListItem.module.css";
-import { EditButton } from "../button/EditButton";
-import { Dialog } from "../dialog/Dialog";
+import { EditButton } from "../../button/EditButton";
+import { Dialog } from "../../dialog/Dialog";
 import { useTranslation } from "next-i18next";
 
 export type EditableIngredientListItemProps = {

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { EditableIngredientList } from "../../../../components/recipeEngine/EditableIngredientList";
-import { EditableInstructionList } from "../../../../components/recipeEngine/EditableInstructionList";
+import { EditableIngredientList } from "../../../../components/recipeEngine/ingredients/EditableIngredientList";
+import { EditableInstructionList } from "../../../../components/recipeEngine/instructions/EditableInstructionList";
 import { z } from "zod";
 import { useRouter } from "next/router";
 import { RecipeQuantityPicker } from "../../../../components/recipeView/RecipeQuantityPicker";
@@ -11,7 +11,7 @@ import { NumberInput } from "../../../../components/forms/NumberInput";
 import styles from "./index.module.css";
 import { getSingleRecipe } from "../../../../database/recipes";
 import { editRecipeSchema } from "../../../api/recipes/[id]";
-import { RawIngredientSection, RawInstruction } from "../../../../components/recipeEngine/IngredientForm";
+import { RawIngredientSection, RawInstruction } from "../../../../components/recipeEngine/ingredients/IngredientForm";
 import { Dropzone } from "../../../../components/dropzone/Dropzone";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Trans, useTranslation } from "next-i18next";

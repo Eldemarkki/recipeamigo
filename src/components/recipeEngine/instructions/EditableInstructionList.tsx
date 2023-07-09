@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Button } from "../button/Button";
+import { Button } from "../../button/Button";
 import styles from "./EditableInstructionList.module.css";
 import { useTranslation } from "next-i18next";
-import { RawInstruction } from "./IngredientForm";
+import { RawInstruction } from "../ingredients/IngredientForm";
 import { Reorder } from "framer-motion";
 import { EditableInstructionListItem } from "./EditableInstructionListItem";
 

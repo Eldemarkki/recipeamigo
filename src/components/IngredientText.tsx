@@ -1,5 +1,5 @@
 import { useTranslation } from "next-i18next";
-import { RawIngredient } from "./recipeEngine/IngredientForm";
+import { RawIngredient } from "./recipeEngine/ingredients/IngredientForm";
 import { UNIT_SELECT_TRANSLATION_KEYS } from "../utils/units";
 import { getIngredientText, isIngredientType } from "../ingredients/ingredientTranslator";
 import { Locale } from "../i18next";

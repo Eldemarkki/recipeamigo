@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { EditableIngredientList } from "../../../components/recipeEngine/EditableIngredientList";
-import { RawIngredientSection, RawInstruction } from "../../../components/recipeEngine/IngredientForm";
-import { EditableInstructionList } from "../../../components/recipeEngine/EditableInstructionList";
+import { EditableIngredientList } from "../../../components/recipeEngine/ingredients/EditableIngredientList";
+import { RawIngredientSection, RawInstruction } from "../../../components/recipeEngine/ingredients/IngredientForm";
+import { EditableInstructionList } from "../../../components/recipeEngine/instructions/EditableInstructionList";
 import { z } from "zod";
 import { createRecipeSchema } from "../../api/recipes";
 import { useRouter } from "next/router";

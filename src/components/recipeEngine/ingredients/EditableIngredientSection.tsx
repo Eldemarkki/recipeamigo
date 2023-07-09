@@ -2,9 +2,9 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import { IngredientForm, RawIngredient, RawIngredientSection } from "./IngredientForm";
 import { Reorder, useDragControls } from "framer-motion";
 import { EditableIngredientListItem } from "./EditableIngredientListItem";
-import { DeleteButton } from "../button/DeleteButton";
-import { CircularButton } from "../button/Button";
-import { DragHandle } from "../misc/DragHandle";
+import { DeleteButton } from "../../button/DeleteButton";
+import { CircularButton } from "../../button/Button";
+import { DragHandle } from "../../misc/DragHandle";
 import styles from "./EditableIngredientSection.module.css";
 
 export type EditableIngredientSectionProps = {

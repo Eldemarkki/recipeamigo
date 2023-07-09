@@ -4,7 +4,7 @@ import { useState } from "react";
 import { IngredientSectionForm } from "./IngredientSectionForm";
 import { Reorder } from "framer-motion";
 import { EditableIngredientSection } from "./EditableIngredientSection";
-import { CircularButton } from "../button/Button";
+import { CircularButton } from "../../button/Button";
 import styles from "./EditableIngredientList.module.css";
 
 export type IngredientListProps = {
