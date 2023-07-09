@@ -22,7 +22,8 @@
 
 .secondary {
   background-color: transparent;
-  border: 2px solid var(--primary);
+  border: none;
+  box-shadow: inset 0 0 0 2px var(--primary);
   color: var(--text);
 }
 

@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from "next-i18next";
 import { getSingleRecipe } from "../../database/recipes";
-import { useState } from "react";
+import { MouseEvent, useId, useState } from "react";
 import { RawIngredientSection, RawInstruction } from "./ingredients/IngredientForm";
 import styles from "./RecipeForm.module.css";
 import { RecipeQuantityPicker } from "../recipeView/RecipeQuantityPicker";
@@ -13,6 +13,7 @@ import { EditableInstructionList } from "./instructions/EditableInstructionList"
 import { editRecipeSchema } from "../../pages/api/recipes/[id]";
 import { z } from "zod";
 import { createRecipeSchema } from "../../pages/api/recipes";
+import { Dialog } from "../dialog/Dialog";
 
 export type RecipeFormProps = {
   initialRecipe?: Awaited<ReturnType<typeof getSingleRecipe>>;
@@ -77,128 +78,128 @@ export const RecipeForm = ({
   const [timeEstimateMin, setTimeEstimateMin] = useState(initialRecipe?.timeEstimateMinimumMinutes);
   const [timeEstimateMax, setTimeEstimateMax] = useState(initialRecipe?.timeEstimateMaximumMinutes ?? undefined);
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const isPublicId = useId();
+
+  const handleSubmit = async (e: MouseEvent) => {
+    e.preventDefault();
+    // TODO: Show loading indicator while saving
+    try {
+      const baseRecipe = {
+        name,
+        description,
+        ingredientSections: ingredientSections.map((section) => ({
+          ...section,
+          ingredients: section.ingredients.map((ingredient) => ({
+            ...ingredient,
+            unit: ingredient.unit ?? undefined
+          }))
+        })),
+        instructions,
+        quantity: recipeQuantity,
+        isPublic,
+        timeEstimateMinimumMinutes: timeEstimateMin,
+        timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax,
+        tags: tags,
+      };
+
+      const coverImageFile = coverImage instanceof File ? coverImage : null;
+      if (type === "edit") {
+        const coverImageAction: "remove" | "keep" | "replace" = (() => {
+          if (coverImage === null) {
+            return "keep";
+          }
+          else if ("removed" in coverImage) {
+            return "remove";
+          }
+          else if ("url" in coverImage) {
+            return "keep";
+          }
+          else {
+            return "replace";
+          }
+        })();
+
+        await onSubmit({
+          ...baseRecipe,
+          coverImageAction,
+        }, coverImageFile);
+      } else if (type === "new") {
+        await onSubmit({
+          ...baseRecipe,
+          tags: tags.map(t => t.text),
+          hasCoverImage: coverImage !== null,
+        }, coverImageFile);
+      }
+    }
+    catch {
+      // TODO: Show a notification to the user that the recipe failed to save.
+      console.log("Failed to save recipe");
+    }
+  };
+
   return <div className={styles.container}>
-    <form onSubmit={async (e) => {
-      e.preventDefault();
-      // TODO: Show loading indicator while saving
-      try {
-        const baseRecipe = {
-          name,
-          description,
-          ingredientSections: ingredientSections.map((section) => ({
-            ...section,
-            ingredients: section.ingredients.map((ingredient) => ({
-              ...ingredient,
-              unit: ingredient.unit ?? undefined
-            }))
-          })),
-          instructions,
-          quantity: recipeQuantity,
-          isPublic,
-          timeEstimateMinimumMinutes: timeEstimateMin,
-          timeEstimateMaximumMinutes: timeEstimateMax === 0 ? undefined : timeEstimateMax,
-          tags: tags,
-        };
-
-        const coverImageFile = coverImage instanceof File ? coverImage : null;
-        if (type === "edit") {
-          const coverImageAction: "remove" | "keep" | "replace" = (() => {
-            if (coverImage === null) {
-              return "keep";
-            }
-            else if ("removed" in coverImage) {
-              return "remove";
-            }
-            else if ("url" in coverImage) {
-              return "keep";
-            }
-            else {
-              return "replace";
-            }
-          })();
-
-          await onSubmit({
-            ...baseRecipe,
-            coverImageAction,
-          }, coverImageFile);
-        } else if (type === "new") {
-          await onSubmit({
-            ...baseRecipe,
-            tags: tags.map(t => t.text),
-            hasCoverImage: coverImage !== null,
-          }, coverImageFile);
-        }
-      }
-      catch {
-        // TODO: Show a notification to the user that the recipe failed to save.
-        console.log("Failed to save recipe");
-      }
-    }}>
-      <div className={styles.topRow}>
+    <Dialog
+      open={dialogOpen}
+      onClickOutside={() => setDialogOpen(false)}
+    >
+      <h1>Settings</h1>
+      <div className={styles.timeEstimateContainer}>
+        <span>{t("edit.timeEstimateTitle")}</span>
+        {/* TODO: Allow empty value (now it's just 0 if user tries to clear all) */}
+        <div>
+          <Trans i18nKey="recipeView:edit.timeEstimate">
+            <NumberInput
+              value={timeEstimateMin}
+              onChange={setTimeEstimateMin}
+              min={0}
+              style={{
+                width: "3rem",
+                textAlign: "center"
+              }}
+            />
+            <span>min{" "}</span>
+            <span>to{" "}</span>
+            <NumberInput
+              value={timeEstimateMax}
+              onChange={setTimeEstimateMax}
+              min={0}
+              style={{
+                width: "3rem",
+                textAlign: "center"
+              }}
+            />
+            <span>min</span>
+          </Trans>
+        </div>
+      </div>
+      <RecipeQuantityPicker
+        quantity={recipeQuantity}
+        onChange={setRecipeQuantity}
+      />
+      <div>
+        <label htmlFor={isPublicId}>{t("edit.isPublic")}</label>
+        <input
+          id={isPublicId}
+          type="checkbox"
+          checked={isPublic}
+          onChange={(e) => setIsPublic(e.target.checked)}
+        />
+      </div>
+      <TagSelect
+        tags={tags.map(t => t.text)}
+        setTags={newTags => setTags(newTags.map(t => ({ text: t })))}
+      />
+    </Dialog>
+    {/* TODO: Add h1 tag somewhere*/}
+    <main className={styles.splitContainer}>
+      <div className={styles.leftPanel}>
         <div style={{
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
         }}>
-          <input
-            className={styles.recipeNameInput}
-            type="text"
-            placeholder={t("edit.recipeName")}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            placeholder={t("edit.description")}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-          <div className={styles.recipeSettingsContainer}>
-            <RecipeQuantityPicker
-              quantity={recipeQuantity}
-              onChange={setRecipeQuantity}
-            />
-            <div>
-              <label htmlFor="is-public">{t("edit.isPublic")}</label>
-              <input
-                id="is-public"
-                type="checkbox"
-                checked={isPublic}
-                onChange={(e) => setIsPublic(e.target.checked)}
-              />
-            </div>
-          </div>
-          <div className={styles.timeEstimateContainer}>
-            <span>{t("edit.timeEstimateTitle")}</span>
-            {/* TODO: Allow empty value (now it's just 0 if user tries to clear all) */}
-            <div>
-              <Trans i18nKey="recipeView:edit.timeEstimate">
-                <NumberInput
-                  value={timeEstimateMin}
-                  onChange={setTimeEstimateMin}
-                  min={0}
-                  style={{
-                    width: "3rem",
-                    textAlign: "center"
-                  }}
-                />
-                <span>min{" "}</span>
-                <span>to{" "}</span>
-                <NumberInput
-                  value={timeEstimateMax}
-                  onChange={setTimeEstimateMax}
-                  min={0}
-                  style={{
-                    width: "3rem",
-                    textAlign: "center"
-                  }}
-                />
-                <span>min</span>
-              </Trans>
-            </div>
-          </div>
           <Dropzone
             initialPreviewUrl={initialRecipe?.coverImageUrl}
             onDrop={f => {
@@ -208,79 +209,90 @@ export const RecipeForm = ({
               setCoverImage({ removed: true });
             }}
           />
-          <TagSelect
-            tags={tags.map(t => t.text)}
-            setTags={newTags => setTags(newTags.map(t => ({ text: t })))}
+          <input
+            className={styles.recipeNameInput}
+            type="text"
+            placeholder={t("edit.recipeName")}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <textarea
+            className={styles.descriptionInput}
+            placeholder={t("edit.description")}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
           />
         </div>
-        <Button style={{ padding: "0.5rem 1rem" }} type="submit">
-          {type === "edit" ? t("edit.saveRecipe") : t("createRecipe")}
-        </Button>
-      </div>
-    </form>
-    {/* TODO: Add h1 tag somewhere*/}
-    <main className={styles.splitContainer}>
-      <div className={styles.leftPanel}>
-        <h2>{t("ingredientsTitle")}</h2>
-        {/* TODO: Implement adding multiple sections */}
-        <EditableIngredientList
-          ingredientSections={ingredientSections}
-          addIngredient={(ingredient, ingredientSectionName) => {
-            const sectionExists = ingredientSections.some(section => section.name === ingredientSectionName);
-            if (!sectionExists) {
-              setIngredientSections([...ingredientSections, {
-                name: ingredientSectionName,
-                ingredients: [ingredient]
-              }]);
-            }
-            else {
+        <div className={styles.ingredientsSection}>
+          <h2 className={styles.subtitle}>{t("ingredientsTitle")}</h2>
+          {/* TODO: Implement adding multiple sections */}
+          <EditableIngredientList
+            ingredientSections={ingredientSections}
+            addIngredient={(ingredient, ingredientSectionName) => {
+              const sectionExists = ingredientSections.some(section => section.name === ingredientSectionName);
+              if (!sectionExists) {
+                setIngredientSections([...ingredientSections, {
+                  name: ingredientSectionName,
+                  ingredients: [ingredient]
+                }]);
+              }
+              else {
+                setIngredientSections(ingredientSections.map(section => {
+                  if (section.name === ingredientSectionName) {
+                    return {
+                      ...section,
+                      ingredients: [...section.ingredients, ingredient]
+                    };
+                  }
+                  return section;
+                }));
+              }
+            }}
+            removeIngredient={(index, ingredientSectionName) => {
+              const exists = ingredientSections.some(section => section.name === ingredientSectionName);
+              if (!exists) {
+                return;
+              }
+
               setIngredientSections(ingredientSections.map(section => {
                 if (section.name === ingredientSectionName) {
                   return {
                     ...section,
-                    ingredients: [...section.ingredients, ingredient]
+                    ingredients: section.ingredients.filter((_, i) => i !== index)
                   };
                 }
                 return section;
               }));
-            }
-          }}
-          removeIngredient={(index, ingredientSectionName) => {
-            const exists = ingredientSections.some(section => section.name === ingredientSectionName);
-            if (!exists) {
-              return;
-            }
-
-            setIngredientSections(ingredientSections.map(section => {
-              if (section.name === ingredientSectionName) {
-                return {
-                  ...section,
-                  ingredients: section.ingredients.filter((_, i) => i !== index)
-                };
-              }
-              return section;
-            }));
-          }}
-          addIngredientSection={(name) => setIngredientSections([...ingredientSections, {
-            name,
-            ingredients: []
-          }])}
-          removeIngredientSection={(index) => setIngredientSections(ingredientSections.filter((_, i) => i !== index))}
-          setIngredientSectionIngredients={(index, ingredients) => {
-            setIngredientSections(ingredientSections.map((section, i) => {
-              if (i === index) {
-                return {
-                  ...section,
-                  ingredients
-                };
-              }
-              return section;
-            }));
-          }}
-          setIngredientSections={(sections) => setIngredientSections(sections)}
-        />
+            }}
+            addIngredientSection={(name) => setIngredientSections([...ingredientSections, {
+              name,
+              ingredients: []
+            }])}
+            removeIngredientSection={(index) => setIngredientSections(ingredientSections.filter((_, i) => i !== index))}
+            setIngredientSectionIngredients={(index, ingredients) => {
+              setIngredientSections(ingredientSections.map((section, i) => {
+                if (i === index) {
+                  return {
+                    ...section,
+                    ingredients
+                  };
+                }
+                return section;
+              }));
+            }}
+            setIngredientSections={(sections) => setIngredientSections(sections)}
+          />
+        </div>
       </div>
       <div className={styles.rightPanel}>
+        <div className={styles.buttonsContainer}>
+          <Button onClick={() => setDialogOpen(true)} variant="secondary" type="button">Settings</Button>
+          <Button style={{ padding: "0.5rem 1rem" }} type="submit" onClick={(e) => handleSubmit(e)}>
+            {type === "edit" ? t("edit.saveRecipe") : t("createRecipe")}
+          </Button>
+        </div>
         <h2>{t("instructionsTitle")}</h2>
         <EditableInstructionList
           instructions={instructions}
