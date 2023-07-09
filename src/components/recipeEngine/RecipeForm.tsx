@@ -81,6 +81,7 @@ export const RecipeForm = ({
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const isPublicId = useId();
+  const tagSelectId = useId();
 
   const handleSubmit = async (e: MouseEvent) => {
     e.preventDefault();
@@ -144,53 +145,62 @@ export const RecipeForm = ({
       open={dialogOpen}
       onClickOutside={() => setDialogOpen(false)}
     >
-      <h1>Settings</h1>
-      <div className={styles.timeEstimateContainer}>
-        <span>{t("edit.timeEstimateTitle")}</span>
-        {/* TODO: Allow empty value (now it's just 0 if user tries to clear all) */}
-        <div>
-          <Trans i18nKey="recipeView:edit.timeEstimate">
-            <NumberInput
-              value={timeEstimateMin}
-              onChange={setTimeEstimateMin}
-              min={0}
-              style={{
-                width: "3rem",
-                textAlign: "center"
-              }}
+      <div className={styles.dialogContent}>
+        <h1>Settings</h1>
+        <div className={styles.settingsContainer}>
+          <div className={styles.recipeSettingsContainer}>
+            <span>{t("edit.timeEstimateTitle")}</span>
+            {/* TODO: Allow empty value (now it's just 0 if user tries to clear all) */}
+            <div>
+              <Trans i18nKey="recipeView:edit.timeEstimate">
+                <NumberInput
+                  value={timeEstimateMin}
+                  onChange={setTimeEstimateMin}
+                  min={0}
+                  style={{
+                    width: "3rem",
+                    textAlign: "center"
+                  }}
+                />
+                <span>min{" "}</span>
+                <span>to{" "}</span>
+                <NumberInput
+                  value={timeEstimateMax}
+                  onChange={setTimeEstimateMax}
+                  min={0}
+                  style={{
+                    width: "3rem",
+                    textAlign: "center"
+                  }}
+                />
+                <span>min</span>
+              </Trans>
+            </div>
+          </div>
+          <RecipeQuantityPicker
+            quantity={recipeQuantity}
+            onChange={setRecipeQuantity}
+          />
+          <div className={styles.recipeSettingsContainer}>
+            <label htmlFor={isPublicId}>{t("edit.isPublic")}</label>
+            <input
+              id={isPublicId}
+              type="checkbox"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
             />
-            <span>min{" "}</span>
-            <span>to{" "}</span>
-            <NumberInput
-              value={timeEstimateMax}
-              onChange={setTimeEstimateMax}
-              min={0}
-              style={{
-                width: "3rem",
-                textAlign: "center"
-              }}
+          </div>
+          <div className={styles.tagsContainer}>
+            <label htmlFor={tagSelectId}>Tags</label>
+            <TagSelect
+              id={tagSelectId}
+              tags={tags.map(t => t.text)}
+              setTags={newTags => setTags(newTags.map(t => ({ text: t })))}
             />
-            <span>min</span>
-          </Trans>
+          </div>
         </div>
+        <Button className={styles.settingsSaveButton} onClick={() => setDialogOpen(false)}>Save</Button>
       </div>
-      <RecipeQuantityPicker
-        quantity={recipeQuantity}
-        onChange={setRecipeQuantity}
-      />
-      <div>
-        <label htmlFor={isPublicId}>{t("edit.isPublic")}</label>
-        <input
-          id={isPublicId}
-          type="checkbox"
-          checked={isPublic}
-          onChange={(e) => setIsPublic(e.target.checked)}
-        />
-      </div>
-      <TagSelect
-        tags={tags.map(t => t.text)}
-        setTags={newTags => setTags(newTags.map(t => ({ text: t })))}
-      />
     </Dialog>
     {/* TODO: Add h1 tag somewhere*/}
     <main className={styles.splitContainer}>

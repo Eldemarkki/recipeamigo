@@ -14,11 +14,11 @@ export const Button = ({
   ref,
   ...props
 }: ButtonProps & React.ComponentProps<"button">) =>
-  <button {...props} className={[styles.buttonComponent, styles[variant]].join(" ")} />;
+  <button {...props} className={[styles.buttonComponent, styles[variant], props.className].join(" ")} />;
 
 export const CircularButton = ({
   variant = "primary",
   ref,
   ...props
 }: ButtonProps & React.ComponentProps<"button">) =>
-  <button {...props} className={[styles.buttonComponent, styles[variant], styles.circular].join(" ")} />;
+  <button {...props} className={[styles.buttonComponent, styles[variant], styles.circular, props.className].join(" ")} />;

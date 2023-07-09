@@ -50,7 +50,7 @@
 
 .timeEstimateContainer {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
 }
 
 .buttonsContainer {
@@ -68,4 +68,27 @@
 
 .subtitle {
   margin: 0;
+}
+
+.settingsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1 1 auto;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.settingsSaveButton {
+  align-self: flex-end;
+}
+
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }

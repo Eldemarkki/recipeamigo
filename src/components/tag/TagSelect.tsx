@@ -9,13 +9,11 @@ import { DeleteButton } from "../button/DeleteButton";
 export type TagSelectProps = {
   tags: string[];
   setTags: (tags: string[]) => void;
+  id?: string | undefined;
 };
 
-export const TagSelect = ({ tags, setTags }: TagSelectProps) => {
+export const TagSelect = ({ tags, setTags, id }: TagSelectProps) => {
   const { t } = useTranslation();
-
-  const instanceId = useId();
-  const inputId = useId();
 
   const predefinedTags = Object.values(TagType).map((tagType) => ({
     label: tagPrefixes[tagType] + " " + t(tagTranslationKeys[tagType]),
@@ -24,8 +22,7 @@ export const TagSelect = ({ tags, setTags }: TagSelectProps) => {
 
   return <Select
     isMulti
-    instanceId={instanceId}
-    inputId={inputId}
+    inputId={id}
     onChange={(selectedOption) => {
       setTags(selectedOption.map((tag) => tag.value));
     }}
