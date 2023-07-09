@@ -57,6 +57,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Text area for the "story" of the recipe that can be collapsed to hide it
 - [X] Optional ingredients
 - [ ] Share links
-  - [ ] Public (those who have the link)
+  - [X] Private (only visible to author)
+  - [ ] Public (partially done, requires implementing the Browse view)
+    - [ ] Listed in Browse view
+    - [ ] Unlisted, only visible with direct link
   - [ ] Password protected
   - [ ] Share with selected registered users
+- [ ] Draft status (only visible to author)
