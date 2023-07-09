@@ -5,6 +5,7 @@ import z from "zod";
 import { IngredientUnit } from "@prisma/client";
 import { UUID, randomUUID } from "crypto";
 import { DEFAULT_BUCKET_NAME, s3 } from "../../../s3";
+import { calculateTime } from "../../../utils/api/timing";
 
 export const ingredientUnitSchema = z.nativeEnum(IngredientUnit);
 
@@ -55,7 +56,10 @@ const handler = (async (req, res) => {
 
     return res.status(200).json(recipes);
   } else if (req.method === "POST") {
-    const user = await getUserFromRequest(req);
+    const user = await calculateTime("userVerify", res, () =>
+      getUserFromRequest(req)
+    );
+
     if (user.status === "Unauthorized") {
       return res.status(401).json({ message: "Not authenticated" });
     }
@@ -75,10 +79,8 @@ const handler = (async (req, res) => {
         : null;
     }
 
-    const recipe = await createRecipe(
-      user.userId,
-      recipeBody.data,
-      coverImageName
+    const recipe = await calculateTime("createRecipe", res, () =>
+      createRecipe(user.userId, recipeBody.data, coverImageName)
     );
 
     return res.status(200).json({
