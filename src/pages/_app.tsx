@@ -3,6 +3,7 @@ import "../styles/index.scss";
 import { Navbar } from "../components/navbar/Navbar";
 import { useTheme } from "../hooks/useTheme";
 import { appWithTranslation } from "next-i18next";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export type Props = {
   isLoggedIn: boolean
@@ -14,29 +15,13 @@ const navbarHiddenPaths = [
 ];
 
 const App = ({ Component, pageProps, router }: AppProps<Props>) => {
-  const showNavbar = !navbarHiddenPaths.includes(router.pathname);
+  const showNavbar = !navbarHiddenPaths.some(path => router.pathname.startsWith(path));
   useTheme();
 
-  return <>
-    {showNavbar && <Navbar isLoggedIn={pageProps.isLoggedIn} />}
+  return <ClerkProvider {...pageProps}>
+    {showNavbar && <Navbar />}
     <Component {...pageProps} />
-  </>;
-};
-
-App.getInitialProps = async ({ ctx }: AppContext): Promise<AppInitialProps<Props>> => {
-  const cookies = ctx.req?.headers.cookie?.split(";").reduce<Map<string, string>>((map, curr) => {
-    const [key, value] = curr.split("=");
-    map.set(key.trim(), value);
-    return map;
-  }, new Map());
-
-  const isLoggedIn = Boolean(ctx.req?.headers.authorization || cookies?.get("hanko"));
-
-  return {
-    pageProps: {
-      isLoggedIn
-    }
-  };
+  </ClerkProvider>;
 };
 
 export default appWithTranslation(App);

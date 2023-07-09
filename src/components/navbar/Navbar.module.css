@@ -19,3 +19,11 @@
   margin: 0;
   padding: 0;
 }
+
+.navbar {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex: 1 1 auto;
+  justify-content: space-between;
+}

@@ -1,10 +1,6 @@
-import dynamic from "next/dynamic";
+import { SignIn } from "@clerk/nextjs";
 import config from "../../config";
 import styles from "./page.module.css";
-const HankoAuth = dynamic(() => import("../../components/auth/HankoAuth"), {
-  ssr: false,
-  loading: () => <p>Loading...</p>
-});
 
 // Currently the app name is "Recipeamigo" and the "Recipe" part should have a gradient.
 // If/when the app name is changed, the styling part will have to be reconsidered, so this
@@ -26,7 +22,7 @@ export default function Home() {
       <h1 className={styles.title}>
         <span className={styles.titleGradientPart}>{appNameFirst}</span>{appNameSecond}
       </h1>
-      <HankoAuth />
+      <SignIn />
     </div>
   </div>;
 }

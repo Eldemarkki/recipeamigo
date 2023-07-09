@@ -14,7 +14,7 @@ model Recipe {
   createdAt                  DateTime            @default(now())
   updatedAt                  DateTime            @updatedAt
   userId                     String
-  user                       UserProfile         @relation(fields: [userId], references: [hankoId])
+  user                       UserProfile         @relation(fields: [userId], references: [clerkId])
   ingredientSections         IngredientSection[]
   instructions               Instruction[]
   quantity                   Int
@@ -86,7 +86,7 @@ enum IngredientUnit {
 }
 
 model UserProfile {
-  hankoId  String   @id @unique
+  clerkId  String   @id @unique
   username String   @unique
   recipes  Recipe[]
   likes    Like[]
@@ -95,7 +95,7 @@ model UserProfile {
 model Like {
   recipe    Recipe      @relation(fields: [recipeId], references: [id])
   recipeId  String
-  user      UserProfile @relation(fields: [userId], references: [hankoId])
+  user      UserProfile @relation(fields: [userId], references: [clerkId])
   userId    String
   createdAt DateTime    @default(now())
 

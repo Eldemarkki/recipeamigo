@@ -35,7 +35,7 @@ const handler: NextApiHandler = async (req, res) => {
 
     const profile = await prisma.userProfile.create({
       data: {
-        hankoId: user.userId,
+        clerkId: user.userId,
         username: body.data.name,
       },
     });

@@ -2,12 +2,9 @@ import { useTranslation } from "next-i18next";
 import config from "../../config";
 import { Link } from "../link/Link";
 import styles from "./Navbar.module.css";
+import { UserButton } from "@clerk/nextjs";
 
-export type NavbarProps = {
-  isLoggedIn: boolean
-}
-
-export const Navbar = ({ isLoggedIn }: NavbarProps) => {
+export const Navbar = () => {
   const { t } = useTranslation();
 
   return <div className={styles.container}>
@@ -16,7 +13,7 @@ export const Navbar = ({ isLoggedIn }: NavbarProps) => {
         {config.APP_NAME}
       </Link>
     </h1>
-    <nav>
+    <nav className={styles.navbar}>
       <ol className={styles.linkList}>
         <li>
           <Link href="/">{t("navbar.home")}</Link>
@@ -24,11 +21,8 @@ export const Navbar = ({ isLoggedIn }: NavbarProps) => {
         <li>
           <Link href="/settings">{t("navbar.settings")}</Link>
         </li>
-        {isLoggedIn &&
-          <li>
-            <Link href="/profile">{t("navbar.profile")}</Link>
-          </li>}
       </ol>
+      <UserButton afterSignOutUrl="/" />
     </nav>
   </div>;
 };

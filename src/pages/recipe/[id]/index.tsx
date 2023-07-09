@@ -88,7 +88,7 @@ export default function RecipePage(props: InferGetServerSidePropsType<typeof get
             }}>
               {t("actions.export")}
             </Button>
-            {props.userId && recipe.user.hankoId === props.userId && <LinkButton href={`/recipe/${recipe.id}/edit`}>
+            {props.userId && recipe.user.clerkId === props.userId && <LinkButton href={`/recipe/${recipe.id}/edit`}>
               {t("actions.edit")}
             </LinkButton>}
           </div>
@@ -98,7 +98,7 @@ export default function RecipePage(props: InferGetServerSidePropsType<typeof get
           {/* @ts-ignore, https://github.com/i18next/react-i18next/issues/1543, https://github.com/i18next/react-i18next/issues/1504 */}
           Created by <Link href={`/user/${recipe.user.username}`}>{{ username: recipe.user.username }}</Link> - Viewed {{ count: recipe.viewCount }} {recipe.viewCount === 1 ? "time" : "times"}
         </Trans>
-        {props.userId && recipe.user.hankoId !== props.userId &&
+        {props.userId && recipe.user.clerkId !== props.userId &&
           <Button
             variant="secondary"
             onClick={likeStatus === true ? unlikeRecipe : likeRecipe}
