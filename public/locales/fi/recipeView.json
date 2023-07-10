@@ -37,6 +37,7 @@
       "amount": "Määrä",
       "unit": "Otsikko",
       "noUnit": "Ei yksikköä",
+      "noUnitFound": "Yksikköä \"{{query}}\" ei löytynyt",
       "isOptional": "Vapaaehtoinen",
       "addIngredientButton": "Lisää ainesosa",
       "selectPlaceholder": "Kirjoita luodaksesi tai etsiäksesi...",
@@ -45,6 +46,13 @@
     "ingredientSections": {
       "newSectionTitle": "Uusi osio",
       "sectionName": "Osion nimi"
+    },
+    "settingsButton": "Asetukset",
+    "settings": {
+      "title": "Asetukset",
+      "tagsLabel": "Tagit",
+      "tagSelectPlaceholder": "Kirjoita luodaksesi tai etsiäksesi...",
+      "tagSelectFormatCreateLabel": "Luo \"{{name}}\""
     }
   },
   "createRecipe": "Luo resepti",

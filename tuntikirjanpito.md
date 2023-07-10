@@ -44,4 +44,5 @@
 | 9.7.2023  | 1      | Reseptin muokkausnäkymän asettelun parantelua, pieniä yleisiä parannuksia      |
 | 9.7.2023  | 1      | Markdown export -ominaisuus                                                    |
 | 10.7.2023 | 2      | Reseptikokoelmien luomiskäyttöliittymän aloittaminen                           |
-| Yhteensä  | 80     |                                                                                |
+| 10.7.2023 | 1      | Testien korjaus, muutaman puuttuvan käännöksen lisääminen, pieniä parannuksia  |
+| Yhteensä  | 81     |                                                                                |

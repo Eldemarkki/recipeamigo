@@ -30,7 +30,8 @@ export const TagSelect = ({ tags, setTags, id }: TagSelectProps) => {
     onCreateOption={(inputValue) => {
       setTags([...tags, inputValue]);
     }}
-    formatCreateLabel={(inputValue) => `Add "${inputValue}"`}
+    placeholder={t("recipeView:edit.settings.tagSelectPlaceholder")}
+    formatCreateLabel={(inputValue) => t("recipeView:edit.settings.tagSelectFormatCreateLabel", { name: inputValue })}
     theme={(theme) => ({
       ...theme,
       colors: {

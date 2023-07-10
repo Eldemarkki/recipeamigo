@@ -31,6 +31,7 @@ export const UnitSelect = (props: UnitSelectProps) => {
       const value = option && option.value !== "" ? option.value : null;
       return props.onChange(value);
     }}
+    noOptionsMessage={({ inputValue }) => t("edit.ingredients.noUnitFound", { query: inputValue })}
     unstyled
     styles={{
       control: (provided) => ({

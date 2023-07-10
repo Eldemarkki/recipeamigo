@@ -37,6 +37,7 @@
       "amount": "Amount",
       "unit": "Unit",
       "noUnit": "No unit",
+      "noUnitFound": "No unit {{query}} found",
       "isOptional": "Optional",
       "addIngredientButton": "Add ingredient",
       "selectPlaceholder": "Type to create or search...",
@@ -45,6 +46,13 @@
     "ingredientSections": {
       "newSectionTitle": "New section",
       "sectionName": "Section name"
+    },
+    "settingsButton": "Settings",
+    "settings": {
+      "title": "Settings",
+      "tagsLabel": "Tags",
+      "tagSelectPlaceholder": "Type to create or search...",
+      "tagSelectFormatCreateLabel": "Add \"{{name}}\""
     }
   },
   "createRecipe": "Create recipe",

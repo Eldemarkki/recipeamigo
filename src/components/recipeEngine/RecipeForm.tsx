@@ -30,7 +30,7 @@ export const RecipeForm = ({
   onSubmit,
   type
 }: RecipeFormProps) => {
-  const { t } = useTranslation("recipeView");
+  const { t } = useTranslation(["recipeView", "common"]);
 
   const [name, setName] = useState(initialRecipe?.name ?? "");
   const [description, setDescription] = useState(initialRecipe?.description ?? "");
@@ -146,7 +146,7 @@ export const RecipeForm = ({
       onClickOutside={() => setDialogOpen(false)}
     >
       <div className={styles.dialogContent}>
-        <h1>Settings</h1>
+        <h1>{t("edit.settings.title")}</h1>
         <div className={styles.settingsContainer}>
           <div className={styles.recipeSettingsContainer}>
             <span>{t("edit.timeEstimateTitle")}</span>
@@ -191,7 +191,7 @@ export const RecipeForm = ({
             />
           </div>
           <div className={styles.tagsContainer}>
-            <label htmlFor={tagSelectId}>Tags</label>
+            <label htmlFor={tagSelectId}>{t("edit.settings.tagsLabel")}</label>
             <TagSelect
               id={tagSelectId}
               tags={tags.map(t => t.text)}
@@ -199,7 +199,9 @@ export const RecipeForm = ({
             />
           </div>
         </div>
-        <Button className={styles.settingsSaveButton} onClick={() => setDialogOpen(false)}>Save</Button>
+        <Button className={styles.settingsSaveButton} onClick={() => setDialogOpen(false)}>
+          {t("common:actions.save")}
+        </Button>
       </div>
     </Dialog>
     {/* TODO: Add h1 tag somewhere*/}
@@ -298,7 +300,7 @@ export const RecipeForm = ({
       </div>
       <div className={styles.rightPanel}>
         <div className={styles.buttonsContainer}>
-          <Button onClick={() => setDialogOpen(true)} variant="secondary" type="button">Settings</Button>
+          <Button onClick={() => setDialogOpen(true)} variant="secondary" type="button">{t("edit.settingsButton")}</Button>
           <Button style={{ padding: "0.5rem 1rem" }} type="submit" onClick={(e) => handleSubmit(e)}>
             {type === "edit" ? t("edit.saveRecipe") : t("createRecipe")}
           </Button>

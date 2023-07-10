@@ -74,7 +74,7 @@ export const IngredientSelect = ({ ingredient, setIngredient }: IngredientSelect
       }),
       placeholder: (provided) => ({
         ...provided,
-        color: "black",
+        color: "var(--text)",
       })
     }}
   />;
