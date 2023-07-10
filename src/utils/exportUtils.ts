@@ -42,32 +42,17 @@ ${recipe.ingredientSections
     (s) => `### ${s.name}
 
 ${s.ingredients
-  .map((ingredient) => {
-    if (isIngredientType(ingredient.name)) {
-      return (
-        "- " +
-        getIngredientText(
-          ingredient.name,
-          ingredient.quantity,
-          ingredient.unit,
-          locale
-        )
-      );
-    }
-
-    if (ingredient.unit === null) {
-      return `- ${ingredient.quantity} ${ingredient.name}${
-        ingredient.isOptional ? " (optional)" : ""
-      }`;
-    }
-
-    const unit = unitsLocaleMap[locale][ingredient.unit].plural;
-
-    // TODO: Improve this
-    return `- ${ingredient.quantity} ${unit} ${ingredient.name}${
-      ingredient.isOptional ? " (optional)" : ""
-    }`;
-  })
+  .map(
+    (ingredient) =>
+      "- " +
+      getIngredientText(
+        ingredient.name,
+        ingredient.quantity,
+        ingredient.unit,
+        ingredient.isOptional,
+        locale
+      )
+  )
   .join("\n")}`
   )
   .join("\n\n")}

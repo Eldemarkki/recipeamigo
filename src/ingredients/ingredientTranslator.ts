@@ -72,6 +72,11 @@ const finnishIngredients = {
   garlic: { singular: "valkosipuli", plural: "valkosipulia" },
 } as const;
 
+const optionalTranslations: Record<Locale, string> = {
+  en: "optional",
+  fi: "valinnainen",
+};
+
 export type IngredientType = keyof typeof englishIngredients;
 
 const ingredientsLocaleMap = {
@@ -93,26 +98,34 @@ const getRequiredAmountType = (amount: number, unit: IngredientUnit | null) => {
 };
 
 export const getIngredientText = (
-  ingredient: IngredientType,
+  ingredient: string,
   amount: number,
   unit: IngredientUnit | null,
+  isOptional: boolean,
   language: Locale
 ) => {
-  const ingredientText = ingredientsLocaleMap[language][ingredient];
+  const ingredientText = isIngredientType(ingredient)
+    ? ingredientsLocaleMap[language][ingredient]
+    : { singular: ingredient, plural: ingredient };
+
   const requiredAmountType = getRequiredAmountType(amount, unit);
   const finalIngredientText = ingredientText[requiredAmountType];
+
+  // TODO: This doesn't work for right-to-left languages
+  const optionalText = isOptional ? ` (${optionalTranslations[language]})` : "";
+
   if (unit === null) {
-    return `${amount} ${finalIngredientText}`;
+    return `${amount} ${finalIngredientText}${optionalText}`;
   }
   const unitText = unitsLocaleMap[language][unit];
 
   const finalUnitText = amount === 1 ? unitText.singular : unitText.plural;
 
   if (language === "en") {
-    return `${amount} ${finalUnitText} of ${finalIngredientText}`;
+    return `${amount} ${finalUnitText} of ${finalIngredientText}${optionalText}`;
   }
 
-  return `${amount} ${finalUnitText} ${finalIngredientText}`;
+  return `${amount} ${finalUnitText} ${finalIngredientText}${optionalText}`;
 };
 
 export const isIngredientType = (

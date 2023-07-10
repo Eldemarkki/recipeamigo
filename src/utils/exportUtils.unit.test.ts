@@ -39,7 +39,7 @@ describe("recipeToMarkdown", () => {
                 name: "tomato",
                 quantity: 1,
                 unit: "MILLILITER",
-                isOptional: false,
+                isOptional: true,
                 order: 1,
                 ingredientSectionId: "ingredientSectionId_1",
               },
@@ -63,7 +63,7 @@ describe("recipeToMarkdown", () => {
               {
                 id: "ingredientId_4",
                 name: "tomato",
-                quantity: 1,
+                quantity: 2,
                 unit: "MILLILITER",
                 isOptional: false,
                 order: 1,
@@ -129,13 +129,13 @@ This is a test recipe
 
 ### Sauce
 
-- 1 cups Test Ingredient
-- 1 milliliter of tomatoes
+- 1 cup of Test Ingredient
+- 1 milliliter of tomatoes (optional)
 
 ### Topping
 
-- 1 cups Test Ingredient
-- 1 milliliter of tomatoes
+- 1 cup of Test Ingredient
+- 2 milliliters of tomatoes
 
 ## Instructions
 
