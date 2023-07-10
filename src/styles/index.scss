@@ -22,6 +22,8 @@ html[data-theme='light'] {
   --tag-glutenFree-background-color: #fffaf0;
   --tag-glutenFree-text-color: #905208;
   --tag-border-color: #0003;
+  --button-disabled-background: #0000000f;
+  --button-disabled-text: #0000007f;
 }
 
 @mixin dark-mode {
@@ -42,6 +44,8 @@ html[data-theme='light'] {
   --tag-glutenFree-background-color: #905208;
   --tag-glutenFree-text-color: #fffaf0;
   --tag-border-color: #fff2;
+  --button-disabled-background: #ffffff0d;
+  --button-disabled-text: #ffffffbd;
 }
 
 @media (prefers-color-scheme: dark) {

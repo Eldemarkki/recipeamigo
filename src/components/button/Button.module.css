@@ -4,7 +4,6 @@
   justify-content: center;
   border-radius: 1rem;
   align-items: center;
-  cursor: pointer;
 }
 
 .buttonComponent:not(.circular) {
@@ -16,7 +15,7 @@
   color: var(--text-black);
 }
 
-.primary:hover {
+.primary:hover:not(:disabled) {
   background-color: var(--primary-shade-1);
 }
 
@@ -27,7 +26,7 @@
   color: var(--text);
 }
 
-.secondary:hover {
+.secondary:hover:not(:disabled) {
   background-color: var(--button-secondary-hover-background);
 }
 
@@ -35,4 +34,9 @@
   border-radius: 50%;
   aspect-ratio: 1/1;
   display: flex;
+}
+
+.buttonComponent:disabled {
+  background-color: var(--button-disabled-background);
+  color: var(--button-disabled-text);
 }

@@ -8,23 +8,24 @@ datasource db {
 }
 
 model Recipe {
-  id                         String              @id @default(uuid())
+  id                         String                 @id @default(uuid())
   name                       String
   description                String
-  createdAt                  DateTime            @default(now())
-  updatedAt                  DateTime            @updatedAt
+  createdAt                  DateTime               @default(now())
+  updatedAt                  DateTime               @updatedAt
   userId                     String
-  user                       UserProfile         @relation(fields: [userId], references: [clerkId])
+  user                       UserProfile            @relation(fields: [userId], references: [clerkId])
   ingredientSections         IngredientSection[]
   instructions               Instruction[]
   quantity                   Int
   isPublic                   Boolean
-  viewCount                  Int                 @default(0)
-  timeEstimateMinimumMinutes Int                 @default(0)
+  viewCount                  Int                    @default(0)
+  timeEstimateMinimumMinutes Int                    @default(0)
   timeEstimateMaximumMinutes Int?
   coverImageName             String?
   likes                      Like[]
   tags                       Tag[]
+  RecipesOnCollections       RecipesOnCollections[]
 }
 
 model Instruction {
@@ -86,10 +87,11 @@ enum IngredientUnit {
 }
 
 model UserProfile {
-  clerkId  String   @id @unique
-  username String   @unique
-  recipes  Recipe[]
-  likes    Like[]
+  clerkId           String             @id @unique
+  username          String             @unique
+  recipes           Recipe[]
+  likes             Like[]
+  recipeCollections RecipeCollection[]
 }
 
 model Like {
@@ -110,4 +112,24 @@ model Tag {
 
   @@id([recipeId, text])
   @@unique([recipeId, order])
+}
+
+model RecipeCollection {
+  id                   String                 @id @default(uuid())
+  name                 String
+  userId               String
+  user                 UserProfile            @relation(fields: [userId], references: [clerkId])
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  RecipesOnCollections RecipesOnCollections[]
+}
+
+model RecipesOnCollections {
+  recipeId           String
+  recipe             Recipe           @relation(fields: [recipeId], references: [id])
+  recipeCollectionId String
+  recipeCollection   RecipeCollection @relation(fields: [recipeCollectionId], references: [id])
+  createdAt          DateTime         @default(now())
+
+  @@id([recipeId, recipeCollectionId])
 }

@@ -1,5 +1,20 @@
 {
   "myRecipes": "My recipes",
   "newRecipeButton": "New recipe",
-  "newRecipeButtonLong": "Create new recipe"
+  "newRecipeButtonLong": "Create new recipe",
+  "newCollectionButton": "New collection",
+  "collections": {
+    "newCollectionTitle": "New collection",
+    "searchPlaceholder": "Search recipes",
+    "noRecipesFound": "No recipes found for \"{{query}}\"",
+    "noRecipesExist": "You don't have any recipes",
+    "noRecipesExistCreate": "Create your first recipe",
+    "createCollection_one": "Create collection ({{count}} recipe)",
+    "createCollection_other": "Create collection ({{count}} recipes)",
+    "tile": {
+      "removeButton": "Remove",
+      "addButton": "Add",
+      "placeholderAltText": "Recipe placeholder image"
+    }
+  }
 }

@@ -1,5 +1,20 @@
 {
   "myRecipes": "Omat reseptit",
   "newRecipeButton": "Uusi resepti",
-  "newRecipeButtonLong": "Luo uusi resepti"
+  "newRecipeButtonLong": "Luo uusi resepti",
+  "newCollectionButton": "Luo uusi kokoelma",
+  "collections": {
+    "newCollectionTitle": "Uusi kokoelma",
+    "searchPlaceholder": "Hae reseptejä",
+    "noRecipesFound": "Ei reseptejä haulla \"{{query}}\"",
+    "noRecipesExist": "Sinulla ei ole reseptejä",
+    "noRecipesExistCreate": "Luo ensimmäinen reseptisi",
+    "createCollection_one": "Luo kokoelma ({{count}} resepti)",
+    "createCollection_other": "Luo kokoelma ({{count}} reseptiä)",
+    "tile": {
+      "removeButton": "Poista",
+      "addButton": "Lisää",
+      "placeholderAltText": "Reseptin kuva"
+    }
+  }
 }

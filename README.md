@@ -42,7 +42,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - [ ] Less than X minutes
 - [X] Recipe tags/categories
 - [X] Likes
-- [ ] Save recipes to private/public collections
+- [ ] Save recipes to collections
+  - [ ] Private collections
+  - [ ] Public collections ("This collection contains private recipes. Do you want to make them public?", Cancel/OK)
 - [ ] Embedded timer ("cook for 5 minutes", click to start timer)
 - [ ] Simple instructions-view (big font, no bloat)
 - [ ] Notes/tips/warnings among instructions
