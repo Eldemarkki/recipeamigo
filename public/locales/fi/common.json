@@ -2,6 +2,7 @@
   "navbar": {
     "home": "Etusivu",
     "settings": "Asetukset",
+    "browse": "Selaa",
     "profile": "Profiili"
   },
   "actions": {

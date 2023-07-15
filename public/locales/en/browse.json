@@ -1,0 +1,7 @@
+{
+  "title": "Browse recipes",
+  "pagination": {
+    "previousPage": "Previous page",
+    "nextPage": "Next page"
+  }
+}

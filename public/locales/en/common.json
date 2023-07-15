@@ -2,6 +2,7 @@
   "navbar": {
     "home": "Home",
     "settings": "Settings",
+    "browse": "Browse",
     "profile": "Profile"
   },
   "actions": {

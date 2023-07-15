@@ -624,3 +624,27 @@ export const increaseViewCountForRecipe = async (id: string) => {
     },
   });
 };
+
+export const getPublicRecipesPaginated = async (pagination: {
+  page: number;
+  pageSize: number;
+}) => {
+  const recipes = await prisma.recipe.findMany({
+    where: {
+      isPublic: true,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+    skip: pagination.page * pagination.pageSize,
+    take: pagination.pageSize,
+  });
+
+  const count = await prisma.recipe.count({
+    where: {
+      isPublic: true,
+    },
+  });
+
+  return { recipes, count };
+};
