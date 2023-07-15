@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.linksContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background-color: var(--background-color-secondary);
+  padding: 0.4rem 1rem;
+  border-radius: 99999px;
+}
+
+.currentPageText {
+  text-align: center;
+}
+
+.nextPageLink {
+  text-align: end;
+  width: fit-content;
+}
+
+.leftIcon,
+.rightIcon {
+  translate: 0px 1px;
+}

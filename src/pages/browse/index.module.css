@@ -1,6 +1,6 @@
-.recipeList {
+.container {
   display: flex;
   flex-direction: column;
-  list-style: none;
-  padding: 0;
+  padding: 3rem 5rem;
+  gap: 2rem;
 }

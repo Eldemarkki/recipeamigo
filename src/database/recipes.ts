@@ -640,11 +640,25 @@ export const getPublicRecipesPaginated = async (pagination: {
     take: pagination.pageSize,
   });
 
+  const recipesWithCoverImageUrls = await Promise.all(
+    recipes.map(async (recipe) => {
+      return {
+        ...recipe,
+        coverImageUrl: recipe.coverImageName
+          ? await s3.presignedGetObject(
+              process.env.S3_BUCKET_NAME ?? "",
+              recipe?.coverImageName
+            )
+          : undefined,
+      };
+    })
+  );
+
   const count = await prisma.recipe.count({
     where: {
       isPublic: true,
     },
   });
 
-  return { recipes, count };
+  return { recipes: recipesWithCoverImageUrls, count };
 };

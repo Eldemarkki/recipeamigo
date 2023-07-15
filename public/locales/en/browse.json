@@ -2,6 +2,7 @@
   "title": "Browse recipes",
   "pagination": {
     "previousPage": "Previous page",
-    "nextPage": "Next page"
+    "nextPage": "Next page",
+    "currentPage": "Current page: {{page}}"
   }
 }

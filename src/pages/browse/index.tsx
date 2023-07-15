@@ -1,10 +1,11 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { getPublicRecipesPaginated } from "../../database/recipes";
-import { Link } from "../../components/link/Link";
 import config from "../../config";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import styles from "./index.module.css";
+import { RecipeCardGrid } from "../../components/RecipeCardGrid";
+import { BrowsePagination } from "../../components/browse/pagination/BrowsePagination";
 
 const BrowsePage = ({
   pagination,
@@ -12,42 +13,11 @@ const BrowsePage = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { t } = useTranslation("browse");
 
-  const previousPageParameters = new URLSearchParams();
-  const nextPageParameters = new URLSearchParams();
-
-  if (pagination.page > 1) {
-    previousPageParameters.set("page", `${pagination.page - 1}`);
-  }
-  nextPageParameters.set("page", `${pagination.page + 1}`);
-
-  if (pagination.pageSize !== config.RECIPE_PAGINATION_DEFAULT_PAGE_SIZE) {
-    previousPageParameters.set("pageSize", `${pagination.pageSize}`);
-    nextPageParameters.set("pageSize", `${pagination.pageSize}`);
-  }
-
   return (
-    <div>
+    <div className={styles.container}>
       <h1>{t("title")}</h1>
-      <ol className={styles.recipeList}>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}>
-            <Link href={`/recipe/${recipe.id}`}><h2>{recipe.name}</h2></Link>
-            <p>{recipe.description}</p>
-          </li>
-        ))}
-      </ol>
-      <div>
-        {pagination.hasPreviousPage && (
-          <Link href={`/browse${previousPageParameters.size ? "?" + previousPageParameters : ""}`}>
-            {t("pagination.previousPage")}
-          </Link>
-        )}
-        {pagination.hasNextPage && (
-          <Link href={`/browse${nextPageParameters.size ? "?" + nextPageParameters : ""}`}>
-            {t("pagination.nextPage")}
-          </Link>
-        )}
-      </div>
+      <RecipeCardGrid recipes={recipes} />
+      <BrowsePagination {...pagination} />
     </div>
   );
 };
@@ -61,7 +31,8 @@ export const getServerSideProps = (async ({ query, locale }) => {
   const { page: pageStr, pageSize: pageSizeStr } = query;
 
   const pagination = validatePagination(
-    parseInt(pageStr as string, 10) || 0,
+    // Starts from page 1
+    (parseInt(pageStr as string, 10) - 1) || 0,
     parseInt(pageSizeStr as string, 10) ||
     config.RECIPE_PAGINATION_DEFAULT_PAGE_SIZE
   );
@@ -77,7 +48,9 @@ export const getServerSideProps = (async ({ query, locale }) => {
       ...(await serverSideTranslations(locale ?? "en", ["common", "browse"])),
       recipes,
       pagination: {
-        ...pagination,
+        // Starts from page 1
+        page: pagination.page + 1,
+        pageSize: pagination.pageSize,
         hasPreviousPage,
         hasNextPage,
       },
