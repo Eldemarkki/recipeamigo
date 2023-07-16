@@ -6,16 +6,19 @@ import { useTranslation } from "next-i18next";
 import styles from "./index.module.css";
 import { RecipeCardGrid } from "../../components/RecipeCardGrid";
 import { BrowsePagination } from "../../components/browse/pagination/BrowsePagination";
+import { BrowseFilter } from "../../components/browse/filter/BrowseFilter";
 
 const BrowsePage = ({
   pagination,
   recipes,
+  query,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { t } = useTranslation("browse");
 
   return (
     <div className={styles.container}>
       <h1>{t("title")}</h1>
+      <BrowseFilter query={query} />
       <RecipeCardGrid recipes={recipes} />
       <BrowsePagination {...pagination} />
     </div>
@@ -30,6 +33,8 @@ const validatePagination = (pageInput: number, pageSizeInput: number) => ({
 export const getServerSideProps = (async ({ query, locale }) => {
   const { page: pageStr, pageSize: pageSizeStr } = query;
 
+  const { search } = query;
+
   const pagination = validatePagination(
     // Starts from page 1
     (parseInt(pageStr as string, 10) - 1) || 0,
@@ -37,7 +42,11 @@ export const getServerSideProps = (async ({ query, locale }) => {
     config.RECIPE_PAGINATION_DEFAULT_PAGE_SIZE
   );
 
-  const { recipes, count } = await getPublicRecipesPaginated(pagination);
+  const filter = {
+    search: search ? (typeof search === "string" ? search : search[0]) : ""
+  };
+
+  const { recipes, count } = await getPublicRecipesPaginated(filter, pagination);
 
   const hasPreviousPage = pagination.page > 0;
   const hasNextPage =
@@ -54,6 +63,7 @@ export const getServerSideProps = (async ({ query, locale }) => {
         hasPreviousPage,
         hasNextPage,
       },
+      query
     },
   };
 }) satisfies GetServerSideProps;

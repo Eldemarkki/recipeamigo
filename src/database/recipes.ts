@@ -625,13 +625,47 @@ export const increaseViewCountForRecipe = async (id: string) => {
   });
 };
 
-export const getPublicRecipesPaginated = async (pagination: {
-  page: number;
-  pageSize: number;
-}) => {
+export const getPublicRecipesPaginated = async (
+  filter: {
+    search?: string;
+  },
+  pagination: {
+    page: number;
+    pageSize: number;
+  }
+) => {
+  // TODO: This could be optimized
+  // - https://www.prisma.io/docs/concepts/components/prisma-client/full-text-search
+  // - ElasticSearch/Algolia/Meilisearch
   const recipes = await prisma.recipe.findMany({
     where: {
       isPublic: true,
+      AND: {
+        OR: [
+          {
+            name: {
+              contains: filter.search,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: filter.search,
+              mode: "insensitive",
+            },
+          },
+          {
+            tags: {
+              some: {
+                text: {
+                  contains: filter.search,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        ],
+      },
     },
     orderBy: {
       updatedAt: "desc",
