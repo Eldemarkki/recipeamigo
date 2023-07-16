@@ -114,7 +114,7 @@ export default function RecipePage(props: InferGetServerSidePropsType<typeof get
             variant="secondary"
             onClick={likeStatus === true ? unlikeRecipe : likeRecipe}
           >
-            {likeStatus ? t("recipeView:likes.likeButton") : t("recipeView:likes.unlikeButton")}
+            {likeStatus ? t("recipeView:likes.unlikeButton") : t("recipeView:likes.likeButton")}
           </Button>}
         <p>{t("recipeView:likes.likeCountText", { count: likeCount })}</p>
         {timeEstimateType !== null && (timeEstimateType === "single" ?
