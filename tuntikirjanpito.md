@@ -45,4 +45,6 @@
 | 9.7.2023  | 1      | Markdown export -ominaisuus                                                    |
 | 10.7.2023 | 2      | Reseptikokoelmien luomiskäyttöliittymän aloittaminen                           |
 | 10.7.2023 | 1      | Testien korjaus, muutaman puuttuvan käännöksen lisääminen, pieniä parannuksia  |
-| Yhteensä  | 81     |                                                                                |
+| 15.7.2023 | 2      | Selaa-sivun tekeminen                                                          |
+| 16.7.2023 | 1      | Selaa-sivun hakusuodattimen tekeminen                                          |
+| Yhteensä  | 84     |                                                                                |
