@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Theme, isTheme, useTheme } from "../../hooks/useTheme";
 import { useTranslation } from "next-i18next";
+import { Select } from "../Select";
+import styles from "./ThemeToggle.module.css";
 
 const ThemeToggle = () => {
   const { t } = useTranslation("settings");
@@ -8,22 +10,24 @@ const ThemeToggle = () => {
   const [selectedTheme, setSelectedTheme] = useState<Theme>("system");
   const setTheme = useTheme(theme => setSelectedTheme(theme));
 
-  return <div>
+  const options = [
+    { value: "system", label: t("themes.systemTheme") },
+    { value: "light", label: t("themes.lightTheme") },
+    { value: "dark", label: t("themes.darkTheme") },
+  ] as const;
+
+  return <div className={styles.themeToggle}>
     <label htmlFor="theme">{t("themes.themeTitle")}</label>
-    <select
+    <Select
       id="theme"
-      value={selectedTheme}
-      onChange={e => {
-        const newTheme = e.target.value;
+      options={options}
+      value={options.find(option => option.value === selectedTheme)}
+      onChange={newTheme => {
         if (!isTheme(newTheme)) throw new Error("Invalid theme. This should never happen.");
         setTheme(newTheme);
         setSelectedTheme(newTheme);
       }}
-    >
-      <option value="system">{t("themes.systemTheme")}</option>
-      <option value="light">{t("themes.lightTheme")}</option>
-      <option value="dark">{t("themes.darkTheme")}</option>
-    </select>
+    />
   </div>;
 };
 
