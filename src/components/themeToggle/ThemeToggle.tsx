@@ -22,7 +22,8 @@ const ThemeToggle = () => {
       id="theme"
       options={options}
       value={options.find(option => option.value === selectedTheme)}
-      onChange={newTheme => {
+      onChange={(option) => {
+        const newTheme = option?.value;
         if (!isTheme(newTheme)) throw new Error("Invalid theme. This should never happen.");
         setTheme(newTheme);
         setSelectedTheme(newTheme);
