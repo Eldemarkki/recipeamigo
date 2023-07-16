@@ -24,6 +24,8 @@ html[data-theme='light'] {
   --tag-border-color: #0003;
   --button-disabled-background: #0000000f;
   --button-disabled-text: #0000007f;
+
+  --font-size-button: 0.9rem;
 }
 
 @mixin dark-mode {
