@@ -33,7 +33,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
-    "react-i18next": "^13.0.2",
     "react-select": "^5.7.4",
     "sharp": "^0.32.3",
     "superjson": "^1.12.4",
