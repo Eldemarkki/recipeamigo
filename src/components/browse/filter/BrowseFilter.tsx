@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { useEffect, useState } from "react";
+import styles from "./BrowseFilter.module.css";
+import { useTranslation } from "next-i18next";
 
 export type Filter = {
   search?: string;
@@ -11,6 +13,7 @@ export type BrowseFilterProps = {
 }
 
 export const BrowseFilter = ({ query }: BrowseFilterProps) => {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const initialSearch = query.search ? (typeof query.search === "string" ? query.search : query.search[0]) : "";
 
@@ -37,5 +40,7 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
     type="text"
     value={search}
     onChange={(e) => setSearch(e.target.value)}
+    placeholder={t("recipeFilter.searchPlaceholder")}
+    className={styles.searchInput}
   />;
 };

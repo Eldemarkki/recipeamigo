@@ -12,5 +12,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "create": "Create"
+  },
+  "recipeFilter": {
+    "searchPlaceholder": "Search"
   }
 }
