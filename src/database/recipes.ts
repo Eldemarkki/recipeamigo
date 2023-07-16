@@ -4,6 +4,11 @@ import { createRecipeSchema } from "../pages/api/recipes";
 import { editRecipeSchema } from "../pages/api/recipes/[id]";
 import type { UUID } from "crypto";
 import { DEFAULT_BUCKET_NAME, s3 } from "../s3";
+import {
+  SortColumn,
+  SortDirection,
+  SortKey,
+} from "../components/browse/sort/BrowseSort";
 
 export const getAllRecipesForUser = async (userId: string) => {
   const recipes = await prisma.recipe.findMany({
@@ -629,6 +634,7 @@ export const getPublicRecipesPaginated = async (
   filter: {
     search?: string;
   },
+  sort: SortKey,
   pagination: {
     page: number;
     pageSize: number;
@@ -637,6 +643,27 @@ export const getPublicRecipesPaginated = async (
   // TODO: This could be optimized
   // - https://www.prisma.io/docs/concepts/components/prisma-client/full-text-search
   // - ElasticSearch/Algolia/Meilisearch
+
+  const [column, direction] = sort.split(".") as [SortColumn, SortDirection];
+
+  const map = {
+    view: "viewCount",
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
+    name: "name",
+  } as const;
+
+  const sortObj =
+    column === "like"
+      ? ({
+          likes: {
+            _count: direction,
+          },
+        } as const)
+      : ({
+          [map[column]]: direction,
+        } as const);
+
   const recipes = await prisma.recipe.findMany({
     where: {
       isPublic: true,
@@ -667,9 +694,7 @@ export const getPublicRecipesPaginated = async (
         ],
       },
     },
-    orderBy: {
-      updatedAt: "desc",
-    },
+    orderBy: sortObj,
     skip: pagination.page * pagination.pageSize,
     take: pagination.pageSize,
   });

@@ -7,6 +7,7 @@ import styles from "./index.module.css";
 import { RecipeCardGrid } from "../../components/RecipeCardGrid";
 import { BrowsePagination } from "../../components/browse/pagination/BrowsePagination";
 import { BrowseFilter } from "../../components/browse/filter/BrowseFilter";
+import { isValidSortParam, queryParamToString } from "../../utils/stringUtils";
 
 const BrowsePage = ({
   pagination,
@@ -35,6 +36,9 @@ export const getServerSideProps = (async ({ query, locale }) => {
 
   const { search } = query;
 
+  const sortStr = queryParamToString(query.sort) || "";
+  const sort = isValidSortParam(sortStr) ? sortStr : config.RECIPE_PAGINATION_DEFAULT_SORT;
+
   const pagination = validatePagination(
     // Starts from page 1
     (parseInt(pageStr as string, 10) - 1) || 0,
@@ -43,10 +47,10 @@ export const getServerSideProps = (async ({ query, locale }) => {
   );
 
   const filter = {
-    search: search ? (typeof search === "string" ? search : search[0]) : ""
+    search: queryParamToString(search) || ""
   };
 
-  const { recipes, count } = await getPublicRecipesPaginated(filter, pagination);
+  const { recipes, count } = await getPublicRecipesPaginated(filter, sort, pagination);
 
   const hasPreviousPage = pagination.page > 0;
   const hasNextPage =

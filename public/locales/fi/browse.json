@@ -4,5 +4,27 @@
     "previousPage": "Edellinen sivu",
     "nextPage": "Seuraava sivu",
     "currentPage": "Nykyinen sivu: {{page}}"
+  },
+  "sort": {
+    "createdAt": {
+      "asc": "Luotu (vanhin ensin)",
+      "desc": "Luotu (uusin ensin)"
+    },
+    "updatedAt": {
+      "asc": "Päivitetty (vanhin ensin)",
+      "desc": "Päivitetty (uusin ensin)"
+    },
+    "likes": {
+      "asc": "Vähiten tykätty",
+      "desc": "Eniten tykätty"
+    },
+    "name": {
+      "asc": "Otsikko (A-Z)",
+      "desc": "Otsikko (Z-A)"
+    },
+    "views": {
+      "asc": "Vähiten katsottu",
+      "desc": "Eniten katsottu"
+    }
   }
 }

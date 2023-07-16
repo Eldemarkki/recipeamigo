@@ -4,5 +4,27 @@
     "previousPage": "Previous page",
     "nextPage": "Next page",
     "currentPage": "Current page: {{page}}"
+  },
+  "sort": {
+    "createdAt": {
+      "asc": "Created (oldest first)",
+      "desc": "Created (newest first)"
+    },
+    "updatedAt": {
+      "asc": "Updated (oldest first)",
+      "desc": "Updated (newest first)"
+    },
+    "likes": {
+      "asc": "Least liked",
+      "desc": "Most liked"
+    },
+    "name": {
+      "asc": "Title (A-Z)",
+      "desc": "Title (Z-A)"
+    },
+    "views": {
+      "asc": "Least viewed",
+      "desc": "Most viewed"
+    }
   }
 }
