@@ -16,8 +16,8 @@ describe("recipeToMarkdown", () => {
         name: "Test Recipe",
         description: "This is a test recipe",
         coverImageName: null,
-        createdAt: new Date(2018, 4, 16, 15, 16, 17),
-        updatedAt: new Date(2019, 8, 20, 15, 16, 17),
+        createdAt: new Date("2018-05-16T12:16:17.000Z"),
+        updatedAt: new Date("2019-09-20T12:16:17.000Z"),
         ingredientSections: [
           {
             id: "ingredientSectionId_1",
