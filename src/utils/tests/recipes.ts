@@ -50,7 +50,7 @@ export const createRandomRecipe = (): z.infer<typeof createRecipeSchema> => ({
     createRandomIngredientSection
   ),
   instructions: createRandomArray(
-    createRandomNumber(2, 10),
+    createRandomNumber(3, 10),
     createRandomInstruction
   ),
   quantity: createRandomNumber(1, 10),
