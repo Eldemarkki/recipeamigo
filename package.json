@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write src",
+    "prettier:verify": "prettier --check src",
     "migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
     "test:unit": "dotenv -e .env.local.test -- vitest unit.test.ts",
     "test:integration": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts",
