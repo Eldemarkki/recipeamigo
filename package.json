@@ -17,7 +17,7 @@
     "test:stop_database": "docker stop recipeamigo-test-database",
     "test": "npm run test:start_database && sleep 5 && dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run && npm run test:stop_database",
     "test:unit:ci": "vitest unit.test.ts",
-    "test:integration:ci": "prisma migrate deploy && vitest run integration.test.ts",
+    "test:integration:ci": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts",
     "sumHours": "node ./sumHours.js"
   },
   "dependencies": {
