@@ -633,6 +633,7 @@ export const increaseViewCountForRecipe = async (id: string) => {
 export const getPublicRecipesPaginated = async (
   filter: {
     search?: string;
+    tags?: string[];
   },
   sort: SortKey,
   pagination: {
@@ -692,6 +693,16 @@ export const getPublicRecipesPaginated = async (
             },
           },
         ],
+        tags:
+          filter.tags && filter.tags.length
+            ? {
+                some: {
+                  text: {
+                    in: filter.tags,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     orderBy: sortObj,

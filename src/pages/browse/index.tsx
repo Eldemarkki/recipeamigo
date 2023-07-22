@@ -34,7 +34,13 @@ const validatePagination = (pageInput: number, pageSizeInput: number) => ({
 export const getServerSideProps = (async ({ query, locale }) => {
   const { page: pageStr, pageSize: pageSizeStr } = query;
 
-  const { search } = query;
+  const { search, tags: queryTags } = query;
+
+  const tags = Array.isArray(queryTags)
+    ? queryTags
+    : queryTags
+    ? [queryTags]
+    : [];
 
   const sortStr = queryParamToString(query.sort) || "";
   const sort = isValidSortParam(sortStr)
@@ -50,6 +56,7 @@ export const getServerSideProps = (async ({ query, locale }) => {
 
   const filter = {
     search: queryParamToString(search) || "",
+    tags: tags as string[],
   };
 
   const { recipes, count } = await getPublicRecipesPaginated(
@@ -64,7 +71,12 @@ export const getServerSideProps = (async ({ query, locale }) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "en", ["common", "browse"])),
+      ...(await serverSideTranslations(locale ?? "en", [
+        "common",
+        "browse",
+        "recipeView",
+        "tags",
+      ])),
       recipes,
       pagination: {
         // Starts from page 1

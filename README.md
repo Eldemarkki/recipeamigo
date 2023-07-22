@@ -48,7 +48,7 @@ Things you need:
 - [x] Recipe time estimation (manual)
 - [ ] Browse recipes
   - [ ] Exclude recipes with certain ingredients
-  - [ ] Only vegetarian, gluten-free, etc.
+  - [x] Only vegetarian, gluten-free, etc.
   - [ ] Less than X minutes
 - [x] Recipe tags/categories
 - [x] Likes
