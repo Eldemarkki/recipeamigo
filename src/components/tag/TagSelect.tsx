@@ -10,6 +10,7 @@ import {
 } from "./Tag";
 import tagStyles from "./Tag.module.css";
 import { DeleteButton } from "../button/DeleteButton";
+import { useId } from "react";
 
 export type TagSelectProps = {
   tags: string[];
@@ -25,9 +26,12 @@ export const TagSelect = ({ tags, setTags, id }: TagSelectProps) => {
     value: tagType,
   }));
 
+  const instanceId = useId();
+
   return (
     <Select
       isMulti
+      instanceId={instanceId}
       inputId={id}
       onChange={(selectedOption) => {
         setTags(selectedOption.map((tag) => tag.value));
