@@ -100,14 +100,7 @@ export default function RecipePage(
               <Button
                 onClick={() => {
                   exportRecipe(
-                    recipeToMarkdown(
-                      {
-                        ...recipe,
-                        createdAt: new Date(recipe.createdAt),
-                        updatedAt: new Date(recipe.updatedAt),
-                      },
-                      i18n.language as Locale,
-                    ),
+                    recipeToMarkdown(recipe, i18n.language as Locale),
                     exportMarkdownFilename,
                   );
                 }}
@@ -116,14 +109,7 @@ export default function RecipePage(
               </Button>
               <Button
                 onClick={() => {
-                  exportRecipe(
-                    JSON.stringify({
-                      ...recipe,
-                      createdAt: new Date(recipe.createdAt),
-                      updatedAt: new Date(recipe.updatedAt),
-                    }),
-                    exportJsonFilename,
-                  );
+                  exportRecipe(JSON.stringify(recipe), exportJsonFilename);
                 }}
               >
                 {t("actions.exportAsJson")}
