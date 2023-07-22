@@ -4,7 +4,7 @@ const { i18n } = require("./next-i18next.config");
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: process.env.IMAGE_HOSTS.split(" ")
+    domains: (process.env.IMAGE_HOSTS ?? "").split(" ")
   },
   i18n,
   experimental: {
