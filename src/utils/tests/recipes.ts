@@ -32,7 +32,7 @@ export const createRandomIngredientSection = (): z.infer<
   name: createRandomString(10),
   ingredients: createRandomArray(
     createRandomNumber(1, 10),
-    createRandomIngredient
+    createRandomIngredient,
   ),
 });
 
@@ -47,11 +47,11 @@ export const createRandomRecipe = (): z.infer<typeof createRecipeSchema> => ({
   description: createRandomString(10),
   ingredientSections: createRandomArray(
     createRandomNumber(1, 5),
-    createRandomIngredientSection
+    createRandomIngredientSection,
   ),
   instructions: createRandomArray(
     createRandomNumber(3, 10),
-    createRandomInstruction
+    createRandomInstruction,
   ),
   quantity: createRandomNumber(1, 10),
   isPublic: createRandomBoolean(),

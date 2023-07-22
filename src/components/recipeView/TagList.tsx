@@ -5,16 +5,22 @@ import { useTranslation } from "next-i18next";
 
 export type TagListProps = {
   tags: TagType[];
-}
+};
 
 export const TagList = ({ tags }: TagListProps) => {
   const { t } = useTranslation();
 
-  return <ul className={styles.list}>
-    {tags.map(({ text }) => <li key={text}>
-      {isSpecialTagValue(text)
-        ? <Tag type={text}>{t(tagTranslationKeys[text])}</Tag>
-        : <Tag>{text}</Tag>}
-    </li>)}
-  </ul>;
+  return (
+    <ul className={styles.list}>
+      {tags.map(({ text }) => (
+        <li key={text}>
+          {isSpecialTagValue(text) ? (
+            <Tag type={text}>{t(tagTranslationKeys[text])}</Tag>
+          ) : (
+            <Tag>{text}</Tag>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
 };

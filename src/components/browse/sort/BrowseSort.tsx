@@ -55,37 +55,42 @@ export const sorts = [
 ] as const;
 
 export type SortDirection = "asc" | "desc";
-export type SortColumn = typeof sorts[number]["sortColumn"];
+export type SortColumn = (typeof sorts)[number]["sortColumn"];
 export type SortKey = `${SortColumn}.${SortDirection}`;
-export type Sort = typeof sorts[number];
+export type Sort = (typeof sorts)[number];
 
-export const getSortKey = (sort: Sort): SortKey => `${sort.sortColumn}.${sort.sortDirection}`;
+export const getSortKey = (sort: Sort): SortKey =>
+  `${sort.sortColumn}.${sort.sortDirection}`;
 
 export type BrowseSortProps = {
   sort: Sort;
   onChange: (sort: Sort) => void;
-}
+};
 
 export const BrowseSort = ({ sort, onChange }: BrowseSortProps) => {
   const { t } = useTranslation("browse");
 
-  return <div>
-    <Select
-      value={{
-        value: sort,
-        label: t(sort.labelTranslationKey),
-      }}
-      options={sorts.map((sort) => ({
-        value: sort,
-        label: t(sort.labelTranslationKey),
-      }))}
-      onChange={(option) => {
-        if (!option) {
-          console.warn("User selected an invalid sort option. This should never happen.");
-          return;
-        }
-        onChange(option.value);
-      }}
-    />
-  </div>;
+  return (
+    <div>
+      <Select
+        value={{
+          value: sort,
+          label: t(sort.labelTranslationKey),
+        }}
+        options={sorts.map((sort) => ({
+          value: sort,
+          label: t(sort.labelTranslationKey),
+        }))}
+        onChange={(option) => {
+          if (!option) {
+            console.warn(
+              "User selected an invalid sort option. This should never happen.",
+            );
+            return;
+          }
+          onChange(option.value);
+        }}
+      />
+    </div>
+  );
 };

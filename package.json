@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prettier": "prettier --write src",
     "migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
     "test:unit": "dotenv -e .env.local.test -- vitest unit.test.ts",
     "test:integration": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts",
@@ -44,6 +45,7 @@
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "dotenv-cli": "^7.2.1",
+    "prettier": "^3.0.0",
     "prisma": "^5.0.0",
     "sass": "^1.63.6",
     "vitest": "^0.33.0"

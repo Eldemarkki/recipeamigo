@@ -14,13 +14,13 @@ const handler: NextApiHandler = async (req, res) => {
     if (user.status !== "OK") {
       return {
         statusCode: 401,
-        message: "You are not logged in"
+        message: "You are not logged in",
       };
     }
 
     const canLike = await canLikeOrUnlikeRecipe(user.userId, recipeId, false, {
       notOperableState: "You have already unliked this recipe",
-      cannotOperateOwnRecipe: "You cannot unlike your own recipe"
+      cannotOperateOwnRecipe: "You cannot unlike your own recipe",
     });
 
     if (canLike === true) {

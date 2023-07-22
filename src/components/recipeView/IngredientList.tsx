@@ -14,17 +14,19 @@ export const IngredientList = ({
   originalRecipeQuantity,
   recipeQuantity,
 }: IngredientListProps) => {
-  return <ul className={styles.list}>
-    {ingredients.map((ingredient) => (
-      <li className={styles.listItem} key={ingredient.id}>
-        <CrossOffText>
-          <IngredientText
-            ingredient={ingredient}
-            originalRecipeQuantity={originalRecipeQuantity}
-            recipeQuantity={recipeQuantity}
-          />
-        </CrossOffText>
-      </li>
-    ))}
-  </ul>;
+  return (
+    <ul className={styles.list}>
+      {ingredients.map((ingredient) => (
+        <li className={styles.listItem} key={ingredient.id}>
+          <CrossOffText>
+            <IngredientText
+              ingredient={ingredient}
+              originalRecipeQuantity={originalRecipeQuantity}
+              recipeQuantity={recipeQuantity}
+            />
+          </CrossOffText>
+        </li>
+      ))}
+    </ul>
+  );
 };

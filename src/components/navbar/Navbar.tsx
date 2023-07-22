@@ -7,23 +7,25 @@ import { UserButton } from "@clerk/nextjs";
 export const Navbar = () => {
   const { t } = useTranslation();
 
-  return <div className={styles.container}>
-    <h1 className={styles.title}>
-      <Link href="/">{config.APP_NAME}</Link>
-    </h1>
-    <nav className={styles.navbar}>
-      <ol className={styles.linkList}>
-        <li>
-          <Link href="/">{t("navbar.home")}</Link>
-        </li>
-        <li>
-          <Link href="/browse">{t("navbar.browse")}</Link>
-        </li>
-        <li>
-          <Link href="/settings">{t("navbar.settings")}</Link>
-        </li>
-      </ol>
-      <UserButton afterSignOutUrl="/" />
-    </nav>
-  </div>;
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>
+        <Link href="/">{config.APP_NAME}</Link>
+      </h1>
+      <nav className={styles.navbar}>
+        <ol className={styles.linkList}>
+          <li>
+            <Link href="/">{t("navbar.home")}</Link>
+          </li>
+          <li>
+            <Link href="/browse">{t("navbar.browse")}</Link>
+          </li>
+          <li>
+            <Link href="/settings">{t("navbar.settings")}</Link>
+          </li>
+        </ol>
+        <UserButton afterSignOutUrl="/" />
+      </nav>
+    </div>
+  );
 };

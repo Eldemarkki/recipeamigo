@@ -10,9 +10,13 @@ export type DropzoneProps = {
   onDrop: (file: File | null) => void;
   initialPreviewUrl?: string | undefined | null;
   onRemove?: () => void;
-}
+};
 
-export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps) => {
+export const Dropzone = ({
+  onDrop,
+  initialPreviewUrl,
+  onRemove,
+}: DropzoneProps) => {
   const { t } = useTranslation("recipeView");
   const [previewImage, setPreviewImage] = useState(initialPreviewUrl);
   const [errors, setErrors] = useState<string[]>([]);
@@ -22,15 +26,17 @@ export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps)
     onRemove?.();
   };
 
-  const onDropHandler = useCallback((acceptedFile: File) => {
-    onDrop(acceptedFile);
-    if (acceptedFile) {
-      setPreviewImage(URL.createObjectURL(acceptedFile));
-    }
-    else {
-      setPreviewImage(undefined);
-    }
-  }, [onDrop]);
+  const onDropHandler = useCallback(
+    (acceptedFile: File) => {
+      onDrop(acceptedFile);
+      if (acceptedFile) {
+        setPreviewImage(URL.createObjectURL(acceptedFile));
+      } else {
+        setPreviewImage(undefined);
+      }
+    },
+    [onDrop],
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
@@ -42,51 +48,75 @@ export const Dropzone = ({ onDrop, initialPreviewUrl, onRemove }: DropzoneProps)
       if (acceptedFiles.length === 1) {
         setErrors([]);
         onDropHandler(acceptedFiles[0]);
-      }
-      else if (rejections.length === 1) {
+      } else if (rejections.length === 1) {
         console.log(rejections);
-        rejections[0].errors.forEach(error => {
+        rejections[0].errors.forEach((error) => {
           if (error.code === ErrorCode.FileTooLarge) {
-            setErrors(oldErrors => removeDuplicateStrings([...oldErrors, t("coverImageDropzone.errors.fileIsTooLarge")]));
-          }
-          else if (error.code === ErrorCode.FileInvalidType) {
-            setErrors(oldErrors => removeDuplicateStrings([...oldErrors, t("coverImageDropzone.errors.unsupportedFileType")]));
-          }
-          else {
-            setErrors(oldErrors => removeDuplicateStrings([...oldErrors, t("coverImageDropzone.errors.unexpectedError")]));
+            setErrors((oldErrors) =>
+              removeDuplicateStrings([
+                ...oldErrors,
+                t("coverImageDropzone.errors.fileIsTooLarge"),
+              ]),
+            );
+          } else if (error.code === ErrorCode.FileInvalidType) {
+            setErrors((oldErrors) =>
+              removeDuplicateStrings([
+                ...oldErrors,
+                t("coverImageDropzone.errors.unsupportedFileType"),
+              ]),
+            );
+          } else {
+            setErrors((oldErrors) =>
+              removeDuplicateStrings([
+                ...oldErrors,
+                t("coverImageDropzone.errors.unexpectedError"),
+              ]),
+            );
           }
         });
         removeImage();
-      }
-      else {
-        setErrors(oldErrors => removeDuplicateStrings([...oldErrors, t("coverImageDropzone.errors.unexpectedError")]));
+      } else {
+        setErrors((oldErrors) =>
+          removeDuplicateStrings([
+            ...oldErrors,
+            t("coverImageDropzone.errors.unexpectedError"),
+          ]),
+        );
         console.log("Unexpected error");
         removeImage();
       }
-    }
+    },
   });
 
   const inputId = useId();
 
-  return <div className={styles.container}>
-    <div className={styles.topRow}>
-      <label htmlFor={inputId}>{t("coverImageDropzone.title")}</label>
-      {previewImage && <DeleteButton type="button" onClick={removeImage} />}
+  return (
+    <div className={styles.container}>
+      <div className={styles.topRow}>
+        <label htmlFor={inputId}>{t("coverImageDropzone.title")}</label>
+        {previewImage && <DeleteButton type="button" onClick={removeImage} />}
+      </div>
+      <div {...getRootProps()} className={styles.dropzone}>
+        <input {...getInputProps()} id={inputId} />
+        {previewImage ? (
+          <Image
+            src={previewImage}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className={styles.previewImage}
+          />
+        ) : (
+          <p className={styles.dragText}>
+            {isDragActive
+              ? t("coverImageDropzone.dragActive")
+              : t("coverImageDropzone.dragInactive")}
+          </p>
+        )}
+      </div>
+      {errors.length > 0 && (
+        <p className={styles.errorText}>{errors.join(" ")}</p>
+      )}
     </div>
-    <div {...getRootProps()} className={styles.dropzone}>
-      <input {...getInputProps()} id={inputId} />
-      {previewImage ?
-        <Image
-          src={previewImage}
-          alt=""
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className={styles.previewImage}
-        /> :
-        <p className={styles.dragText}>
-          {isDragActive ? t("coverImageDropzone.dragActive") : t("coverImageDropzone.dragInactive")}
-        </p>}
-    </div>
-    {errors.length > 0 && <p className={styles.errorText}>{errors.join(" ")}</p>}
-  </div>;
+  );
 };

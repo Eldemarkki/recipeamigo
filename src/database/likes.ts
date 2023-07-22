@@ -42,4 +42,3 @@ export const getLikeCountForRecipe = async (recipeId: string) => {
 
   return count;
 };
-

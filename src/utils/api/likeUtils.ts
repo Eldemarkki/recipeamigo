@@ -3,21 +3,25 @@ import { getLikeStatus } from "../../database/likes";
 
 type CanLikeOrUnlikeRecipeResult<
   CannotOperateOwnRecipeError extends string,
-  NotOperableStateError extends string
-> = {
-  statusCode: 404;
-  message: "Recipe not found";
-} | {
-  statusCode: 403;
-  message: CannotOperateOwnRecipeError;
-} | {
-  statusCode: 409;
-  message: NotOperableStateError;
-} | true;
+  NotOperableStateError extends string,
+> =
+  | {
+      statusCode: 404;
+      message: "Recipe not found";
+    }
+  | {
+      statusCode: 403;
+      message: CannotOperateOwnRecipeError;
+    }
+  | {
+      statusCode: 409;
+      message: NotOperableStateError;
+    }
+  | true;
 
 export const canLikeOrUnlikeRecipe = async <
   CannotOperateOwnRecipeError extends string,
-  NotOperableStateError extends string
+  NotOperableStateError extends string,
 >(
   userId: string,
   recipeId: string,
@@ -25,20 +29,25 @@ export const canLikeOrUnlikeRecipe = async <
   errors: {
     cannotOperateOwnRecipe: CannotOperateOwnRecipeError;
     notOperableState: NotOperableStateError;
-  }
-): Promise<CanLikeOrUnlikeRecipeResult<CannotOperateOwnRecipeError, NotOperableStateError>> => {
+  },
+): Promise<
+  CanLikeOrUnlikeRecipeResult<
+    CannotOperateOwnRecipeError,
+    NotOperableStateError
+  >
+> => {
   const recipe = await getSingleRecipe(recipeId);
   if (recipe === null) {
     return {
       statusCode: 404,
-      message: "Recipe not found"
+      message: "Recipe not found",
     };
   }
 
   if (recipe.userId === userId) {
     return {
       statusCode: 403,
-      message: errors.cannotOperateOwnRecipe
+      message: errors.cannotOperateOwnRecipe,
     };
   }
 
@@ -46,7 +55,7 @@ export const canLikeOrUnlikeRecipe = async <
     // User doesn't own the recipe and it is private
     return {
       statusCode: 404,
-      message: "Recipe not found"
+      message: "Recipe not found",
     };
   }
 
@@ -55,7 +64,7 @@ export const canLikeOrUnlikeRecipe = async <
   if (!!hasAlreadyLiked === requiredLikeState) {
     return {
       statusCode: 409,
-      message: errors.notOperableState
+      message: errors.notOperableState,
     };
   }
 

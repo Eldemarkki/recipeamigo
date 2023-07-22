@@ -1,11 +1,11 @@
 .title {
   font-size: 4rem;
   font-weight: bold;
-  font-family: "Inter"
+  font-family: "Inter";
 }
 
 .titleGradientPart {
-  background: linear-gradient(90deg, #FFB800 0%, #FF5E00 100%);
+  background: linear-gradient(90deg, #ffb800 0%, #ff5e00 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

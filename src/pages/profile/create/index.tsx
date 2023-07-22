@@ -10,7 +10,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export type CreateProfilePageProps = {
   userId: string;
-}
+};
 
 export default function CreateProfilePage(props: CreateProfilePageProps) {
   const { t } = useTranslation();
@@ -29,13 +29,17 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
       }),
     });
 
-    const data = await response.json() as {
-      message: "Not authenticated";
-    } | {
-      message: "Profile already exists"
-    } | {
-      message: "Username already taken"
-    } | UserProfile;
+    const data = (await response.json()) as
+      | {
+          message: "Not authenticated";
+        }
+      | {
+          message: "Profile already exists";
+        }
+      | {
+          message: "Username already taken";
+        }
+      | UserProfile;
 
     if ("message" in data) {
       switch (data.message) {
@@ -56,39 +60,42 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
           alert(t("errors.unknownError"));
           break;
       }
-    }
-    else {
+    } else {
       router.push("/");
     }
   };
 
-  return <div className={styles.container}>
-    <div className={styles.innerContainer}>
-      <h1>{t("profile:question")}</h1>
-      <form
-        className={styles.form}
-        onSubmit={async (e) => {
-          e.preventDefault();
-          await saveProfile();
-        }}
-      >
-        <input
-          type="text"
-          value={profileName}
-          onChange={(e) => setProfileName(e.target.value)}
-          placeholder={t("profile:placeholderName")}
-          minLength={3}
-          maxLength={32}
-          pattern="[a-zA-Z0-9_]+"
-          required
-        />
-        <Button>{t("profile:createProfileButton")}</Button>
-      </form>
+  return (
+    <div className={styles.container}>
+      <div className={styles.innerContainer}>
+        <h1>{t("profile:question")}</h1>
+        <form
+          className={styles.form}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await saveProfile();
+          }}
+        >
+          <input
+            type="text"
+            value={profileName}
+            onChange={(e) => setProfileName(e.target.value)}
+            placeholder={t("profile:placeholderName")}
+            minLength={3}
+            maxLength={32}
+            pattern="[a-zA-Z0-9_]+"
+            required
+          />
+          <Button>{t("profile:createProfileButton")}</Button>
+        </form>
+      </div>
     </div>
-  </div>;
+  );
 }
 
-export const getServerSideProps: GetServerSideProps<CreateProfilePageProps> = async ({ req, locale }) => {
+export const getServerSideProps: GetServerSideProps<
+  CreateProfilePageProps
+> = async ({ req, locale }) => {
   const user = await getUserFromRequest(req);
 
   if (user.status === "Unauthorized") {

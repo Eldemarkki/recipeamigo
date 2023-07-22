@@ -13,14 +13,18 @@ export type RecipeCardGridProps = {
 };
 
 export const RecipeCardGrid = (props: RecipeCardGridProps) => {
-  return <div className={styles.grid}>
-    {props.showCreateButton && <NewRecipeCard />}
-    {props.recipes.map(recipe => <RecipeCard
-      key={recipe.id}
-      id={recipe.id}
-      name={recipe.name}
-      description={recipe.description}
-      coverImageUrl={recipe.coverImageUrl}
-    />)}
-  </div>;
+  return (
+    <div className={styles.grid}>
+      {props.showCreateButton && <NewRecipeCard />}
+      {props.recipes.map((recipe) => (
+        <RecipeCard
+          key={recipe.id}
+          id={recipe.id}
+          name={recipe.name}
+          description={recipe.description}
+          coverImageUrl={recipe.coverImageUrl}
+        />
+      ))}
+    </div>
+  );
 };

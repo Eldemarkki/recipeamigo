@@ -1,6 +1,9 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
-import { getSingleRecipe, increaseViewCountForRecipe } from "../../../database/recipes";
+import {
+  getSingleRecipe,
+  increaseViewCountForRecipe,
+} from "../../../database/recipes";
 import { useState } from "react";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
@@ -20,7 +23,10 @@ import { Locale } from "../../../i18next";
 
 type TimeEstimateType = null | "single" | "range";
 
-const getTimeEstimateType = (min: number, max: number | null): TimeEstimateType => {
+const getTimeEstimateType = (
+  min: number,
+  max: number | null,
+): TimeEstimateType => {
   if (min === 0 && max === null) {
     return null;
   }
@@ -39,11 +45,15 @@ const exportRecipe = (data: string, filename: string) => {
   window.URL.revokeObjectURL(url);
 };
 
-export default function RecipePage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function RecipePage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
   const { t, i18n } = useTranslation();
   const { recipe, exportJsonFilename, exportMarkdownFilename } = props;
   const [likeCount, setLikeCount] = useState(props.likeCount);
-  const [likeStatus, setLikeStatus] = useState(props.userId ? props.likeStatus : null);
+  const [likeStatus, setLikeStatus] = useState(
+    props.userId ? props.likeStatus : null,
+  );
 
   const originalQuantity = recipe.quantity;
 
@@ -65,87 +75,138 @@ export default function RecipePage(props: InferGetServerSidePropsType<typeof get
 
   const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
 
-  const timeEstimateType = getTimeEstimateType(recipe.timeEstimateMinimumMinutes ?? 0, recipe.timeEstimateMaximumMinutes);
+  const timeEstimateType = getTimeEstimateType(
+    recipe.timeEstimateMinimumMinutes ?? 0,
+    recipe.timeEstimateMaximumMinutes,
+  );
 
-  return <main className={styles.container}>
-    {recipe.coverImageUrl && <div className={styles.coverImageContainer}>
-      <Image
-        className={styles.coverImage}
-        src={recipe.coverImageUrl}
-        alt=""
-        fill
-      />
-    </div>}
-    <div className={styles.topRow}>
-      <div>
-        <div className={styles.titleRow}>
-          <h3 className={styles.title}>{recipe.name}</h3>
-          <div className={styles.titleRowButtons}>
-            <Button onClick={() => {
-              exportRecipe(recipeToMarkdown({
-                ...recipe,
-                createdAt: new Date(recipe.createdAt),
-                updatedAt: new Date(recipe.updatedAt),
-              }, i18n.language as Locale), exportMarkdownFilename);
-            }}>
-              {t("actions.exportAsMarkdown")}
-            </Button>
-            <Button onClick={() => {
-              exportRecipe(JSON.stringify({
-                ...recipe,
-                createdAt: new Date(recipe.createdAt),
-                updatedAt: new Date(recipe.updatedAt),
-              }), exportJsonFilename);
-            }}>
-              {t("actions.exportAsJson")}
-            </Button>
-            {props.userId && recipe.user.clerkId === props.userId && <LinkButton href={`/recipe/${recipe.id}/edit`}>
-              {t("actions.edit")}
-            </LinkButton>}
-          </div>
+  return (
+    <main className={styles.container}>
+      {recipe.coverImageUrl && (
+        <div className={styles.coverImageContainer}>
+          <Image
+            className={styles.coverImage}
+            src={recipe.coverImageUrl}
+            alt=""
+            fill
+          />
         </div>
-        {recipe.tags.length > 0 && <TagList tags={recipe.tags} />}
-        <Trans i18nKey="recipeView:line" username={recipe.user.username} count={recipe.viewCount}>
-          {/* @ts-ignore, https://github.com/i18next/react-i18next/issues/1543, https://github.com/i18next/react-i18next/issues/1504 */}
-          Created by <Link href={`/user/${recipe.user.username}`}>{{ username: recipe.user.username }}</Link> - Viewed {{ count: recipe.viewCount }} {recipe.viewCount === 1 ? "time" : "times"}
-        </Trans>
-        {props.userId && recipe.user.clerkId !== props.userId &&
-          <Button
-            variant="secondary"
-            onClick={likeStatus === true ? unlikeRecipe : likeRecipe}
+      )}
+      <div className={styles.topRow}>
+        <div>
+          <div className={styles.titleRow}>
+            <h3 className={styles.title}>{recipe.name}</h3>
+            <div className={styles.titleRowButtons}>
+              <Button
+                onClick={() => {
+                  exportRecipe(
+                    recipeToMarkdown(
+                      {
+                        ...recipe,
+                        createdAt: new Date(recipe.createdAt),
+                        updatedAt: new Date(recipe.updatedAt),
+                      },
+                      i18n.language as Locale,
+                    ),
+                    exportMarkdownFilename,
+                  );
+                }}
+              >
+                {t("actions.exportAsMarkdown")}
+              </Button>
+              <Button
+                onClick={() => {
+                  exportRecipe(
+                    JSON.stringify({
+                      ...recipe,
+                      createdAt: new Date(recipe.createdAt),
+                      updatedAt: new Date(recipe.updatedAt),
+                    }),
+                    exportJsonFilename,
+                  );
+                }}
+              >
+                {t("actions.exportAsJson")}
+              </Button>
+              {props.userId && recipe.user.clerkId === props.userId && (
+                <LinkButton href={`/recipe/${recipe.id}/edit`}>
+                  {t("actions.edit")}
+                </LinkButton>
+              )}
+            </div>
+          </div>
+          {recipe.tags.length > 0 && <TagList tags={recipe.tags} />}
+          <Trans
+            i18nKey="recipeView:line"
+            username={recipe.user.username}
+            count={recipe.viewCount}
           >
-            {likeStatus ? t("recipeView:likes.unlikeButton") : t("recipeView:likes.likeButton")}
-          </Button>}
-        <p>{t("recipeView:likes.likeCountText", { count: likeCount })}</p>
-        {timeEstimateType !== null && (timeEstimateType === "single" ?
-          <p>{t("recipeView:timeEstimate.single", { count: recipe.timeEstimateMinimumMinutes })}</p> :
-          <p>{t("recipeView:timeEstimate.range", { min: recipe.timeEstimateMinimumMinutes, max: recipe.timeEstimateMaximumMinutes })}</p>)
-        }
-        <p>{recipe.description}</p>
+            Created by{" "}
+            <Link href={`/user/${recipe.user.username}`}>
+              {/* @ts-ignore, https://github.com/i18next/react-i18next/issues/1543, https://github.com/i18next/react-i18next/issues/1504 */}
+              {{ username: recipe.user.username }}
+            </Link>{" "}
+            - Viewed {{ count: recipe.viewCount }}{" "}
+            {recipe.viewCount === 1 ? "time" : "times"}
+          </Trans>
+          {props.userId && recipe.user.clerkId !== props.userId && (
+            <Button
+              variant="secondary"
+              onClick={likeStatus === true ? unlikeRecipe : likeRecipe}
+            >
+              {likeStatus
+                ? t("recipeView:likes.unlikeButton")
+                : t("recipeView:likes.likeButton")}
+            </Button>
+          )}
+          <p>{t("recipeView:likes.likeCountText", { count: likeCount })}</p>
+          {timeEstimateType !== null &&
+            (timeEstimateType === "single" ? (
+              <p>
+                {t("recipeView:timeEstimate.single", {
+                  count: recipe.timeEstimateMinimumMinutes,
+                })}
+              </p>
+            ) : (
+              <p>
+                {t("recipeView:timeEstimate.range", {
+                  min: recipe.timeEstimateMinimumMinutes,
+                  max: recipe.timeEstimateMaximumMinutes,
+                })}
+              </p>
+            ))}
+          <p>{recipe.description}</p>
+        </div>
+        <div className={styles.recipeQuantityPickerContainer}>
+          <RecipeQuantityPicker
+            quantity={recipeAmount}
+            onChange={setRecipeAmount}
+          />
+        </div>
       </div>
-      <div className={styles.recipeQuantityPickerContainer}>
-        <RecipeQuantityPicker
-          quantity={recipeAmount}
-          onChange={setRecipeAmount}
-        />
+      <div className={styles.splitContainer}>
+        <div className={styles.ingredientsContainer}>
+          <h2 className={styles.ingredientsTitle}>
+            {t("recipeView:ingredientsTitle")}
+          </h2>
+          {recipe.ingredientSections.map((section) => (
+            <IngredientSection
+              key={section.id}
+              section={section}
+              recipeQuantity={recipeAmount}
+              originalRecipeQuantity={originalQuantity}
+            />
+          ))}
+        </div>
+        <div className={styles.instructionsContainer}>
+          <h2 className={styles.instructionsTitle}>
+            {t("recipeView:instructionsTitle")}
+          </h2>
+          <InstructionsList instructions={recipe.instructions} />
+        </div>
       </div>
-    </div>
-    <div className={styles.splitContainer}>
-      <div className={styles.ingredientsContainer}>
-        <h2 className={styles.ingredientsTitle}>{t("recipeView:ingredientsTitle")}</h2>
-        {recipe.ingredientSections.map((section) => <IngredientSection
-          key={section.id}
-          section={section}
-          recipeQuantity={recipeAmount}
-          originalRecipeQuantity={originalQuantity}
-        />)}
-      </div>
-      <div className={styles.instructionsContainer}>
-        <h2 className={styles.instructionsTitle}>{t("recipeView:instructionsTitle")}</h2>
-        <InstructionsList instructions={recipe.instructions} />
-      </div>
-    </div>
-  </main>;
+    </main>
+  );
 }
 
 export const getServerSideProps = (async ({ query, req, locale }) => {
@@ -163,7 +224,8 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
     };
   }
 
-  const userIsRecipeOwner = user.status !== "Unauthorized" && user.userId === recipe.userId;
+  const userIsRecipeOwner =
+    user.status !== "Unauthorized" && user.userId === recipe.userId;
   if (recipe.isPublic === false && !userIsRecipeOwner) {
     return {
       notFound: true,
@@ -172,20 +234,29 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
 
   const likeCount = await getLikeCountForRecipe(recipeId);
 
-  const likeStatusAndAnonymity: ({
-    userId: null,
-  } | {
-    userId: string,
-    likeStatus: boolean,
-  }) = user.status === "Unauthorized" ? {
-    userId: null
-  } : {
-      userId: user.userId,
-      likeStatus: !!(await getLikeStatus(user.userId, recipeId)),
-    };
+  const likeStatusAndAnonymity:
+    | {
+        userId: null;
+      }
+    | {
+        userId: string;
+        likeStatus: boolean;
+      } =
+    user.status === "Unauthorized"
+      ? {
+          userId: null,
+        }
+      : {
+          userId: user.userId,
+          likeStatus: !!(await getLikeStatus(user.userId, recipeId)),
+        };
 
-  const exportJsonFilename = filenamify(recipe.name + ".json", { replacement: "_" });
-  const exportMarkdownFilename = filenamify(recipe.name + ".md", { replacement: "_" });
+  const exportJsonFilename = filenamify(recipe.name + ".json", {
+    replacement: "_",
+  });
+  const exportMarkdownFilename = filenamify(recipe.name + ".md", {
+    replacement: "_",
+  });
 
   if (recipe.isPublic) {
     await increaseViewCountForRecipe(recipeId);
@@ -196,7 +267,7 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
         likeCount,
         exportJsonFilename,
         exportMarkdownFilename,
-        ...likeStatusAndAnonymity
+        ...likeStatusAndAnonymity,
       },
     };
   }
@@ -211,7 +282,7 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
         likeCount,
         exportJsonFilename,
         exportMarkdownFilename,
-        ...likeStatusAndAnonymity
+        ...likeStatusAndAnonymity,
       },
     };
   }

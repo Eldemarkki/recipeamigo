@@ -17,20 +17,31 @@ export const UnitSelect = (props: UnitSelectProps) => {
     { value: "", label: t("edit.ingredients.noUnit") },
     ...units.map((unit) => ({
       value: unit,
-      label: t(UNIT_SELECT_TRANSLATION_KEYS[unit])
+      label: t(UNIT_SELECT_TRANSLATION_KEYS[unit]),
     })),
   ] as const;
 
-  return <Select
-    options={options}
-    value={props.value ? { value: props.value, label: t(UNIT_SELECT_TRANSLATION_KEYS[props.value]) } : {
-      value: "" as const,
-      label: t("edit.ingredients.noUnit"),
-    }}
-    onChange={(option) => {
-      const value = option && option.value !== "" ? option.value : null;
-      return props.onChange(value);
-    }}
-    noOptionsMessage={({ inputValue }) => t("edit.ingredients.noUnitFound", { query: inputValue })}
-  />;
+  return (
+    <Select
+      options={options}
+      value={
+        props.value
+          ? {
+              value: props.value,
+              label: t(UNIT_SELECT_TRANSLATION_KEYS[props.value]),
+            }
+          : {
+              value: "" as const,
+              label: t("edit.ingredients.noUnit"),
+            }
+      }
+      onChange={(option) => {
+        const value = option && option.value !== "" ? option.value : null;
+        return props.onChange(value);
+      }}
+      noOptionsMessage={({ inputValue }) =>
+        t("edit.ingredients.noUnitFound", { query: inputValue })
+      }
+    />
+  );
 };

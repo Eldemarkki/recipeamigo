@@ -60,7 +60,7 @@ const compareRecipes = (
       ingredients: Ingredient[];
     })[];
     instructions: Instruction[];
-  }
+  },
 ) => {
   const {
     ingredientSections: expectedIngredientSections,
@@ -82,7 +82,7 @@ const compareRecipes = (
       userId: original.userId,
       createdAt: original.createdAt,
       updatedAt: expect.any(Date),
-    })
+    }),
   );
 
   const hasIngredientSections = !!expectedIngredientSections;
@@ -112,10 +112,10 @@ const compareRecipes = (
                 .find((i) => "id" in ingredient && i.id === ingredient.id)
                 ?.isOptional ??
               false,
-          })
+          }),
         ),
-      })
-    )
+      }),
+    ),
   );
 
   expect(actualInstructions).toEqual(
@@ -125,8 +125,8 @@ const compareRecipes = (
         id: "id" in instruction ? instruction.id : expect.any(String),
         recipeId: original.id,
         order: instructionIndex,
-      })
-    )
+      }),
+    ),
   );
 };
 

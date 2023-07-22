@@ -7,7 +7,11 @@ import { editRecipeSchema } from "../../../api/recipes/[id]";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
 
-const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSchema>, coverImage: File | null) => {
+const editRecipe = async (
+  recipeId: string,
+  recipe: z.infer<typeof editRecipeSchema>,
+  coverImage: File | null,
+) => {
   const response = await fetch(`/api/recipes/${recipeId}`, {
     method: "PUT",
     body: JSON.stringify(recipe),
@@ -16,8 +20,10 @@ const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSch
     },
   });
 
-  const data = await response.json() as Awaited<ReturnType<typeof editRecipe>> & {
-    coverImageUploadUrl: string
+  const data = (await response.json()) as Awaited<
+    ReturnType<typeof editRecipe>
+  > & {
+    coverImageUploadUrl: string;
   };
 
   if (recipe.coverImageAction === "replace" && coverImage) {
@@ -31,24 +37,27 @@ const editRecipe = async (recipeId: string, recipe: z.infer<typeof editRecipeSch
   }
 };
 
-export default function EditRecipePage({ recipe: initialRecipe }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function EditRecipePage({
+  recipe: initialRecipe,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
 
-  return <RecipeForm
-    type="edit"
-    initialRecipe={initialRecipe}
-    onSubmit={async (recipe, coverImage) => {
-      // TODO: Show loading indicator while saving
-      try {
-        await editRecipe(initialRecipe.id, recipe, coverImage);
-        router.push("/recipe/" + initialRecipe.id);
-      }
-      catch {
-        // TODO: Show a notification to the user that the recipe failed to save.
-        console.log("Failed to save recipe");
-      }
-    }}
-  />;
+  return (
+    <RecipeForm
+      type="edit"
+      initialRecipe={initialRecipe}
+      onSubmit={async (recipe, coverImage) => {
+        // TODO: Show loading indicator while saving
+        try {
+          await editRecipe(initialRecipe.id, recipe, coverImage);
+          router.push("/recipe/" + initialRecipe.id);
+        } catch {
+          // TODO: Show a notification to the user that the recipe failed to save.
+          console.log("Failed to save recipe");
+        }
+      }}
+    />
+  );
 }
 
 export const getServerSideProps = (async ({ req, params, locale }) => {
@@ -79,7 +88,7 @@ export const getServerSideProps = (async ({ req, params, locale }) => {
   return {
     props: {
       ...(await serverSideTranslations(locale ?? "en")),
-      recipe
+      recipe,
     },
   };
 }) satisfies GetServerSideProps;

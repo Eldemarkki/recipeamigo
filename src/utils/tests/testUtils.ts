@@ -21,7 +21,7 @@ export const createRandomBoolean = (): boolean => {
 
 export const createRandomArray = <T>(
   length: number,
-  createItem: () => T
+  createItem: () => T,
 ): T[] => {
   return Array.from({ length }, createItem);
 };

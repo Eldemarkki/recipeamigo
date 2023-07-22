@@ -11,9 +11,9 @@ export enum TagType {
 }
 
 export type TagProps = PropsWithChildren<{
-  type?: TagType,
-  onClickDelete?: () => void,
-}>
+  type?: TagType;
+  onClickDelete?: () => void;
+}>;
 
 export const tagAdditionalClassname: Record<TagType, string> = {
   [TagType.LactoseFree]: styles.lactoseFree,
@@ -29,12 +29,13 @@ export const tagPrefixes: Record<TagType, string> = {
   [TagType.Vegetarian]: "🥕",
 };
 
-export const tagTranslationKeys: Record<TagType, `tags:${ParseKeys<"tags">}`> = {
-  [TagType.LactoseFree]: "tags:lactoseFree",
-  [TagType.GlutenFree]: "tags:glutenFree",
-  [TagType.Vegan]: "tags:vegan",
-  [TagType.Vegetarian]: "tags:vegetarian",
-};
+export const tagTranslationKeys: Record<TagType, `tags:${ParseKeys<"tags">}`> =
+  {
+    [TagType.LactoseFree]: "tags:lactoseFree",
+    [TagType.GlutenFree]: "tags:glutenFree",
+    [TagType.Vegan]: "tags:vegan",
+    [TagType.Vegetarian]: "tags:vegetarian",
+  };
 
 export const isSpecialTagValue = (value: string): value is TagType => {
   return Object.values(TagType).includes(value as TagType);
@@ -43,9 +44,13 @@ export const isSpecialTagValue = (value: string): value is TagType => {
 export const Tag = ({ type, children, onClickDelete }: TagProps) => {
   const prefix = type ? tagPrefixes[type] + " " : undefined;
 
-  return <span className={styles.tag + (type ? " " + tagAdditionalClassname[type] : "")}>
-    {prefix && <span>{prefix}</span>}
-    {children && <span>{children}</span>}
-    {onClickDelete && <DeleteButton onClick={onClickDelete} />}
-  </span>;
+  return (
+    <span
+      className={styles.tag + (type ? " " + tagAdditionalClassname[type] : "")}
+    >
+      {prefix && <span>{prefix}</span>}
+      {children && <span>{children}</span>}
+      {onClickDelete && <DeleteButton onClick={onClickDelete} />}
+    </span>
+  );
 };

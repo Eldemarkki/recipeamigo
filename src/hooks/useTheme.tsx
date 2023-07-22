@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 
 export const THEMES = ["system", "light", "dark"] as const;
-export type Theme = typeof THEMES[number];
-export const isTheme = (value: string | null | undefined): value is Theme => THEMES.includes(value as any);
+export type Theme = (typeof THEMES)[number];
+export const isTheme = (value: string | null | undefined): value is Theme =>
+  THEMES.includes(value as any);
 
 const setTheme = (theme: Theme) => {
   if (theme === "system") {

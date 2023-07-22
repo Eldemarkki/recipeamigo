@@ -4,7 +4,7 @@ import { UserProfile } from "@prisma/client";
 import { RequestLike } from "@clerk/nextjs/dist/types/server/types";
 
 export const getUserFromRequest = async (
-  req: RequestLike
+  req: RequestLike,
 ): Promise<
   | {
       status: "Unauthorized";

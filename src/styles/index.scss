@@ -1,5 +1,5 @@
 :root,
-html[data-theme='light'] {
+html[data-theme="light"] {
   --background-color: #fff;
   --background-color-secondary: #f1f1f1;
   --text-black: #000;
@@ -36,7 +36,7 @@ html[data-theme='light'] {
   --primary: #f2c61d;
   --primary-shade-1: #dfb81c;
   --button-secondary-hover-background: #7a662957;
-  --new-recipe-card-hover-background: #FFFFFF11;
+  --new-recipe-card-hover-background: #ffffff11;
   --tag-vegetarian-background-color: #0d360d;
   --tag-vegetarian-text-color: #d4fbd4;
   --tag-vegan-background-color: #614016;
@@ -56,7 +56,7 @@ html[data-theme='light'] {
   }
 }
 
-html[data-theme='dark'] {
+html[data-theme="dark"] {
   @include dark-mode;
 }
 

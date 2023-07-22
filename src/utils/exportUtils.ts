@@ -11,7 +11,7 @@ export const recipeToMarkdown = (
     Awaited<ReturnType<typeof getSingleRecipeWithoutCoverImageUrl>>,
     null
   >,
-  locale: Locale
+  locale: Locale,
 ) => {
   let markdown = `---
 id: ${recipe.id}
@@ -50,10 +50,10 @@ ${s.ingredients
         ingredient.quantity,
         ingredient.unit,
         ingredient.isOptional,
-        locale
-      )
+        locale,
+      ),
   )
-  .join("\n")}`
+  .join("\n")}`,
   )
   .join("\n\n")}
 

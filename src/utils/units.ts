@@ -3,7 +3,10 @@ import type { ParseKeys } from "i18next";
 
 type UnitTranslationKey = `units:${ParseKeys<"units">}`;
 
-export const UNIT_SELECT_TRANSLATION_KEYS: Record<IngredientUnit, UnitTranslationKey> = {
+export const UNIT_SELECT_TRANSLATION_KEYS: Record<
+  IngredientUnit,
+  UnitTranslationKey
+> = {
   GRAM: "units:unitSelect.GRAM",
   CUP: "units:unitSelect.CUP",
   TEASPOON: "units:unitSelect.TEASPOON",

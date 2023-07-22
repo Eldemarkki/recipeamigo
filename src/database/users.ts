@@ -8,9 +8,9 @@ export const getUserAndPublicRecipesByUsername = (username: string) => {
     include: {
       recipes: {
         where: {
-          isPublic: true
-        }
+          isPublic: true,
+        },
       },
-    }
+    },
   });
 };

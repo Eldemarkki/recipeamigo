@@ -8,7 +8,7 @@ const ThemeToggle = () => {
   const { t } = useTranslation("settings");
 
   const [selectedTheme, setSelectedTheme] = useState<Theme>("system");
-  const setTheme = useTheme(theme => setSelectedTheme(theme));
+  const setTheme = useTheme((theme) => setSelectedTheme(theme));
 
   const options = [
     { value: "system", label: t("themes.systemTheme") },
@@ -16,20 +16,23 @@ const ThemeToggle = () => {
     { value: "dark", label: t("themes.darkTheme") },
   ] as const;
 
-  return <div className={styles.themeToggle}>
-    <label htmlFor="theme">{t("themes.themeTitle")}</label>
-    <Select
-      id="theme"
-      options={options}
-      value={options.find(option => option.value === selectedTheme)}
-      onChange={(option) => {
-        const newTheme = option?.value;
-        if (!isTheme(newTheme)) throw new Error("Invalid theme. This should never happen.");
-        setTheme(newTheme);
-        setSelectedTheme(newTheme);
-      }}
-    />
-  </div>;
+  return (
+    <div className={styles.themeToggle}>
+      <label htmlFor="theme">{t("themes.themeTitle")}</label>
+      <Select
+        id="theme"
+        options={options}
+        value={options.find((option) => option.value === selectedTheme)}
+        onChange={(option) => {
+          const newTheme = option?.value;
+          if (!isTheme(newTheme))
+            throw new Error("Invalid theme. This should never happen.");
+          setTheme(newTheme);
+          setSelectedTheme(newTheme);
+        }}
+      />
+    </div>
+  );
 };
 
 export default ThemeToggle;

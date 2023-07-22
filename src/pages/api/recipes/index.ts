@@ -57,7 +57,7 @@ const handler = (async (req, res) => {
     return res.status(200).json(recipes);
   } else if (req.method === "POST") {
     const user = await calculateTime("userVerify", res, () =>
-      getUserFromRequest(req)
+      getUserFromRequest(req),
     );
 
     if (user.status === "Unauthorized") {
@@ -80,7 +80,7 @@ const handler = (async (req, res) => {
     }
 
     const recipe = await calculateTime("createRecipe", res, () =>
-      createRecipe(user.userId, recipeBody.data, coverImageName)
+      createRecipe(user.userId, recipeBody.data, coverImageName),
     );
 
     return res.status(200).json({

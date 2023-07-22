@@ -13,7 +13,7 @@ export type EditableIngredientListItemProps = {
   ingredient: RawIngredient;
   onEditIngredient: (ingredient: RawIngredient) => void;
   onRemove: () => void;
-}
+};
 
 export const EditableIngredientListItem = ({
   ingredient,
@@ -24,40 +24,43 @@ export const EditableIngredientListItem = ({
   const controls = useDragControls();
   const [isEditing, setIsEditing] = useState(false);
 
-  return <Reorder.Item
-    className={styles.ingredientListItem}
-    value={ingredient}
-    dragListener={false}
-    dragControls={controls}
-  >
-    <Dialog
-      open={isEditing}
-      onClickOutside={() => setIsEditing(false)}
+  return (
+    <Reorder.Item
+      className={styles.ingredientListItem}
+      value={ingredient}
+      dragListener={false}
+      dragControls={controls}
     >
-      <h1>{t("recipeView:edit.editingIngredientTitle", { ingredientName: ingredient.name })}</h1>
-      <IngredientForm
-        type="edit"
-        addIngredient={newIngredient => {
-          onEditIngredient(newIngredient);
-          setIsEditing(false);
+      <Dialog open={isEditing} onClickOutside={() => setIsEditing(false)}>
+        <h1>
+          {t("recipeView:edit.editingIngredientTitle", {
+            ingredientName: ingredient.name,
+          })}
+        </h1>
+        <IngredientForm
+          type="edit"
+          addIngredient={(newIngredient) => {
+            onEditIngredient(newIngredient);
+            setIsEditing(false);
+          }}
+          initialIngredient={ingredient}
+        />
+      </Dialog>
+      <DragHandle
+        onPointerDown={(e) => {
+          controls.start(e);
+          e.preventDefault();
         }}
-        initialIngredient={ingredient}
       />
-    </Dialog>
-    <DragHandle
-      onPointerDown={(e) => {
-        controls.start(e);
-        e.preventDefault();
-      }}
-    />
-    <DeleteButton onClick={onRemove} />
-    <EditButton
-      onClick={() => {
-        setIsEditing(true);
-      }}
-    />
-    <span>
-      <IngredientText ingredient={ingredient} />
-    </span>
-  </Reorder.Item>;
+      <DeleteButton onClick={onRemove} />
+      <EditButton
+        onClick={() => {
+          setIsEditing(true);
+        }}
+      />
+      <span>
+        <IngredientText ingredient={ingredient} />
+      </span>
+    </Reorder.Item>
+  );
 };

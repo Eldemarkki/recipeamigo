@@ -24,7 +24,13 @@ export const Dialog = ({ open, onClickOutside, children }: DialogProps) => {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dialogRef && dialogRef.current && event.target instanceof Node && !dialogRef.current.contains(event.target) && open) {
+      if (
+        dialogRef &&
+        dialogRef.current &&
+        event.target instanceof Node &&
+        !dialogRef.current.contains(event.target) &&
+        open
+      ) {
         onClickOutside?.();
       }
     }
@@ -35,7 +41,9 @@ export const Dialog = ({ open, onClickOutside, children }: DialogProps) => {
     };
   }, [open, dialogRef, onClickOutside]);
 
-  return <dialog className={styles.dialog} ref={dialogRef} open={isActuallyOpen}>
-    {isActuallyOpen && children}
-  </dialog>;
+  return (
+    <dialog className={styles.dialog} ref={dialogRef} open={isActuallyOpen}>
+      {isActuallyOpen && children}
+    </dialog>
+  );
 };

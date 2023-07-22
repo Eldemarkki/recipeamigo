@@ -4,7 +4,11 @@ import { getUserFromRequest } from "../../../utils/auth";
 import { prisma } from "../../../db";
 
 export const profileSchema = z.object({
-  name: z.string().min(3).max(32).regex(/^[a-zA-Z0-9_]+$/),
+  name: z
+    .string()
+    .min(3)
+    .max(32)
+    .regex(/^[a-zA-Z0-9_]+$/),
 });
 
 const handler: NextApiHandler = async (req, res) => {

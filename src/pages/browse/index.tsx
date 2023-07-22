@@ -37,20 +37,26 @@ export const getServerSideProps = (async ({ query, locale }) => {
   const { search } = query;
 
   const sortStr = queryParamToString(query.sort) || "";
-  const sort = isValidSortParam(sortStr) ? sortStr : config.RECIPE_PAGINATION_DEFAULT_SORT;
+  const sort = isValidSortParam(sortStr)
+    ? sortStr
+    : config.RECIPE_PAGINATION_DEFAULT_SORT;
 
   const pagination = validatePagination(
     // Starts from page 1
-    (parseInt(pageStr as string, 10) - 1) || 0,
+    parseInt(pageStr as string, 10) - 1 || 0,
     parseInt(pageSizeStr as string, 10) ||
-    config.RECIPE_PAGINATION_DEFAULT_PAGE_SIZE
+      config.RECIPE_PAGINATION_DEFAULT_PAGE_SIZE,
   );
 
   const filter = {
-    search: queryParamToString(search) || ""
+    search: queryParamToString(search) || "",
   };
 
-  const { recipes, count } = await getPublicRecipesPaginated(filter, sort, pagination);
+  const { recipes, count } = await getPublicRecipesPaginated(
+    filter,
+    sort,
+    pagination,
+  );
 
   const hasPreviousPage = pagination.page > 0;
   const hasNextPage =
@@ -67,7 +73,7 @@ export const getServerSideProps = (async ({ query, locale }) => {
         hasPreviousPage,
         hasNextPage,
       },
-      query
+      query,
     },
   };
 }) satisfies GetServerSideProps;

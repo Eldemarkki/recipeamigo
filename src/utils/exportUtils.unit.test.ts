@@ -105,7 +105,7 @@ describe("recipeToMarkdown", () => {
         userId: "userId_1",
         viewCount: 13,
       },
-      "en"
+      "en",
     );
 
     expect(markdown).toBe(`---

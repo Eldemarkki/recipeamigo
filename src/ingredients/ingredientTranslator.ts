@@ -102,7 +102,7 @@ export const getIngredientText = (
   amount: number,
   unit: IngredientUnit | null,
   isOptional: boolean,
-  language: Locale
+  language: Locale,
 ) => {
   const ingredientText = isIngredientType(ingredient)
     ? ingredientsLocaleMap[language][ingredient]
@@ -129,14 +129,14 @@ export const getIngredientText = (
 };
 
 export const isIngredientType = (
-  ingredient: string
+  ingredient: string,
 ): ingredient is IngredientType => {
   return Object.keys(englishIngredients).includes(ingredient);
 };
 
 export const getIngredientDropdownLabel = (
   ingredient: string,
-  language: Locale
+  language: Locale,
 ) => {
   if (isIngredientType(ingredient)) {
     return capitalize(ingredientsLocaleMap[language][ingredient].singular);

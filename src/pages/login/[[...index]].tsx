@@ -8,21 +8,26 @@ import styles from "./page.module.css";
 const ensureAppNameStyle = () => {
   const appName = config.APP_NAME;
   const appNameFirst = appName.slice(0, 6);
-  if (appNameFirst !== "Recipe") throw new Error("Noncritical: Update login title");
+  if (appNameFirst !== "Recipe")
+    throw new Error("Noncritical: Update login title");
   const appNameSecond = appName.slice(6);
-  if (appNameSecond !== "amigo") throw new Error("Noncritical: Update login title");
+  if (appNameSecond !== "amigo")
+    throw new Error("Noncritical: Update login title");
 
   return { appNameFirst, appNameSecond };
 };
 
 export default function Home() {
   const { appNameFirst, appNameSecond } = ensureAppNameStyle();
-  return <div className={styles.container}>
-    <div className={styles.innerContainer}>
-      <h1 className={styles.title}>
-        <span className={styles.titleGradientPart}>{appNameFirst}</span>{appNameSecond}
-      </h1>
-      <SignIn />
+  return (
+    <div className={styles.container}>
+      <div className={styles.innerContainer}>
+        <h1 className={styles.title}>
+          <span className={styles.titleGradientPart}>{appNameFirst}</span>
+          {appNameSecond}
+        </h1>
+        <SignIn />
+      </div>
     </div>
-  </div>;
+  );
 }

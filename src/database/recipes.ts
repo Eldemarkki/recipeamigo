@@ -46,7 +46,7 @@ export const getAllRecipesForUser = async (userId: string) => {
       const coverImageUrl = recipe.coverImageName
         ? await s3.presignedGetObject(
             DEFAULT_BUCKET_NAME,
-            recipe?.coverImageName
+            recipe?.coverImageName,
           )
         : undefined;
 
@@ -54,7 +54,7 @@ export const getAllRecipesForUser = async (userId: string) => {
         ...recipe,
         coverImageUrl,
       };
-    })
+    }),
   );
 
   return recipesWithCoverImageUrls;
@@ -63,7 +63,7 @@ export const getAllRecipesForUser = async (userId: string) => {
 export const createRecipe = async (
   userId: string,
   recipe: z.infer<typeof createRecipeSchema>,
-  coverImageName: UUID | null
+  coverImageName: UUID | null,
 ) => {
   return await prisma.$transaction(async (prisma) => {
     const createdRecipe = await prisma.recipe.create({
@@ -113,9 +113,9 @@ export const createRecipe = async (
               ingredientSectionId:
                 ingredientSections[ingredientSectionIndex].id,
               order: ingredientIndex,
-            })
+            }),
           );
-        }
+        },
       ),
     });
 
@@ -161,7 +161,7 @@ export const createRecipe = async (
 
     if (!recipeWithIngredients)
       throw new Error(
-        "Recipe not found after creation. This should never happen."
+        "Recipe not found after creation. This should never happen.",
       );
 
     return recipeWithIngredients;
@@ -171,7 +171,7 @@ export const createRecipe = async (
 export const editRecipe = async (
   recipeId: string,
   editedRecipe: z.infer<typeof editRecipeSchema>,
-  coverImageName?: string | undefined | null
+  coverImageName?: string | undefined | null,
 ) => {
   await prisma.$transaction(async (prisma) => {
     const originalRecipe = await prisma.recipe.findUnique({
@@ -194,7 +194,7 @@ export const editRecipe = async (
 
     const touchedIngredientSectionIds = (editedRecipe.ingredientSections ?? [])
       .map((ingredientSection) =>
-        "id" in ingredientSection ? ingredientSection.id : undefined
+        "id" in ingredientSection ? ingredientSection.id : undefined,
       )
       .filter((id): id is string => id !== undefined);
 
@@ -206,7 +206,7 @@ export const editRecipe = async (
       },
     });
     const hasAccessToAllIngredientSections = touchedIngredientSections.every(
-      (ingredientSection) => ingredientSection.recipeId === recipeId
+      (ingredientSection) => ingredientSection.recipeId === recipeId,
     );
     if (!hasAccessToAllIngredientSections) {
       throw new Error("Cannot move ingredient section to another recipe");
@@ -215,7 +215,7 @@ export const editRecipe = async (
     const ingredientIds = (editedRecipe.ingredientSections ?? [])
       .flatMap((ingredientSection) => ingredientSection.ingredients)
       .map((ingredient) =>
-        ingredient && "id" in ingredient ? ingredient.id : undefined
+        ingredient && "id" in ingredient ? ingredient.id : undefined,
       )
       .filter((id): id is string => id !== undefined);
 
@@ -235,7 +235,7 @@ export const editRecipe = async (
     });
 
     const hasAccessToAllIngredients = ingredients.every(
-      (ingredient) => ingredient.ingredientSection.recipeId === recipeId
+      (ingredient) => ingredient.ingredientSection.recipeId === recipeId,
     );
     if (!hasAccessToAllIngredients) {
       throw new Error("Cannot move ingredient to another recipe");
@@ -254,7 +254,7 @@ export const editRecipe = async (
     });
 
     const hasAccessToAllInstructions = instructions.every(
-      (instruction) => instruction.recipeId === recipeId
+      (instruction) => instruction.recipeId === recipeId,
     );
     if (!hasAccessToAllInstructions) {
       throw new Error("Cannot move instruction to another recipe");
@@ -288,12 +288,12 @@ export const editRecipe = async (
                   ingredientSection.ingredients?.some(
                     (ingredient) =>
                       "id" in ingredient &&
-                      ingredient.id === originalIngredient.id
-                  )
+                      ingredient.id === originalIngredient.id,
+                  ),
               );
-            }
+            },
           );
-        }
+        },
       );
 
       await prisma.ingredient.deleteMany({
@@ -316,16 +316,16 @@ export const editRecipe = async (
             return !editedRecipe.ingredientSections?.some(
               (ingredientSection) =>
                 "id" in ingredientSection &&
-                ingredientSection.id === originalIngredientSection.id
+                ingredientSection.id === originalIngredientSection.id,
             );
-          }
+          },
         );
 
       await prisma.ingredientSection.deleteMany({
         where: {
           id: {
             in: ingredientSectionsToRemove.map(
-              (ingredientSection) => ingredientSection.id
+              (ingredientSection) => ingredientSection.id,
             ),
           },
           recipe: {
@@ -474,9 +474,9 @@ export const editRecipe = async (
         (originalInstruction) => {
           return !editedRecipe.instructions?.some(
             (instruction) =>
-              "id" in instruction && instruction.id === originalInstruction.id
+              "id" in instruction && instruction.id === originalInstruction.id,
           );
-        }
+        },
       );
 
       await prisma.instruction.deleteMany({
@@ -603,7 +603,7 @@ export const getSingleRecipe = async (id: string) => {
     coverImageUrl: recipe.coverImageName
       ? await s3.presignedGetObject(
           process.env.S3_BUCKET_NAME ?? "",
-          recipe?.coverImageName
+          recipe?.coverImageName,
         )
       : undefined,
   };
@@ -638,7 +638,7 @@ export const getPublicRecipesPaginated = async (
   pagination: {
     page: number;
     pageSize: number;
-  }
+  },
 ) => {
   // TODO: This could be optimized
   // - https://www.prisma.io/docs/concepts/components/prisma-client/full-text-search
@@ -706,11 +706,11 @@ export const getPublicRecipesPaginated = async (
         coverImageUrl: recipe.coverImageName
           ? await s3.presignedGetObject(
               process.env.S3_BUCKET_NAME ?? "",
-              recipe?.coverImageName
+              recipe?.coverImageName,
             )
           : undefined,
       };
-    })
+    }),
   );
 
   const count = await prisma.recipe.count({

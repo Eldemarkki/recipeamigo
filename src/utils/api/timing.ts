@@ -3,7 +3,7 @@ import { OutgoingMessage } from "http";
 export const calculateTime = <T>(
   name: string,
   res: OutgoingMessage,
-  callback: () => T
+  callback: () => T,
 ): T => {
   const start = performance.now();
   const result = callback();
