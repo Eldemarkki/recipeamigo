@@ -83,6 +83,11 @@ export default function RecipePage(
           <div className={styles.titleRow}>
             <h3 className={styles.title}>{recipe.name}</h3>
             <div className={styles.titleRowButtons}>
+              <LinkButton
+                href={`/api/recipes/${recipe.id}/export/pdf?locale=${i18n.language}`}
+              >
+                {t("actions.exportAsPdf")}
+              </LinkButton>
               <Button
                 onClick={() => {
                   exportRecipe(

@@ -8,6 +8,7 @@
   "actions": {
     "exportAsJson": "Export as JSON",
     "exportAsMarkdown": "Export as Markdown",
+    "exportAsPdf": "Export as PDF",
     "edit": "Edit",
     "cancel": "Cancel",
     "save": "Save",

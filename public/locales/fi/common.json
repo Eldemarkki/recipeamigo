@@ -8,6 +8,7 @@
   "actions": {
     "exportAsJson": "Vie JSON-muodossa",
     "exportAsMarkdown": "Vie Markdown-muodossa",
+    "exportAsPdf": "Vie PDF-tiedostona",
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "save": "Tallenna",
