@@ -20,3 +20,11 @@ export const queryParamToString = (param: string | string[] | undefined) => {
 
   return param;
 };
+
+export const locales = ["en", "fi"] as const;
+
+export type Locale = typeof locales[number];
+
+export const isLocale = (str: string): str is Locale => {
+  return locales.includes(str as any);
+};

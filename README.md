@@ -41,9 +41,9 @@ Things you need:
 - [ ] Metric/Imperial conversion
 - [ ] Mobile friendly
 - [ ] Print recipe
-- [ ] Export recipe
+- [x] Export recipe
   - [x] JSON
-  - [ ] PDF
+  - [x] PDF
   - [x] Markdown
 - [x] Recipe time estimation (manual)
 - [ ] Browse recipes

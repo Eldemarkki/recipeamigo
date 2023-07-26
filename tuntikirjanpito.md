@@ -49,4 +49,6 @@
 | 16.7.2023 | 1      | Selaa-sivun hakusuodattimen tekeminen                                          |
 | 16.7.2023 | 2      | Pieniä yleisiä parannuksia, Selaa-sivun järjestämisen tekeminen                |
 | 22.7.2023 | 1      | Prettierin setup, CI-pipelinen parantelu, dokumentaation parantelu             |
-| Yhteensä  | 87     |                                                                                |
+| 22.7.2023 | 1      | Selaa-sivun parantelu                                                          |
+| 26.7.2023 | 4      | PDF-exportin tekeminen                                                         |
+| Yhteensä  | 92     |                                                                                |

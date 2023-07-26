@@ -65,5 +65,12 @@
       "unsupportedFileType": "Kuvan täytyy olla joko PNG, JPEG, JPG, tai GIF.",
       "unexpectedError": "Tuntematon virhe."
     }
+  },
+  "export": {
+    "createdAt": "Luotu {{val, datetime}}",
+    "author": "Tekijä: {{name}}",
+    "tags": "Tagit: {{tags, list}}",
+    "views_one": "{{count}} näyttökerta",
+    "views_other": "{{count}} näyttökertaa"
   }
 }

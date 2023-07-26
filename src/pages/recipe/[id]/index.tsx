@@ -20,21 +20,7 @@ import { Trans, useTranslation } from "next-i18next";
 import { TagList } from "../../../components/recipeView/TagList";
 import { recipeToMarkdown } from "../../../utils/exportUtils";
 import { Locale } from "../../../i18next";
-
-type TimeEstimateType = null | "single" | "range";
-
-const getTimeEstimateType = (
-  min: number,
-  max: number | null,
-): TimeEstimateType => {
-  if (min === 0 && max === null) {
-    return null;
-  }
-  if (max === null || min === max) {
-    return "single";
-  }
-  return "range";
-};
+import { getTimeEstimateType } from "../../../utils/recipeUtils";
 
 const exportRecipe = (data: string, filename: string) => {
   const a = document.createElement("a");

@@ -65,5 +65,12 @@
       "unsupportedFileType": "The image must be either PNG, JPEG, JPG, or GIF.",
       "unexpectedError": "Unexpected error."
     }
+  },
+  "export": {
+    "createdAt": "Created {{val, datetime}}",
+    "author": "Author: {{name}}",
+    "tags": "Tags: {{tags, list}}",
+    "views_one": "{{count}} view",
+    "views_other": "{{count}} views"
   }
 }
