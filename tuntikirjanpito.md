@@ -51,4 +51,5 @@
 | 22.7.2023 | 1      | Prettierin setup, CI-pipelinen parantelu, dokumentaation parantelu             |
 | 22.7.2023 | 1      | Selaa-sivun parantelu                                                          |
 | 26.7.2023 | 4      | PDF-exportin tekeminen                                                         |
-| Yhteensä  | 92     |                                                                                |
+| 26.7.2023 | 1      | Reseptien suodattaminen enimmäisajan mukaan                                    |
+| Yhteensä  | 93     |                                                                                |

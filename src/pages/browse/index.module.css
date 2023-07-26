@@ -4,3 +4,16 @@
   padding: 3rem 5rem;
   gap: 2rem;
 }
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(auto, 350px) 1fr;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+@media (max-width: 1000px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+}

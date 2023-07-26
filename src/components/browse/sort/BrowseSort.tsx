@@ -1,5 +1,6 @@
 import { useTranslation } from "next-i18next";
 import { Select } from "../../Select";
+import { useId } from "react";
 
 export const sorts = [
   {
@@ -70,9 +71,12 @@ export type BrowseSortProps = {
 export const BrowseSort = ({ sort, onChange }: BrowseSortProps) => {
   const { t } = useTranslation("browse");
 
+  const selectId = useId();
   return (
-    <div>
+    <div style={{ width: "100%" }}>
+      <label htmlFor={selectId}>{t("labels.sort")}</label>
       <Select
+        id={selectId}
         value={{
           value: sort,
           label: t(sort.labelTranslationKey),

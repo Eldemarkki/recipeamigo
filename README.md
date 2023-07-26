@@ -49,7 +49,7 @@ Things you need:
 - [ ] Browse recipes
   - [ ] Exclude recipes with certain ingredients
   - [x] Only vegetarian, gluten-free, etc.
-  - [ ] Less than X minutes
+  - [x] Less than X minutes
 - [x] Recipe tags/categories
 - [x] Likes
 - [ ] Save recipes to collections

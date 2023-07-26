@@ -26,5 +26,13 @@
       "asc": "Vähiten katsottu",
       "desc": "Eniten katsottu"
     }
+  },
+  "labels": {
+    "sort": "Järjestys",
+    "tags": "Tagit",
+    "maximumTime": {
+      "label": "Enimmäisaika (minuuttia)",
+      "placeholder": "Enimmäisaika"
+    }
   }
 }

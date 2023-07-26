@@ -19,8 +19,10 @@ const BrowsePage = ({
   return (
     <div className={styles.container}>
       <h1>{t("title")}</h1>
-      <BrowseFilter query={query} />
-      <RecipeCardGrid recipes={recipes} />
+      <div className={styles.main}>
+        <BrowseFilter query={query} />
+        <RecipeCardGrid recipes={recipes} />
+      </div>
       <BrowsePagination {...pagination} />
     </div>
   );
@@ -42,6 +44,9 @@ export const getServerSideProps = (async ({ query, locale }) => {
     ? [queryTags]
     : [];
 
+  const maximumTime =
+    parseInt(queryParamToString(query.maximumTime) || "0", 10) || undefined;
+
   const sortStr = queryParamToString(query.sort) || "";
   const sort = isValidSortParam(sortStr)
     ? sortStr
@@ -54,13 +59,12 @@ export const getServerSideProps = (async ({ query, locale }) => {
       config.RECIPE_PAGINATION_DEFAULT_PAGE_SIZE,
   );
 
-  const filter = {
-    search: queryParamToString(search) || "",
-    tags: tags as string[],
-  };
-
   const { recipes, count } = await getPublicRecipesPaginated(
-    filter,
+    {
+      search: queryParamToString(search) || "",
+      tags,
+      maximumTime,
+    },
     sort,
     pagination,
   );

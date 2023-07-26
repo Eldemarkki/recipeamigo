@@ -26,5 +26,13 @@
       "asc": "Least viewed",
       "desc": "Most viewed"
     }
+  },
+  "labels": {
+    "sort": "Sort",
+    "tags": "Tags",
+    "maximumTime": {
+      "label": "Maximum time (minutes)",
+      "placeholder": "Maximum time"
+    }
   }
 }

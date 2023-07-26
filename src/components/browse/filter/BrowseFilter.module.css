@@ -1,14 +1,13 @@
 .container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 1rem;
-  flex-wrap: wrap;
 }
 
 .searchInput {
   font-size: 1.3rem;
-  max-width: 500px;
+  width: 100%;
   background-color: var(--background);
   color: var(--text);
   border: 1px solid var(--text);

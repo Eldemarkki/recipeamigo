@@ -9,6 +9,7 @@ import {
   SortDirection,
   SortKey,
 } from "../components/browse/sort/BrowseSort";
+import { notNull } from "../utils/arrayUtils";
 
 export const getAllRecipesForUser = async (userId: string) => {
   const recipes = await prisma.recipe.findMany({
@@ -634,6 +635,7 @@ export const getPublicRecipesPaginated = async (
   filter: {
     search?: string;
     tags?: string[];
+    maximumTime?: number;
   },
   sort: SortKey,
   pagination: {
@@ -669,30 +671,56 @@ export const getPublicRecipesPaginated = async (
     where: {
       isPublic: true,
       AND: {
-        OR: [
+        AND: [
           {
-            name: {
-              contains: filter.search,
-              mode: "insensitive",
-            },
-          },
-          {
-            description: {
-              contains: filter.search,
-              mode: "insensitive",
-            },
-          },
-          {
-            tags: {
-              some: {
-                text: {
+            OR: [
+              {
+                name: {
                   contains: filter.search,
-                  mode: "insensitive",
+                  mode: "insensitive" as const,
                 },
               },
-            },
+              {
+                description: {
+                  contains: filter.search,
+                  mode: "insensitive" as const,
+                },
+              },
+              {
+                tags: {
+                  some: {
+                    text: {
+                      contains: filter.search,
+                      mode: "insensitive" as const,
+                    },
+                  },
+                },
+              },
+            ],
           },
-        ],
+          filter.maximumTime
+            ? {
+                OR: [
+                  {
+                    timeEstimateMinimumMinutes: {
+                      lte: filter.maximumTime,
+                    },
+                    timeEstimateMaximumMinutes: {
+                      not: null,
+                      lte: filter.maximumTime,
+                    },
+                  },
+                  {
+                    timeEstimateMaximumMinutes: null,
+                    timeEstimateMinimumMinutes: {
+                      lte: filter.maximumTime,
+                      gt: 0,
+                    },
+                  },
+                ],
+              }
+            : null,
+        ].filter(notNull),
         tags:
           filter.tags && filter.tags.length
             ? {
