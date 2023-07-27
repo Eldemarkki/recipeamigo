@@ -33,6 +33,7 @@
     "maximumTime": {
       "label": "Enimmäisaika (minuuttia)",
       "placeholder": "Enimmäisaika"
-    }
+    },
+    "excludeIngredients": "Poislukien ainesosat"
   }
 }

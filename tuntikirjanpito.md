@@ -52,4 +52,5 @@
 | 22.7.2023 | 1      | Selaa-sivun parantelu                                                          |
 | 26.7.2023 | 4      | PDF-exportin tekeminen                                                         |
 | 26.7.2023 | 1      | Reseptien suodattaminen enimmäisajan mukaan                                    |
-| Yhteensä  | 93     |                                                                                |
+| 27.7.2023 | 1      | Reseptien suodattaminen poissulkemalla tiettyjä ainesosia                      |
+| Yhteensä  | 94     |                                                                                |

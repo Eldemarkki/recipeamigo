@@ -46,8 +46,8 @@ Things you need:
   - [x] PDF
   - [x] Markdown
 - [x] Recipe time estimation (manual)
-- [ ] Browse recipes
-  - [ ] Exclude recipes with certain ingredients
+- [x] Browse recipes
+  - [x] Exclude recipes with certain ingredients
   - [x] Only vegetarian, gluten-free, etc.
   - [x] Less than X minutes
 - [x] Recipe tags/categories

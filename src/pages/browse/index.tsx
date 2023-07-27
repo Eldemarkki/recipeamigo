@@ -44,6 +44,12 @@ export const getServerSideProps = (async ({ query, locale }) => {
     ? [queryTags]
     : [];
 
+  const excludedIngredients = Array.isArray(query.excludedIngredients)
+    ? query.excludedIngredients
+    : query.excludedIngredients
+    ? [query.excludedIngredients]
+    : [];
+
   const maximumTime =
     parseInt(queryParamToString(query.maximumTime) || "0", 10) || undefined;
 
@@ -64,6 +70,7 @@ export const getServerSideProps = (async ({ query, locale }) => {
       search: queryParamToString(search) || "",
       tags,
       maximumTime,
+      excludedIngredients,
     },
     sort,
     pagination,

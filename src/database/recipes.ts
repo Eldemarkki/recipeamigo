@@ -636,6 +636,7 @@ export const getPublicRecipesPaginated = async (
     search?: string;
     tags?: string[];
     maximumTime?: number;
+    excludedIngredients?: string[];
   },
   sort: SortKey,
   pagination: {
@@ -718,6 +719,24 @@ export const getPublicRecipesPaginated = async (
                     },
                   },
                 ],
+              }
+            : null,
+          filter.excludedIngredients && filter.excludedIngredients.length
+            ? {
+                NOT: {
+                  ingredientSections: {
+                    some: {
+                      ingredients: {
+                        some: {
+                          name: {
+                            in: filter.excludedIngredients,
+                            mode: "insensitive" as const,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               }
             : null,
         ].filter(notNull),

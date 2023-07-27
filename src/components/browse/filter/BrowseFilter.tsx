@@ -11,6 +11,7 @@ import {
 import config from "../../../config";
 import { TagSelect } from "../../tag/TagSelect";
 import { NumberInput } from "../../forms/NumberInput";
+import { IngredientSelect } from "../../IngredientSelect";
 
 export type Filter = {
   search?: string;
@@ -35,11 +36,19 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
     : [];
   const initialMaximumTime =
     parseInt(queryParamToString(query.maximumTime) || "0", 10) || undefined;
+  const initialExcludedIngredients = Array.isArray(query.ingredients)
+    ? query.ingredients
+    : query.ingredients
+    ? [query.ingredients]
+    : [];
 
   // TODO: Navigating to the previous page creates a mismatch between the UI and the actual filter
   const [search, setSearch] = useState(initialSearch);
   const [tags, setTags] = useState(initialTags);
   const [maximumTime, setMaximumTime] = useState(initialMaximumTime);
+  const [excludedIngredients, setExcludedIngredients] = useState(
+    initialExcludedIngredients,
+  );
 
   const [sort, setSort] = useState<Sort>(
     sorts.find((sort) => getSortKey(sort) === initialSort) || sorts[0],
@@ -51,6 +60,11 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
   }
   if (tags.length > 0) {
     tags.forEach((tag) => searchParams.append("tags", tag));
+  }
+  if (excludedIngredients.length > 0) {
+    excludedIngredients.forEach((ingredient) =>
+      searchParams.append("excludedIngredients", ingredient),
+    );
   }
 
   if (maximumTime) {
@@ -75,7 +89,7 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
   useEffect(() => {
     router.push(newUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, tags]);
+  }, [sort, tags, excludedIngredients]);
 
   const tagSelectId = useId();
 
@@ -100,6 +114,14 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
           onChange={setMaximumTime}
           placeholder={t("browse:labels.maximumTime.placeholder")}
           style={{ width: "100%" }}
+        />
+      </div>
+      <div>
+        <label>{t("browse:labels.excludeIngredients")}</label>
+        <IngredientSelect
+          multi
+          ingredients={excludedIngredients}
+          setIngredients={setExcludedIngredients}
         />
       </div>
     </div>

@@ -33,6 +33,7 @@
     "maximumTime": {
       "label": "Maximum time (minutes)",
       "placeholder": "Maximum time"
-    }
+    },
+    "excludeIngredients": "Exclude ingredients"
   }
 }
