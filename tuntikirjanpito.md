@@ -53,4 +53,5 @@
 | 26.7.2023 | 4      | PDF-exportin tekeminen                                                         |
 | 26.7.2023 | 1      | Reseptien suodattaminen enimmäisajan mukaan                                    |
 | 27.7.2023 | 1      | Reseptien suodattaminen poissulkemalla tiettyjä ainesosia                      |
-| Yhteensä  | 94     |                                                                                |
+| 27.7.2023 | 2      | Tiptapin setup parempien ohjetekstien mahdollistamiseksi                       |
+| Yhteensä  | 96     |                                                                                |

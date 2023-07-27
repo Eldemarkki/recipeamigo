@@ -3,6 +3,7 @@ import { RawInstruction } from "../ingredients/IngredientForm";
 import styles from "./EditableInstructionListItem.module.css";
 import { DeleteButton } from "../../button/DeleteButton";
 import { DragHandle } from "../../misc/DragHandle";
+import { InstructionRenderer } from "../InstructionRenderer";
 
 export type InstructionListProps = {
   instruction: RawInstruction & {
@@ -32,7 +33,7 @@ export const EditableInstructionListItem = ({
         }}
       />
       <DeleteButton onClick={onRemoveInstruction} />
-      <span>{instruction.description}</span>
+      <InstructionRenderer instruction={instruction.description} />
     </Reorder.Item>
   );
 };

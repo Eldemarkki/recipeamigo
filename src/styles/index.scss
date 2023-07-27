@@ -78,3 +78,12 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.instruction-editor-editable {
+  border: 1px solid var(--text);
+  padding: 0.25rem 0.5rem;
+}
+
+.instruction-editor p {
+  margin: 0px;
+}

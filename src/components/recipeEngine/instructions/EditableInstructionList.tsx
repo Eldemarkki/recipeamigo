@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { Button } from "../../button/Button";
 import styles from "./EditableInstructionList.module.css";
-import { useTranslation } from "next-i18next";
 import { RawInstruction } from "../ingredients/IngredientForm";
 import { Reorder } from "framer-motion";
 import { EditableInstructionListItem } from "./EditableInstructionListItem";
+import { InstructionEditor } from "./InstructionEditor";
 
 export type InstructionListProps = {
   instructions: (RawInstruction & {
@@ -25,9 +23,6 @@ export const EditableInstructionList = ({
   removeInstruction,
   setInstructions,
 }: InstructionListProps) => {
-  const { t } = useTranslation("recipeView");
-  const [newInstruction, setNewInstruction] = useState("");
-
   return (
     <div className={styles.container}>
       <Reorder.Group
@@ -44,27 +39,13 @@ export const EditableInstructionList = ({
           />
         ))}
       </Reorder.Group>
-      <form
-        className={styles.form}
-        onSubmit={(e) => {
-          e.preventDefault();
+      <InstructionEditor
+        addInstruction={(instruction) => {
           addInstruction({
-            description: newInstruction,
+            description: instruction,
           });
-          setNewInstruction("");
         }}
-      >
-        <input
-          type="text"
-          value={newInstruction}
-          onChange={(e) => setNewInstruction(e.target.value)}
-          placeholder={t("edit.instructions.newInstructionPlaceholder")}
-          required
-        />
-        <Button type="submit">
-          {t("edit.instructions.newInstructionPlaceholder")}
-        </Button>
-      </form>
+      />
     </div>
   );
 };
