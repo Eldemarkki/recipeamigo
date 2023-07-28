@@ -40,12 +40,13 @@ export const CountdownComponent = (
   const seconds = secondsLeft % 60;
   const suffix = ["h", "min", "s"];
 
-  const formattedTimeLeft = [hours, minutes, seconds]
-    .reduce(
-      (acc, curr, i) => (curr === 0 ? acc : `${acc}${curr}${suffix[i]} `),
-      "",
-    )
-    .trim();
+  const formattedTimeLeft =
+    [hours, minutes, seconds]
+      .reduce(
+        (acc, curr, i) => (curr === 0 ? acc : `${acc}${curr}${suffix[i]} `),
+        "",
+      )
+      .trim() || "0s";
 
   return (
     <NodeViewWrapper className="countdown-component" as="span">
