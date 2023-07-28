@@ -32,7 +32,7 @@ export const InstructionEditor = ({
     },
   });
 
-  const { t } = useTranslation("recipeView");
+  const { t } = useTranslation(["common", "recipeView"]);
 
   const [seconds, setSeconds] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -44,7 +44,7 @@ export const InstructionEditor = ({
       <EditorContent editor={editor} />
       <Dialog open={isDialogOpen} onClickOutside={() => setIsDialogOpen(false)}>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <h1>New countdown</h1>
+          <h1>{t("recipeView:edit.misc.countdown.newCountdownTitle")}</h1>
           <form
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
             onSubmit={(e) => {
@@ -55,10 +55,22 @@ export const InstructionEditor = ({
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor={inputId}>Countdown duration (seconds)</label>
+              <label htmlFor={inputId}>
+                {t("recipeView:edit.misc.countdown.durationLabel")}
+              </label>
               <NumberInput value={seconds} onChange={setSeconds} id={inputId} />
             </div>
-            <Button type="submit">Save</Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setSeconds(0);
+                setIsDialogOpen(false);
+              }}
+            >
+              {t("common:actions.cancel")}
+            </Button>
+            <Button type="submit">{t("common:actions.save")}</Button>
           </form>
         </div>
       </Dialog>
@@ -66,8 +78,9 @@ export const InstructionEditor = ({
         onClick={() => {
           setIsDialogOpen(true);
         }}
+        variant="secondary"
       >
-        Add countdown
+        {t("recipeView:edit.misc.countdown.newCountdownTitle")}
       </Button>
       <Button
         type="submit"
@@ -76,7 +89,7 @@ export const InstructionEditor = ({
           editor?.commands.clearContent();
         }}
       >
-        {t("edit.instructions.newInstructionPlaceholder")}
+        {t("recipeView:edit.instructions.newInstructionPlaceholder")}
       </Button>
     </>
   );

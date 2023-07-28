@@ -53,6 +53,13 @@
       "tagsLabel": "Tags",
       "tagSelectPlaceholder": "Type to create or search...",
       "tagSelectFormatCreateLabel": "Add \"{{name}}\""
+    },
+    "misc": {
+      "countdown": {
+        "newCountdownTitle": "New countdown",
+        "addCountdownButton": "Add countdown",
+        "durationLabel": "Countdown duration (seconds)"
+      }
     }
   },
   "createRecipe": "Create recipe",

@@ -1,6 +1,7 @@
 import { PauseIcon, PlayIcon, SymbolIcon } from "@radix-ui/react-icons";
 import { NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react";
 import React, { useEffect } from "react";
+import { CircularButton } from "../../button/Button";
 
 export type CountdownComponentProps = {
   seconds: number;
@@ -36,8 +37,9 @@ export const CountdownComponent = (
 
   return (
     <NodeViewWrapper className="countdown-component" as="span">
-      <span className="label">{secondsLeft} seconds left</span>{" "}
-      <button
+      <span>{secondsLeft} seconds left</span>{" "}
+      <CircularButton
+        style={{ display: "inline" }}
         onClick={() => {
           setIsPaused(false);
           setSecondsLeft(initialSeconds);
@@ -49,15 +51,18 @@ export const CountdownComponent = (
         ) : (
           <PlayIcon style={{ pointerEvents: "none" }} />
         )}
-      </button>
+      </CircularButton>
       {hasRanOnce && secondsLeft !== 0 && (
-        <button onClick={() => setIsPaused(!isPaused)}>
+        <CircularButton
+          style={{ display: "inline" }}
+          onClick={() => setIsPaused(!isPaused)}
+        >
           {isPaused ? (
             <PlayIcon style={{ pointerEvents: "none" }} />
           ) : (
             <PauseIcon style={{ pointerEvents: "none" }} />
           )}
-        </button>
+        </CircularButton>
       )}
     </NodeViewWrapper>
   );
