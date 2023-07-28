@@ -54,4 +54,5 @@
 | 26.7.2023 | 1      | Reseptien suodattaminen enimmäisajan mukaan                                    |
 | 27.7.2023 | 1      | Reseptien suodattaminen poissulkemalla tiettyjä ainesosia                      |
 | 27.7.2023 | 2      | Tiptapin setup parempien ohjetekstien mahdollistamiseksi                       |
-| Yhteensä  | 96     |                                                                                |
+| 28.7.2023 | 2      | Ohjeisiin upotettavan ajastinkomponentin aloittaminen                          |
+| Yhteensä  | 98     |                                                                                |
