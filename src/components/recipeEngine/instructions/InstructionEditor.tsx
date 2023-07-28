@@ -4,6 +4,10 @@ import { useTranslation } from "next-i18next";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import { Node } from "@tiptap/core";
+import { CountdownExtension } from "../extensions/CountdownExtension";
+import { Dialog } from "../../dialog/Dialog";
+import { useId, useState } from "react";
+import { NumberInput } from "../../forms/NumberInput";
 
 const OneLiner = Node.create({
   name: "oneLiner",
@@ -19,7 +23,7 @@ export const InstructionEditor = ({
   addInstruction,
 }: InstructionEditorProps) => {
   const editor = useEditor({
-    extensions: [OneLiner, Paragraph, Text],
+    extensions: [OneLiner, Paragraph, Text, CountdownExtension],
     content: "",
     editorProps: {
       attributes: {
@@ -30,9 +34,41 @@ export const InstructionEditor = ({
 
   const { t } = useTranslation("recipeView");
 
+  const [seconds, setSeconds] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const inputId = useId();
+
   return (
     <>
       <EditorContent editor={editor} />
+      <Dialog open={isDialogOpen} onClickOutside={() => setIsDialogOpen(false)}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <h1>New countdown</h1>
+          <form
+            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              editor?.chain().focus().setCountdown({ seconds }).run();
+              setIsDialogOpen(false);
+              setSeconds(0);
+            }}
+          >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <label htmlFor={inputId}>Countdown duration (seconds)</label>
+              <NumberInput value={seconds} onChange={setSeconds} id={inputId} />
+            </div>
+            <Button type="submit">Save</Button>
+          </form>
+        </div>
+      </Dialog>
+      <Button
+        onClick={() => {
+          setIsDialogOpen(true);
+        }}
+      >
+        Add countdown
+      </Button>
       <Button
         type="submit"
         onClick={() => {
