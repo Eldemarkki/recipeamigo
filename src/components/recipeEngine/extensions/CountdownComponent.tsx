@@ -35,9 +35,21 @@ export const CountdownComponent = (
     return () => clearInterval(interval);
   }, [isPaused, secondsLeft]);
 
+  const hours = Math.floor(secondsLeft / 3600);
+  const minutes = Math.floor((secondsLeft % 3600) / 60);
+  const seconds = secondsLeft % 60;
+  const suffix = ["h", "min", "s"];
+
+  const formattedTimeLeft = [hours, minutes, seconds]
+    .reduce(
+      (acc, curr, i) => (curr === 0 ? acc : `${acc}${curr}${suffix[i]} `),
+      "",
+    )
+    .trim();
+
   return (
     <NodeViewWrapper className="countdown-component" as="span">
-      <span>{secondsLeft} seconds left</span>{" "}
+      <span>{formattedTimeLeft}</span>{" "}
       <CircularButton
         style={{ display: "inline" }}
         onClick={() => {
