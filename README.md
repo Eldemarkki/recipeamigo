@@ -55,7 +55,7 @@ Things you need:
 - [ ] Save recipes to collections
   - [ ] Private collections
   - [ ] Public collections ("This collection contains private recipes. Do you want to make them public?", Cancel/OK)
-- [ ] Embedded timer ("cook for 5 minutes", click to start timer)
+- [x] Embedded timer ("cook for 5 minutes", click to start timer)
 - [ ] Simple instructions-view (big font, no bloat)
 - [ ] Notes/tips/warnings among instructions
 - [ ] "I have these ingredients, what can I make?"
