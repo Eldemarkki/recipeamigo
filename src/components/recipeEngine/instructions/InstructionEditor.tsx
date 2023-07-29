@@ -8,6 +8,8 @@ import { CountdownExtension } from "../extensions/CountdownExtension";
 import { Dialog } from "../../dialog/Dialog";
 import { useId, useState } from "react";
 import { NumberInput } from "../../forms/NumberInput";
+import { TimerIcon } from "@radix-ui/react-icons";
+import styles from "./InstructionEditor.module.css";
 
 const OneLiner = Node.create({
   name: "oneLiner",
@@ -41,7 +43,6 @@ export const InstructionEditor = ({
 
   return (
     <>
-      <EditorContent editor={editor} />
       <Dialog open={isDialogOpen} onClickOutside={() => setIsDialogOpen(false)}>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <h1>{t("recipeView:edit.misc.countdown.newCountdownTitle")}</h1>
@@ -58,7 +59,12 @@ export const InstructionEditor = ({
               <label htmlFor={inputId}>
                 {t("recipeView:edit.misc.countdown.durationLabel")}
               </label>
-              <NumberInput value={seconds} onChange={setSeconds} id={inputId} />
+              <NumberInput
+                value={seconds}
+                onChange={setSeconds}
+                id={inputId}
+                key={String(isDialogOpen)}
+              />
             </div>
             <Button
               type="button"
@@ -74,23 +80,37 @@ export const InstructionEditor = ({
           </form>
         </div>
       </Dialog>
-      <Button
-        onClick={() => {
-          setIsDialogOpen(true);
-        }}
-        variant="secondary"
-      >
-        {t("recipeView:edit.misc.countdown.newCountdownTitle")}
-      </Button>
-      <Button
-        type="submit"
-        onClick={() => {
-          addInstruction(editor?.getHTML() || "");
-          editor?.commands.clearContent();
-        }}
-      >
-        {t("recipeView:edit.instructions.newInstructionPlaceholder")}
-      </Button>
+      <div className={styles.container}>
+        <EditorContent editor={editor} />
+        <div>
+          <Button
+            onClick={() => {
+              setIsDialogOpen(true);
+            }}
+            variant="secondary"
+            size="small"
+            style={{ gap: "0.2rem" }}
+          >
+            <TimerIcon />
+            {t("recipeView:edit.misc.countdown.addCountdownButton")}
+          </Button>
+        </div>
+        <Button
+          type="submit"
+          onClick={() => {
+            if (editor) {
+              addInstruction(editor.getHTML());
+              editor.commands.clearContent();
+            } else {
+              console.error(
+                "Editor was null when trying to add an instruction",
+              );
+            }
+          }}
+        >
+          {t("recipeView:edit.instructions.newInstructionPlaceholder")}
+        </Button>
+      </div>
     </>
   );
 };

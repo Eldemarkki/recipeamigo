@@ -20,23 +20,34 @@ export const NumberInput = ({
 }: NumberInputProps) => {
   const [rawValue, setRawValue] = useState(value?.toString() ?? "");
 
+  const handleBlur = (value: string) => {
+    const newValue = Number(value.replace(",", "."));
+    const clampedValue = Math.max(
+      min ?? 0,
+      Math.min(max ?? Infinity, newValue || 0),
+    );
+    setRawValue(clampedValue.toString());
+    onChange(clampedValue);
+  };
+
   return (
     <input
       className={
         className ? className + " " + styles.numberInput : styles.numberInput
       }
       type="text"
-      onBlur={(e) => {
-        const newValue = Number(e.target.value.replace(",", "."));
-        const clampedValue = Math.max(
-          min ?? 0,
-          Math.min(max ?? Infinity, newValue || 0),
-        );
-        setRawValue(clampedValue.toString());
-        onChange(clampedValue);
-      }}
+      onBlur={(e) => handleBlur(e.target.value)}
       onChange={(e) => {
         setRawValue(e.target.value);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          const v =
+            "value" in e.target && typeof e.target.value === "string"
+              ? e.target.value
+              : "";
+          handleBlur(v);
+        }
       }}
       value={rawValue}
       inputMode="numeric"

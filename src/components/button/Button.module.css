@@ -41,3 +41,12 @@
   background-color: var(--button-disabled-background);
   color: var(--button-disabled-text);
 }
+
+.buttonComponent:not(.circular).size-medium {
+  padding: 0.5rem 1rem;
+}
+
+.buttonComponent:not(.circular).size-small {
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.4rem;
+}

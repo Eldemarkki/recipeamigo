@@ -56,9 +56,9 @@
     },
     "misc": {
       "countdown": {
-        "newCountdownTitle": "New countdown",
-        "addCountdownButton": "Add countdown",
-        "durationLabel": "Countdown duration (seconds)"
+        "newCountdownTitle": "New timer",
+        "addCountdownButton": "Insert timer",
+        "durationLabel": "Timer duration (seconds)"
       }
     }
   },
