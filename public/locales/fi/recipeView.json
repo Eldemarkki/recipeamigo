@@ -58,7 +58,12 @@
       "countdown": {
         "newCountdownTitle": "Uusi ajastin",
         "addCountdownButton": "Lisää ajastin",
-        "durationLabel": "Ajastimen kesto (sekuntia)"
+        "duration": {
+          "hours": "Tuntia",
+          "minutes": "Minuuttia",
+          "seconds": "Sekuntia",
+          "totalSeconds": "Sekuntia yhteensä"
+        }
       }
     }
   },

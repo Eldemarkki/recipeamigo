@@ -2,6 +2,7 @@ import { PauseIcon, PlayIcon, SymbolIcon } from "@radix-ui/react-icons";
 import { NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react";
 import React, { useEffect } from "react";
 import { CircularButton } from "../../button/Button";
+import { splitSeconds } from "../../../utils/recipeUtils";
 
 export type CountdownComponentProps = {
   seconds: number;
@@ -35,9 +36,7 @@ export const CountdownComponent = (
     return () => clearInterval(interval);
   }, [isPaused, secondsLeft]);
 
-  const hours = Math.floor(secondsLeft / 3600);
-  const minutes = Math.floor((secondsLeft % 3600) / 60);
-  const seconds = secondsLeft % 60;
+  const { hours, minutes, seconds } = splitSeconds(secondsLeft);
   const suffix = ["h", "min", "s"];
 
   const formattedTimeLeft =

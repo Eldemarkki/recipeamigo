@@ -58,7 +58,12 @@
       "countdown": {
         "newCountdownTitle": "New timer",
         "addCountdownButton": "Insert timer",
-        "durationLabel": "Timer duration (seconds)"
+        "duration": {
+          "hours": "Hours",
+          "minutes": "Minutes",
+          "seconds": "Seconds",
+          "totalSeconds": "Total seconds"
+        }
       }
     }
   },
