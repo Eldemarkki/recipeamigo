@@ -4,9 +4,17 @@ import styles from "./Dialog.module.css";
 export type DialogProps = PropsWithChildren<{
   open: boolean;
   onClickOutside?: () => void;
+  unstyled?: boolean;
+  className?: string;
 }>;
 
-export const Dialog = ({ open, onClickOutside, children }: DialogProps) => {
+export const Dialog = ({
+  open,
+  onClickOutside,
+  children,
+  unstyled,
+  className,
+}: DialogProps) => {
   const [isActuallyOpen, setIsActuallyOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -41,8 +49,12 @@ export const Dialog = ({ open, onClickOutside, children }: DialogProps) => {
     };
   }, [open, dialogRef, onClickOutside]);
 
+  const finalClassName = [unstyled ? undefined : styles.dialog, className]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <dialog className={styles.dialog} ref={dialogRef} open={isActuallyOpen}>
+    <dialog className={finalClassName} ref={dialogRef} open={isActuallyOpen}>
       {isActuallyOpen && children}
     </dialog>
   );

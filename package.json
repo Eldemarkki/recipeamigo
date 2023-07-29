@@ -43,6 +43,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-select": "^5.7.4",
+    "screenfull": "^6.0.2",
     "sharp": "^0.32.4",
     "superjson": "^1.13.1",
     "typescript": "5.1.6",

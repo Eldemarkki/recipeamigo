@@ -1,0 +1,37 @@
+.dialog {
+  background-color: var(--background-color);
+  color: var(--text);
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin: 0;
+  padding: 0;
+  z-index: 1000; /* Prevent clicking on text edit fields underneath */
+  text-align: center;
+  line-height: 1.2;
+  gap: 3rem;
+}
+
+.dialogCloseButton {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+}
+
+.dialogText {
+  font-size: 10rem;
+}
+
+.controlButtonsContainer {
+  display: inline-flex;
+  gap: 0.15rem;
+}
