@@ -6,10 +6,10 @@ import Text from "@tiptap/extension-text";
 import { Node } from "@tiptap/core";
 import { CountdownExtension } from "../extensions/CountdownExtension";
 import { Dialog } from "../../dialog/Dialog";
-import { useId, useState } from "react";
-import { NumberInput } from "../../forms/NumberInput";
+import { useState } from "react";
 import { TimerIcon } from "@radix-ui/react-icons";
 import styles from "./InstructionEditor.module.css";
+import { NewCountdownDialog } from "./NewCountdownDialog";
 
 const OneLiner = Node.create({
   name: "oneLiner",
@@ -36,49 +36,12 @@ export const InstructionEditor = ({
 
   const { t } = useTranslation(["common", "recipeView"]);
 
-  const [seconds, setSeconds] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const inputId = useId();
 
   return (
     <>
       <Dialog open={isDialogOpen} onClickOutside={() => setIsDialogOpen(false)}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <h1>{t("recipeView:edit.misc.countdown.newCountdownTitle")}</h1>
-          <form
-            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-            onSubmit={(e) => {
-              e.preventDefault();
-              editor?.chain().focus().setCountdown({ seconds }).run();
-              setIsDialogOpen(false);
-              setSeconds(0);
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor={inputId}>
-                {t("recipeView:edit.misc.countdown.durationLabel")}
-              </label>
-              <NumberInput
-                value={seconds}
-                onChange={setSeconds}
-                id={inputId}
-                key={String(isDialogOpen)}
-              />
-            </div>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                setSeconds(0);
-                setIsDialogOpen(false);
-              }}
-            >
-              {t("common:actions.cancel")}
-            </Button>
-            <Button type="submit">{t("common:actions.save")}</Button>
-          </form>
-        </div>
+        <NewCountdownDialog editor={editor} setIsDialogOpen={setIsDialogOpen} />
       </Dialog>
       <div className={styles.container}>
         <EditorContent editor={editor} />
