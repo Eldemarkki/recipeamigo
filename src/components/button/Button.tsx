@@ -15,10 +15,12 @@ export const Button = ({
   variant = "primary",
   size = "medium",
   ref,
+  type = "button",
   ...props
 }: ButtonProps & React.ComponentProps<"button">) => (
   <button
     {...props}
+    type={type}
     className={[
       styles.buttonComponent,
       styles[variant],
@@ -31,10 +33,12 @@ export const Button = ({
 export const CircularButton = ({
   variant = "primary",
   ref,
+  type = "button",
   ...props
 }: ButtonProps & React.ComponentProps<"button">) => (
   <button
     {...props}
+    type={type}
     className={[
       styles.buttonComponent,
       styles[variant],

@@ -5,6 +5,10 @@
   "newCollectionButton": "Luo uusi kokoelma",
   "collections": {
     "newCollectionTitle": "Uusi kokoelma",
+    "newCollectionNamePlaceholder": "Kokoelman nimi",
+    "newCollectionVisibility": "Näkyvyys",
+    "descriptionLabel": "Kuvaus",
+    "descriptionPlaceholder": "Kuvaus",
     "searchPlaceholder": "Hae reseptejä",
     "noRecipesFound": "Ei reseptejä haulla \"{{query}}\"",
     "noRecipesExist": "Sinulla ei ole reseptejä",
@@ -15,6 +19,11 @@
       "removeButton": "Poista",
       "addButton": "Lisää",
       "placeholderAltText": "Reseptin kuva"
+    },
+    "visibility": {
+      "public": "Julkinen",
+      "private": "Yksityinen",
+      "unlisted": "Piilotettu"
     }
   }
 }

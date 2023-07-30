@@ -20,3 +20,21 @@
   max-height: 100%;
   overflow: auto;
 }
+
+.collectionNameInput {
+  width: 100%;
+  font-size: 1.4rem;
+}
+
+.visibilityContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.descriptionInput {
+  width: 100%;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 2rem;
+}

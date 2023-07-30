@@ -29,7 +29,7 @@ export const splitSeconds = (totalSeconds: number) => {
 };
 
 export const hasReadAccessToRecipe = (
-  user: Awaited<ReturnType<typeof getUserFromRequest>>,
+  user: Awaited<ReturnType<typeof getUserFromRequest>> | string,
   recipe: Recipe,
 ) => {
   if (
@@ -40,6 +40,11 @@ export const hasReadAccessToRecipe = (
   }
 
   if (recipe.visibility === RecipeVisibility.PRIVATE) {
+    if (typeof user === "string") {
+      // `user` is actually the userId
+      return recipe.userId === user;
+    }
+
     if (user.status === "Unauthorized") {
       return false;
     }

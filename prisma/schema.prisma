@@ -120,14 +120,22 @@ model Tag {
   @@unique([recipeId, order])
 }
 
+enum RecipeCollectionVisibility {
+  PUBLIC
+  PRIVATE
+  UNLISTED
+}
+
 model RecipeCollection {
-  id                   String                 @id @default(uuid())
+  id                   String                     @id @default(uuid())
   name                 String
+  description          String?
   userId               String
-  user                 UserProfile            @relation(fields: [userId], references: [clerkId])
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @updatedAt
+  user                 UserProfile                @relation(fields: [userId], references: [clerkId])
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
   RecipesOnCollections RecipesOnCollections[]
+  visibility           RecipeCollectionVisibility
 }
 
 model RecipesOnCollections {

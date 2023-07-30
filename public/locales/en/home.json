@@ -5,6 +5,10 @@
   "newCollectionButton": "New collection",
   "collections": {
     "newCollectionTitle": "New collection",
+    "newCollectionNamePlaceholder": "Collection name",
+    "newCollectionVisibility": "Visibility",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Description",
     "searchPlaceholder": "Search recipes",
     "noRecipesFound": "No recipes found for \"{{query}}\"",
     "noRecipesExist": "You don't have any recipes",
@@ -15,6 +19,11 @@
       "removeButton": "Remove",
       "addButton": "Add",
       "placeholderAltText": "Recipe placeholder image"
+    },
+    "visibility": {
+      "public": "Public",
+      "private": "Private",
+      "unlisted": "Unlisted"
     }
   }
 }
