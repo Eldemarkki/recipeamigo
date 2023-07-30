@@ -70,9 +70,9 @@ Things you need:
 - [x] Optional ingredients
 - [ ] Share links
   - [x] Private (only visible to author)
-  - [ ] Public (partially done, requires implementing the Browse view)
-    - [ ] Listed in Browse view
-    - [ ] Unlisted, only visible with direct link
+  - [x] Public (partially done, requires implementing the Browse view)
+    - [x] Listed in Browse view
+    - [x] Unlisted, only visible with direct link
   - [ ] Password protected
   - [ ] Share with selected registered users
 - [ ] Draft status (only visible to author)
