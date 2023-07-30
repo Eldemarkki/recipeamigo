@@ -19,10 +19,15 @@
   },
   "ingredientsTitle": "Ainesosat",
   "instructionsTitle": "Ohjeet",
+  "recipeVisibility": {
+    "public": "Julkinen",
+    "private": "Yksityinen",
+    "unlisted": "Piilotettu"
+  },
   "edit": {
     "recipeName": "Reseptin nimi",
     "description": "Kuvaus",
-    "isPublic": "Julkinen",
+    "visibility": "Näkyvyys",
     "timeEstimateTitle": "Aika-arvio (vapaaehtoinen)",
     "timeEstimate": "<0></0>min - <3></3>min",
     "saveRecipe": "Tallenna resepti",

@@ -21,6 +21,7 @@ import { TagList } from "../../../components/recipeView/TagList";
 import { recipeToMarkdown } from "../../../utils/exportUtils";
 import { Locale } from "../../../i18next";
 import { getTimeEstimateType } from "../../../utils/recipeUtils";
+import { RecipeVisibility } from "@prisma/client";
 
 const exportRecipe = (data: string, filename: string) => {
   const a = document.createElement("a");
@@ -203,7 +204,7 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
 
   const userIsRecipeOwner =
     user.status !== "Unauthorized" && user.userId === recipe.userId;
-  if (recipe.isPublic === false && !userIsRecipeOwner) {
+  if (recipe.visibility !== RecipeVisibility.PUBLIC && !userIsRecipeOwner) {
     return {
       notFound: true,
     };
@@ -235,7 +236,7 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
     replacement: "_",
   });
 
-  if (recipe.isPublic) {
+  if (recipe.visibility === RecipeVisibility.PUBLIC) {
     await increaseViewCountForRecipe(recipeId);
     return {
       props: {

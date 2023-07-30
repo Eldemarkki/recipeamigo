@@ -1,3 +1,4 @@
+import { RecipeVisibility } from "@prisma/client";
 import { recipeToMarkdown } from "./exportUtils";
 
 // TODO: Add tests for if there are no ingredients, ingredient sections, instructions or tags or if they are empty
@@ -87,7 +88,7 @@ describe("recipeToMarkdown", () => {
           },
         ],
         quantity: 1,
-        isPublic: true,
+        visibility: RecipeVisibility.PUBLIC,
         timeEstimateMinimumMinutes: 10,
         timeEstimateMaximumMinutes: 20,
         tags: [

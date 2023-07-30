@@ -56,4 +56,5 @@
 | 27.7.2023 | 2      | Tiptapin setup parempien ohjetekstien mahdollistamiseksi                       |
 | 28.7.2023 | 3      | Ohjeisiin upotettavan ajastinkomponentin aloittaminen                          |
 | 29.7.2023 | 3      | Ajastinkomponentin parantelua                                                  |
-| Yhteensä  | 102    |                                                                                |
+| 30.7.2023 | 1      | Lisää tyyppi piilotetuille resepteille                                         |
+| Yhteensä  | 103    |                                                                                |

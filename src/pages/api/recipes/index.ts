@@ -2,7 +2,7 @@ import { NextApiHandler } from "next";
 import { getUserFromRequest } from "../../../utils/auth";
 import { createRecipe, getAllRecipesForUser } from "../../../database/recipes";
 import z from "zod";
-import { IngredientUnit } from "@prisma/client";
+import { IngredientUnit, RecipeVisibility } from "@prisma/client";
 import { UUID, randomUUID } from "crypto";
 import { DEFAULT_BUCKET_NAME, s3 } from "../../../s3";
 import { calculateTime } from "../../../utils/api/timing";
@@ -27,13 +27,15 @@ export const instructionSchema = z.object({
 
 export const tagSchema = z.string().min(1);
 
+export const visibilitySchema = z.nativeEnum(RecipeVisibility);
+
 export const createRecipeSchema = z.object({
   name: z.string(),
   description: z.string(),
   ingredientSections: z.array(ingredientSectionSchema),
   instructions: z.array(instructionSchema),
   quantity: z.number().min(1),
-  isPublic: z.boolean(),
+  visibility: visibilitySchema,
   timeEstimateMinimumMinutes: z.number().min(0).optional(),
   timeEstimateMaximumMinutes: z.number().min(0).optional(),
   tags: z

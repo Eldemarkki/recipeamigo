@@ -8,6 +8,7 @@ import {
   IngredientSection,
   Instruction,
   Recipe,
+  RecipeVisibility,
 } from "@prisma/client";
 
 describe("recipes", () => {
@@ -140,7 +141,10 @@ describe("editRecipes", () => {
       description: "Updated description",
       name: "Updated recipe name",
       quantity: 100,
-      isPublic: !recipe.isPublic,
+      visibility:
+        recipe.visibility === RecipeVisibility.PUBLIC
+          ? RecipeVisibility.PRIVATE
+          : RecipeVisibility.PUBLIC,
       timeEstimateMinimumMinutes: 10000,
       timeEstimateMaximumMinutes: 100000,
     };

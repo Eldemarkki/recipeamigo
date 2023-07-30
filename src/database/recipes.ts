@@ -10,6 +10,7 @@ import {
   SortKey,
 } from "../components/browse/sort/BrowseSort";
 import { notNull } from "../utils/arrayUtils";
+import { RecipeVisibility } from "@prisma/client";
 
 export const getAllRecipesForUser = async (userId: string) => {
   const recipes = await prisma.recipe.findMany({
@@ -72,7 +73,7 @@ export const createRecipe = async (
         name: recipe.name,
         description: recipe.description,
         quantity: recipe.quantity,
-        isPublic: recipe.isPublic,
+        visibility: recipe.visibility,
         userId,
         timeEstimateMinimumMinutes: recipe.timeEstimateMinimumMinutes,
         timeEstimateMaximumMinutes: recipe.timeEstimateMaximumMinutes,
@@ -269,7 +270,7 @@ export const editRecipe = async (
         name: editedRecipe.name,
         description: editedRecipe.description,
         quantity: editedRecipe.quantity,
-        isPublic: editedRecipe.isPublic,
+        visibility: editedRecipe.visibility,
         timeEstimateMinimumMinutes: editedRecipe.timeEstimateMinimumMinutes,
         timeEstimateMaximumMinutes: editedRecipe.timeEstimateMaximumMinutes,
         coverImageName,
@@ -670,7 +671,7 @@ export const getPublicRecipesPaginated = async (
 
   const recipes = await prisma.recipe.findMany({
     where: {
-      isPublic: true,
+      visibility: RecipeVisibility.PUBLIC,
       AND: {
         AND: [
           {
@@ -773,7 +774,7 @@ export const getPublicRecipesPaginated = async (
 
   const count = await prisma.recipe.count({
     where: {
-      isPublic: true,
+      visibility: RecipeVisibility.PUBLIC,
     },
   });
 

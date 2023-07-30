@@ -11,7 +11,7 @@ import {
   createRandomNumber,
   createRandomString,
 } from "./testUtils";
-import { IngredientUnit } from "@prisma/client";
+import { IngredientUnit, RecipeVisibility } from "@prisma/client";
 
 export const createRandomIngredientUnit = (): IngredientUnit => {
   const units = Object.values(IngredientUnit);
@@ -42,6 +42,12 @@ export const createRandomInstruction = (): z.infer<
   description: createRandomString(30),
 });
 
+export const createRandomRecipeVisibility = (): RecipeVisibility => {
+  const visibilities = Object.values(RecipeVisibility);
+  const randomIndex = createRandomNumber(0, visibilities.length - 1);
+  return visibilities[randomIndex];
+};
+
 export const createRandomRecipe = (): z.infer<typeof createRecipeSchema> => ({
   name: createRandomString(10),
   description: createRandomString(10),
@@ -54,7 +60,7 @@ export const createRandomRecipe = (): z.infer<typeof createRecipeSchema> => ({
     createRandomInstruction,
   ),
   quantity: createRandomNumber(1, 10),
-  isPublic: createRandomBoolean(),
+  visibility: createRandomRecipeVisibility(),
   timeEstimateMinimumMinutes: createRandomNumber(0, 10),
   timeEstimateMaximumMinutes: createRandomNumber(10, 20),
 });

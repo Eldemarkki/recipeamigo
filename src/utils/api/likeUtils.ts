@@ -1,5 +1,6 @@
 import { getSingleRecipe } from "../../database/recipes";
 import { getLikeStatus } from "../../database/likes";
+import { RecipeVisibility } from "@prisma/client";
 
 type CanLikeOrUnlikeRecipeResult<
   CannotOperateOwnRecipeError extends string,
@@ -51,7 +52,7 @@ export const canLikeOrUnlikeRecipe = async <
     };
   }
 
-  if (!recipe.isPublic) {
+  if (recipe.visibility !== RecipeVisibility.PUBLIC) {
     // User doesn't own the recipe and it is private
     return {
       statusCode: 404,

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ingredientUnitSchema } from "..";
+import { ingredientUnitSchema, visibilitySchema } from "..";
 import { NextApiHandler } from "next";
 import { getUserFromRequest } from "../../../../utils/auth";
 import {
@@ -68,7 +68,7 @@ export const editRecipeSchema = z.object({
   ingredientSections: z.array(editingIngredientSchema).optional(),
   instructions: z.array(editingInstructionsSchema).optional(),
   quantity: z.number().min(1).optional(),
-  isPublic: z.boolean().optional(),
+  visibility: visibilitySchema.optional(),
   timeEstimateMinimumMinutes: z.number().min(0).optional(),
   timeEstimateMaximumMinutes: z.number().min(0).optional(),
   tags: z

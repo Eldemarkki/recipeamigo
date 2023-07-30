@@ -1,3 +1,4 @@
+import { RecipeVisibility } from "@prisma/client";
 import { prisma } from "../db";
 
 export const getUserAndPublicRecipesByUsername = (username: string) => {
@@ -8,7 +9,7 @@ export const getUserAndPublicRecipesByUsername = (username: string) => {
     include: {
       recipes: {
         where: {
-          isPublic: true,
+          visibility: RecipeVisibility.PUBLIC,
         },
       },
     },

@@ -17,7 +17,7 @@ export const recipeToMarkdown = (
 id: ${recipe.id}
 name: ${recipe.name}
 description: ${recipe.description}
-visibility: ${recipe.isPublic ? "public" : "private"}
+visibility: ${recipe.visibility.toLowerCase()}
 created: ${recipe.createdAt.toISOString()}
 updated: ${recipe.updatedAt.toISOString()}
 author: ${recipe.user.username}

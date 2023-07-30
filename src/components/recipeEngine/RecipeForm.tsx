@@ -17,6 +17,8 @@ import { editRecipeSchema } from "../../pages/api/recipes/[id]";
 import { z } from "zod";
 import { createRecipeSchema } from "../../pages/api/recipes";
 import { Dialog } from "../dialog/Dialog";
+import { RecipeVisibility } from "@prisma/client";
+import { Select } from "../Select";
 
 export type RecipeFormProps = {
   initialRecipe?: Awaited<ReturnType<typeof getSingleRecipe>>;
@@ -106,7 +108,9 @@ export const RecipeForm = ({
   const [recipeQuantity, setRecipeQuantity] = useState(
     initialRecipe?.quantity ?? 1,
   );
-  const [isPublic, setIsPublic] = useState(initialRecipe?.isPublic ?? false);
+  const [visibility, setVisibility] = useState(
+    initialRecipe?.visibility ?? RecipeVisibility.PRIVATE,
+  );
 
   const [timeEstimateMin, setTimeEstimateMin] = useState(
     initialRecipe?.timeEstimateMinimumMinutes,
@@ -117,7 +121,7 @@ export const RecipeForm = ({
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const isPublicId = useId();
+  const visibilityId = useId();
   const tagSelectId = useId();
 
   const handleSubmit = async (e: MouseEvent) => {
@@ -136,7 +140,7 @@ export const RecipeForm = ({
         })),
         instructions,
         quantity: recipeQuantity,
-        isPublic,
+        visibility,
         timeEstimateMinimumMinutes: timeEstimateMin,
         timeEstimateMaximumMinutes:
           timeEstimateMax === 0 ? undefined : timeEstimateMax,
@@ -180,6 +184,12 @@ export const RecipeForm = ({
     }
   };
 
+  const visibilityLabelMap: Record<RecipeVisibility, string> = {
+    [RecipeVisibility.PRIVATE]: t("recipeVisibility.private"),
+    [RecipeVisibility.PUBLIC]: t("recipeVisibility.public"),
+    [RecipeVisibility.UNLISTED]: t("recipeVisibility.unlisted"),
+  };
+
   return (
     <div className={styles.container}>
       <Dialog open={dialogOpen} onClickOutside={() => setDialogOpen(false)}>
@@ -220,12 +230,32 @@ export const RecipeForm = ({
               onChange={setRecipeQuantity}
             />
             <div className={styles.recipeSettingsContainer}>
-              <label htmlFor={isPublicId}>{t("edit.isPublic")}</label>
-              <input
-                id={isPublicId}
-                type="checkbox"
-                checked={isPublic}
-                onChange={(e) => setIsPublic(e.target.checked)}
+              <label htmlFor={visibilityId}>{t("edit.visibility")}</label>
+              <Select
+                id={visibilityId}
+                options={[
+                  {
+                    label: t("recipeVisibility.private"),
+                    value: RecipeVisibility.PRIVATE,
+                  },
+                  {
+                    label: t("recipeVisibility.public"),
+                    value: RecipeVisibility.PUBLIC,
+                  },
+                  {
+                    label: t("recipeVisibility.unlisted"),
+                    value: RecipeVisibility.UNLISTED,
+                  },
+                ]}
+                value={{
+                  label: visibilityLabelMap[visibility],
+                  value: visibility,
+                }}
+                onChange={(option) => {
+                  if (option) {
+                    setVisibility(option.value);
+                  }
+                }}
               />
             </div>
             <div className={styles.tagsContainer}>

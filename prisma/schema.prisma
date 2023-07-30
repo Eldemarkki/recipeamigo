@@ -18,7 +18,7 @@ model Recipe {
   ingredientSections         IngredientSection[]
   instructions               Instruction[]
   quantity                   Int
-  isPublic                   Boolean
+  visibility                 RecipeVisibility
   viewCount                  Int                    @default(0)
   timeEstimateMinimumMinutes Int                    @default(0)
   timeEstimateMaximumMinutes Int?
@@ -26,6 +26,12 @@ model Recipe {
   likes                      Like[]
   tags                       Tag[]
   RecipesOnCollections       RecipesOnCollections[]
+}
+
+enum RecipeVisibility {
+  PUBLIC
+  PRIVATE
+  UNLISTED
 }
 
 model Instruction {

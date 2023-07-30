@@ -10,6 +10,7 @@ import {
   tagTranslationKeys,
 } from "../../../../../../components/tag/Tag";
 import { getUserFromRequest } from "../../../../../../utils/auth";
+import { RecipeVisibility } from "@prisma/client";
 
 const handler = (async (req, res) => {
   const id = req.query.id;
@@ -26,7 +27,7 @@ const handler = (async (req, res) => {
     }
 
     if (user.status === "Unauthorized") {
-      if (!recipe.isPublic) {
+      if (recipe.visibility !== RecipeVisibility.PUBLIC) {
         res.status(404).end();
         return;
       }
