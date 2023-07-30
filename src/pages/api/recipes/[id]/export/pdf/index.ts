@@ -4,13 +4,15 @@ import PDFDocument from "pdfkit";
 import { isLocale, locales } from "../../../../../../utils/stringUtils";
 import { getIngredientText } from "../../../../../../ingredients/ingredientTranslator";
 import { getI18nClient } from "../../../../../../utils/getI18nClient";
-import { getTimeEstimateType } from "../../../../../../utils/recipeUtils";
+import {
+  getTimeEstimateType,
+  hasReadAccessToRecipe,
+} from "../../../../../../utils/recipeUtils";
 import {
   isSpecialTagValue,
   tagTranslationKeys,
 } from "../../../../../../components/tag/Tag";
 import { getUserFromRequest } from "../../../../../../utils/auth";
-import { RecipeVisibility } from "@prisma/client";
 
 const handler = (async (req, res) => {
   const id = req.query.id;
@@ -26,16 +28,9 @@ const handler = (async (req, res) => {
       return;
     }
 
-    if (user.status === "Unauthorized") {
-      if (recipe.visibility !== RecipeVisibility.PUBLIC) {
-        res.status(404).end();
-        return;
-      }
-    } else {
-      if (recipe.userId !== user.userId) {
-        res.status(404).end();
-        return;
-      }
+    if (!hasReadAccessToRecipe(user, recipe)) {
+      res.status(404).end();
+      return;
     }
 
     const locale = req.query.locale;
@@ -55,10 +50,11 @@ const handler = (async (req, res) => {
       return;
     }
 
+    res.status(200);
+
     const doc = new PDFDocument({
       margin: 20,
     });
-    res.status(200);
 
     doc.pipe(res);
     doc.font("Helvetica");

@@ -3,12 +3,7 @@ import { prisma } from "../db";
 import { UserProfile } from "@prisma/client";
 import { RequestLike } from "@clerk/nextjs/dist/types/server/types";
 
-export const getUserFromRequest = async (
-  req: RequestLike,
-): Promise<
-  | {
-      status: "Unauthorized";
-    }
+export type AuthorizedUser =
   | {
       status: "OK";
       userId: string;
@@ -17,8 +12,13 @@ export const getUserFromRequest = async (
   | {
       status: "No profile";
       userId: string;
-    }
-> => {
+    };
+
+export type AnyUser = AuthorizedUser | { status: "Unauthorized" };
+
+export const getUserFromRequest = async (
+  req: RequestLike,
+): Promise<AnyUser> => {
   const { userId } = getAuth(req);
   if (!userId) {
     return { status: "Unauthorized" };

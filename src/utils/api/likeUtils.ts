@@ -1,6 +1,7 @@
 import { getSingleRecipe } from "../../database/recipes";
 import { getLikeStatus } from "../../database/likes";
-import { RecipeVisibility } from "@prisma/client";
+import { hasReadAccessToRecipe } from "../recipeUtils";
+import { AuthorizedUser, getUserFromRequest } from "../auth";
 
 type CanLikeOrUnlikeRecipeResult<
   CannotOperateOwnRecipeError extends string,
@@ -24,7 +25,7 @@ export const canLikeOrUnlikeRecipe = async <
   CannotOperateOwnRecipeError extends string,
   NotOperableStateError extends string,
 >(
-  userId: string,
+  user: AuthorizedUser,
   recipeId: string,
   requiredLikeState: boolean,
   errors: {
@@ -45,22 +46,21 @@ export const canLikeOrUnlikeRecipe = async <
     };
   }
 
-  if (recipe.userId === userId) {
+  if (recipe.userId === user.userId) {
     return {
       statusCode: 403,
       message: errors.cannotOperateOwnRecipe,
     };
   }
 
-  if (recipe.visibility !== RecipeVisibility.PUBLIC) {
-    // User doesn't own the recipe and it is private
+  if (!hasReadAccessToRecipe(user, recipe)) {
     return {
       statusCode: 404,
       message: "Recipe not found",
     };
   }
 
-  const hasAlreadyLiked = await getLikeStatus(userId, recipeId);
+  const hasAlreadyLiked = await getLikeStatus(user.userId, recipeId);
 
   if (!!hasAlreadyLiked === requiredLikeState) {
     return {

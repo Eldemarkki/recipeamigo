@@ -20,8 +20,10 @@ import { Trans, useTranslation } from "next-i18next";
 import { TagList } from "../../../components/recipeView/TagList";
 import { recipeToMarkdown } from "../../../utils/exportUtils";
 import { Locale } from "../../../i18next";
-import { getTimeEstimateType } from "../../../utils/recipeUtils";
-import { RecipeVisibility } from "@prisma/client";
+import {
+  getTimeEstimateType,
+  hasReadAccessToRecipe,
+} from "../../../utils/recipeUtils";
 
 const exportRecipe = (data: string, filename: string) => {
   const a = document.createElement("a");
@@ -195,16 +197,13 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
 
   const user = await getUserFromRequest(req);
   const recipe = await getSingleRecipe(recipeId);
-
   if (!recipe) {
     return {
       notFound: true,
     };
   }
 
-  const userIsRecipeOwner =
-    user.status !== "Unauthorized" && user.userId === recipe.userId;
-  if (recipe.visibility !== RecipeVisibility.PUBLIC && !userIsRecipeOwner) {
+  if (!hasReadAccessToRecipe(user, recipe)) {
     return {
       notFound: true,
     };
@@ -236,39 +235,16 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
     replacement: "_",
   });
 
-  if (recipe.visibility === RecipeVisibility.PUBLIC) {
-    await increaseViewCountForRecipe(recipeId);
-    return {
-      props: {
-        ...(await serverSideTranslations(locale ?? "en")),
-        recipe,
-        likeCount,
-        exportJsonFilename,
-        exportMarkdownFilename,
-        ...likeStatusAndAnonymity,
-      },
-    };
-  }
-
-  // TODO: Check to make sure user is not allowed to view other people's private recipes
-  if (user && (user.status === "No profile" || user.status === "OK")) {
-    await increaseViewCountForRecipe(recipeId);
-    return {
-      props: {
-        ...(await serverSideTranslations(locale ?? "en")),
-        recipe,
-        likeCount,
-        exportJsonFilename,
-        exportMarkdownFilename,
-        ...likeStatusAndAnonymity,
-      },
-    };
-  }
+  await increaseViewCountForRecipe(recipeId);
 
   return {
-    redirect: {
-      destination: "/login",
-      permanent: false,
+    props: {
+      ...(await serverSideTranslations(locale ?? "en")),
+      recipe,
+      likeCount,
+      exportJsonFilename,
+      exportMarkdownFilename,
+      ...likeStatusAndAnonymity,
     },
   };
 }) satisfies GetServerSideProps;

@@ -1,3 +1,6 @@
+import { Recipe, RecipeVisibility } from "@prisma/client";
+import { getUserFromRequest } from "./auth";
+
 type TimeEstimateType = null | "single" | "range";
 
 export const getTimeEstimateType = (
@@ -23,4 +26,26 @@ export const splitSeconds = (totalSeconds: number) => {
     minutes,
     seconds,
   };
+};
+
+export const hasReadAccessToRecipe = (
+  user: Awaited<ReturnType<typeof getUserFromRequest>>,
+  recipe: Recipe,
+) => {
+  if (
+    recipe.visibility === RecipeVisibility.PUBLIC ||
+    recipe.visibility === RecipeVisibility.UNLISTED
+  ) {
+    return true;
+  }
+
+  if (recipe.visibility === RecipeVisibility.PRIVATE) {
+    if (user.status === "Unauthorized") {
+      return false;
+    }
+
+    return recipe.userId === user.userId;
+  }
+
+  return false;
 };
