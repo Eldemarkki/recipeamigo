@@ -35,5 +35,14 @@
       "placeholder": "Enimmäisaika"
     },
     "excludeIngredients": "Poislukien ainesosat"
+  },
+  "collections": {
+    "title": "Selaa kokoelmia",
+    "myCollections": "Omat kokoelmat",
+    "publicCollections": "Julkiset kokoelmat",
+    "item": {
+      "recipeCount_one": "{{count}} resepti",
+      "recipeCount_other": "{{count}} reseptiä"
+    }
   }
 }

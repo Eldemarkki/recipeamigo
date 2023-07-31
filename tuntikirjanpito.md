@@ -58,4 +58,5 @@
 | 29.7.2023 | 3      | Ajastinkomponentin parantelua                                                  |
 | 30.7.2023 | 2      | Lisää tuki listaamattomille/piilotetuille resepteille                          |
 | 30.7.2023 | 2      | Luo kokoelmasivu, parannuksia kokoelmien luomisdialogiin                       |
-| Yhteensä  | 106    |                                                                                |
+| 31.7.2023 | 1      | Luo sivu kokoelmien selaamiselle                                               |
+| Yhteensä  | 107    |                                                                                |

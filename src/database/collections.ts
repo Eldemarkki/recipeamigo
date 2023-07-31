@@ -85,3 +85,39 @@ export const getCollection = async (id: string) => {
     })),
   };
 };
+
+export const getUserCollections = async (userId: string) => {
+  return await prisma.recipeCollection.findMany({
+    where: {
+      userId,
+    },
+    include: {
+      _count: {
+        select: {
+          RecipesOnCollections: true,
+        },
+      },
+      user: {
+        select: {
+          username: true,
+        },
+      },
+    },
+  });
+};
+
+export const getPublicCollections = async () => {
+  return await prisma.recipeCollection.findMany({
+    where: {
+      visibility: "PUBLIC",
+    },
+    include: {
+      _count: {
+        select: {
+          RecipesOnCollections: true,
+        },
+      },
+      user: true,
+    },
+  });
+};

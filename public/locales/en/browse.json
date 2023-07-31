@@ -35,5 +35,14 @@
       "placeholder": "Maximum time"
     },
     "excludeIngredients": "Exclude ingredients"
+  },
+  "collections": {
+    "title": "Browse collections",
+    "myCollections": "My collections",
+    "publicCollections": "Public collections",
+    "item": {
+      "recipeCount_one": "{{count}} recipe",
+      "recipeCount_other": "{{count}} recipes"
+    }
   }
 }

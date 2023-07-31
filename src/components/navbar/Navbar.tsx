@@ -21,6 +21,11 @@ export const Navbar = () => {
             <Link href="/browse">{t("navbar.browse")}</Link>
           </li>
           <li>
+            <Link href="/browse/collections">
+              {t("navbar.browseCollections")}
+            </Link>
+          </li>
+          <li>
             <Link href="/settings">{t("navbar.settings")}</Link>
           </li>
         </ol>

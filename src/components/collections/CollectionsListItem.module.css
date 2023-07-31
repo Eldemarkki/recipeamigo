@@ -1,0 +1,30 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: var(--background-color-secondary);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.itemTitle {
+  margin: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  gap: 0.1rem;
+  font-size: 0.9rem;
+}
+
+.infoRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.description {
+  margin: 0;
+}
