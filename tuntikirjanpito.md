@@ -59,4 +59,5 @@
 | 30.7.2023 | 2      | Lisää tuki listaamattomille/piilotetuille resepteille                          |
 | 30.7.2023 | 2      | Luo kokoelmasivu, parannuksia kokoelmien luomisdialogiin                       |
 | 31.7.2023 | 1      | Luo sivu kokoelmien selaamiselle                                               |
-| Yhteensä  | 107    |                                                                                |
+| 31.7.2023 | 1      | Estä julkisten kokoelmien luominen jos kokoelma sisältää yksityisiä reseptejä  |
+| Yhteensä  | 108    |                                                                                |

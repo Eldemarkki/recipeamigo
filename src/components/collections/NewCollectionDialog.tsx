@@ -10,8 +10,9 @@ import { Button } from "../button/Button";
 import { z } from "zod";
 import { createCollectionSchema } from "../../pages/api/collections";
 import { createCollection as createCollectionApi } from "../../database/collections";
-import { RecipeCollectionVisibility } from "@prisma/client";
+import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
 import { Select } from "../Select";
+import { ErrorText } from "../error/ErrorText";
 
 const createCollection = async (
   collection: z.infer<typeof createCollectionSchema>,
@@ -50,7 +51,11 @@ export const NewCollectionDialog = ({
   const [visibility, setVisibility] = useState<RecipeCollectionVisibility>(
     RecipeCollectionVisibility.PRIVATE,
   );
-  const [selectedRecipes, setSelectedRecipes] = useState<string[]>([]);
+  const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([]);
+
+  const selectedRecipes = allRecipes.filter((r) =>
+    selectedRecipeIds.includes(r.id),
+  );
 
   // TODO: Allow searching all recipes, not just your own ones.
   const [recipeFilter, setRecipeFilter] = useState("");
@@ -70,19 +75,29 @@ export const NewCollectionDialog = ({
   const visibilitySelectId = useId();
   const descriptionId = useId();
 
+  // If the visibility is public, all recipes must be public or unlisted
+  const validVisibilityConfiguration =
+    visibility === RecipeCollectionVisibility.PUBLIC
+      ? selectedRecipes.every(
+          (r) =>
+            r.visibility === RecipeCollectionVisibility.PUBLIC ||
+            r.visibility === RecipeCollectionVisibility.UNLISTED,
+        )
+      : true;
+
   return (
     <Dialog open={isOpen} onClickOutside={() => setIsOpen(false)}>
       <form
         className={styles.container}
         onSubmit={async (e) => {
           e.preventDefault();
-          if (selectedRecipes.length === 0) {
+          if (selectedRecipeIds.length === 0) {
             return;
           }
 
           const collection = await createCollection({
             name: collectionName,
-            recipeIds: selectedRecipes,
+            recipeIds: selectedRecipeIds,
             visibility,
             description,
           });
@@ -153,9 +168,10 @@ export const NewCollectionDialog = ({
               id: r.id,
               name: r.name,
               coverImageUrl: r.coverImageUrl,
-              isSelected: selectedRecipes.includes(r.id),
+              visibility: r.visibility,
+              isSelected: selectedRecipeIds.includes(r.id),
               onClickSelect: () =>
-                setSelectedRecipes((selectedRecipes) => {
+                setSelectedRecipeIds((selectedRecipes) => {
                   if (selectedRecipes.includes(r.id)) {
                     return selectedRecipes.filter((id) => id !== r.id);
                   } else {
@@ -180,12 +196,25 @@ export const NewCollectionDialog = ({
             )}
           </div>
         )}
+        {!validVisibilityConfiguration && (
+          <ErrorText>
+            {t("collections.invalidVisibilityConfiguration", {
+              privateRecipes: selectedRecipes
+                .filter((r) => r.visibility === RecipeVisibility.PRIVATE)
+                .map((r) => r.name),
+            })}
+          </ErrorText>
+        )}
         <Button
           type="submit"
-          disabled={selectedRecipes.length === 0 || !collectionName}
+          disabled={
+            selectedRecipeIds.length === 0 ||
+            !collectionName ||
+            !validVisibilityConfiguration
+          }
         >
           {t("collections.createCollection", {
-            count: selectedRecipes.length,
+            count: selectedRecipeIds.length,
           })}
         </Button>
       </form>

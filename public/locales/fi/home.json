@@ -24,6 +24,7 @@
       "public": "Julkinen",
       "private": "Yksityinen",
       "unlisted": "Piilotettu"
-    }
+    },
+    "invalidVisibilityConfiguration": "Koska olet luomassa uutta julkista kokoelmaa, kaikkien reseptien tulee olla joko julkisia tai piilotettuja. Seuraavat reseptit ovat yksityisiä: {{privateRecipes, list}}"
   }
 }

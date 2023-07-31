@@ -1,0 +1,17 @@
+.container {
+  background-color: var(--danger);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 0.5rem;
+  padding: 0.7rem 1rem;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 2rem;
+  width: 2rem;
+  height: 2rem;
+}

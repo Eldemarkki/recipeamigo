@@ -1,3 +1,4 @@
+import { RecipeVisibility } from "@prisma/client";
 import styles from "./RecipeSelectionGrid.module.css";
 import { RecipeSelectionTile } from "./RecipeSelectionTile";
 
@@ -6,6 +7,7 @@ export type RecipeSelectionGridProps = {
     id: string;
     name: string;
     coverImageUrl?: string | undefined | null;
+    visibility: RecipeVisibility;
     isSelected: boolean;
     onClickSelect: () => void;
   }[];

@@ -24,6 +24,19 @@ export const createCollection = async (
     throw new Error("User does not have access to all referenced recipes");
   }
 
+  if (collection.visibility === "PUBLIC") {
+    const allRecipesArePublicOrUnlisted = recipes.every(
+      (recipe) =>
+        recipe.visibility === "PUBLIC" || recipe.visibility === "UNLISTED",
+    );
+
+    if (!allRecipesArePublicOrUnlisted) {
+      throw new Error(
+        "All recipes must be public or unlisted to be added to a collection",
+      );
+    }
+  }
+
   const newCollection = await prisma.recipeCollection.create({
     data: {
       userId,

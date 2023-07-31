@@ -3,17 +3,21 @@ import styles from "./RecipeSelectionTile.module.css";
 import { ImageIcon } from "@radix-ui/react-icons";
 import { Button } from "./button/Button";
 import { useTranslation } from "next-i18next";
+import { RecipeVisibility } from "@prisma/client";
+import { Link } from "./link/Link";
+import { VisibilityText } from "./misc/VisibilityText";
 
 export type RecipeSelectionTileProps = {
   id: string;
   name: string;
   coverImageUrl?: string | undefined | null;
   isSelected: boolean;
+  visibility: RecipeVisibility;
   onClickSelect: () => void;
 };
 
 export const RecipeSelectionTile = (props: RecipeSelectionTileProps) => {
-  const { t } = useTranslation("home");
+  const { t } = useTranslation(["home", "recipeView"]);
 
   return (
     <div className={styles.container}>
@@ -31,7 +35,12 @@ export const RecipeSelectionTile = (props: RecipeSelectionTileProps) => {
         )}
       </div>
       <div className={styles.recipeInfoContainer}>
-        <h3 className={styles.recipeName}>{props.name}</h3>
+        <h3 className={styles.recipeName}>
+          <Link href={`/recipe/${props.id}`} target="_blank">
+            {props.name}
+          </Link>
+        </h3>
+        <VisibilityText type="recipe" visibility={props.visibility} />
         <Button
           onClick={props.onClickSelect}
           variant={!props.isSelected ? "secondary" : "primary"}
