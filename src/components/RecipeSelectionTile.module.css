@@ -9,14 +9,6 @@
   padding: 1rem;
 }
 
-.recipeName {
-  margin: 0px;
-}
-
-.recipeDescription {
-  margin: 0px;
-}
-
 .recipeInfoContainer {
   display: flex;
   flex-direction: column;

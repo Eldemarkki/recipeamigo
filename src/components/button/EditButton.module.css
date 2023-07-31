@@ -6,7 +6,7 @@
   border-radius: 15%;
   align-items: center;
   border: none;
-  margin: 0;
+  padding: 0.2rem;
   cursor: pointer;
   color: var(--text);
 }

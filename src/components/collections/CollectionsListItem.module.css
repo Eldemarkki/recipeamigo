@@ -7,10 +7,6 @@
   padding: 0.5rem;
 }
 
-.itemTitle {
-  margin: 0;
-}
-
 .info {
   display: flex;
   flex-direction: column;
@@ -23,8 +19,4 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-}
-
-.description {
-  margin: 0;
 }

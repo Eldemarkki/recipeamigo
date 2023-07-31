@@ -9,7 +9,7 @@ export const Navbar = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>
+      <h1>
         <Link href="/">{config.APP_NAME}</Link>
       </h1>
       <nav className={styles.navbar}>

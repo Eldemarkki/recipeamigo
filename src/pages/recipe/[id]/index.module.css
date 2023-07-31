@@ -7,7 +7,6 @@
 
 .title {
   font-size: 3rem;
-  margin: 0px;
 }
 
 .ingredientsContainer {
@@ -24,14 +23,6 @@
 .instructionsContainer {
   display: flex;
   flex-direction: column;
-}
-
-.ingredientsTitle {
-  margin: 0px;
-}
-
-.instructionsTitle {
-  margin: 0px;
 }
 
 .topRow {

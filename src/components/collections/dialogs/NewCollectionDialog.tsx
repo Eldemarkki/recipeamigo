@@ -105,7 +105,7 @@ export const NewCollectionDialog = ({
           router.push(`/collections/${collection.id}`);
         }}
       >
-        <h1 className={styles.title}>
+        <h1>
           <input
             required
             minLength={1}

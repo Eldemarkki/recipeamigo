@@ -14,9 +14,7 @@ export const IngredientSectionForm = (props: IngredientSectionFormProps) => {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>
-        {t("recipeView:edit.ingredientSections.newSectionTitle")}
-      </h3>
+      <h3>{t("recipeView:edit.ingredientSections.newSectionTitle")}</h3>
       <form
         className={styles.form}
         onSubmit={(e) => {

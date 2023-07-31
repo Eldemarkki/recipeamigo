@@ -20,7 +20,7 @@ export const IngredientSection = ({
 }: IngredientSectionProps) => {
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>{section.name}</h3>
+      <h3>{section.name}</h3>
       <IngredientList
         ingredients={section.ingredients}
         recipeQuantity={recipeQuantity}

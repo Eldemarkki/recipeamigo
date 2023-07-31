@@ -28,9 +28,9 @@ export const RecipeCard = (props: RecipeCardProps) => {
       </div>
       <div className={styles.recipeInfoContainer}>
         <Link href={`/recipe/${props.id}`}>
-          <h3 className={styles.recipeName}>{props.name}</h3>
+          <h3>{props.name}</h3>
         </Link>
-        <p className={styles.recipeDescription}>{props.description}</p>
+        <p>{props.description}</p>
       </div>
     </div>
   );

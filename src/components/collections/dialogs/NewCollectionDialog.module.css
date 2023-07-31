@@ -6,10 +6,6 @@
   gap: 1rem;
 }
 
-.title {
-  margin: 0;
-}
-
 .noResultsContainer {
   display: flex;
   flex-direction: column;
@@ -34,7 +30,6 @@
 
 .descriptionInput {
   width: 100%;
-  font-family: inherit;
   resize: vertical;
   min-height: 2rem;
 }

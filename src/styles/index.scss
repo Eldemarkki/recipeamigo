@@ -75,15 +75,27 @@ body {
   flex-direction: column;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+input, textarea, button {
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text);
+  background-color: var(--background-color);
+  border: 1px solid var(--text);
+  padding: 0.2rem;
 }
 
 .instruction-editor-editable {
   border: 1px solid var(--text);
   padding: 0.25rem 0.5rem;
-}
-
-.instruction-editor p {
-  margin: 0px;
 }

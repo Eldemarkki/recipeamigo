@@ -166,9 +166,7 @@ export default function RecipePage(
       </div>
       <div className={styles.splitContainer}>
         <div className={styles.ingredientsContainer}>
-          <h2 className={styles.ingredientsTitle}>
-            {t("recipeView:ingredientsTitle")}
-          </h2>
+          <h2>{t("recipeView:ingredientsTitle")}</h2>
           {recipe.ingredientSections.map((section) => (
             <IngredientSection
               key={section.id}
@@ -179,9 +177,7 @@ export default function RecipePage(
           ))}
         </div>
         <div className={styles.instructionsContainer}>
-          <h2 className={styles.instructionsTitle}>
-            {t("recipeView:instructionsTitle")}
-          </h2>
+          <h2>{t("recipeView:instructionsTitle")}</h2>
           <InstructionsList instructions={recipe.instructions} />
         </div>
       </div>

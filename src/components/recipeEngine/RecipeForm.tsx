@@ -315,7 +315,7 @@ export const RecipeForm = ({
             />
           </div>
           <div className={styles.ingredientsSection}>
-            <h2 className={styles.subtitle}>{t("ingredientsTitle")}</h2>
+            <h2>{t("ingredientsTitle")}</h2>
             {/* TODO: Implement adding multiple sections */}
             <EditableIngredientList
               ingredientSections={ingredientSections}

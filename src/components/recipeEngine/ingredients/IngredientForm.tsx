@@ -61,9 +61,7 @@ export const IngredientForm = ({
   return (
     <div className={styles.container}>
       {type === "new" && (
-        <h4 className={styles.title}>
-          {t("recipeView:edit.ingredients.newIngredientTitle")}
-        </h4>
+        <h4>{t("recipeView:edit.ingredients.newIngredientTitle")}</h4>
       )}
       <form
         className={styles.form}
@@ -113,7 +111,6 @@ export const IngredientForm = ({
           </div>
           <div className={styles.optionalContainer}>
             <input
-              className={styles.optionalCheckbox}
               id={ingredientOptionalId}
               type="checkbox"
               checked={ingredientOptional}

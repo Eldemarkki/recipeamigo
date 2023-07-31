@@ -35,7 +35,7 @@ export const RecipeSelectionTile = (props: RecipeSelectionTileProps) => {
         )}
       </div>
       <div className={styles.recipeInfoContainer}>
-        <h3 className={styles.recipeName}>
+        <h3>
           <Link href={`/recipe/${props.id}`} target="_blank">
             {props.name}
           </Link>

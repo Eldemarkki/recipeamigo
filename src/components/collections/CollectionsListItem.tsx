@@ -22,7 +22,7 @@ export const CollectionsListItem = ({
 
   return (
     <li className={styles.item}>
-      <h3 className={styles.itemTitle}>
+      <h3>
         <Link href={`/collections/${collection.id}`}>{collection.name}</Link>
       </h3>
       <div className={styles.info}>
@@ -37,7 +37,7 @@ export const CollectionsListItem = ({
           {collection.user.username}
         </span>
       </div>
-      <p className={styles.description}>{collection.description}</p>
+      <p>{collection.description}</p>
     </li>
   );
 };

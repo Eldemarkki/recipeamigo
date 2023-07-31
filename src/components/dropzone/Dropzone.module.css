@@ -33,7 +33,6 @@
 }
 
 .errorText {
-  margin: 0;
   font-size: 0.9rem;
   color: var(--danger);
   text-align: center;

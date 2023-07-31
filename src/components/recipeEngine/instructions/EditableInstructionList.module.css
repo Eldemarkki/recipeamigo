@@ -6,11 +6,8 @@
 }
 
 .listContainer {
-  margin: 0px;
   display: flex;
   flex-direction: column;
-  list-style: none;
-  padding: 0px;
 }
 
 .form {

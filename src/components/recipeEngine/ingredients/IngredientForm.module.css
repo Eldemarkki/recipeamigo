@@ -20,11 +20,6 @@
   gap: 1rem;
 }
 
-.title {
-  margin: 0;
-  padding: 0;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -54,8 +49,4 @@
   flex-direction: row;
   align-items: center;
   gap: 0.2rem;
-}
-
-.optionalCheckbox {
-  margin: 0;
 }
