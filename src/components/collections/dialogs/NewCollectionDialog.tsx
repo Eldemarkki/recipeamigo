@@ -1,18 +1,18 @@
 import { useTranslation } from "next-i18next";
-import { getAllRecipesForUser } from "../../database/recipes";
-import { Dialog } from "../dialog/Dialog";
+import { getAllRecipesForUser } from "../../../database/recipes";
+import { Dialog } from "../../dialog/Dialog";
 import styles from "./NewCollectionDialog.module.css";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
-import { RecipeSelectionGrid } from "../RecipeSelectionGrid";
-import { LinkButton } from "../LinkButton";
-import { Button } from "../button/Button";
+import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
+import { LinkButton } from "../../LinkButton";
+import { Button } from "../../button/Button";
 import { z } from "zod";
-import { createCollectionSchema } from "../../pages/api/collections";
-import { createCollection as createCollectionApi } from "../../database/collections";
+import { createCollectionSchema } from "../../../pages/api/collections";
+import { createCollection as createCollectionApi } from "../../../database/collections";
 import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
-import { Select } from "../Select";
-import { ErrorText } from "../error/ErrorText";
+import { Select } from "../../Select";
+import { ErrorText } from "../../error/ErrorText";
 
 const createCollection = async (
   collection: z.infer<typeof createCollectionSchema>,

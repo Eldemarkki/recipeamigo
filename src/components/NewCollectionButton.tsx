@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "./button/Button";
 import { getAllRecipesForUser } from "../database/recipes";
 import { useTranslation } from "next-i18next";
-import { NewCollectionDialog } from "./collections/NewCollectionDialog";
+import { NewCollectionDialog } from "./collections/dialogs/NewCollectionDialog";
 
 export type NewCollectionButtonProps = {
   recipes: Awaited<ReturnType<typeof getAllRecipesForUser>>;
