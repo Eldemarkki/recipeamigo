@@ -52,10 +52,11 @@ Things you need:
   - [x] Less than X minutes
 - [x] Recipe tags/categories
 - [x] Likes
-- [ ] Save recipes to collections
-  - [ ] Private collections
-  - [ ] Public collections ("This collection contains private recipes. Do you want to make them public?", Cancel/OK)
-  - [ ] Unlisted collections
+- [ ] Collection for showing liked recipes
+- [x] Save recipes to collections
+  - [x] Private collections
+  - [x] Public collections
+  - [x] Unlisted collections
 - [x] Embedded timer ("cook for 5 minutes", click to start timer)
 - [ ] Simple instructions-view (big font, no bloat)
 - [ ] Notes/tips/warnings among instructions
