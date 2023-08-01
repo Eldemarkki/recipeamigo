@@ -7,6 +7,7 @@ import {
 import { getUserFromRequest } from "../../../utils/auth";
 import { CollectionsList } from "../../../components/collections/CollectionsList";
 import { useTranslation } from "next-i18next";
+import styles from "./index.module.css";
 
 export default function BrowseCollectionsPage({
   publicCollections,
@@ -15,16 +16,18 @@ export default function BrowseCollectionsPage({
   const { t } = useTranslation("browse");
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>{t("collections.title")}</h1>
       {userCollections && (
-        <>
+        <div className={styles.collectionSection}>
           <h2>{t("collections.myCollections")}</h2>
           <CollectionsList collections={userCollections} />
-        </>
+        </div>
       )}
-      <h2>{t("collections.publicCollections")}</h2>
-      <CollectionsList collections={publicCollections} />
+      <div className={styles.collectionSection}>
+        <h2>{t("collections.publicCollections")}</h2>
+        <CollectionsList collections={publicCollections} />
+      </div>
     </div>
   );
 }

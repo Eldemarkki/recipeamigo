@@ -7,6 +7,7 @@ import enProfile from "../public/locales/en/profile.json";
 import enTags from "../public/locales/en/tags.json";
 import enUnits from "../public/locales/en/units.json";
 import enBrowse from "../public/locales/en/browse.json";
+import enCollections from "../public/locales/en/collections.json";
 
 import fiCommon from "../public/locales/fi/common.json";
 import fiHome from "../public/locales/fi/home.json";
@@ -17,6 +18,7 @@ import fiProfile from "../public/locales/fi/profile.json";
 import fiTags from "../public/locales/fi/tags.json";
 import fiUnits from "../public/locales/fi/units.json";
 import fiBrowse from "../public/locales/fi/browse.json";
+import fiCollections from "../public/locales/fi/collections.json";
 
 declare module "i18next" {
   interface CustomTypeOptions {
@@ -30,6 +32,7 @@ declare module "i18next" {
       tags: typeof enTags | typeof fiTags;
       units: typeof enUnits | typeof fiUnits;
       browse: typeof enBrowse | typeof fiBrowse;
+      collections: typeof enCollections | typeof fiCollections;
     };
   }
 }

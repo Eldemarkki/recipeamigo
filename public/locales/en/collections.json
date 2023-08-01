@@ -1,0 +1,6 @@
+{
+  "edit": {
+    "dialogTitle": "Editing {{name}}",
+    "invalidVisibilityConfiguration": "Because you are making this public collection public, all recipes must be either public or unlisted. The following recipes are private: {{privateRecipes, list}}"
+  }
+}

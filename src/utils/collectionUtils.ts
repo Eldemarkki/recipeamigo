@@ -22,3 +22,14 @@ export const hasReadAccessToCollection = (
 
   return false;
 };
+
+export const hasWriteAccessToCollection = (
+  user: Awaited<ReturnType<typeof getUserFromRequest>>,
+  collection: RecipeCollection,
+) => {
+  if (user.status === "Unauthorized") {
+    return false;
+  }
+
+  return collection.userId === user.userId;
+};

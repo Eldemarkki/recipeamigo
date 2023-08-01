@@ -1,0 +1,6 @@
+{
+  "edit": {
+    "dialogTitle": "Muokataan {{name}}",
+    "invalidVisibilityConfiguration": "Koska olet muuttamassa kokoelmaa julkiseksi, kaikkien reseptien tulee olla joko julkisia tai piilotettuja. Seuraavat reseptit ovat yksityisiä: {{privateRecipes, list}}"
+  }
+}

@@ -3,6 +3,7 @@ import { createCollectionSchema } from "../pages/api/collections";
 import { prisma } from "../db";
 import { s3 } from "../s3";
 import { hasReadAccessToRecipe } from "../utils/recipeUtils";
+import { editCollectionSchema } from "../pages/api/collections/[id]";
 
 export const createCollection = async (
   userId: string,
@@ -133,4 +134,95 @@ export const getPublicCollections = async () => {
       user: true,
     },
   });
+};
+
+export const editCollection = async (
+  userId: string,
+  collectionId: string,
+  collection: z.infer<typeof editCollectionSchema>,
+) => {
+  const requestedRecipes = await prisma.recipe.findMany({
+    where: {
+      id: {
+        in: collection.recipeIds,
+      },
+    },
+  });
+
+  const hasAccessToAll = requestedRecipes.every((recipe) =>
+    hasReadAccessToRecipe(userId, recipe),
+  );
+
+  if (
+    !hasAccessToAll ||
+    requestedRecipes.length !== collection.recipeIds.length
+  ) {
+    throw new Error("User does not have access to all referenced recipes");
+  }
+
+  if (collection.visibility === "PUBLIC") {
+    const allRecipesArePublicOrUnlisted = requestedRecipes.every(
+      (recipe) =>
+        recipe.visibility === "PUBLIC" || recipe.visibility === "UNLISTED",
+    );
+
+    if (!allRecipesArePublicOrUnlisted) {
+      throw new Error(
+        "All recipes must be public or unlisted to be added to a public collection",
+      );
+    }
+  }
+
+  const collectionToUpdate = await prisma.recipeCollection.findUnique({
+    where: {
+      id: collectionId,
+    },
+    include: {
+      RecipesOnCollections: {
+        include: {
+          recipe: true,
+        },
+      },
+    },
+  });
+
+  if (!collectionToUpdate) {
+    throw new Error("Collection not found");
+  }
+
+  if (collectionToUpdate.userId !== userId) {
+    throw new Error("User does not have access to this collection");
+  }
+
+  await prisma.recipeCollection.update({
+    where: {
+      id: collectionId,
+    },
+    data: {
+      name: collection.name,
+      visibility: collection.visibility,
+      description: collection.description,
+      RecipesOnCollections: {
+        deleteMany: {
+          recipeId: {
+            notIn: collection.recipeIds,
+          },
+        },
+        createMany: {
+          data: collection.recipeIds
+            .filter(
+              (recipeId) =>
+                !collectionToUpdate.RecipesOnCollections.some(
+                  (roc) => roc.recipeId === recipeId,
+                ),
+            )
+            .map((recipeId) => ({
+              recipeId,
+            })),
+        },
+      },
+    },
+  });
+
+  return await getCollection(collectionId);
 };
