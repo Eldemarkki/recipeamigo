@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Theme, isTheme, useTheme } from "../../hooks/useTheme";
-import { useTranslation } from "next-i18next";
 import { Select } from "../Select";
 import styles from "./ThemeToggle.module.css";
+import { useTranslation } from "next-i18next";
+import { useState } from "react";
 
 const ThemeToggle = () => {
   const { t } = useTranslation("settings");

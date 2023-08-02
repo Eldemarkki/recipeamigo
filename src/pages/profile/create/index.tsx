@@ -1,12 +1,12 @@
-import { GetServerSideProps } from "next";
-import { getUserFromRequest } from "../../../utils/auth";
-import { useState } from "react";
-import { UserProfile } from "@prisma/client";
-import { useRouter } from "next/router";
 import { Button } from "../../../components/button/Button";
+import { getUserFromRequest } from "../../../utils/auth";
 import styles from "./page.module.css";
+import { UserProfile } from "@prisma/client";
+import { GetServerSideProps } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 export type CreateProfilePageProps = {
   userId: string;

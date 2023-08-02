@@ -1,8 +1,8 @@
-import { useTranslation } from "next-i18next";
 import config from "../../../config";
 import { Link } from "../../link/Link";
 import styles from "./BrowsePagination.module.css";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
+import { useTranslation } from "next-i18next";
 
 export type BrowsePaginationProps = {
   page: number;

@@ -1,6 +1,4 @@
-import { useTranslation } from "next-i18next";
-import Select from "react-select/creatable";
-import { components } from "react-select";
+import { DeleteButton } from "../button/DeleteButton";
 import {
   TagType,
   isSpecialTagValue,
@@ -9,8 +7,10 @@ import {
   tagTranslationKeys,
 } from "./Tag";
 import tagStyles from "./Tag.module.css";
-import { DeleteButton } from "../button/DeleteButton";
+import { useTranslation } from "next-i18next";
 import { useId } from "react";
+import { components } from "react-select";
+import Select from "react-select/creatable";
 
 export type TagSelectProps = {
   tags: string[];

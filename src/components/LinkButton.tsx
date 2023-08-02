@@ -1,6 +1,6 @@
 import styles from "./LinkButton.module.css";
-import { ComponentProps } from "react";
 import { Link } from "./link/Link";
+import { ComponentProps } from "react";
 
 export const LinkButton = ({
   children,

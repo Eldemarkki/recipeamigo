@@ -1,5 +1,5 @@
-import { TrashIcon } from "@radix-ui/react-icons";
 import styles from "./DeleteButton.module.css";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 export const DeleteButton = ({
   className,

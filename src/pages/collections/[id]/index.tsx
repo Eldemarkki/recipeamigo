@@ -1,17 +1,17 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { queryParamToString } from "../../../utils/stringUtils";
+import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
+import { Button } from "../../../components/button/Button";
+import { CollectionEditDialog } from "../../../components/collections/dialogs/CollectionEditDialog";
+import { Dialog } from "../../../components/dialog/Dialog";
 import { getCollection } from "../../../database/collections";
+import { getAllRecipesForUser } from "../../../database/recipes";
 import { getUserFromRequest } from "../../../utils/auth";
 import { hasReadAccessToCollection } from "../../../utils/collectionUtils";
-import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
+import { queryParamToString } from "../../../utils/stringUtils";
 import styles from "./index.module.css";
-import { useState } from "react";
-import { Button } from "../../../components/button/Button";
-import { Dialog } from "../../../components/dialog/Dialog";
-import { CollectionEditDialog } from "../../../components/collections/dialogs/CollectionEditDialog";
-import { getAllRecipesForUser } from "../../../database/recipes";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useState } from "react";
 
 export default function CollectionPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,

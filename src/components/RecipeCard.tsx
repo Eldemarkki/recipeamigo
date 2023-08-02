@@ -1,7 +1,7 @@
-import Image from "next/image";
 import styles from "./RecipeCard.module.css";
-import { ImageIcon } from "@radix-ui/react-icons";
 import { Link } from "./link/Link";
+import { ImageIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
 
 export type RecipeCardProps = {
   id: string;

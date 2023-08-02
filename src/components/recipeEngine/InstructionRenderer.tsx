@@ -1,8 +1,8 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { CountdownExtension } from "./extensions/CountdownExtension";
+import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
-import Document from "@tiptap/extension-document";
-import { CountdownExtension } from "./extensions/CountdownExtension";
+import { EditorContent, useEditor } from "@tiptap/react";
 
 export type InstructionListItemProps = {
   instruction: string;

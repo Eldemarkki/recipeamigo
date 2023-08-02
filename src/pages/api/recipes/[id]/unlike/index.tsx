@@ -1,7 +1,7 @@
-import { NextApiHandler } from "next";
-import { getUserFromRequest } from "../../../../../utils/auth";
 import { unlikeRecipe } from "../../../../../database/likes";
 import { canLikeOrUnlikeRecipe } from "../../../../../utils/api/likeUtils";
+import { getUserFromRequest } from "../../../../../utils/auth";
+import { NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) => {
   const recipeId = req.query.id;

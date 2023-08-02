@@ -1,7 +1,7 @@
-import { NumberInput } from "../forms/NumberInput";
 import { CircularButton } from "../button/Button";
-import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
+import { NumberInput } from "../forms/NumberInput";
 import styles from "./RecipeQuantityPicker.module.css";
+import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "next-i18next";
 import { useId } from "react";
 

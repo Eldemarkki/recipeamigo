@@ -1,6 +1,6 @@
-import { mergeAttributes, Node } from "@tiptap/core";
-import { ReactNodeViewRenderer } from "@tiptap/react";
 import { CountdownComponent } from "./CountdownComponent";
+import { Node, mergeAttributes } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {

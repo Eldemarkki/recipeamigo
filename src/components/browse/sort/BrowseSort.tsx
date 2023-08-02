@@ -1,5 +1,5 @@
-import { useTranslation } from "next-i18next";
 import { Select } from "../../Select";
+import { useTranslation } from "next-i18next";
 import { useId } from "react";
 
 export const sorts = [

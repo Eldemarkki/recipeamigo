@@ -1,6 +1,6 @@
-import { randomUUID } from "crypto";
 import { prisma } from "../../db";
 import { AuthorizedUser } from "../auth";
+import { randomUUID } from "crypto";
 
 export const createRandomString = (length: number): string => {
   const characters =

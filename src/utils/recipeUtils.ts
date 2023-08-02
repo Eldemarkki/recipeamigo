@@ -1,5 +1,5 @@
-import { Recipe, RecipeVisibility } from "@prisma/client";
 import { getUserFromRequest } from "./auth";
+import { Recipe, RecipeVisibility } from "@prisma/client";
 
 type TimeEstimateType = null | "single" | "range";
 

@@ -1,13 +1,13 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { CollectionsList } from "../../../components/collections/CollectionsList";
 import {
   getPublicCollections,
   getUserCollections,
 } from "../../../database/collections";
 import { getUserFromRequest } from "../../../utils/auth";
-import { CollectionsList } from "../../../components/collections/CollectionsList";
-import { useTranslation } from "next-i18next";
 import styles from "./index.module.css";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function BrowseCollectionsPage({
   publicCollections,

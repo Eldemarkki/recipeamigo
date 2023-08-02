@@ -1,12 +1,12 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { getUserFromRequest } from "../utils/auth";
-import { getAllRecipesForUser } from "../database/recipes";
-import { RecipeCardGrid } from "../components/RecipeCardGrid";
 import { LinkButton } from "../components/LinkButton";
-import styles from "./page.module.css";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
 import { NewCollectionButton } from "../components/NewCollectionButton";
+import { RecipeCardGrid } from "../components/RecipeCardGrid";
+import { getAllRecipesForUser } from "../database/recipes";
+import { getUserFromRequest } from "../utils/auth";
+import styles from "./page.module.css";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function Home({
   recipes,

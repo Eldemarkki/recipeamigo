@@ -1,6 +1,6 @@
+import { AuthorizedUser, getUserFromRequest } from "./auth";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
-import { AuthorizedUser, getUserFromRequest } from "./auth";
 
 export type AuthorizedUserRequestHandler<
   BodyType = unknown,

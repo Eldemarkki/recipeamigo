@@ -1,13 +1,13 @@
-import { NextApiHandler } from "next";
-import { getUserFromRequest } from "../../../../utils/auth";
-import { queryParamToString } from "../../../../utils/stringUtils";
-import { z } from "zod";
-import { collectionVisibilitySchema } from "../../../../handlers/collections/collectionsPostHandler";
 import {
   editCollection,
   getCollection,
 } from "../../../../database/collections";
+import { collectionVisibilitySchema } from "../../../../handlers/collections/collectionsPostHandler";
+import { getUserFromRequest } from "../../../../utils/auth";
 import { hasWriteAccessToCollection } from "../../../../utils/collectionUtils";
+import { queryParamToString } from "../../../../utils/stringUtils";
+import { NextApiHandler } from "next";
+import { z } from "zod";
 
 export const editCollectionSchema = z.object({
   name: z.string(),

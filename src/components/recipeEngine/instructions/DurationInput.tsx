@@ -1,8 +1,8 @@
-import { useId } from "react";
+import { splitSeconds } from "../../../utils/recipeUtils";
 import { NumberInput } from "../../forms/NumberInput";
 import styles from "./DurationInput.module.css";
 import { useTranslation } from "next-i18next";
-import { splitSeconds } from "../../../utils/recipeUtils";
+import { useId } from "react";
 
 export type DurationInputProps = {
   seconds: number;

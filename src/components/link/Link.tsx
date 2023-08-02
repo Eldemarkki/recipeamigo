@@ -1,6 +1,6 @@
-import { ComponentProps } from "react";
-import NextLink from "next/link";
 import styles from "./Link.module.css";
+import NextLink from "next/link";
+import { ComponentProps } from "react";
 
 export const Link = ({
   className,

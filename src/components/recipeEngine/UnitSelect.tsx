@@ -1,7 +1,7 @@
-import { IngredientUnit } from "@prisma/client";
-import { useTranslation } from "next-i18next";
 import { UNIT_SELECT_TRANSLATION_KEYS } from "../../utils/units";
 import { Select } from "../Select";
+import { IngredientUnit } from "@prisma/client";
+import { useTranslation } from "next-i18next";
 
 export type UnitSelectProps = {
   value: IngredientUnit | null;

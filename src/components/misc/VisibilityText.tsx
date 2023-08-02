@@ -1,3 +1,4 @@
+import styles from "./VisibilityText.module.css";
 import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
 import {
   EyeClosedIcon,
@@ -5,7 +6,6 @@ import {
   LockClosedIcon,
 } from "@radix-ui/react-icons";
 import { useTranslation } from "next-i18next";
-import styles from "./VisibilityText.module.css";
 
 // TODO: Refactor. I want to keep RecipeVisibility and RecipeCollectionVisibility separate, but this is a bit messy.
 

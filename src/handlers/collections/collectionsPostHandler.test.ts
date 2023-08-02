@@ -1,9 +1,9 @@
-import { RecipeVisibility } from "@prisma/client";
 import { getUserCollections } from "../../database/collections";
 import { createRecipe } from "../../database/recipes";
 import { createRandomRecipe } from "../../utils/tests/recipes";
 import { createUserToDatabaseAndAuthenticate } from "../../utils/tests/testUtils";
 import { collectionsPostHandler } from "./collectionsPostHandler";
+import { RecipeVisibility } from "@prisma/client";
 
 describe("collectionsPostHandler", () => {
   test("should create collection with no recipes", async () => {

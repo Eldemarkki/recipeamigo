@@ -1,7 +1,7 @@
-import { getAuth } from "@clerk/nextjs/server";
 import { prisma } from "../db";
-import { UserProfile } from "@prisma/client";
 import { RequestLike } from "@clerk/nextjs/dist/types/server/types";
+import { getAuth } from "@clerk/nextjs/server";
+import { UserProfile } from "@prisma/client";
 
 export type AuthorizedUser =
   | {

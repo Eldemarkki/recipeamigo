@@ -1,9 +1,9 @@
-import { Editor } from "@tiptap/react";
-import { useTranslation } from "next-i18next";
-import { useState } from "react";
 import { Button } from "../../button/Button";
 import { DurationInput } from "./DurationInput";
 import styles from "./NewCountdownDialog.module.css";
+import { Editor } from "@tiptap/react";
+import { useTranslation } from "next-i18next";
+import { useState } from "react";
 
 export type NewCountdownDialogProps = {
   editor: Editor | null;

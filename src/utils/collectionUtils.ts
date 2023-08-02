@@ -1,5 +1,5 @@
-import { RecipeCollection, RecipeCollectionVisibility } from "@prisma/client";
 import { getUserFromRequest } from "./auth";
+import { RecipeCollection, RecipeCollectionVisibility } from "@prisma/client";
 
 export const hasReadAccessToCollection = (
   user: Awaited<ReturnType<typeof getUserFromRequest>>,

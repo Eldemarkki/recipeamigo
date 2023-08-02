@@ -1,13 +1,13 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { getPublicRecipesPaginated } from "../../database/recipes";
-import config from "../../config";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
-import styles from "./index.module.css";
 import { RecipeCardGrid } from "../../components/RecipeCardGrid";
-import { BrowsePagination } from "../../components/browse/pagination/BrowsePagination";
 import { BrowseFilter } from "../../components/browse/filter/BrowseFilter";
+import { BrowsePagination } from "../../components/browse/pagination/BrowsePagination";
+import config from "../../config";
+import { getPublicRecipesPaginated } from "../../database/recipes";
 import { isValidSortParam, queryParamToString } from "../../utils/stringUtils";
+import styles from "./index.module.css";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const BrowsePage = ({
   pagination,

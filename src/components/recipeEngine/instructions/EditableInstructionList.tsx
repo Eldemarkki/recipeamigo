@@ -1,8 +1,8 @@
-import styles from "./EditableInstructionList.module.css";
 import { RawInstruction } from "../ingredients/IngredientForm";
-import { Reorder } from "framer-motion";
+import styles from "./EditableInstructionList.module.css";
 import { EditableInstructionListItem } from "./EditableInstructionListItem";
 import { InstructionEditor } from "./InstructionEditor";
+import { Reorder } from "framer-motion";
 
 export type InstructionListProps = {
   instructions: (RawInstruction & {

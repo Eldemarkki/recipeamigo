@@ -1,8 +1,7 @@
-import { createRecipe, editRecipe, getAllRecipesForUser } from "./recipes";
-import { createUserToDatabase } from "../utils/tests/testUtils";
-import { createRandomRecipe } from "../utils/tests/recipes";
-import { z } from "zod";
 import { editRecipeSchema } from "../pages/api/recipes/[id]";
+import { createRandomRecipe } from "../utils/tests/recipes";
+import { createUserToDatabase } from "../utils/tests/testUtils";
+import { createRecipe, editRecipe, getAllRecipesForUser } from "./recipes";
 import {
   Ingredient,
   IngredientSection,
@@ -10,6 +9,7 @@ import {
   Recipe,
   RecipeVisibility,
 } from "@prisma/client";
+import { z } from "zod";
 
 describe("recipes", () => {
   it("should return empty array when user has no recipes", async () => {

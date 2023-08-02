@@ -1,5 +1,5 @@
-import { useState } from "react";
 import styles from "./CrossOffText.module.css";
+import { useState } from "react";
 
 export type CrossOffText = React.PropsWithChildren<{}>;
 

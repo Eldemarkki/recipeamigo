@@ -1,6 +1,6 @@
-import { RecipeCollection } from "@prisma/client";
 import styles from "./CollectionsList.module.css";
 import { CollectionsListItem } from "./CollectionsListItem";
+import { RecipeCollection } from "@prisma/client";
 
 export type CollectionsListProps = {
   collections: (RecipeCollection & {

@@ -1,6 +1,6 @@
-import { IngredientUnit } from "@prisma/client";
 import { Locale } from "../i18next";
 import { capitalize } from "../utils/stringUtils";
+import { IngredientUnit } from "@prisma/client";
 
 const englishUnits: Record<
   IngredientUnit,

@@ -1,11 +1,11 @@
-import { useId } from "react";
-import Select from "react-select/creatable";
+import { Locale } from "../i18next";
 import {
   englishIngredients,
   getIngredientDropdownLabel,
 } from "../ingredients/ingredientTranslator";
 import { useTranslation } from "next-i18next";
-import { Locale } from "../i18next";
+import { useId } from "react";
+import Select from "react-select/creatable";
 
 export type IngredientSelectProps =
   | {

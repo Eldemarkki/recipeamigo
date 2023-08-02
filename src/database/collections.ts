@@ -1,9 +1,9 @@
-import { z } from "zod";
-import { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
 import { prisma } from "../db";
+import { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
+import { editCollectionSchema } from "../pages/api/collections/[id]";
 import { s3 } from "../s3";
 import { hasReadAccessToRecipe } from "../utils/recipeUtils";
-import { editCollectionSchema } from "../pages/api/collections/[id]";
+import { z } from "zod";
 
 export const createCollection = async (
   userId: string,

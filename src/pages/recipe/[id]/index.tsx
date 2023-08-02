@@ -1,29 +1,29 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { getUserFromRequest } from "../../../utils/auth";
+import { LinkButton } from "../../../components/LinkButton";
+import { Button } from "../../../components/button/Button";
+import { Link } from "../../../components/link/Link";
+import { IngredientSection } from "../../../components/recipeView/IngredientSection";
+import { InstructionsList } from "../../../components/recipeView/InstructionsList";
+import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
+import { TagList } from "../../../components/recipeView/TagList";
+import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
 import {
   getSingleRecipe,
   increaseViewCountForRecipe,
 } from "../../../database/recipes";
-import { useState } from "react";
-import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
-import { InstructionsList } from "../../../components/recipeView/InstructionsList";
-import { IngredientSection } from "../../../components/recipeView/IngredientSection";
-import { Link } from "../../../components/link/Link";
-import styles from "./index.module.css";
-import { LinkButton } from "../../../components/LinkButton";
-import filenamify from "filenamify";
-import { Button } from "../../../components/button/Button";
-import Image from "next/image";
-import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Trans, useTranslation } from "next-i18next";
-import { TagList } from "../../../components/recipeView/TagList";
-import { recipeToMarkdown } from "../../../utils/exportUtils";
 import { Locale } from "../../../i18next";
+import { getUserFromRequest } from "../../../utils/auth";
+import { recipeToMarkdown } from "../../../utils/exportUtils";
 import {
   getTimeEstimateType,
   hasReadAccessToRecipe,
 } from "../../../utils/recipeUtils";
+import styles from "./index.module.css";
+import filenamify from "filenamify";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { Trans, useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Image from "next/image";
+import { useState } from "react";
 
 const exportRecipe = (data: string, filename: string) => {
   const a = document.createElement("a");

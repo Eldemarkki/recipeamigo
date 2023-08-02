@@ -1,5 +1,5 @@
-import { RecipeVisibility } from "@prisma/client";
 import { recipeToMarkdown } from "./exportUtils";
+import { RecipeVisibility } from "@prisma/client";
 
 // TODO: Add tests for if there are no ingredients, ingredient sections, instructions or tags or if they are empty
 // I think the recipeToMarkdown leaves extra empty lines if one of those arrays are empty, so it's partially

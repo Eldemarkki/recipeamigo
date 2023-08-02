@@ -1,6 +1,6 @@
-import { SignIn } from "@clerk/nextjs";
 import config from "../../config";
 import styles from "./page.module.css";
+import { SignIn } from "@clerk/nextjs";
 
 // Currently the app name is "Recipeamigo" and the "Recipe" part should have a gradient.
 // If/when the app name is changed, the styling part will have to be reconsidered, so this

@@ -1,8 +1,8 @@
-import { useTranslation } from "next-i18next";
 import config from "../../config";
 import { Link } from "../link/Link";
 import styles from "./Navbar.module.css";
 import { UserButton } from "@clerk/nextjs";
+import { useTranslation } from "next-i18next";
 
 export const Navbar = () => {
   const { t } = useTranslation();

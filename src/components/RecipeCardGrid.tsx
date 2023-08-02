@@ -1,5 +1,5 @@
-import { RecipeCard } from "./RecipeCard";
 import { NewRecipeCard } from "./NewRecipeCard";
+import { RecipeCard } from "./RecipeCard";
 import styles from "./RecipeCardGrid.module.css";
 
 export type RecipeCardGridProps = {

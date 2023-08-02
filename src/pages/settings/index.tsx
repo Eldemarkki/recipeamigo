@@ -1,7 +1,7 @@
-import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
 import ThemeToggle from "../../components/themeToggle/ThemeToggle";
+import { GetServerSideProps } from "next";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function SettingsPage() {
   const { t } = useTranslation();

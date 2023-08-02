@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { Button } from "../../button/Button";
 import styles from "./IngredientSectionForm.module.css";
 import { useTranslation } from "next-i18next";
+import { useState } from "react";
 
 export type IngredientSectionFormProps = {
   addIngredientSection: (ingredientSectionName: string) => void;

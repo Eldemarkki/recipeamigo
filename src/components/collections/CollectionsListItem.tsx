@@ -1,8 +1,8 @@
-import { RecipeCollection } from "@prisma/client";
-import styles from "./CollectionsListItem.module.css";
 import { Link } from "../link/Link";
-import { useTranslation } from "next-i18next";
+import styles from "./CollectionsListItem.module.css";
+import { RecipeCollection } from "@prisma/client";
 import { PersonIcon, ReaderIcon } from "@radix-ui/react-icons";
+import { useTranslation } from "next-i18next";
 
 export type CollectionsListItemProps = {
   collection: RecipeCollection & {

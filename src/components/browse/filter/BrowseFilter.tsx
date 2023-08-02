@@ -1,17 +1,17 @@
-import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
-import { useEffect, useId, useState } from "react";
-import styles from "./BrowseFilter.module.css";
-import { useTranslation } from "next-i18next";
-import { BrowseSort, Sort, getSortKey, sorts } from "../sort/BrowseSort";
+import config from "../../../config";
 import {
   isValidSortParam,
   queryParamToString,
 } from "../../../utils/stringUtils";
-import config from "../../../config";
-import { TagSelect } from "../../tag/TagSelect";
-import { NumberInput } from "../../forms/NumberInput";
 import { IngredientSelect } from "../../IngredientSelect";
+import { NumberInput } from "../../forms/NumberInput";
+import { TagSelect } from "../../tag/TagSelect";
+import { BrowseSort, Sort, getSortKey, sorts } from "../sort/BrowseSort";
+import styles from "./BrowseFilter.module.css";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+import { ParsedUrlQuery } from "querystring";
+import { useEffect, useId, useState } from "react";
 
 export type Filter = {
   search?: string;

@@ -1,6 +1,6 @@
-import { RecipeVisibility } from "@prisma/client";
 import styles from "./RecipeSelectionGrid.module.css";
 import { RecipeSelectionTile } from "./RecipeSelectionTile";
+import { RecipeVisibility } from "@prisma/client";
 
 export type RecipeSelectionGridProps = {
   recipes: {

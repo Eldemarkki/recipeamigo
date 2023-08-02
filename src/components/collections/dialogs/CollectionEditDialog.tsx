@@ -1,22 +1,22 @@
+import { getCollection } from "../../../database/collections";
+import { editCollection as editCollectionApi } from "../../../database/collections";
+import { getAllRecipesForUser } from "../../../database/recipes";
+import { editCollectionSchema } from "../../../pages/api/collections/[id]";
+import { LinkButton } from "../../LinkButton";
+import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
+import { Select } from "../../Select";
+import { Button } from "../../button/Button";
+import { ErrorText } from "../../error/ErrorText";
+import styles from "./CollectionEditDialog.module.css";
 import {
   RecipeCollection,
   RecipeCollectionVisibility,
   RecipeVisibility,
 } from "@prisma/client";
-import styles from "./CollectionEditDialog.module.css";
 import { useTranslation } from "next-i18next";
-import { useId, useState } from "react";
-import { getAllRecipesForUser } from "../../../database/recipes";
-import { Select } from "../../Select";
-import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
-import { LinkButton } from "../../LinkButton";
-import { ErrorText } from "../../error/ErrorText";
-import { Button } from "../../button/Button";
-import { getCollection } from "../../../database/collections";
-import { z } from "zod";
-import { editCollectionSchema } from "../../../pages/api/collections/[id]";
-import { editCollection as editCollectionApi } from "../../../database/collections";
 import { useRouter } from "next/router";
+import { useId, useState } from "react";
+import { z } from "zod";
 
 const editCollection = async (
   collectionId: string,

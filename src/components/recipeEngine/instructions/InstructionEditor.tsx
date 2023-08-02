@@ -1,15 +1,15 @@
-import { useEditor, EditorContent } from "@tiptap/react";
 import { Button } from "../../button/Button";
-import { useTranslation } from "next-i18next";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
-import { Node } from "@tiptap/core";
-import { CountdownExtension } from "../extensions/CountdownExtension";
 import { Dialog } from "../../dialog/Dialog";
-import { useState } from "react";
-import { TimerIcon } from "@radix-ui/react-icons";
+import { CountdownExtension } from "../extensions/CountdownExtension";
 import styles from "./InstructionEditor.module.css";
 import { NewCountdownDialog } from "./NewCountdownDialog";
+import { TimerIcon } from "@radix-ui/react-icons";
+import { Node } from "@tiptap/core";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { useTranslation } from "next-i18next";
+import { useState } from "react";
 
 const OneLiner = Node.create({
   name: "oneLiner",

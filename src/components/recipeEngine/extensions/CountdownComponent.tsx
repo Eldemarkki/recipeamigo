@@ -1,3 +1,7 @@
+import { splitSeconds } from "../../../utils/recipeUtils";
+import { CircularButton } from "../../button/Button";
+import { Dialog } from "../../dialog/Dialog";
+import styles from "./CountdownComponent.module.css";
 import {
   Cross1Icon,
   EnterFullScreenIcon,
@@ -7,10 +11,6 @@ import {
 } from "@radix-ui/react-icons";
 import { NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
-import { CircularButton } from "../../button/Button";
-import { splitSeconds } from "../../../utils/recipeUtils";
-import { Dialog } from "../../dialog/Dialog";
-import styles from "./CountdownComponent.module.css";
 import screenfull from "screenfull";
 
 export type CountdownComponentProps = {

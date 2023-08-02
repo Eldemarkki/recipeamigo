@@ -1,16 +1,16 @@
+import { IngredientSelect } from "../../IngredientSelect";
+import { Button } from "../../button/Button";
+import { NumberInput } from "../../forms/NumberInput";
+import { UnitSelect } from "../UnitSelect";
+import styles from "./IngredientForm.module.css";
 import {
   Ingredient,
   IngredientSection,
   IngredientUnit,
   Instruction,
 } from "@prisma/client";
-import { useId, useState } from "react";
-import { NumberInput } from "../../forms/NumberInput";
-import { Button } from "../../button/Button";
-import styles from "./IngredientForm.module.css";
 import { useTranslation } from "next-i18next";
-import { UnitSelect } from "../UnitSelect";
-import { IngredientSelect } from "../../IngredientSelect";
+import { useId, useState } from "react";
 
 export type RawIngredient = Omit<
   Ingredient,

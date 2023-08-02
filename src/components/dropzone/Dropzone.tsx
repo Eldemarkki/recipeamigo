@@ -1,10 +1,10 @@
+import { removeDuplicateStrings } from "../../utils/arrayUtils";
+import { DeleteButton } from "../button/DeleteButton";
+import styles from "./Dropzone.module.css";
+import { useTranslation } from "next-i18next";
+import Image from "next/image";
 import { useCallback, useId, useState } from "react";
 import { ErrorCode, useDropzone } from "react-dropzone";
-import styles from "./Dropzone.module.css";
-import Image from "next/image";
-import { DeleteButton } from "../button/DeleteButton";
-import { useTranslation } from "next-i18next";
-import { removeDuplicateStrings } from "../../utils/arrayUtils";
 
 export type DropzoneProps = {
   onDrop: (file: File | null) => void;

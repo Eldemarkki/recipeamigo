@@ -1,7 +1,7 @@
-import { getSingleRecipe } from "../../database/recipes";
 import { getLikeStatus } from "../../database/likes";
-import { hasReadAccessToRecipe } from "../recipeUtils";
+import { getSingleRecipe } from "../../database/recipes";
 import { AuthorizedUser, getUserFromRequest } from "../auth";
+import { hasReadAccessToRecipe } from "../recipeUtils";
 
 type CanLikeOrUnlikeRecipeResult<
   CannotOperateOwnRecipeError extends string,

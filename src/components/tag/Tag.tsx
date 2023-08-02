@@ -1,7 +1,7 @@
-import { PropsWithChildren } from "react";
-import styles from "./Tag.module.css";
 import { DeleteButton } from "../button/DeleteButton";
+import styles from "./Tag.module.css";
 import { ParseKeys } from "i18next";
+import { PropsWithChildren } from "react";
 
 export enum TagType {
   LactoseFree = "lactoseFree",
