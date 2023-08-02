@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { ingredientUnitSchema, visibilitySchema } from "..";
+import {
+  ingredientUnitSchema,
+  visibilitySchema,
+} from "../../../../handlers/recipes/recipesPostHandler";
 import { NextApiHandler } from "next";
 import { getUserFromRequest } from "../../../../utils/auth";
 import {

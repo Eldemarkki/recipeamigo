@@ -15,7 +15,7 @@ import { EditableIngredientList } from "./ingredients/EditableIngredientList";
 import { EditableInstructionList } from "./instructions/EditableInstructionList";
 import { editRecipeSchema } from "../../pages/api/recipes/[id]";
 import { z } from "zod";
-import { createRecipeSchema } from "../../pages/api/recipes";
+import { createRecipeSchema } from "../../handlers/recipes/recipesPostHandler";
 import { Dialog } from "../dialog/Dialog";
 import { RecipeVisibility } from "@prisma/client";
 import { Select } from "../Select";

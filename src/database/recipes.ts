@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { prisma } from "../db";
-import { createRecipeSchema } from "../pages/api/recipes";
+import { createRecipeSchema } from "../handlers/recipes/recipesPostHandler";
 import { editRecipeSchema } from "../pages/api/recipes/[id]";
 import type { UUID } from "crypto";
 import { DEFAULT_BUCKET_NAME, s3 } from "../s3";

@@ -4,7 +4,7 @@ import {
   ingredientSchema,
   ingredientSectionSchema,
   instructionSchema,
-} from "../../pages/api/recipes";
+} from "../../handlers/recipes/recipesPostHandler";
 import {
   createRandomArray,
   createRandomBoolean,
