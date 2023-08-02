@@ -48,7 +48,9 @@ export const createRandomRecipeVisibility = (): RecipeVisibility => {
   return visibilities[randomIndex];
 };
 
-export const createRandomRecipe = (): z.infer<typeof createRecipeSchema> => ({
+export const createRandomRecipe = (
+  values?: Partial<z.infer<typeof createRecipeSchema>>,
+): z.infer<typeof createRecipeSchema> => ({
   name: createRandomString(10),
   description: createRandomString(10),
   ingredientSections: createRandomArray(
@@ -63,4 +65,5 @@ export const createRandomRecipe = (): z.infer<typeof createRecipeSchema> => ({
   visibility: createRandomRecipeVisibility(),
   timeEstimateMinimumMinutes: createRandomNumber(0, 10),
   timeEstimateMaximumMinutes: createRandomNumber(10, 20),
+  ...values,
 });

@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
 import { prisma } from "../../db";
+import { AuthorizedUser } from "../auth";
 
 export const createRandomString = (length: number): string => {
   const characters =
@@ -37,4 +38,25 @@ export const createUserToDatabase = async () => {
   });
 
   return userId;
+};
+
+export const createUserToDatabaseAndAuthenticate = async () => {
+  const userId = randomUUID();
+  const username = createRandomString(20);
+
+  await prisma.userProfile.create({
+    data: {
+      clerkId: userId,
+      username: username,
+    },
+  });
+
+  return {
+    status: "OK",
+    userId: userId,
+    userProfile: {
+      clerkId: userId,
+      username: username,
+    },
+  } satisfies AuthorizedUser;
 };
