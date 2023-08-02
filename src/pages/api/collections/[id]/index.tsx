@@ -2,7 +2,7 @@ import { NextApiHandler } from "next";
 import { getUserFromRequest } from "../../../../utils/auth";
 import { queryParamToString } from "../../../../utils/stringUtils";
 import { z } from "zod";
-import { collectionVisibilitySchema } from "..";
+import { collectionVisibilitySchema } from "../../../../handlers/collections/collectionsPostHandler";
 import {
   editCollection,
   getCollection,

@@ -8,7 +8,7 @@ import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
 import { LinkButton } from "../../LinkButton";
 import { Button } from "../../button/Button";
 import { z } from "zod";
-import { createCollectionSchema } from "../../../pages/api/collections";
+import { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
 import { createCollection as createCollectionApi } from "../../../database/collections";
 import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
 import { Select } from "../../Select";

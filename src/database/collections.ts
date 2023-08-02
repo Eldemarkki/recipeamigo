@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createCollectionSchema } from "../pages/api/collections";
+import { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
 import { prisma } from "../db";
 import { s3 } from "../s3";
 import { hasReadAccessToRecipe } from "../utils/recipeUtils";
