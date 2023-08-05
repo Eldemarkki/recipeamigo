@@ -1,5 +1,5 @@
 import { createCollection } from "../../database/collections";
-import { AuthorizedUserRequestHandler } from "../../utils/apiUtils";
+import { Handler } from "../../utils/apiUtils";
 import { RecipeCollectionVisibility } from "@prisma/client";
 import { z } from "zod";
 
@@ -14,9 +14,11 @@ export const createCollectionSchema = z.object({
   recipeIds: z.array(z.string()),
 });
 
-export const collectionsPostHandler = (async (user, body) => {
-  const collection = await createCollection(user.userId, body);
-  return collection;
-}) satisfies AuthorizedUserRequestHandler<
-  z.infer<typeof createCollectionSchema>
->;
+export const collectionsPostHandler = {
+  requireUser: true,
+  bodyValidator: createCollectionSchema,
+  handler: async (user, body) => {
+    const collection = await createCollection(user.userId, body);
+    return collection;
+  },
+} satisfies Handler<z.infer<typeof createCollectionSchema>>;

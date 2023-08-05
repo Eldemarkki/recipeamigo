@@ -2,12 +2,9 @@ import {
   editRecipe,
   getSingleRecipeWithoutCoverImageUrl,
 } from "../../../../database/recipes";
-import {
-  ingredientUnitSchema,
-  visibilitySchema,
-} from "../../../../handlers/recipes/recipesPostHandler";
 import { DEFAULT_BUCKET_NAME, s3 } from "../../../../s3";
 import { getUserFromRequest } from "../../../../utils/auth";
+import { IngredientUnit, RecipeVisibility } from "@prisma/client";
 import { randomUUID } from "crypto";
 import { NextApiHandler } from "next";
 import { z } from "zod";
@@ -15,7 +12,7 @@ import { z } from "zod";
 const newIngredientSchema = z.object({
   name: z.string(),
   quantity: z.number().nonnegative(),
-  unit: ingredientUnitSchema.optional(),
+  unit: z.nativeEnum(IngredientUnit).optional(),
   isOptional: z.boolean().optional(),
 });
 
@@ -71,7 +68,7 @@ export const editRecipeSchema = z.object({
   ingredientSections: z.array(editingIngredientSchema).optional(),
   instructions: z.array(editingInstructionsSchema).optional(),
   quantity: z.number().min(1).optional(),
-  visibility: visibilitySchema.optional(),
+  visibility: z.nativeEnum(RecipeVisibility).optional(),
   timeEstimateMinimumMinutes: z.number().min(0).optional(),
   timeEstimateMaximumMinutes: z.number().min(0).optional(),
   tags: z

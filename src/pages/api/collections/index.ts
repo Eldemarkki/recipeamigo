@@ -1,7 +1,4 @@
-import {
-  collectionsPostHandler,
-  createCollectionSchema,
-} from "../../../handlers/collections/collectionsPostHandler";
+import { collectionsPostHandler } from "../../../handlers/collections/collectionsPostHandler";
 import { handle, mapMethods } from "../../../utils/apiUtils";
 
 export default mapMethods({
@@ -9,8 +6,6 @@ export default mapMethods({
     handle({
       req,
       res,
-      requireUser: true,
-      bodyValidator: createCollectionSchema,
-      handler: collectionsPostHandler,
+      ...collectionsPostHandler,
     }),
 });

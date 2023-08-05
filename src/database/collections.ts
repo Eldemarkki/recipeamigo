@@ -1,6 +1,6 @@
 import { prisma } from "../db";
+import { editCollectionSchema } from "../handlers/collections/collectionsIdPutHandler";
 import { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
-import { editCollectionSchema } from "../pages/api/collections/[id]";
 import { s3 } from "../s3";
 import { hasReadAccessToRecipe } from "../utils/recipeUtils";
 import { z } from "zod";

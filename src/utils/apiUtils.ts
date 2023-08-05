@@ -1,68 +1,127 @@
 import { AuthorizedUser, getUserFromRequest } from "./auth";
+import {
+  BadRequestError,
+  HttpError,
+  HttpStatusCode,
+  InvalidQueryParametersError,
+  UnauthorizedError,
+} from "./errors";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 
-export type AuthorizedUserRequestHandler<
+export type HandlerParameters<
   BodyType = unknown,
+  QueryType = unknown,
   ResponseType = unknown,
-> = (user: AuthorizedUser, body: BodyType) => Promise<ResponseType>;
-
-export type UnauthorizedUserRequestHandler<
-  BodyType = unknown,
-  ResponseType = unknown,
-> = (user: AuthorizedUser | null, body: BodyType) => Promise<ResponseType>;
-
-type AuthHandler<
-  RequireAuth extends boolean,
-  BodyType,
-  ResponseType,
-> = RequireAuth extends true
-  ? AuthorizedUserRequestHandler<BodyType, ResponseType>
-  : UnauthorizedUserRequestHandler<BodyType, ResponseType>;
-
-export const handle = async <BodyType, ResponseType>({
-  req,
-  res,
-  bodyValidator,
-  requireUser,
-  handler,
-}: {
+> = {
   req: NextApiRequest;
   res: NextApiResponse;
+} & Handler<BodyType, QueryType, ResponseType>;
+
+export type Handler<BodyType, QueryType = unknown, ResponseType = unknown> = {
   bodyValidator: z.ZodType<BodyType>;
 } & (
   | {
       requireUser: true;
-      handler: AuthHandler<true, BodyType, ResponseType>;
+      handler: (
+        user: AuthorizedUser,
+        body: BodyType,
+        query: QueryType,
+      ) => Promise<ResponseType> | ResponseType;
+      queryValidator: z.ZodType<QueryType>;
     }
   | {
       requireUser: false;
-      handler: AuthHandler<false, BodyType, ResponseType>;
+      handler: (
+        user: AuthorizedUser | null,
+        body: BodyType,
+        query: QueryType,
+      ) => Promise<ResponseType> | ResponseType;
+      queryValidator: z.ZodType<QueryType>;
     }
-)) => {
-  const result = bodyValidator.safeParse(req.body);
-  if (!result.success) {
-    return res.status(400).json({ message: "Invalid request body" });
+  | {
+      requireUser: true;
+      handler: (
+        user: AuthorizedUser,
+        body: BodyType,
+      ) => Promise<ResponseType> | ResponseType;
+      queryValidator?: null;
+    }
+  | {
+      requireUser: false;
+      handler: (
+        user: AuthorizedUser | null,
+        body: BodyType,
+      ) => Promise<ResponseType> | ResponseType;
+      queryValidator?: null;
+    }
+);
+
+const errorMapper = (
+  error: unknown,
+): {
+  message: string;
+  status: HttpStatusCode;
+} => {
+  if (error instanceof HttpError) {
+    return { message: error.message, status: error.status };
   }
 
-  const user = await getUserFromRequest(req);
+  return { message: "Internal server error", status: 500 };
+};
+
+export const handle = async <BodyType, QueryType, ResponseType>({
+  req,
+  res,
+  handler,
+  bodyValidator,
+  queryValidator,
+  requireUser,
+}: HandlerParameters<BodyType, QueryType, ResponseType>) => {
   try {
+    const result = bodyValidator.safeParse(req.body);
+    if (!result.success) {
+      throw new BadRequestError(result.error.message);
+    }
+
+    const user = await getUserFromRequest(req);
     if (requireUser === true) {
       if (user.status === "Unauthorized") {
-        return res.status(401).json({ message: "Not authenticated" });
+        throw new UnauthorizedError();
       }
-      const responseBody = await handler(user, result.data);
-      res.status(200).json(responseBody);
-      return;
+
+      if (queryValidator) {
+        const queryResult = queryValidator.safeParse(req.query);
+        if (queryResult && !queryResult.success) {
+          throw new InvalidQueryParametersError(queryResult.error.message);
+        }
+
+        const query = queryResult?.data;
+        const responseBody = await handler(user, result.data, query);
+        res.status(200).json(responseBody);
+      } else {
+        const responseBody = await handler(user, result.data);
+        res.status(200).json(responseBody);
+      }
     } else {
       const userOrNull = user.status !== "Unauthorized" ? user : null;
-      const responseBody = await handler(userOrNull, result.data);
-      res.status(200).json(responseBody);
-      return;
+      if (queryValidator) {
+        const queryResult = queryValidator.safeParse(req.query);
+        if (queryResult && !queryResult.success) {
+          throw new InvalidQueryParametersError(queryResult.error.message);
+        }
+
+        const query = queryResult?.data;
+        const responseBody = await handler(userOrNull, result.data, query);
+        res.status(200).json(responseBody);
+      } else {
+        const responseBody = await handler(userOrNull, result.data);
+        res.status(200).json(responseBody);
+      }
     }
   } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: "Internal server error" });
+    const { message, status } = errorMapper(e);
+    res.status(status).json({ message });
   }
 };
 

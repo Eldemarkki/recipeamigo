@@ -1,18 +1,14 @@
 import { getCollection } from "../../../database/collections";
 import { editCollection as editCollectionApi } from "../../../database/collections";
 import { getAllRecipesForUser } from "../../../database/recipes";
-import { editCollectionSchema } from "../../../pages/api/collections/[id]";
+import { editCollectionSchema } from "../../../handlers/collections/collectionsIdPutHandler";
 import { LinkButton } from "../../LinkButton";
 import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
 import { Select } from "../../Select";
 import { Button } from "../../button/Button";
 import { ErrorText } from "../../error/ErrorText";
 import styles from "./CollectionEditDialog.module.css";
-import {
-  RecipeCollection,
-  RecipeCollectionVisibility,
-  RecipeVisibility,
-} from "@prisma/client";
+import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";

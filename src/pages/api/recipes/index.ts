@@ -1,7 +1,4 @@
-import {
-  createRecipeSchema,
-  recipesPostHandler,
-} from "../../../handlers/recipes/recipesPostHandler";
+import { recipesPostHandler } from "../../../handlers/recipes/recipesPostHandler";
 import { handle, mapMethods } from "../../../utils/apiUtils";
 
 export default mapMethods({
@@ -9,8 +6,6 @@ export default mapMethods({
     handle({
       req,
       res,
-      requireUser: true,
-      bodyValidator: createRecipeSchema,
-      handler: recipesPostHandler,
+      ...recipesPostHandler,
     }),
 });

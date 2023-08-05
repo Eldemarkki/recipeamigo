@@ -8,7 +8,7 @@ import { RecipeVisibility } from "@prisma/client";
 describe("collectionsPostHandler", () => {
   test("should create collection with no recipes", async () => {
     const user = await createUserToDatabaseAndAuthenticate();
-    await collectionsPostHandler(user, {
+    await collectionsPostHandler.handler(user, {
       name: "test",
       description: "test",
       visibility: "PUBLIC",
@@ -30,7 +30,7 @@ describe("collectionsPostHandler", () => {
       null,
     );
 
-    await collectionsPostHandler(user, {
+    await collectionsPostHandler.handler(user, {
       name: "test",
       description: "test",
       visibility: "PUBLIC",
@@ -54,7 +54,7 @@ describe("collectionsPostHandler", () => {
     );
 
     await expect(
-      collectionsPostHandler(user, {
+      collectionsPostHandler.handler(user, {
         name: "test",
         description: "test",
         visibility: "PUBLIC",
