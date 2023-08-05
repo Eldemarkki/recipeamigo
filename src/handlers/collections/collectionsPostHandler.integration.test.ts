@@ -276,7 +276,9 @@ describe("collectionsPostHandler", () => {
         const collection = await createCollectionWithParameters();
         expect(collection).not.toBeNull();
       } else {
-        await expect(createCollectionWithParameters).rejects.toThrowError(e ?? undefined);
+        await expect(createCollectionWithParameters).rejects.toThrowError(
+          e ?? undefined,
+        );
         const userCollections = await getUserCollections(user.userId);
         expect(userCollections).toHaveLength(0);
       }
