@@ -62,4 +62,5 @@
 | 31.7.2023 | 1      | Estä julkisten kokoelmien luominen jos kokoelma sisältää yksityisiä reseptejä   |
 | 1.8.2023  | 2      | Salli kokoelmien muokkaaminen                                                   |
 | 2.8.2023  | 2      | Refaktoroi API-handlereita, luo yksinkertaisia API handler -testejä kokoelmille |
-| Yhteensä  | 112    |                                                                                 |
+| 5.8.2023  | 2      | Refaktoroi API-handlereita, luo testejä                                         |
+| Yhteensä  | 114    |                                                                                 |
