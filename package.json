@@ -19,7 +19,8 @@
     "test:unit:ci": "vitest unit.test.ts",
     "test:integration:ci": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts",
     "sumHours": "node ./sumHours.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "commitlint": "commitlint --edit"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.2",
@@ -51,6 +52,8 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/node": "20.4.8",
     "@types/pdfkit": "^0.12.10",
