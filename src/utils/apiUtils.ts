@@ -18,11 +18,14 @@ export type HandlerParameters<
   res: NextApiResponse;
 } & Handler<BodyType, QueryType, ResponseType>;
 
-export type Handler<BodyType, QueryType = unknown, ResponseType = unknown> = {
-  bodyValidator: z.ZodType<BodyType>;
-} & (
+export type Handler<
+  BodyType = unknown,
+  QueryType = unknown,
+  ResponseType = unknown,
+> =
   | {
       requireUser: true;
+      bodyValidator: z.ZodType<BodyType>;
       handler: (
         user: AuthorizedUser,
         body: BodyType,
@@ -32,6 +35,7 @@ export type Handler<BodyType, QueryType = unknown, ResponseType = unknown> = {
     }
   | {
       requireUser: false;
+      bodyValidator: z.ZodType<BodyType>;
       handler: (
         user: AuthorizedUser | null,
         body: BodyType,
@@ -41,6 +45,7 @@ export type Handler<BodyType, QueryType = unknown, ResponseType = unknown> = {
     }
   | {
       requireUser: true;
+      bodyValidator: z.ZodType<BodyType>;
       handler: (
         user: AuthorizedUser,
         body: BodyType,
@@ -49,13 +54,45 @@ export type Handler<BodyType, QueryType = unknown, ResponseType = unknown> = {
     }
   | {
       requireUser: false;
+      bodyValidator: z.ZodType<BodyType>;
       handler: (
         user: AuthorizedUser | null,
         body: BodyType,
       ) => Promise<ResponseType> | ResponseType;
       queryValidator?: null;
     }
-);
+  | {
+      requireUser: true;
+      bodyValidator?: null;
+      handler: (
+        user: AuthorizedUser,
+        query: QueryType,
+      ) => Promise<ResponseType> | ResponseType;
+      queryValidator: z.ZodType<QueryType>;
+    }
+  | {
+      requireUser: false;
+      bodyValidator?: null;
+      handler: (
+        user: AuthorizedUser | null,
+        query: QueryType,
+      ) => Promise<ResponseType> | ResponseType;
+      queryValidator: z.ZodType<QueryType>;
+    }
+  | {
+      requireUser: true;
+      bodyValidator?: null;
+      handler: (user: AuthorizedUser) => Promise<ResponseType> | ResponseType;
+      queryValidator?: null;
+    }
+  | {
+      requireUser: false;
+      bodyValidator?: null;
+      handler: (
+        user: AuthorizedUser | null,
+      ) => Promise<ResponseType> | ResponseType;
+      queryValidator?: null;
+    };
 
 const errorMapper = (
   error: unknown,
@@ -79,44 +116,82 @@ export const handle = async <BodyType, QueryType, ResponseType>({
   requireUser,
 }: HandlerParameters<BodyType, QueryType, ResponseType>) => {
   try {
-    const result = bodyValidator.safeParse(req.body);
-    if (!result.success) {
-      throw new BadRequestError(result.error.message);
-    }
-
-    const user = await getUserFromRequest(req);
-    if (requireUser === true) {
-      if (user.status === "Unauthorized") {
-        throw new UnauthorizedError();
+    if (bodyValidator) {
+      const result = bodyValidator.safeParse(req.body);
+      if (!result.success) {
+        throw new BadRequestError(result.error.message);
       }
 
-      if (queryValidator) {
-        const queryResult = queryValidator.safeParse(req.query);
-        if (queryResult && !queryResult.success) {
-          throw new InvalidQueryParametersError(queryResult.error.message);
+      const user = await getUserFromRequest(req);
+      if (requireUser === true) {
+        if (user.status === "Unauthorized") {
+          throw new UnauthorizedError();
         }
 
-        const query = queryResult?.data;
-        const responseBody = await handler(user, result.data, query);
-        res.status(200).json(responseBody);
+        if (queryValidator) {
+          const queryResult = queryValidator.safeParse(req.query);
+          if (queryResult && !queryResult.success) {
+            throw new InvalidQueryParametersError(queryResult.error.message);
+          }
+
+          const query = queryResult?.data;
+          const responseBody = await handler(user, result.data, query);
+          res.status(200).json(responseBody);
+        } else {
+          const responseBody = await handler(user, result.data);
+          res.status(200).json(responseBody);
+        }
       } else {
-        const responseBody = await handler(user, result.data);
-        res.status(200).json(responseBody);
+        const userOrNull = user.status !== "Unauthorized" ? user : null;
+        if (queryValidator) {
+          const queryResult = queryValidator.safeParse(req.query);
+          if (queryResult && !queryResult.success) {
+            throw new InvalidQueryParametersError(queryResult.error.message);
+          }
+
+          const query = queryResult?.data;
+          const responseBody = await handler(userOrNull, result.data, query);
+          res.status(200).json(responseBody);
+        } else {
+          const responseBody = await handler(userOrNull, result.data);
+          res.status(200).json(responseBody);
+        }
       }
     } else {
-      const userOrNull = user.status !== "Unauthorized" ? user : null;
-      if (queryValidator) {
-        const queryResult = queryValidator.safeParse(req.query);
-        if (queryResult && !queryResult.success) {
-          throw new InvalidQueryParametersError(queryResult.error.message);
+      const user = await getUserFromRequest(req);
+      if (requireUser === true) {
+        if (user.status === "Unauthorized") {
+          throw new UnauthorizedError();
         }
 
-        const query = queryResult?.data;
-        const responseBody = await handler(userOrNull, result.data, query);
-        res.status(200).json(responseBody);
+        if (queryValidator) {
+          const queryResult = queryValidator.safeParse(req.query);
+          if (queryResult && !queryResult.success) {
+            throw new InvalidQueryParametersError(queryResult.error.message);
+          }
+
+          const query = queryResult?.data;
+          const responseBody = await handler(user, query);
+          res.status(200).json(responseBody);
+        } else {
+          const responseBody = await handler(user);
+          res.status(200).json(responseBody);
+        }
       } else {
-        const responseBody = await handler(userOrNull, result.data);
-        res.status(200).json(responseBody);
+        const userOrNull = user.status !== "Unauthorized" ? user : null;
+        if (queryValidator) {
+          const queryResult = queryValidator.safeParse(req.query);
+          if (queryResult && !queryResult.success) {
+            throw new InvalidQueryParametersError(queryResult.error.message);
+          }
+
+          const query = queryResult?.data;
+          const responseBody = await handler(userOrNull, query);
+          res.status(200).json(responseBody);
+        } else {
+          const responseBody = await handler(userOrNull);
+          res.status(200).json(responseBody);
+        }
       }
     }
   } catch (e) {

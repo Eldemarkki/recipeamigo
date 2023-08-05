@@ -1,13 +1,9 @@
 import { CollectionsList } from "../../../components/collections/CollectionsList";
-import {
-  getPublicCollections,
-  getUserCollections,
-} from "../../../database/collections";
-import { getUserFromRequest } from "../../../utils/auth";
+import { browseCollectionsDataLoader } from "../../../dataLoaders/browse/collections/browseCollectionsDataLoader";
+import { loadProps } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function BrowseCollectionsPage({
   publicCollections,
@@ -32,23 +28,8 @@ export default function BrowseCollectionsPage({
   );
 }
 
-export const getServerSideProps = (async ({ req, locale }) => {
-  const user = await getUserFromRequest(req);
-
-  const userId = user.status !== "Unauthorized" ? user.userId : undefined;
-
-  const publicCollections = await getPublicCollections();
-  const userCollections = userId ? await getUserCollections(userId) : null;
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? "en", [
-        "common",
-        "browse",
-        "navbar",
-      ])),
-      publicCollections,
-      userCollections,
-    },
-  };
-}) satisfies GetServerSideProps;
+export const getServerSideProps = (async (ctx) =>
+  await loadProps({
+    ctx,
+    ...browseCollectionsDataLoader,
+  })) satisfies GetServerSideProps;
