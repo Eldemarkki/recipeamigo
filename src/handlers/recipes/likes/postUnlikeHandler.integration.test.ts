@@ -25,7 +25,7 @@ describe("postUnlikeHandler", () => {
     );
 
     await expect(
-      postUnlikeHandler.handler(user, {}, { id: recipe.id }),
+      postUnlikeHandler.handler(user, { id: recipe.id }),
     ).rejects.toThrow(new RecipeAlreadyUnliked(recipe.id));
 
     const likes = await getLikeCountForRecipe(recipe.id);
@@ -44,13 +44,13 @@ describe("postUnlikeHandler", () => {
       null,
     );
 
-    await postLikeHandler.handler(user, {}, { id: recipe.id });
+    await postLikeHandler.handler(user, { id: recipe.id });
     const likes = await getLikeCountForRecipe(recipe.id);
     expect(likes).toBe(1);
 
-    await postUnlikeHandler.handler(user, {}, { id: recipe.id });
+    await postUnlikeHandler.handler(user, { id: recipe.id });
     await expect(
-      postUnlikeHandler.handler(user, {}, { id: recipe.id }),
+      postUnlikeHandler.handler(user, { id: recipe.id }),
     ).rejects.toThrow(new RecipeAlreadyUnliked(recipe.id));
 
     const likesAfterUnlike = await getLikeCountForRecipe(recipe.id);
@@ -69,7 +69,7 @@ describe("postUnlikeHandler", () => {
     );
 
     await expect(
-      postUnlikeHandler.handler(user, {}, { id: recipe.id }),
+      postUnlikeHandler.handler(user, { id: recipe.id }),
     ).rejects.toThrow(CannotUnlikeOwnRecipe);
 
     const likes = await getLikeCountForRecipe(recipe.id);
@@ -89,7 +89,7 @@ describe("postUnlikeHandler", () => {
     );
 
     await expect(
-      postUnlikeHandler.handler(user, {}, { id: recipe.id }),
+      postUnlikeHandler.handler(user, { id: recipe.id }),
     ).rejects.toThrow(new RecipeNotFoundError(recipe.id));
 
     const likes = await getLikeCountForRecipe(recipe.id);
@@ -100,7 +100,7 @@ describe("postUnlikeHandler", () => {
     const user = await createUserToDatabaseAndAuthenticate();
 
     await expect(
-      postUnlikeHandler.handler(user, {}, { id: "123" }),
+      postUnlikeHandler.handler(user, { id: "123" }),
     ).rejects.toThrow(new RecipeNotFoundError("123"));
   });
 
@@ -116,11 +116,11 @@ describe("postUnlikeHandler", () => {
       null,
     );
 
-    await postLikeHandler.handler(user, {}, { id: recipe.id });
+    await postLikeHandler.handler(user, { id: recipe.id });
     const likes = await getLikeCountForRecipe(recipe.id);
     expect(likes).toBe(1);
 
-    await postUnlikeHandler.handler(user, {}, { id: recipe.id });
+    await postUnlikeHandler.handler(user, { id: recipe.id });
     const likesAfterUnlike = await getLikeCountForRecipe(recipe.id);
     expect(likesAfterUnlike).toBe(0);
   });
@@ -137,7 +137,7 @@ describe("postUnlikeHandler", () => {
     );
 
     await expect(
-      postUnlikeHandler.handler(user, {}, { id: recipe.id }),
+      postUnlikeHandler.handler(user, { id: recipe.id }),
     ).rejects.toThrow(CannotUnlikeOwnRecipe);
 
     const likes = await getLikeCountForRecipe(recipe.id);

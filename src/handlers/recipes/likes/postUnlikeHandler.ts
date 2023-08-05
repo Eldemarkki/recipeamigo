@@ -5,11 +5,10 @@ import { z } from "zod";
 
 export const postUnlikeHandler = {
   requireUser: true,
-  bodyValidator: z.object({}),
   queryValidator: z.object({
     id: z.string(),
   }),
-  handler: async (user, _body, query) => {
+  handler: async (user, query) => {
     const recipeId = query.id;
 
     await canLikeOrUnlikeRecipe(user, recipeId, false);
