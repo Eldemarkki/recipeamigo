@@ -44,3 +44,27 @@ export class InvalidQueryParametersError extends BadRequestError {
     super("Invalid query parameters: " + message);
   }
 }
+
+export class RecipeAlreadyLiked extends BadRequestError {
+  constructor(recipeId: string) {
+    super(`Recipe with id ${recipeId} already liked`);
+  }
+}
+
+export class RecipeAlreadyUnliked extends BadRequestError {
+  constructor(recipeId: string) {
+    super(`Recipe with id ${recipeId} already unliked`);
+  }
+}
+
+export class CannotLikeOwnRecipe extends BadRequestError {
+  constructor() {
+    super("Cannot like own recipe");
+  }
+}
+
+export class CannotUnlikeOwnRecipe extends BadRequestError {
+  constructor() {
+    super("Cannot unlike own recipe");
+  }
+}

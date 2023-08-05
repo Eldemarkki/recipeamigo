@@ -12,10 +12,7 @@ export const postLikeHandler = {
   handler: async (user, _body, query) => {
     const recipeId = query.id;
 
-    await canLikeOrUnlikeRecipe(user, recipeId, true, {
-      notOperableState: "You have already liked this recipe",
-      cannotOperateOwnRecipe: "You cannot like your own recipe",
-    });
+    await canLikeOrUnlikeRecipe(user, recipeId, true);
 
     await likeRecipe(user.userId, recipeId);
     return { message: "Recipe liked" };

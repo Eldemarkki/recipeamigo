@@ -12,10 +12,7 @@ export const postUnlikeHandler = {
   handler: async (user, _body, query) => {
     const recipeId = query.id;
 
-    await canLikeOrUnlikeRecipe(user, recipeId, false, {
-      notOperableState: "You have already unliked this recipe",
-      cannotOperateOwnRecipe: "You cannot unlike your own recipe",
-    });
+    await canLikeOrUnlikeRecipe(user, recipeId, false);
 
     await unlikeRecipe(user.userId, recipeId);
     return { message: "Recipe unliked" };
