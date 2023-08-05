@@ -18,7 +18,8 @@
     "test": "npm run test:start_database && sleep 5 && dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run && npm run test:stop_database",
     "test:unit:ci": "vitest unit.test.ts",
     "test:integration:ci": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts",
-    "sumHours": "node ./sumHours.js"
+    "sumHours": "node ./sumHours.js",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.1",
@@ -60,6 +61,7 @@
     "prettier": "^3.0.0",
     "prisma": "^5.0.0",
     "sass": "^1.64.1",
-    "vitest": "^0.33.0"
+    "vitest": "^0.33.0",
+    "husky": "^8.0.0"
   }
 }
