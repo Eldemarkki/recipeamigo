@@ -2,6 +2,10 @@ import { prisma } from "../db";
 import { editCollectionSchema } from "../handlers/collections/collectionsIdPutHandler";
 import { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
 import { s3 } from "../s3";
+import {
+  RecipesMustBePublicOrUnlisted,
+  RecipesNotFound,
+} from "../utils/errors";
 import { hasReadAccessToRecipe } from "../utils/recipeUtils";
 import { z } from "zod";
 
@@ -22,7 +26,12 @@ export const createCollection = async (
   );
 
   if (!hasAccessToAll || recipes.length !== collection.recipeIds.length) {
-    throw new Error("User does not have access to all referenced recipes");
+    const missingIds = collection.recipeIds.filter((id) => {
+      const recipe = recipes.find((r) => r.id === id);
+      return !recipe || !hasReadAccessToRecipe(userId, recipe);
+    });
+
+    throw new RecipesNotFound(missingIds);
   }
 
   if (collection.visibility === "PUBLIC") {
@@ -32,9 +41,7 @@ export const createCollection = async (
     );
 
     if (!allRecipesArePublicOrUnlisted) {
-      throw new Error(
-        "All recipes must be public or unlisted to be added to a collection",
-      );
+      throw new RecipesMustBePublicOrUnlisted();
     }
   }
 

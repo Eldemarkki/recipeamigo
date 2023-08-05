@@ -21,6 +21,12 @@ export class RecipeNotFoundError extends NotFoundError {
   }
 }
 
+export class RecipesNotFound extends NotFoundError {
+  constructor(missingRecipeIds: string[]) {
+    super(`Recipes with ids ${missingRecipeIds.join(", ")} not found`);
+  }
+}
+
 export class CollectionNotFoundError extends NotFoundError {
   constructor(collectionId: string) {
     super(`Collection with id ${collectionId} not found`);
@@ -66,5 +72,13 @@ export class CannotLikeOwnRecipe extends BadRequestError {
 export class CannotUnlikeOwnRecipe extends BadRequestError {
   constructor() {
     super("Cannot unlike own recipe");
+  }
+}
+
+export class RecipesMustBePublicOrUnlisted extends BadRequestError {
+  constructor() {
+    super(
+      "All recipes must be public or unlisted to be added to a public collection",
+    );
   }
 }
