@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "analyze": "dotenv -v ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "lint:verify": "next lint --max-warnings 0",
@@ -54,6 +55,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",
     "@commitlint/config-conventional": "^17.6.7",
+    "@next/bundle-analyzer": "^13.4.12",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/node": "20.4.8",
     "@types/pdfkit": "^0.12.10",

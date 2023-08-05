@@ -63,4 +63,5 @@
 | 1.8.2023  | 2      | Salli kokoelmien muokkaaminen                                                   |
 | 2.8.2023  | 2      | Refaktoroi API-handlereita, luo yksinkertaisia API handler -testejä kokoelmille |
 | 5.8.2023  | 2      | Refaktoroi API-handlereita, luo testejä                                         |
-| Yhteensä  | 114    |                                                                                 |
+| 5.8.2023  | 1      | Pieniä parannuksia                                                              |
+| Yhteensä  | 115    |                                                                                 |
