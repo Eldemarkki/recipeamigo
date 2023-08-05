@@ -9,7 +9,7 @@ import { Select } from "../../Select";
 import { Button } from "../../button/Button";
 import { ErrorText } from "../../error/ErrorText";
 import styles from "./CollectionEditDialog.module.css";
-import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
+import { RecipeCollectionVisibility } from "@prisma/client";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
