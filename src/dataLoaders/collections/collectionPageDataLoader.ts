@@ -24,6 +24,7 @@ export const collectionPageDataLoader = {
 
     const isOwner = user && user.userId === collection.userId;
 
+    // This is for providing the recipe list for the editing dialog
     const allRecipes = isOwner ? await getAllRecipesForUser(user.userId) : null;
 
     const recipesAndOwner = isOwner
