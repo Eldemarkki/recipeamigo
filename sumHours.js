@@ -10,14 +10,20 @@ const yhteensaLines = allLines.filter((line) => /Yhteensä/.test(line));
 const longestLine = Math.max(...lines.map((line) => line.length));
 
 if (yhteensaLines.length === 0) {
-  allLines.push(`| Yhteensä  | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(longestLine - 25)} |`);
-}
-else {
-  allLines[allLines.indexOf(yhteensaLines[yhteensaLines.length - 1])] = `| Yhteensä  | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(longestLine - 25)} |`;
+  allLines.push(
+    `| Yhteensä  | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(
+      longestLine - 25,
+    )} |`,
+  );
+} else {
+  allLines[
+    allLines.indexOf(yhteensaLines[yhteensaLines.length - 1])
+  ] = `| Yhteensä  | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(
+    longestLine - 25,
+  )} |`;
 }
 allLines.push("");
 
 const newFile = allLines.join("\n");
-
 
 writeFileSync("./tuntikirjanpito.md", newFile);
