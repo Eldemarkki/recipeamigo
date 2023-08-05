@@ -1,4 +1,4 @@
-import { editRecipeSchema } from "../pages/api/recipes/[id]";
+import { editRecipeSchema } from "../handlers/recipes/recipePutHandler";
 import { createRandomRecipe } from "../utils/tests/recipes";
 import { createUserToDatabase } from "../utils/tests/testUtils";
 import { createRecipe, editRecipe, getAllRecipesForUser } from "./recipes";
