@@ -21,7 +21,7 @@ export class RecipeNotFoundError extends NotFoundError {
   }
 }
 
-export class RecipesNotFound extends NotFoundError {
+export class RecipesNotFoundError extends NotFoundError {
   constructor(missingRecipeIds: string[]) {
     super(`Recipes with ids ${missingRecipeIds.join(", ")} not found`);
   }
@@ -51,34 +51,44 @@ export class InvalidQueryParametersError extends BadRequestError {
   }
 }
 
-export class RecipeAlreadyLiked extends BadRequestError {
+export class RecipeAlreadyLikedError extends BadRequestError {
   constructor(recipeId: string) {
     super(`Recipe with id ${recipeId} already liked`);
   }
 }
 
-export class RecipeAlreadyUnliked extends BadRequestError {
+export class RecipeAlreadyUnlikedError extends BadRequestError {
   constructor(recipeId: string) {
     super(`Recipe with id ${recipeId} already unliked`);
   }
 }
 
-export class CannotLikeOwnRecipe extends BadRequestError {
+export class CannotLikeOwnRecipeError extends BadRequestError {
   constructor() {
     super("Cannot like own recipe");
   }
 }
 
-export class CannotUnlikeOwnRecipe extends BadRequestError {
+export class CannotUnlikeOwnRecipeError extends BadRequestError {
   constructor() {
     super("Cannot unlike own recipe");
   }
 }
 
-export class RecipesMustBePublicOrUnlisted extends BadRequestError {
-  constructor() {
+export class RecipesMustBePublicError extends BadRequestError {
+  constructor(violatingRecipeIds: string[]) {
     super(
-      "All recipes must be public or unlisted to be added to a public collection",
+      "All recipes must be public to be added to a public collection. The following recipes are not public: " +
+        violatingRecipeIds.join(", "),
+    );
+  }
+}
+
+export class RecipesMustBePublicOrUnlistedError extends BadRequestError {
+  constructor(violatingRecipeIds: string[]) {
+    super(
+      "All recipes must be public or unlisted to be added to a unlisted collection. The following recipes are not public or unlisted: " +
+        violatingRecipeIds.join(", "),
     );
   }
 }

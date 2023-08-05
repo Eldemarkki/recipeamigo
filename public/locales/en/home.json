@@ -24,7 +24,6 @@
       "public": "Public",
       "private": "Private",
       "unlisted": "Unlisted"
-    },
-    "invalidVisibilityConfiguration": "Because you are creating a public collection, all recipes must be either public or unlisted. The following recipes are private: {{privateRecipes, list}}"
+    }
   }
 }

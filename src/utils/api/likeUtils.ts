@@ -2,10 +2,10 @@ import { getLikeStatus } from "../../database/likes";
 import { getSingleRecipe } from "../../database/recipes";
 import { AuthorizedUser } from "../auth";
 import {
-  CannotLikeOwnRecipe,
-  CannotUnlikeOwnRecipe,
-  RecipeAlreadyLiked,
-  RecipeAlreadyUnliked,
+  CannotLikeOwnRecipeError,
+  CannotUnlikeOwnRecipeError,
+  RecipeAlreadyLikedError,
+  RecipeAlreadyUnlikedError,
   RecipeNotFoundError,
 } from "../errors";
 import { hasReadAccessToRecipe } from "../recipeUtils";
@@ -22,16 +22,16 @@ export const canLikeOrUnlikeRecipe = async (
     throw new RecipeNotFoundError(recipeId);
   if (recipe.userId === user.userId) {
     if (requiredLikeState) {
-      throw new CannotLikeOwnRecipe();
+      throw new CannotLikeOwnRecipeError();
     } else {
-      throw new CannotUnlikeOwnRecipe();
+      throw new CannotUnlikeOwnRecipeError();
     }
   }
 
   const hasAlreadyLiked = await getLikeStatus(user.userId, recipeId);
 
   if (!!hasAlreadyLiked === requiredLikeState) {
-    if (requiredLikeState) throw new RecipeAlreadyLiked(recipeId);
-    else throw new RecipeAlreadyUnliked(recipeId);
+    if (requiredLikeState) throw new RecipeAlreadyLikedError(recipeId);
+    else throw new RecipeAlreadyUnlikedError(recipeId);
   }
 };

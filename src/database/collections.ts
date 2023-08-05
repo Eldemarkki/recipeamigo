@@ -2,11 +2,15 @@ import { prisma } from "../db";
 import { editCollectionSchema } from "../handlers/collections/collectionsIdPutHandler";
 import { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
 import { s3 } from "../s3";
+import { isValidVisibilityConfiguration } from "../utils/collectionUtils";
 import {
-  RecipesMustBePublicOrUnlisted,
-  RecipesNotFound,
+  BadRequestError,
+  RecipesMustBePublicError,
+  RecipesMustBePublicOrUnlistedError,
+  RecipesNotFoundError,
 } from "../utils/errors";
 import { hasReadAccessToRecipe } from "../utils/recipeUtils";
+import { RecipeCollectionVisibility } from "@prisma/client";
 import { z } from "zod";
 
 export const createCollection = async (
@@ -31,18 +35,27 @@ export const createCollection = async (
       return !recipe || !hasReadAccessToRecipe(userId, recipe);
     });
 
-    throw new RecipesNotFound(missingIds);
+    throw new RecipesNotFoundError(missingIds);
   }
 
-  if (collection.visibility === "PUBLIC") {
-    const allRecipesArePublicOrUnlisted = recipes.every(
-      (recipe) =>
-        recipe.visibility === "PUBLIC" || recipe.visibility === "UNLISTED",
-    );
+  const validityConfiguration = isValidVisibilityConfiguration(
+    collection.visibility,
+    recipes,
+  );
 
-    if (!allRecipesArePublicOrUnlisted) {
-      throw new RecipesMustBePublicOrUnlisted();
+  if (!validityConfiguration.isValid) {
+    const violations = validityConfiguration.violatingRecipes.map((r) => r.id);
+    if (collection.visibility === RecipeCollectionVisibility.PUBLIC) {
+      throw new RecipesMustBePublicError(violations);
+    } else if (collection.visibility === RecipeCollectionVisibility.UNLISTED) {
+      throw new RecipesMustBePublicOrUnlistedError(violations);
     }
+
+    // This should never happen
+    throw new BadRequestError(
+      "Invalid visibility configuration. The following recipe ids are in violation: " +
+        violations.join(", "),
+    );
   }
 
   const newCollection = await prisma.recipeCollection.create({
@@ -130,7 +143,7 @@ export const getUserCollections = async (userId: string) => {
 export const getPublicCollections = async () => {
   return await prisma.recipeCollection.findMany({
     where: {
-      visibility: "PUBLIC",
+      visibility: RecipeCollectionVisibility.PUBLIC,
     },
     include: {
       _count: {
@@ -167,17 +180,23 @@ export const editCollection = async (
     throw new Error("User does not have access to all referenced recipes");
   }
 
-  if (collection.visibility === "PUBLIC") {
-    const allRecipesArePublicOrUnlisted = requestedRecipes.every(
-      (recipe) =>
-        recipe.visibility === "PUBLIC" || recipe.visibility === "UNLISTED",
-    );
-
-    if (!allRecipesArePublicOrUnlisted) {
-      throw new Error(
-        "All recipes must be public or unlisted to be added to a public collection",
-      );
+  const configurationValidity = isValidVisibilityConfiguration(
+    collection.visibility,
+    requestedRecipes,
+  );
+  if (!configurationValidity.isValid) {
+    const violations = configurationValidity.violatingRecipes.map((r) => r.id);
+    if (collection.visibility === RecipeCollectionVisibility.PUBLIC) {
+      throw new RecipesMustBePublicError(violations);
+    } else if (collection.visibility === RecipeCollectionVisibility.UNLISTED) {
+      throw new RecipesMustBePublicOrUnlistedError(violations);
     }
+
+    // This should never happen
+    throw new Error(
+      "Invalid visibility configuration. The following recipe ids are in violation: " +
+        violations.join(", "),
+    );
   }
 
   const collectionToUpdate = await prisma.recipeCollection.findUnique({

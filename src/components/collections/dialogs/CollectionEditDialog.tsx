@@ -2,6 +2,7 @@ import { getCollection } from "../../../database/collections";
 import { editCollection as editCollectionApi } from "../../../database/collections";
 import { getAllRecipesForUser } from "../../../database/recipes";
 import { editCollectionSchema } from "../../../handlers/collections/collectionsIdPutHandler";
+import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
 import { LinkButton } from "../../LinkButton";
 import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
 import { Select } from "../../Select";
@@ -25,6 +26,10 @@ const editCollection = async (
       "Content-Type": "application/json",
     },
   });
+
+  if (!response.ok) {
+    return null;
+  }
 
   const data = (await response.json()) as Awaited<
     ReturnType<typeof editCollectionApi>
@@ -84,15 +89,8 @@ export const CollectionEditDialog = ({
   const visibilitySelectId = useId();
   const descriptionId = useId();
 
-  // If the visibility is public, all recipes must be public or unlisted
-  const validVisibilityConfiguration =
-    visibility === RecipeCollectionVisibility.PUBLIC
-      ? selectedRecipes.every(
-          (r) =>
-            r.visibility === RecipeCollectionVisibility.PUBLIC ||
-            r.visibility === RecipeCollectionVisibility.UNLISTED,
-        )
-      : true;
+  const { isValid: validVisibilityConfiguration, violatingRecipes } =
+    isValidVisibilityConfiguration(visibility, selectedRecipes);
 
   return (
     <>
@@ -112,14 +110,13 @@ export const CollectionEditDialog = ({
             description,
           });
 
-          if (!editedCollection) {
-            throw new Error(
-              "Collection not found after editing it. This should never happen",
-            );
+          if (editedCollection) {
+            onClose();
+            router.push(`/collections/${editedCollection.id}`);
+          } else {
+            // TODO: Show error message
+            console.error("Failed to edit collection");
           }
-
-          onClose();
-          router.push(`/collections/${editedCollection.id}`);
         }}
       >
         <h1>
@@ -216,11 +213,23 @@ export const CollectionEditDialog = ({
         {!validVisibilityConfiguration && (
           <ErrorText>
             {/* TODO: Different message if collection is already public and the user is trying to add private recipes */}
-            {t("collections:edit.invalidVisibilityConfiguration", {
-              privateRecipes: selectedRecipes
-                .filter((r) => r.visibility === RecipeVisibility.PRIVATE)
-                .map((r) => r.name),
-            })}
+            {
+              {
+                [RecipeCollectionVisibility.PRIVATE]: null,
+                [RecipeCollectionVisibility.PUBLIC]: t(
+                  "collections:edit.invalidVisibilityConfiguration.public",
+                  {
+                    violatingRecipes: violatingRecipes.map((r) => r.name),
+                  },
+                ),
+                [RecipeCollectionVisibility.UNLISTED]: t(
+                  "collections:edit.invalidVisibilityConfiguration.unlisted",
+                  {
+                    violatingRecipes: violatingRecipes.map((r) => r.name),
+                  },
+                ),
+              }[visibility]
+            }
           </ErrorText>
         )}
         <div className={styles.buttonsContainer}>

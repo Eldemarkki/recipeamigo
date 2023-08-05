@@ -1,8 +1,8 @@
 import { getLikeCountForRecipe } from "../../../database/likes";
 import { createRecipe } from "../../../database/recipes";
 import {
-  CannotLikeOwnRecipe,
-  RecipeAlreadyLiked,
+  CannotLikeOwnRecipeError,
+  RecipeAlreadyLikedError,
   RecipeNotFoundError,
 } from "../../../utils/errors";
 import { createRandomRecipe } from "../../../utils/tests/recipes";
@@ -44,7 +44,7 @@ describe("postLikeHandler", () => {
     await postLikeHandler.handler(user, { id: recipe.id });
     await expect(
       postLikeHandler.handler(user, { id: recipe.id }),
-    ).rejects.toThrow(new RecipeAlreadyLiked(recipe.id));
+    ).rejects.toThrow(new RecipeAlreadyLikedError(recipe.id));
 
     const likes = await getLikeCountForRecipe(recipe.id);
     expect(likes).toBe(1);
@@ -63,7 +63,7 @@ describe("postLikeHandler", () => {
 
     await expect(
       postLikeHandler.handler(user, { id: recipe.id }),
-    ).rejects.toThrow(CannotLikeOwnRecipe);
+    ).rejects.toThrow(CannotLikeOwnRecipeError);
 
     const likes = await getLikeCountForRecipe(recipe.id);
     expect(likes).toBe(0);
@@ -128,7 +128,7 @@ describe("postLikeHandler", () => {
 
     await expect(
       postLikeHandler.handler(user, { id: recipe.id }),
-    ).rejects.toThrow(CannotLikeOwnRecipe);
+    ).rejects.toThrow(CannotLikeOwnRecipeError);
 
     const likes = await getLikeCountForRecipe(recipe.id);
     expect(likes).toBe(0);

@@ -1,8 +1,9 @@
 import { getUserCollections } from "../../database/collections";
 import { createRecipe } from "../../database/recipes";
 import {
-  RecipesMustBePublicOrUnlisted,
-  RecipesNotFound,
+  RecipesMustBePublicError,
+  RecipesMustBePublicOrUnlistedError,
+  RecipesNotFoundError,
 } from "../../utils/errors";
 import { createRandomRecipe } from "../../utils/tests/recipes";
 import { createUserToDatabaseAndAuthenticate } from "../../utils/tests/testUtils";
@@ -15,7 +16,7 @@ describe("collectionsPostHandler", () => {
     await collectionsPostHandler.handler(user, {
       name: "test",
       description: "test",
-      visibility: "PUBLIC",
+      visibility: RecipeCollectionVisibility.PUBLIC,
       recipeIds: [],
     });
 
@@ -37,7 +38,7 @@ describe("collectionsPostHandler", () => {
     await collectionsPostHandler.handler(user, {
       name: "test",
       description: "test",
-      visibility: "PUBLIC",
+      visibility: RecipeCollectionVisibility.PUBLIC,
       recipeIds: [recipe.id],
     });
 
@@ -72,8 +73,8 @@ describe("collectionsPostHandler", () => {
       RecipeVisibility.PUBLIC,
       RecipeVisibility.UNLISTED,
       RecipeCollectionVisibility.PUBLIC,
-      true,
-      null,
+      false,
+      RecipesMustBePublicError,
     ],
     [
       RecipeVisibility.PUBLIC,
@@ -94,28 +95,28 @@ describe("collectionsPostHandler", () => {
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.PUBLIC,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
     [
       RecipeVisibility.PUBLIC,
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.UNLISTED,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
     [
       RecipeVisibility.PUBLIC,
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.PRIVATE,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
     [
       RecipeVisibility.UNLISTED,
       RecipeVisibility.PUBLIC,
       RecipeCollectionVisibility.PUBLIC,
-      true,
-      null,
+      false,
+      RecipesMustBePublicError,
     ],
     [
       RecipeVisibility.UNLISTED,
@@ -135,8 +136,8 @@ describe("collectionsPostHandler", () => {
       RecipeVisibility.UNLISTED,
       RecipeVisibility.UNLISTED,
       RecipeCollectionVisibility.PUBLIC,
-      true,
-      null,
+      false,
+      RecipesMustBePublicError,
     ],
     [
       RecipeVisibility.UNLISTED,
@@ -157,35 +158,35 @@ describe("collectionsPostHandler", () => {
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.PUBLIC,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
     [
       RecipeVisibility.UNLISTED,
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.UNLISTED,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
     [
       RecipeVisibility.UNLISTED,
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.PRIVATE,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
     [
       RecipeVisibility.PRIVATE,
       RecipeVisibility.PUBLIC,
       RecipeCollectionVisibility.PUBLIC,
       false,
-      RecipesMustBePublicOrUnlisted,
+      RecipesMustBePublicError,
     ],
     [
       RecipeVisibility.PRIVATE,
       RecipeVisibility.PUBLIC,
       RecipeCollectionVisibility.UNLISTED,
-      true,
-      null,
+      false,
+      RecipesMustBePublicOrUnlistedError,
     ],
     [
       RecipeVisibility.PRIVATE,
@@ -199,14 +200,14 @@ describe("collectionsPostHandler", () => {
       RecipeVisibility.UNLISTED,
       RecipeCollectionVisibility.PUBLIC,
       false,
-      RecipesMustBePublicOrUnlisted,
+      RecipesMustBePublicError,
     ],
     [
       RecipeVisibility.PRIVATE,
       RecipeVisibility.UNLISTED,
       RecipeCollectionVisibility.UNLISTED,
-      true,
-      null,
+      false,
+      RecipesMustBePublicOrUnlistedError,
     ],
     [
       RecipeVisibility.PRIVATE,
@@ -220,21 +221,21 @@ describe("collectionsPostHandler", () => {
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.PUBLIC,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
     [
       RecipeVisibility.PRIVATE,
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.UNLISTED,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
     [
       RecipeVisibility.PRIVATE,
       RecipeVisibility.PRIVATE,
       RecipeCollectionVisibility.PRIVATE,
       false,
-      RecipesNotFound,
+      RecipesNotFoundError,
     ],
   ] as const)(
     "user can include own %s recipe and other users' %s recipes in their own %s collection",
@@ -291,10 +292,10 @@ describe("collectionsPostHandler", () => {
       collectionsPostHandler.handler(user, {
         name: "test",
         description: "test",
-        visibility: "PUBLIC",
+        visibility: RecipeCollectionVisibility.PUBLIC,
         recipeIds: ["non-existent-recipe"],
       }),
-    ).rejects.toThrowError(new RecipesNotFound(["non-existent-recipe"]));
+    ).rejects.toThrowError(new RecipesNotFoundError(["non-existent-recipe"]));
 
     const collections = await getUserCollections(user.userId);
     expect(collections).toHaveLength(0);
