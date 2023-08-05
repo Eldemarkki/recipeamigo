@@ -1,6 +1,6 @@
 import { getSingleRecipe } from "../../database/recipes";
+import { editRecipeSchema } from "../../handlers/recipes/recipePutHandler";
 import { createRecipeSchema } from "../../handlers/recipes/recipesPostHandler";
-import { editRecipeSchema } from "../../pages/api/recipes/[id]";
 import { Select } from "../Select";
 import { Button } from "../button/Button";
 import { Dialog } from "../dialog/Dialog";

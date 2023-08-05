@@ -4,8 +4,8 @@ import {
   SortKey,
 } from "../components/browse/sort/BrowseSort";
 import { prisma } from "../db";
+import { editRecipeSchema } from "../handlers/recipes/recipePutHandler";
 import { createRecipeSchema } from "../handlers/recipes/recipesPostHandler";
-import { editRecipeSchema } from "../pages/api/recipes/[id]";
 import { DEFAULT_BUCKET_NAME, s3 } from "../s3";
 import { notNull } from "../utils/arrayUtils";
 import { RecipeVisibility } from "@prisma/client";

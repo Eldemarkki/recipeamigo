@@ -1,4 +1,4 @@
-export type HttpStatusCode = 400 | 401 | 404 | 500;
+export type HttpStatusCode = 400 | 401 | 403 | 404 | 409 | 500;
 
 export class HttpError extends Error {
   constructor(
@@ -12,6 +12,12 @@ export class HttpError extends Error {
 export class NotFoundError extends HttpError {
   constructor(message?: string) {
     super(message || "Not found", 404);
+  }
+}
+
+export class RecipeNotFoundError extends NotFoundError {
+  constructor(recipeId: string) {
+    super(`Recipe with id ${recipeId} not found`);
   }
 }
 

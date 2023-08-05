@@ -1,7 +1,7 @@
 import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
 import { getSingleRecipe } from "../../../../database/recipes";
+import { editRecipeSchema } from "../../../../handlers/recipes/recipePutHandler";
 import { getUserFromRequest } from "../../../../utils/auth";
-import { editRecipeSchema } from "../../../api/recipes/[id]";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";

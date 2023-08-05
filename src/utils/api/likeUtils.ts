@@ -1,25 +1,8 @@
 import { getLikeStatus } from "../../database/likes";
 import { getSingleRecipe } from "../../database/recipes";
-import { AuthorizedUser, getUserFromRequest } from "../auth";
+import { AuthorizedUser } from "../auth";
+import { HttpError, RecipeNotFoundError } from "../errors";
 import { hasReadAccessToRecipe } from "../recipeUtils";
-
-type CanLikeOrUnlikeRecipeResult<
-  CannotOperateOwnRecipeError extends string,
-  NotOperableStateError extends string,
-> =
-  | {
-      statusCode: 404;
-      message: "Recipe not found";
-    }
-  | {
-      statusCode: 403;
-      message: CannotOperateOwnRecipeError;
-    }
-  | {
-      statusCode: 409;
-      message: NotOperableStateError;
-    }
-  | true;
 
 export const canLikeOrUnlikeRecipe = async <
   CannotOperateOwnRecipeError extends string,
@@ -32,42 +15,18 @@ export const canLikeOrUnlikeRecipe = async <
     cannotOperateOwnRecipe: CannotOperateOwnRecipeError;
     notOperableState: NotOperableStateError;
   },
-): Promise<
-  CanLikeOrUnlikeRecipeResult<
-    CannotOperateOwnRecipeError,
-    NotOperableStateError
-  >
-> => {
+): Promise<void> => {
   const recipe = await getSingleRecipe(recipeId);
-  if (recipe === null) {
-    return {
-      statusCode: 404,
-      message: "Recipe not found",
-    };
-  }
 
-  if (recipe.userId === user.userId) {
-    return {
-      statusCode: 403,
-      message: errors.cannotOperateOwnRecipe,
-    };
-  }
-
-  if (!hasReadAccessToRecipe(user, recipe)) {
-    return {
-      statusCode: 404,
-      message: "Recipe not found",
-    };
-  }
+  if (recipe === null) throw new RecipeNotFoundError(recipeId);
+  if (!hasReadAccessToRecipe(user, recipe))
+    throw new RecipeNotFoundError(recipeId);
+  if (recipe.userId === user.userId)
+    throw new HttpError(errors.cannotOperateOwnRecipe, 403);
 
   const hasAlreadyLiked = await getLikeStatus(user.userId, recipeId);
 
   if (!!hasAlreadyLiked === requiredLikeState) {
-    return {
-      statusCode: 409,
-      message: errors.notOperableState,
-    };
+    throw new HttpError(errors.notOperableState, 409);
   }
-
-  return true;
 };
