@@ -1,8 +1,8 @@
-import { getUserFromRequest } from "./auth";
+import { AnyUser } from "./auth";
 import { RecipeCollection, RecipeCollectionVisibility } from "@prisma/client";
 
 export const hasReadAccessToCollection = (
-  user: Awaited<ReturnType<typeof getUserFromRequest>>,
+  user: AnyUser | null,
   collection: RecipeCollection,
 ) => {
   if (
@@ -13,6 +13,10 @@ export const hasReadAccessToCollection = (
   }
 
   if (collection.visibility === RecipeCollectionVisibility.PRIVATE) {
+    if (!user) {
+      return false;
+    }
+
     if (user.status === "Unauthorized") {
       return false;
     }
@@ -24,7 +28,7 @@ export const hasReadAccessToCollection = (
 };
 
 export const hasWriteAccessToCollection = (
-  user: Awaited<ReturnType<typeof getUserFromRequest>>,
+  user: AnyUser,
   collection: RecipeCollection,
 ) => {
   if (user.status === "Unauthorized") {

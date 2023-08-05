@@ -1,25 +1,38 @@
 import { AuthorizedUser, getUserFromRequest } from "../utils/auth";
+import { NotFoundError } from "../utils/errors";
 import { FlatNamespace } from "i18next";
 import { GetServerSidePropsContext, PreviewData } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { ParsedUrlQuery } from "querystring";
+import { z } from "zod";
 
-export type PropsLoaderHandler<PropsType = unknown> = {
-  requireUser: false;
-  requiredTranslationNamespaces: FlatNamespace[];
-  handler: (user: AuthorizedUser | null) => Promise<PropsType>;
-};
+export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
+  | {
+      requireUser: false;
+      requiredTranslationNamespaces: FlatNamespace[];
+      handler: (user: AuthorizedUser | null) => Promise<PropsType>;
+      queryValidator?: null;
+    }
+  | {
+      requireUser: false;
+      requiredTranslationNamespaces: FlatNamespace[];
+      queryValidator: z.ZodType<QueryType>;
+      handler: (
+        user: AuthorizedUser | null,
+        query: QueryType,
+      ) => Promise<PropsType>;
+    };
 
-export type PropsLoader<PropsType> = {
+export type PropsLoader<QueryType = unknown, PropsType = unknown> = {
   ctx: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>;
-} & PropsLoaderHandler<PropsType>;
+} & PropsLoaderHandler<QueryType, PropsType>;
 
-export const loadProps = async <PropsType>({
+export const loadProps = async <QueryType = unknown, PropsType = unknown>({
   ctx,
   requireUser,
-  handler,
   requiredTranslationNamespaces,
-}: PropsLoader<PropsType>) => {
+  ...other
+}: PropsLoader<QueryType, PropsType>) => {
   const u = await getUserFromRequest(ctx.req);
   if (requireUser && !u) {
     return {
@@ -31,15 +44,38 @@ export const loadProps = async <PropsType>({
   }
 
   const user = u.status === "Unauthorized" ? null : u;
-  const props = await handler(user);
 
-  return {
-    props: {
-      ...(await serverSideTranslations(
-        ctx.locale ?? "en",
-        requiredTranslationNamespaces,
-      )),
-      ...props,
-    },
-  };
+  let props: PropsType;
+
+  try {
+    if (other.queryValidator) {
+      const queryResult = other.queryValidator.safeParse(ctx.query);
+      if (!queryResult.success) {
+        return {
+          notFound: true as const,
+        };
+      } else {
+        props = await other.handler(user, queryResult.data);
+      }
+    } else {
+      props = await other.handler(user);
+    }
+
+    return {
+      props: {
+        ...(await serverSideTranslations(
+          ctx.locale ?? "en",
+          requiredTranslationNamespaces,
+        )),
+        ...props,
+      },
+    };
+  } catch (e) {
+    if (e instanceof NotFoundError) {
+      return {
+        notFound: true as const,
+      };
+    }
+    throw e;
+  }
 };

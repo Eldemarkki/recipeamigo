@@ -2,15 +2,11 @@ import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
 import { Button } from "../../../components/button/Button";
 import { CollectionEditDialog } from "../../../components/collections/dialogs/CollectionEditDialog";
 import { Dialog } from "../../../components/dialog/Dialog";
-import { getCollection } from "../../../database/collections";
-import { getAllRecipesForUser } from "../../../database/recipes";
-import { getUserFromRequest } from "../../../utils/auth";
-import { hasReadAccessToCollection } from "../../../utils/collectionUtils";
-import { queryParamToString } from "../../../utils/stringUtils";
+import { collectionPageDataLoader } from "../../../dataLoaders/collections/collectionPageDataLoader";
+import { loadProps } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useState } from "react";
 
 export default function CollectionPage(
@@ -49,42 +45,8 @@ export default function CollectionPage(
   );
 }
 
-export const getServerSideProps = (async ({ req, locale, query }) => {
-  const id = queryParamToString(query.id) ?? "";
-
-  const collection = await getCollection(id);
-  const user = await getUserFromRequest(req);
-
-  if (!collection || !hasReadAccessToCollection(user, collection)) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const isOwner =
-    user.status !== "Unauthorized" && user.userId === collection.userId;
-
-  const allRecipes = isOwner ? await getAllRecipesForUser(user.userId) : null;
-
-  const recipesAndOwner = isOwner
-    ? ({
-        allRecipes,
-        isOwner: true,
-      } as const)
-    : ({
-        isOwner: false,
-      } as const);
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? "en", [
-        "common",
-        "home",
-        "recipeView",
-        "collections",
-      ])),
-      collection,
-      ...recipesAndOwner,
-    },
-  };
-}) satisfies GetServerSideProps;
+export const getServerSideProps = (async (ctx) =>
+  await loadProps({
+    ctx,
+    ...collectionPageDataLoader,
+  })) satisfies GetServerSideProps;
