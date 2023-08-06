@@ -82,7 +82,7 @@ describe("recipeToMarkdown", () => {
           },
           {
             id: "instructionId_2",
-            description: "This is a test instruction 2",
+            description: `<p>Boil for <countdown-component seconds="15732"></countdown-component></p>`,
             order: 1,
             recipeId: "recipeId_1",
           },
@@ -141,7 +141,7 @@ This is a test recipe
 ## Instructions
 
 1. This is a test instruction 1
-2. This is a test instruction 2
+2. Boil for 4h 22min 12s
 `);
   });
 });

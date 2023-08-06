@@ -1,4 +1,5 @@
 import { splitSeconds } from "../../../utils/recipeUtils";
+import { formatDuration } from "../../../utils/stringUtils";
 import { CircularButton } from "../../button/Button";
 import { Dialog } from "../../dialog/Dialog";
 import styles from "./CountdownComponent.module.css";
@@ -46,15 +47,7 @@ export const CountdownComponent = (
   }, [isPaused, secondsLeft]);
 
   const { hours, minutes, seconds } = splitSeconds(secondsLeft);
-  const suffix = ["h", "min", "s"];
-
-  const formattedTimeLeft =
-    [hours, minutes, seconds]
-      .reduce(
-        (acc, curr, i) => (curr === 0 ? acc : `${acc}${curr}${suffix[i]} `),
-        "",
-      )
-      .trim() || "0s";
+  const formattedTimeLeft = formatDuration(hours, minutes, seconds);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   return (

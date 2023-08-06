@@ -28,3 +28,21 @@ export type Locale = (typeof locales)[number];
 export const isLocale = (str: string): str is Locale => {
   return locales.includes(str as any);
 };
+
+export const formatDuration = (
+  hours: number,
+  minutes: number,
+  seconds: number,
+) => {
+  const suffix = ["h", "min", "s"];
+
+  const formattedTimeLeft =
+    [hours, minutes, seconds]
+      .reduce(
+        (acc, curr, i) => (curr === 0 ? acc : `${acc}${curr}${suffix[i]} `),
+        "",
+      )
+      .trim() || "0s";
+
+  return formattedTimeLeft;
+};

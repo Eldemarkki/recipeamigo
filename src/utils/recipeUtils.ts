@@ -1,5 +1,11 @@
+import { CountdownExtension } from "../components/recipeEngine/extensions/CountdownExtension";
 import { getUserFromRequest } from "./auth";
 import { Recipe, RecipeVisibility } from "@prisma/client";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import { generateJSON } from "@tiptap/html";
+import { generateText } from "@tiptap/react";
 
 type TimeEstimateType = null | "single" | "range";
 
@@ -53,4 +59,11 @@ export const hasReadAccessToRecipe = (
   }
 
   return false;
+};
+
+export const getInstructionText = (instructionHtml: string) => {
+  const extensions = [Document, Paragraph, Text, CountdownExtension];
+  const json = generateJSON(instructionHtml, extensions);
+  const text = generateText(json, extensions);
+  return text;
 };

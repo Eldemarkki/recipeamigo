@@ -7,6 +7,7 @@ import { getIngredientText } from "../../../../../../ingredients/ingredientTrans
 import { getUserFromRequest } from "../../../../../../utils/auth";
 import { getI18nClient } from "../../../../../../utils/getI18nClient";
 import {
+  getInstructionText,
   getTimeEstimateType,
   hasReadAccessToRecipe,
 } from "../../../../../../utils/recipeUtils";
@@ -149,9 +150,14 @@ const handler = (async (req, res) => {
     doc.fontSize(18).text(t("recipeView:instructionsTitle"));
     for (const instruction of recipe.instructions) {
       doc.fontSize(12);
-      doc.text(instruction.order + 1 + ". " + instruction.description, {
-        indent: 10,
-      });
+      doc.text(
+        `${instruction.order + 1}. ${getInstructionText(
+          instruction.description,
+        )}`,
+        {
+          indent: 10,
+        },
+      );
     }
 
     doc.end();

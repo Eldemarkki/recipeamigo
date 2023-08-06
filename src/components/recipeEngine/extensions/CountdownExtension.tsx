@@ -1,3 +1,5 @@
+import { splitSeconds } from "../../../utils/recipeUtils";
+import { formatDuration } from "../../../utils/stringUtils";
 import { CountdownComponent } from "./CountdownComponent";
 import { Node, mergeAttributes } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
@@ -22,6 +24,11 @@ export const CountdownExtension = Node.create({
     "countdown-component",
     mergeAttributes(HTMLAttributes),
   ],
+  renderText: ({ node }) => {
+    const totalSeconds = node.attrs.seconds;
+    const { hours, minutes, seconds } = splitSeconds(totalSeconds);
+    return formatDuration(hours, minutes, seconds);
+  },
   addNodeView: () => ReactNodeViewRenderer(CountdownComponent),
   addCommands: () => ({
     setCountdown:

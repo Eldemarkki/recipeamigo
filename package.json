@@ -21,7 +21,8 @@
     "test:integration:ci": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts",
     "sumHours": "node ./sumHours.js",
     "prepare": "husky install",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "prisma:studio": "dotenv -e .env.local -- prisma studio"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.2",
@@ -31,6 +32,7 @@
     "@tiptap/extension-document": "^2.0.4",
     "@tiptap/extension-paragraph": "^2.0.4",
     "@tiptap/extension-text": "^2.0.4",
+    "@tiptap/html": "^2.0.4",
     "@tiptap/pm": "^2.0.4",
     "@tiptap/react": "^2.0.4",
     "filenamify": "^6.0.0",

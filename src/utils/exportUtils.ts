@@ -1,10 +1,7 @@
 import { getSingleRecipeWithoutCoverImageUrl } from "../database/recipes";
 import { Locale } from "../i18next";
-import {
-  getIngredientText,
-  isIngredientType,
-  unitsLocaleMap,
-} from "../ingredients/ingredientTranslator";
+import { getIngredientText } from "../ingredients/ingredientTranslator";
+import { getInstructionText } from "./recipeUtils";
 
 export const recipeToMarkdown = (
   recipe: Exclude<
@@ -60,7 +57,10 @@ ${s.ingredients
 ## Instructions
 
 ${recipe.instructions
-  .map((instruction, index) => `${index + 1}. ${instruction.description}`)
+  .map(
+    (instruction, index) =>
+      `${index + 1}. ${getInstructionText(instruction.description)}`,
+  )
   .join("\n")}
 `;
 
