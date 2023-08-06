@@ -64,4 +64,6 @@
 | 2.8.2023  | 2      | Refaktoroi API-handlereita, luo yksinkertaisia API handler -testejä kokoelmille |
 | 5.8.2023  | 2      | Refaktoroi API-handlereita, luo testejä                                         |
 | 5.8.2023  | 1      | Pieniä parannuksia                                                              |
-| Yhteensä  | 115    |                                                                                 |
+| 5.8.2023  | 3      | Lisää integraatiotestejä                                                        |
+| 6.8.2023  | 1      | Lisää integraatiotestejä                                                        |
+| Yhteensä  | 119    |                                                                                 |
