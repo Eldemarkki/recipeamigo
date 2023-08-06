@@ -66,4 +66,5 @@
 | 5.8.2023  | 1      | Pieniä parannuksia                                                              |
 | 5.8.2023  | 3      | Lisää integraatiotestejä                                                        |
 | 6.8.2023  | 1      | Lisää integraatiotestejä                                                        |
-| Yhteensä  | 119    |                                                                                 |
+| 6.8.2023  | 2      | Luo "split button" reseptien exporttamiselle                                    |
+| Yhteensä  | 121    |                                                                                 |
