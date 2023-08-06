@@ -8,10 +8,8 @@ export const browseCollectionsDataLoader = {
   requireUser: false,
   requiredTranslationNamespaces: ["common", "browse"],
   handler: async (user) => {
-    const userId = user ? user.userId : undefined;
-
     const publicCollections = await getPublicCollections();
-    const userCollections = userId ? await getUserCollections(userId) : null;
+    const userCollections = user ? await getUserCollections(user.userId) : null;
 
     return {
       publicCollections,
