@@ -7,6 +7,7 @@
     "profile": "Profile"
   },
   "actions": {
+    "export": "Export",
     "exportAsJson": "Export as JSON",
     "exportAsMarkdown": "Export as Markdown",
     "exportAsPdf": "Export as PDF",

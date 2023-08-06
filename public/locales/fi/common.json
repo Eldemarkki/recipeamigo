@@ -7,6 +7,7 @@
     "profile": "Profiili"
   },
   "actions": {
+    "export": "Vie",
     "exportAsJson": "Vie JSON-muodossa",
     "exportAsMarkdown": "Vie Markdown-muodossa",
     "exportAsPdf": "Vie PDF-tiedostona",

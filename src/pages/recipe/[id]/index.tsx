@@ -1,5 +1,6 @@
 import { LinkButton } from "../../../components/LinkButton";
 import { Button } from "../../../components/button/Button";
+import { ExportButton } from "../../../components/button/ExportButton";
 import { Link } from "../../../components/link/Link";
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
@@ -10,9 +11,7 @@ import {
   getSingleRecipe,
   increaseViewCountForRecipe,
 } from "../../../database/recipes";
-import { Locale } from "../../../i18next";
 import { getUserFromRequest } from "../../../utils/auth";
-import { recipeToMarkdown } from "../../../utils/exportUtils";
 import {
   getTimeEstimateType,
   hasReadAccessToRecipe,
@@ -25,19 +24,10 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Image from "next/image";
 import { useState } from "react";
 
-const exportRecipe = (data: string, filename: string) => {
-  const a = document.createElement("a");
-  const url = URL.createObjectURL(new Blob([data], { type: "text/json" }));
-  a.href = url;
-  a.download = filename;
-  a.click();
-  window.URL.revokeObjectURL(url);
-};
-
 export default function RecipePage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { recipe, exportJsonFilename, exportMarkdownFilename } = props;
   const [likeCount, setLikeCount] = useState(props.likeCount);
   const [likeStatus, setLikeStatus] = useState(
@@ -86,33 +76,19 @@ export default function RecipePage(
           <div className={styles.titleRow}>
             <h3 className={styles.title}>{recipe.name}</h3>
             <div className={styles.titleRowButtons}>
-              <LinkButton
-                href={`/api/recipes/${recipe.id}/export/pdf?locale=${i18n.language}`}
-              >
-                {t("actions.exportAsPdf")}
-              </LinkButton>
-              <Button
-                onClick={() => {
-                  exportRecipe(
-                    recipeToMarkdown(recipe, i18n.language as Locale),
-                    exportMarkdownFilename,
-                  );
-                }}
-              >
-                {t("actions.exportAsMarkdown")}
-              </Button>
-              <Button
-                onClick={() => {
-                  exportRecipe(JSON.stringify(recipe), exportJsonFilename);
-                }}
-              >
-                {t("actions.exportAsJson")}
-              </Button>
               {props.userId && recipe.user.clerkId === props.userId && (
-                <LinkButton href={`/recipe/${recipe.id}/edit`}>
+                <LinkButton
+                  variant="secondary"
+                  href={`/recipe/${recipe.id}/edit`}
+                >
                   {t("actions.edit")}
                 </LinkButton>
               )}
+              <ExportButton
+                recipe={recipe}
+                exportJsonFilename={exportJsonFilename}
+                exportMarkdownFilename={exportMarkdownFilename}
+              />
             </div>
           </div>
           {recipe.tags.length > 0 && <TagList tags={recipe.tags} />}

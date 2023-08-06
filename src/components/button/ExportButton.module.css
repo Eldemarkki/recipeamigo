@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.mainExportButton,
+.dialogOpenButton {
+  padding-block: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.mainExportButton {
+  padding-inline: 0.8rem 0.5rem;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+
+.dialogOpenButton {
+  padding-inline: 0.7rem !important;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.mainExportButton:hover,
+.dialogOpenButton:hover {
+  background-color: var(--primary-shade-1);
+}
+
+.mainExportButton:focus {
+  /* Make sure the focus outline is not hidden by the arrow button */
+  z-index: 1;
+}
+
+.dialog {
+  background-color: var(--background-color-secondary);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}

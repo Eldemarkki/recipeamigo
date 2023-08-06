@@ -2,9 +2,14 @@
   border: none;
   display: flex;
   justify-content: center;
-  border-radius: 1rem;
   align-items: center;
   font-size: var(--font-size-button);
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.buttonComponent:not(.rectangular) {
+  border-radius: 1rem;
 }
 
 .buttonComponent:not(.circular) {
@@ -35,6 +40,7 @@
   border-radius: 50%;
   aspect-ratio: 1/1;
   display: flex;
+  padding: 0.2rem;
 }
 
 .buttonComponent:disabled {

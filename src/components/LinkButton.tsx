@@ -1,20 +1,31 @@
 import styles from "./LinkButton.module.css";
 import { Link } from "./link/Link";
-import { ComponentProps } from "react";
+import { ComponentPropsWithoutRef, forwardRef } from "react";
 
-export const LinkButton = ({
-  children,
-  className,
-  ...props
-}: ComponentProps<typeof Link>) => {
-  return (
+export const LinkButton = forwardRef<
+  HTMLAnchorElement,
+  ComponentPropsWithoutRef<typeof Link> & {
+    rectangular?: boolean;
+    variant?: "primary" | "secondary";
+  }
+>(
+  (
+    { children, className, rectangular = false, variant = "primary", ...props },
+    ref,
+  ) => (
     <Link
       {...props}
-      className={
-        className ? className + " " + styles.linkButton : styles.linkButton
-      }
+      ref={ref}
+      className={[
+        className,
+        styles.linkButton,
+        rectangular && styles.rectangular,
+        styles[variant],
+      ].join(" ")}
     >
       {children}
     </Link>
-  );
-};
+  ),
+);
+
+LinkButton.displayName = "LinkButton";

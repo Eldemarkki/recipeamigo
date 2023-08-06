@@ -1,15 +1,16 @@
 import styles from "./Link.module.css";
 import NextLink from "next/link";
-import { ComponentProps } from "react";
+import { ComponentPropsWithoutRef, forwardRef } from "react";
 
-export const Link = ({
-  className,
-  ...props
-}: ComponentProps<typeof NextLink>) => {
-  return (
-    <NextLink
-      {...props}
-      className={className ? styles.link + " " + className : styles.link}
-    />
-  );
-};
+export const Link = forwardRef<
+  HTMLAnchorElement,
+  ComponentPropsWithoutRef<typeof NextLink>
+>(({ className, ...props }, ref) => (
+  <NextLink
+    {...props}
+    ref={ref}
+    className={className ? styles.link + " " + className : styles.link}
+  />
+));
+
+Link.displayName = "Link";
