@@ -1,3 +1,4 @@
+import { PageWrapper } from "../../components/misc/PageWrapper";
 import ThemeToggle from "../../components/themeToggle/ThemeToggle";
 import type { GetServerSideProps } from "next";
 import { useTranslation } from "next-i18next";
@@ -7,10 +8,9 @@ export default function SettingsPage() {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <h1>{t("settings:settingsTitle")}</h1>
+    <PageWrapper title={t("settings:settingsTitle")}>
       <ThemeToggle />
-    </div>
+    </PageWrapper>
   );
 }
 

@@ -1,6 +1,7 @@
 import { RecipeCardGrid } from "../../components/RecipeCardGrid";
 import { BrowseFilter } from "../../components/browse/filter/BrowseFilter";
 import { BrowsePagination } from "../../components/browse/pagination/BrowsePagination";
+import { PageWrapper } from "../../components/misc/PageWrapper";
 import config from "../../config";
 import { getPublicRecipesPaginated } from "../../database/recipes";
 import { isValidSortParam, queryParamToString } from "../../utils/stringUtils";
@@ -17,14 +18,15 @@ const BrowsePage = ({
   const { t } = useTranslation("browse");
 
   return (
-    <div className={styles.container}>
-      <h1>{t("title")}</h1>
-      <div className={styles.main}>
-        <BrowseFilter query={query} />
-        <RecipeCardGrid recipes={recipes} />
+    <PageWrapper title={t("title")}>
+      <div className={styles.container}>
+        <div className={styles.main}>
+          <BrowseFilter query={query} />
+          <RecipeCardGrid recipes={recipes} />
+        </div>
+        <BrowsePagination {...pagination} />
       </div>
-      <BrowsePagination {...pagination} />
-    </div>
+    </PageWrapper>
   );
 };
 

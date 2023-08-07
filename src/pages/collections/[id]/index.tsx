@@ -2,6 +2,7 @@ import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
 import { Button } from "../../../components/button/Button";
 import { CollectionEditDialog } from "../../../components/collections/dialogs/CollectionEditDialog";
 import { Dialog } from "../../../components/dialog/Dialog";
+import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { collectionPageDataLoader } from "../../../dataLoaders/collections/collectionPageDataLoader";
 import { loadProps } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
@@ -16,7 +17,22 @@ export default function CollectionPage(
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <div>
+    <PageWrapper
+      titleRow={
+        <div className={styles.topRow}>
+          <h1>{props.collection.name}</h1>
+          {props.isOwner && (
+            <Button
+              onClick={() => {
+                setIsDialogOpen(true);
+              }}
+            >
+              {t("actions.edit")}
+            </Button>
+          )}
+        </div>
+      }
+    >
       {props.isOwner && props.allRecipes && (
         <Dialog
           open={isDialogOpen}
@@ -33,23 +49,11 @@ export default function CollectionPage(
           />
         </Dialog>
       )}
-      <div className={styles.topRow}>
-        <h1>{props.collection.name}</h1>
-        {props.isOwner && (
-          <Button
-            onClick={() => {
-              setIsDialogOpen(true);
-            }}
-          >
-            {t("actions.edit")}
-          </Button>
-        )}
-      </div>
       {props.collection.description && <p>{props.collection.description}</p>}
       <RecipeCardGrid
         recipes={props.collection.RecipesOnCollections.map((r) => r.recipe)}
       />
-    </div>
+    </PageWrapper>
   );
 }
 

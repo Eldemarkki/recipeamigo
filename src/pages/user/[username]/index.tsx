@@ -1,4 +1,5 @@
 import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
+import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { getUserAndPublicRecipesByUsername } from "../../../database/users";
 import type { Recipe, UserProfile } from "@prisma/client";
 import type { GetServerSideProps } from "next";
@@ -15,8 +16,7 @@ export default function UserPage({ user }: UserPageProps) {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <h1>{user.username}</h1>
+    <PageWrapper title={user.username}>
       <h2>{t("userPage:recipesTitle")}</h2>
       {user.recipes.length > 0 ? (
         <>
@@ -26,7 +26,7 @@ export default function UserPage({ user }: UserPageProps) {
       ) : (
         <p>{t("userPage:noRecipes")}</p>
       )}
-    </div>
+    </PageWrapper>
   );
 }
 

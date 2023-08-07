@@ -1,4 +1,5 @@
 import { CollectionsList } from "../../../components/collections/CollectionsList";
+import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { browseCollectionsDataLoader } from "../../../dataLoaders/browse/collections/browseCollectionsDataLoader";
 import { loadProps } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
@@ -12,19 +13,20 @@ export default function BrowseCollectionsPage({
   const { t } = useTranslation("browse");
 
   return (
-    <div className={styles.container}>
-      <h1>{t("collections.title")}</h1>
-      {userCollections && (
+    <PageWrapper title={t("collections.title")}>
+      <div className={styles.container}>
+        {userCollections && (
+          <div className={styles.collectionSection}>
+            <h2>{t("collections.myCollections")}</h2>
+            <CollectionsList collections={userCollections} />
+          </div>
+        )}
         <div className={styles.collectionSection}>
-          <h2>{t("collections.myCollections")}</h2>
-          <CollectionsList collections={userCollections} />
+          <h2>{t("collections.publicCollections")}</h2>
+          <CollectionsList collections={publicCollections} />
         </div>
-      )}
-      <div className={styles.collectionSection}>
-        <h2>{t("collections.publicCollections")}</h2>
-        <CollectionsList collections={publicCollections} />
       </div>
-    </div>
+    </PageWrapper>
   );
 }
 

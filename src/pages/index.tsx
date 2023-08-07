@@ -1,6 +1,7 @@
 import { LinkButton } from "../components/LinkButton";
 import { NewCollectionButton } from "../components/NewCollectionButton";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
+import { PageWrapper } from "../components/misc/PageWrapper";
 import { getAllRecipesForUser } from "../database/recipes";
 import { getUserFromRequest } from "../utils/auth";
 import styles from "./page.module.css";
@@ -14,14 +15,17 @@ export default function Home({
   const { t } = useTranslation("home");
 
   return (
-    <div className={styles.container}>
-      <div className={styles.recipesTitleRow}>
-        <h2>{t("myRecipes")}</h2>
-        <LinkButton href="/recipe/new">{t("newRecipeButton")}</LinkButton>
-        <NewCollectionButton recipes={recipes} />
-      </div>
+    <PageWrapper
+      titleRow={
+        <div className={styles.recipesTitleRow}>
+          <h1>{t("myRecipes")}</h1>
+          <LinkButton href="/recipe/new">{t("newRecipeButton")}</LinkButton>
+          <NewCollectionButton recipes={recipes} />
+        </div>
+      }
+    >
       <RecipeCardGrid showCreateButton recipes={recipes} />
-    </div>
+    </PageWrapper>
   );
 }
 

@@ -2,6 +2,7 @@ import { LinkButton } from "../../../components/LinkButton";
 import { Button } from "../../../components/button/Button";
 import { ExportButton } from "../../../components/button/ExportButton";
 import { Link } from "../../../components/link/Link";
+import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
@@ -71,7 +72,7 @@ export default function RecipePage(
   );
 
   return (
-    <main className={styles.container}>
+    <PageWrapper mainClass={styles.container} maxWidth={1000}>
       {recipe.coverImageUrl && (
         <div className={styles.coverImageContainer}>
           <Image
@@ -171,7 +172,7 @@ export default function RecipePage(
           <InstructionsList instructions={recipe.instructions} />
         </div>
       </div>
-    </main>
+    </PageWrapper>
   );
 }
 

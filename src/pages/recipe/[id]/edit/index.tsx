@@ -1,3 +1,4 @@
+import { PageWrapper } from "../../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
 import { getSingleRecipe } from "../../../../database/recipes";
 import type { editRecipeSchema } from "../../../../handlers/recipes/recipePutHandler";
@@ -43,20 +44,22 @@ export default function EditRecipePage({
   const router = useRouter();
 
   return (
-    <RecipeForm
-      type="edit"
-      initialRecipe={initialRecipe}
-      onSubmit={async (recipe, coverImage) => {
-        // TODO: Show loading indicator while saving
-        try {
-          await editRecipe(initialRecipe.id, recipe, coverImage);
-          void router.push("/recipe/" + initialRecipe.id);
-        } catch {
-          // TODO: Show a notification to the user that the recipe failed to save.
-          console.log("Failed to save recipe");
-        }
-      }}
-    />
+    <PageWrapper>
+      <RecipeForm
+        type="edit"
+        initialRecipe={initialRecipe}
+        onSubmit={async (recipe, coverImage) => {
+          // TODO: Show loading indicator while saving
+          try {
+            await editRecipe(initialRecipe.id, recipe, coverImage);
+            void router.push("/recipe/" + initialRecipe.id);
+          } catch {
+            // TODO: Show a notification to the user that the recipe failed to save.
+            console.log("Failed to save recipe");
+          }
+        }}
+      />
+    </PageWrapper>
   );
 }
 
