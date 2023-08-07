@@ -15,13 +15,19 @@ import React, { useEffect, useState } from "react";
 import screenfull from "screenfull";
 
 export type CountdownComponentProps = {
-  seconds: number;
+  seconds?: number;
 };
 
 export const CountdownComponent = (
   props: NodeViewRendererProps & CountdownComponentProps,
 ) => {
-  const initialSeconds = props.seconds ?? props.node.attrs.seconds;
+  const attrSeconds =
+    "seconds" in props.node.attrs &&
+    typeof props.node.attrs.seconds === "number"
+      ? props.node.attrs.seconds
+      : 0;
+
+  const initialSeconds = props.seconds ?? attrSeconds;
 
   const [secondsLeft, setSecondsLeft] = React.useState(
     typeof initialSeconds === "number"
@@ -43,7 +49,9 @@ export const CountdownComponent = (
       }
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [isPaused, secondsLeft]);
 
   const { hours, minutes, seconds } = splitSeconds(secondsLeft);
@@ -58,7 +66,9 @@ export const CountdownComponent = (
           {hasRanOnce && secondsLeft !== 0 && (
             <CircularButton
               style={{ display: "inline" }}
-              onClick={() => setIsPaused(!isPaused)}
+              onClick={() => {
+                setIsPaused(!isPaused);
+              }}
             >
               {isPaused ? (
                 <PlayIcon style={{ pointerEvents: "none" }} />
@@ -70,7 +80,7 @@ export const CountdownComponent = (
           <div className={styles.dialogCloseButton}>
             <CircularButton
               onClick={() => {
-                screenfull.exit();
+                void screenfull.exit();
                 setIsDialogOpen(false);
               }}
             >
@@ -98,7 +108,9 @@ export const CountdownComponent = (
         {hasRanOnce && secondsLeft !== 0 && (
           <CircularButton
             style={{ display: "inline" }}
-            onClick={() => setIsPaused(!isPaused)}
+            onClick={() => {
+              setIsPaused(!isPaused);
+            }}
           >
             {isPaused ? (
               <PlayIcon style={{ pointerEvents: "none" }} />
@@ -112,7 +124,7 @@ export const CountdownComponent = (
             <EnterFullScreenIcon
               onClick={() => {
                 if (screenfull.isEnabled) {
-                  screenfull.request();
+                  void screenfull.request();
                 }
                 setIsDialogOpen(true);
               }}

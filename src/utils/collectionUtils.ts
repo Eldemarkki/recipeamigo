@@ -16,19 +16,15 @@ export const hasReadAccessToCollection = (
     return true;
   }
 
-  if (collection.visibility === RecipeCollectionVisibility.PRIVATE) {
-    if (!user) {
-      return false;
-    }
-
-    if (user.status === "Unauthorized") {
-      return false;
-    }
-
-    return collection.userId === user.userId;
+  if (!user) {
+    return false;
   }
 
-  return false;
+  if (user.status === "Unauthorized") {
+    return false;
+  }
+
+  return collection.userId === user.userId;
 };
 
 export const hasWriteAccessToCollection = (
@@ -53,11 +49,9 @@ export const isVisibilityValidForCollection = (
       recipeVisibility === RecipeVisibility.PUBLIC ||
       recipeVisibility === RecipeVisibility.UNLISTED
     );
-  } else if (collectionVisibility === RecipeCollectionVisibility.PUBLIC) {
-    return recipeVisibility === RecipeVisibility.PUBLIC;
   }
 
-  throw new Error("Invalid collection visibility");
+  return recipeVisibility === RecipeVisibility.PUBLIC;
 };
 
 export const isValidVisibilityConfiguration = <

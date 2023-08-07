@@ -20,19 +20,27 @@ export default function CollectionPage(
       {props.isOwner && props.allRecipes && (
         <Dialog
           open={isDialogOpen}
-          onClickOutside={() => setIsDialogOpen(false)}
+          onClickOutside={() => {
+            setIsDialogOpen(false);
+          }}
         >
           <CollectionEditDialog
             collection={props.collection}
             allRecipes={props.allRecipes}
-            onClose={() => setIsDialogOpen(false)}
+            onClose={() => {
+              setIsDialogOpen(false);
+            }}
           />
         </Dialog>
       )}
       <div className={styles.topRow}>
         <h1>{props.collection.name}</h1>
         {props.isOwner && (
-          <Button onClick={() => setIsDialogOpen(true)}>
+          <Button
+            onClick={() => {
+              setIsDialogOpen(true);
+            }}
+          >
             {t("actions.edit")}
           </Button>
         )}

@@ -58,7 +58,7 @@ export const CollectionEditDialog = ({
     collection.visibility,
   );
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>(
-    collection?.RecipesOnCollections.map((r) => r.recipeId) ?? [],
+    collection.RecipesOnCollections.map((r) => r.recipeId),
   );
 
   const selectedRecipes = allRecipes.filter((r) =>
@@ -97,26 +97,28 @@ export const CollectionEditDialog = ({
       <h1>{t("collections:edit.dialogTitle", { name: collection.name })}</h1>
       <form
         className={styles.container}
-        onSubmit={async (e) => {
+        onSubmit={(e) => {
           e.preventDefault();
           if (selectedRecipeIds.length === 0) {
             return;
           }
 
-          const editedCollection = await editCollection(collection.id, {
-            name: collectionName,
-            recipeIds: selectedRecipeIds,
-            visibility,
-            description,
-          });
+          void (async () => {
+            const editedCollection = await editCollection(collection.id, {
+              name: collectionName,
+              recipeIds: selectedRecipeIds,
+              visibility,
+              description,
+            });
 
-          if (editedCollection) {
-            onClose();
-            router.push(`/collections/${editedCollection.id}`);
-          } else {
-            // TODO: Show error message
-            console.error("Failed to edit collection");
-          }
+            if (editedCollection) {
+              onClose();
+              void router.push(`/collections/${editedCollection.id}`);
+            } else {
+              // TODO: Show error message
+              console.error("Failed to edit collection");
+            }
+          })();
         }}
       >
         <h1>
@@ -140,7 +142,9 @@ export const CollectionEditDialog = ({
             className={styles.descriptionInput}
             id={descriptionId}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
             placeholder={t("home:collections.descriptionPlaceholder")}
           />
         </div>
@@ -173,7 +177,9 @@ export const CollectionEditDialog = ({
             type="text"
             placeholder={t("home:collections.searchPlaceholder")}
             value={recipeFilter}
-            onChange={(e) => setRecipeFilter(e.target.value)}
+            onChange={(e) => {
+              setRecipeFilter(e.target.value);
+            }}
           />
         )}
         {recipes.length > 0 ? (
@@ -184,14 +190,15 @@ export const CollectionEditDialog = ({
               coverImageUrl: r.coverImageUrl,
               visibility: r.visibility,
               isSelected: selectedRecipeIds.includes(r.id),
-              onClickSelect: () =>
+              onClickSelect: () => {
                 setSelectedRecipeIds((selectedRecipes) => {
                   if (selectedRecipes.includes(r.id)) {
                     return selectedRecipes.filter((id) => id !== r.id);
                   } else {
                     return [...selectedRecipes, r.id];
                   }
-                }),
+                });
+              },
             }))}
           />
         ) : (

@@ -21,7 +21,12 @@ export const NewCollectionButton = ({
         setIsOpen={setIsOpen}
         allRecipes={allRecipes}
       />
-      <Button variant="secondary" onClick={() => setIsOpen(true)}>
+      <Button
+        variant="secondary"
+        onClick={() => {
+          setIsOpen(true);
+        }}
+      >
         {t("newCollectionButton")}
       </Button>
     </>

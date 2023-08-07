@@ -1,8 +1,22 @@
 {
   "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/strict-type-checked",
     "next/core-web-vitals",
     "plugin:prettier/recommended"
   ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module",
+    "ecmaVersion": "latest",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "rules": {
     "prettier/prettier": "error",
     "no-restricted-imports": [

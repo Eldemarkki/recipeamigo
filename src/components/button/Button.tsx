@@ -8,7 +8,6 @@ export type RequiredButtonProps = {
   variant: ButtonVariant;
   size: ButtonSize;
   rectangular?: boolean;
-  textAlign?: "left" | "center" | "right";
 };
 
 export type ButtonProps = Partial<RequiredButtonProps>;
@@ -22,7 +21,6 @@ export const Button = forwardRef<
       variant = "primary",
       size = "medium",
       type = "button",
-      textAlign = "center",
       rectangular = false,
       ...props
     },
@@ -45,15 +43,14 @@ export const Button = forwardRef<
 
 Button.displayName = "Button";
 
-export const CircularButton = ({
-  variant = "primary",
-  ref,
-  type = "button",
-  ...props
-}: ButtonProps & React.ComponentProps<"button">) => (
+export const CircularButton = forwardRef<
+  HTMLButtonElement,
+  ButtonProps & React.ComponentProps<"button">
+>(({ variant = "primary", type = "button", ...props }, ref) => (
   <button
     {...props}
     type={type}
+    ref={ref}
     className={[
       styles.buttonComponent,
       styles[variant],
@@ -61,4 +58,6 @@ export const CircularButton = ({
       props.className,
     ].join(" ")}
   />
-);
+));
+
+CircularButton.displayName = "CircularButton";

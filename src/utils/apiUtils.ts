@@ -123,18 +123,18 @@ export const handle = async <BodyType, QueryType, ResponseType>({
       }
 
       const user = await getUserFromRequest(req);
-      if (requireUser === true) {
+      if (requireUser) {
         if (user.status === "Unauthorized") {
           throw new UnauthorizedError();
         }
 
         if (queryValidator) {
           const queryResult = queryValidator.safeParse(req.query);
-          if (queryResult && !queryResult.success) {
+          if (!queryResult.success) {
             throw new InvalidQueryParametersError(queryResult.error.message);
           }
 
-          const query = queryResult?.data;
+          const query = queryResult.data;
           const responseBody = await handler(user, result.data, query);
           res.status(200).json(responseBody);
         } else {
@@ -145,11 +145,11 @@ export const handle = async <BodyType, QueryType, ResponseType>({
         const userOrNull = user.status !== "Unauthorized" ? user : null;
         if (queryValidator) {
           const queryResult = queryValidator.safeParse(req.query);
-          if (queryResult && !queryResult.success) {
+          if (!queryResult.success) {
             throw new InvalidQueryParametersError(queryResult.error.message);
           }
 
-          const query = queryResult?.data;
+          const query = queryResult.data;
           const responseBody = await handler(userOrNull, result.data, query);
           res.status(200).json(responseBody);
         } else {
@@ -159,18 +159,18 @@ export const handle = async <BodyType, QueryType, ResponseType>({
       }
     } else {
       const user = await getUserFromRequest(req);
-      if (requireUser === true) {
+      if (requireUser) {
         if (user.status === "Unauthorized") {
           throw new UnauthorizedError();
         }
 
         if (queryValidator) {
           const queryResult = queryValidator.safeParse(req.query);
-          if (queryResult && !queryResult.success) {
+          if (!queryResult.success) {
             throw new InvalidQueryParametersError(queryResult.error.message);
           }
 
-          const query = queryResult?.data;
+          const query = queryResult.data;
           const responseBody = await handler(user, query);
           res.status(200).json(responseBody);
         } else {
@@ -181,11 +181,11 @@ export const handle = async <BodyType, QueryType, ResponseType>({
         const userOrNull = user.status !== "Unauthorized" ? user : null;
         if (queryValidator) {
           const queryResult = queryValidator.safeParse(req.query);
-          if (queryResult && !queryResult.success) {
+          if (!queryResult.success) {
             throw new InvalidQueryParametersError(queryResult.error.message);
           }
 
-          const query = queryResult?.data;
+          const query = queryResult.data;
           const responseBody = await handler(userOrNull, query);
           res.status(200).json(responseBody);
         } else {

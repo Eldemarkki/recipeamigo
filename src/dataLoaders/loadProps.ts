@@ -1,9 +1,8 @@
 import { AuthorizedUser, getUserFromRequest } from "../utils/auth";
 import { NotFoundError } from "../utils/errors";
 import { FlatNamespace } from "i18next";
-import { GetServerSidePropsContext, PreviewData } from "next";
+import { GetServerSidePropsContext } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { ParsedUrlQuery } from "querystring";
 import { z } from "zod";
 
 export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
@@ -24,7 +23,7 @@ export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
     };
 
 export type PropsLoader<QueryType = unknown, PropsType = unknown> = {
-  ctx: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>;
+  ctx: GetServerSidePropsContext;
 } & PropsLoaderHandler<QueryType, PropsType>;
 
 export const loadProps = async <QueryType = unknown, PropsType = unknown>({
@@ -34,6 +33,9 @@ export const loadProps = async <QueryType = unknown, PropsType = unknown>({
   ...other
 }: PropsLoader<QueryType, PropsType>) => {
   const u = await getUserFromRequest(ctx.req);
+
+  // In the future we may have requireUser: true for some pages
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (requireUser && !u) {
     return {
       redirect: {

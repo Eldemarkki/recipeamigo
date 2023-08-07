@@ -35,7 +35,9 @@ export const EditableInstructionList = ({
           <EditableInstructionListItem
             key={instruction.id + "-" + instruction.description}
             instruction={instruction}
-            onRemoveInstruction={() => removeInstruction(index)}
+            onRemoveInstruction={() => {
+              removeInstruction(index);
+            }}
           />
         ))}
       </Reorder.Group>

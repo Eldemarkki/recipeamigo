@@ -1,9 +1,9 @@
 import styles from "./CrossOffText.module.css";
 import { useState } from "react";
 
-export type CrossOffText = React.PropsWithChildren<{}>;
+export type CrossOffTextProps = React.PropsWithChildren;
 
-export const CrossOffText = ({ children }: CrossOffText) => {
+export const CrossOffText = ({ children }: CrossOffTextProps) => {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -11,7 +11,9 @@ export const CrossOffText = ({ children }: CrossOffText) => {
       <input
         type="checkbox"
         checked={checked}
-        onChange={(e) => setChecked(e.target.checked)}
+        onChange={(e) => {
+          setChecked(e.target.checked);
+        }}
       />
       {children}
     </label>

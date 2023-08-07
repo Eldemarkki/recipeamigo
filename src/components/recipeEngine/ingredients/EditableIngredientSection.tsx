@@ -79,8 +79,12 @@ export const EditableIngredientSection = ({
           <EditableIngredientListItem
             key={ingredient.name}
             ingredient={ingredient}
-            onEditIngredient={(i) => onEditIngredient(i, index)}
-            onRemove={() => onRemoveIngredient(index)}
+            onEditIngredient={(i) => {
+              onEditIngredient(i, index);
+            }}
+            onRemove={() => {
+              onRemoveIngredient(index);
+            }}
           />
         ))}
       </Reorder.Group>
@@ -90,17 +94,19 @@ export const EditableIngredientSection = ({
         <IngredientForm
           type="new"
           addIngredient={addIngredient}
-          onCancel={() => setNewItemType(null)}
+          onCancel={() => {
+            setNewItemType(null);
+          }}
         />
       ) : (
         <div className={styles.ingredientSectionBottomSection}>
           <CircularButton
-            onClick={() =>
+            onClick={() => {
               setNewItemType({
                 type: "ingredient",
                 ingredientSectionName: ingredientSection.name,
-              })
-            }
+              });
+            }}
           >
             <PlusIcon />
           </CircularButton>

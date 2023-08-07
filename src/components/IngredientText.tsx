@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 export type IngredientTextProps = {
   ingredient: RawIngredient;
 } & (
-  | {}
+  | object
   | {
       originalRecipeQuantity: number;
       recipeQuantity: number;

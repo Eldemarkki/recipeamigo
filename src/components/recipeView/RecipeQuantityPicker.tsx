@@ -23,7 +23,9 @@ export const RecipeQuantityPicker = ({
       <div className={styles.inputContainer}>
         <CircularButton
           type="button"
-          onClick={() => onChange(Math.max(quantity - 1, 1))}
+          onClick={() => {
+            onChange(Math.max(quantity - 1, 1));
+          }}
           aria-label={t("recipeView:recipeQuantity.decrease")}
         >
           <MinusIcon />
@@ -38,7 +40,9 @@ export const RecipeQuantityPicker = ({
         />
         <CircularButton
           type="button"
-          onClick={() => onChange(quantity + 1)}
+          onClick={() => {
+            onChange(quantity + 1);
+          }}
           aria-label={t("recipeView:recipeQuantity.increase")}
         >
           <PlusIcon />

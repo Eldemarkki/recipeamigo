@@ -26,7 +26,7 @@ export const locales = ["en", "fi"] as const;
 export type Locale = (typeof locales)[number];
 
 export const isLocale = (str: string): str is Locale => {
-  return locales.includes(str as any);
+  return locales.includes(str as Locale);
 };
 
 export const formatDuration = (

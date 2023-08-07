@@ -9,7 +9,7 @@ import { Button } from "../../button/Button";
 import { Dialog } from "../../dialog/Dialog";
 import { ErrorText } from "../../error/ErrorText";
 import styles from "./NewCollectionDialog.module.css";
-import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
+import { RecipeCollectionVisibility } from "@prisma/client";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
@@ -84,28 +84,35 @@ export const NewCollectionDialog = ({
     isValidVisibilityConfiguration(visibility, selectedRecipes);
 
   return (
-    <Dialog open={isOpen} onClickOutside={() => setIsOpen(false)}>
+    <Dialog
+      open={isOpen}
+      onClickOutside={() => {
+        setIsOpen(false);
+      }}
+    >
       <form
         className={styles.container}
-        onSubmit={async (e) => {
+        onSubmit={(e) => {
           e.preventDefault();
           if (selectedRecipeIds.length === 0) {
             return;
           }
 
-          const collection = await createCollection({
-            name: collectionName,
-            recipeIds: selectedRecipeIds,
-            visibility,
-            description,
-          });
+          void (async () => {
+            const collection = await createCollection({
+              name: collectionName,
+              recipeIds: selectedRecipeIds,
+              visibility,
+              description,
+            });
 
-          if (collection) {
-            router.push(`/collections/${collection.id}`);
-          } else {
-            // TODO: Show some notification to the user.
-            console.error("Failed to create collection");
-          }
+            if (collection) {
+              void router.push(`/collections/${collection.id}`);
+            } else {
+              // TODO: Show some notification to the user.
+              console.error("Failed to create collection");
+            }
+          })();
         }}
       >
         <h1>
@@ -129,7 +136,9 @@ export const NewCollectionDialog = ({
             className={styles.descriptionInput}
             id={descriptionId}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
             placeholder={t("collections.descriptionPlaceholder")}
           />
         </div>
@@ -162,7 +171,9 @@ export const NewCollectionDialog = ({
             type="text"
             placeholder={t("collections.searchPlaceholder")}
             value={recipeFilter}
-            onChange={(e) => setRecipeFilter(e.target.value)}
+            onChange={(e) => {
+              setRecipeFilter(e.target.value);
+            }}
           />
         )}
         {recipes.length > 0 ? (
@@ -173,14 +184,15 @@ export const NewCollectionDialog = ({
               coverImageUrl: r.coverImageUrl,
               visibility: r.visibility,
               isSelected: selectedRecipeIds.includes(r.id),
-              onClickSelect: () =>
+              onClickSelect: () => {
                 setSelectedRecipeIds((selectedRecipes) => {
                   if (selectedRecipes.includes(r.id)) {
                     return selectedRecipes.filter((id) => id !== r.id);
                   } else {
                     return [...selectedRecipes, r.id];
                   }
-                }),
+                });
+              },
             }))}
           />
         ) : (

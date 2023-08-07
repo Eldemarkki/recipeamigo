@@ -19,6 +19,10 @@ const saveRecipe = async (
     },
   });
 
+  if (!response.ok) {
+    return null;
+  }
+
   const data = (await response.json()) as {
     recipe: Awaited<ReturnType<typeof createRecipe>>;
     coverImageUploadUrl: string;
@@ -44,7 +48,7 @@ export default function NewRecipePage() {
         // TODO: Show loading indicator while saving
         const savedRecipe = await saveRecipe(recipe, coverImage);
         if (savedRecipe) {
-          router.push("/recipe/" + savedRecipe.id);
+          void router.push("/recipe/" + savedRecipe.id);
         } else {
           // TODO: Show a notification to the user that the recipe failed to save.
           console.log("Failed to save recipe");
@@ -54,10 +58,7 @@ export default function NewRecipePage() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<{}> = async ({
-  req,
-  locale,
-}) => {
+export const getServerSideProps = (async ({ req, locale }) => {
   const user = await getUserFromRequest(req);
   if (user.status === "Unauthorized") {
     return {
@@ -73,4 +74,4 @@ export const getServerSideProps: GetServerSideProps<{}> = async ({
       ...(await serverSideTranslations(locale ?? "en")),
     },
   };
-};
+}) satisfies GetServerSideProps;

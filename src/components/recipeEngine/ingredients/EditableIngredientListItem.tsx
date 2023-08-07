@@ -31,7 +31,12 @@ export const EditableIngredientListItem = ({
       dragListener={false}
       dragControls={controls}
     >
-      <Dialog open={isEditing} onClickOutside={() => setIsEditing(false)}>
+      <Dialog
+        open={isEditing}
+        onClickOutside={() => {
+          setIsEditing(false);
+        }}
+      >
         <h1>
           {t("recipeView:edit.editingIngredientTitle", {
             ingredientName: ingredient.name,

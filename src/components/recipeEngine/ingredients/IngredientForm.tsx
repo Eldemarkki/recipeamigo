@@ -114,7 +114,9 @@ export const IngredientForm = ({
               id={ingredientOptionalId}
               type="checkbox"
               checked={ingredientOptional}
-              onChange={(e) => setIngredientOptional(e.target.checked)}
+              onChange={(e) => {
+                setIngredientOptional(e.target.checked);
+              }}
             />
             <label className={styles.inputLabel} htmlFor={ingredientOptionalId}>
               {t("recipeView:edit.ingredients.isOptional")}

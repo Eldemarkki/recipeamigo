@@ -8,11 +8,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export type CreateProfilePageProps = {
-  userId: string;
-};
-
-export default function CreateProfilePage(props: CreateProfilePageProps) {
+export default function CreateProfilePage() {
   const { t } = useTranslation();
   const [profileName, setProfileName] = useState("");
 
@@ -44,7 +40,7 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
     if ("message" in data) {
       switch (data.message) {
         case "Not authenticated":
-          router.push("/login");
+          void router.push("/login");
           break;
         case "Profile already exists":
           setProfileName("");
@@ -61,7 +57,7 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
           break;
       }
     } else {
-      router.push("/");
+      void router.push("/");
     }
   };
 
@@ -71,15 +67,17 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
         <h1>{t("profile:question")}</h1>
         <form
           className={styles.form}
-          onSubmit={async (e) => {
+          onSubmit={(e) => {
             e.preventDefault();
-            await saveProfile();
+            void saveProfile();
           }}
         >
           <input
             type="text"
             value={profileName}
-            onChange={(e) => setProfileName(e.target.value)}
+            onChange={(e) => {
+              setProfileName(e.target.value);
+            }}
             placeholder={t("profile:placeholderName")}
             minLength={3}
             maxLength={32}
@@ -93,9 +91,7 @@ export default function CreateProfilePage(props: CreateProfilePageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<
-  CreateProfilePageProps
-> = async ({ req, locale }) => {
+export const getServerSideProps = (async ({ req, locale }) => {
   const user = await getUserFromRequest(req);
 
   if (user.status === "Unauthorized") {
@@ -119,7 +115,6 @@ export const getServerSideProps: GetServerSideProps<
   return {
     props: {
       ...(await serverSideTranslations(locale ?? "en")),
-      userId: user.userId,
     },
   };
-};
+}) satisfies GetServerSideProps;

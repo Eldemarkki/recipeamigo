@@ -45,20 +45,16 @@ export const hasReadAccessToRecipe = (
     return true;
   }
 
-  if (recipe.visibility === RecipeVisibility.PRIVATE) {
-    if (typeof user === "string") {
-      // `user` is actually the userId
-      return recipe.userId === user;
-    }
-
-    if (user.status === "Unauthorized") {
-      return false;
-    }
-
-    return recipe.userId === user.userId;
+  if (typeof user === "string") {
+    // `user` is actually the userId
+    return recipe.userId === user;
   }
 
-  return false;
+  if (user.status === "Unauthorized") {
+    return false;
+  }
+
+  return recipe.userId === user.userId;
 };
 
 export const getInstructionText = (instructionHtml: string) => {

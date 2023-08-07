@@ -25,7 +25,10 @@ export const CountdownExtension = Node.create({
     mergeAttributes(HTMLAttributes),
   ],
   renderText: ({ node }) => {
-    const totalSeconds = node.attrs.seconds;
+    const totalSeconds =
+      "seconds" in node.attrs && typeof node.attrs.seconds === "number"
+        ? node.attrs.seconds
+        : 0;
     const { hours, minutes, seconds } = splitSeconds(totalSeconds);
     return formatDuration(hours, minutes, seconds);
   },

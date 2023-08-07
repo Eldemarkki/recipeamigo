@@ -8,7 +8,9 @@ const ThemeToggle = () => {
   const { t } = useTranslation("settings");
 
   const [selectedTheme, setSelectedTheme] = useState<Theme>("system");
-  const setTheme = useTheme((theme) => setSelectedTheme(theme));
+  const setTheme = useTheme((theme) => {
+    setSelectedTheme(theme);
+  });
 
   const options = [
     { value: "system", label: t("themes.systemTheme") },

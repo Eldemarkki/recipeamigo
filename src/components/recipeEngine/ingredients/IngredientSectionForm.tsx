@@ -25,7 +25,9 @@ export const IngredientSectionForm = (props: IngredientSectionFormProps) => {
         <input
           type="text"
           value={sectionName}
-          onChange={(e) => setSectionName(e.target.value)}
+          onChange={(e) => {
+            setSectionName(e.target.value);
+          }}
           placeholder={t("recipeView:edit.ingredientSections.sectionName")}
           required
         />

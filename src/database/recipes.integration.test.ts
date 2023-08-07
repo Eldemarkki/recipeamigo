@@ -66,12 +66,16 @@ const compareRecipes = (
   const {
     ingredientSections: expectedIngredientSections,
     instructions: expectedInstructions,
+    // Need to remove it from expectedBasic
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     coverImageAction,
     ...expectedBasic
   } = expected;
   const {
     ingredientSections: actualIngredientSections,
     instructions: actualInstructions,
+    // Need to remove it from actualBasic
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     coverImageName,
     ...actualBasic
   } = actual;
@@ -82,7 +86,7 @@ const compareRecipes = (
       id: original.id,
       userId: original.userId,
       createdAt: original.createdAt,
-      updatedAt: expect.any(Date),
+      updatedAt: expect.any(Date) as unknown,
     }),
   );
 
@@ -94,7 +98,7 @@ const compareRecipes = (
         id:
           hasIngredientSections && "id" in section
             ? section.id
-            : expect.any(String),
+            : (expect.any(String) as unknown),
         recipeId: original.id,
         order: sectionIndex,
         ingredients: section.ingredients?.map(
@@ -104,8 +108,11 @@ const compareRecipes = (
             ingredientSectionId:
               hasIngredientSections && "id" in section
                 ? section.id
-                : expect.any(String),
-            id: "id" in ingredient ? ingredient.id : expect.any(String),
+                : (expect.any(String) as unknown),
+            id:
+              "id" in ingredient
+                ? ingredient.id
+                : (expect.any(String) as unknown),
             isOptional:
               ingredient.isOptional ??
               original.ingredientSections
@@ -123,7 +130,10 @@ const compareRecipes = (
     (expectedInstructions ?? original.instructions).map(
       (instruction, instructionIndex) => ({
         ...instruction,
-        id: "id" in instruction ? instruction.id : expect.any(String),
+        id:
+          "id" in instruction
+            ? instruction.id
+            : (expect.any(String) as unknown),
         recipeId: original.id,
         order: instructionIndex,
       }),

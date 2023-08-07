@@ -36,7 +36,9 @@ export const NumberInput = ({
         className ? className + " " + styles.numberInput : styles.numberInput
       }
       type="text"
-      onBlur={(e) => handleBlur(e.target.value)}
+      onBlur={(e) => {
+        handleBlur(e.target.value);
+      }}
       onChange={(e) => {
         setRawValue(e.target.value);
       }}

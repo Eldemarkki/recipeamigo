@@ -27,7 +27,9 @@ export const DurationInput = ({
       <label htmlFor={hourId}>{t("edit.misc.countdown.duration.hours")}</label>
       <NumberInput
         value={hours}
-        onChange={(hours) => setSeconds(hours * 3600 + minutes * 60 + seconds)}
+        onChange={(hours) => {
+          setSeconds(hours * 3600 + minutes * 60 + seconds);
+        }}
         id={hourId}
         key={"hour-" + totalSeconds}
       />
@@ -36,9 +38,9 @@ export const DurationInput = ({
       </label>
       <NumberInput
         value={minutes}
-        onChange={(minutes) =>
-          setSeconds(hours * 3600 + minutes * 60 + seconds)
-        }
+        onChange={(minutes) => {
+          setSeconds(hours * 3600 + minutes * 60 + seconds);
+        }}
         id={minuteId}
         key={"minute-" + totalSeconds}
       />
@@ -47,9 +49,9 @@ export const DurationInput = ({
       </label>
       <NumberInput
         value={seconds}
-        onChange={(seconds) =>
-          setSeconds(hours * 3600 + minutes * 60 + seconds)
-        }
+        onChange={(seconds) => {
+          setSeconds(hours * 3600 + minutes * 60 + seconds);
+        }}
         id={secondId}
         key={"second-" + totalSeconds}
       />
@@ -60,7 +62,9 @@ export const DurationInput = ({
         <NumberInput
           className={styles.totalInput}
           value={totalSeconds}
-          onChange={(totalSeconds) => setSeconds(totalSeconds)}
+          onChange={(totalSeconds) => {
+            setSeconds(totalSeconds);
+          }}
           id={totalSecondsId}
           key={"total-" + totalSeconds}
         />

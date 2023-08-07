@@ -3,7 +3,7 @@ import { useTheme } from "../hooks/useTheme";
 import "../styles/index.scss";
 import { ClerkProvider } from "@clerk/nextjs";
 import { appWithTranslation } from "next-i18next";
-import type { AppContext, AppInitialProps, AppProps } from "next/app";
+import type { AppProps } from "next/app";
 
 export type Props = {
   isLoggedIn: boolean;

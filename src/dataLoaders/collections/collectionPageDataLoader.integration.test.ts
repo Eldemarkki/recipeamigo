@@ -88,7 +88,7 @@ describe("collectionPageDataLoader", () => {
         expect(response.allRecipes).toBeUndefined();
         expect(response.collection.RecipesOnCollections).toHaveLength(2);
       } else {
-        expect(
+        void expect(
           collectionPageDataLoader.handler(user, {
             id: collection.id,
           }),

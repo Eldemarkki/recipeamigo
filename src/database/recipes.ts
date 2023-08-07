@@ -48,7 +48,7 @@ export const getAllRecipesForUser = async (userId: string) => {
       const coverImageUrl = recipe.coverImageName
         ? await s3.presignedGetObject(
             DEFAULT_BUCKET_NAME,
-            recipe?.coverImageName,
+            recipe.coverImageName,
           )
         : undefined;
 
@@ -605,7 +605,7 @@ export const getSingleRecipe = async (id: string) => {
     coverImageUrl: recipe.coverImageName
       ? await s3.presignedGetObject(
           process.env.S3_BUCKET_NAME ?? "",
-          recipe?.coverImageName,
+          recipe.coverImageName,
         )
       : undefined,
   };
@@ -765,7 +765,7 @@ export const getPublicRecipesPaginated = async (
         coverImageUrl: recipe.coverImageName
           ? await s3.presignedGetObject(
               process.env.S3_BUCKET_NAME ?? "",
-              recipe?.coverImageName,
+              recipe.coverImageName,
             )
           : undefined,
       };

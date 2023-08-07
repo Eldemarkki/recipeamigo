@@ -38,7 +38,9 @@ export const BrowsePagination = ({
         {hasPreviousPage && (
           <Link
             href={`/browse${
-              previousPageParameters.size ? "?" + previousPageParameters : ""
+              previousPageParameters.size
+                ? "?" + previousPageParameters.toString()
+                : ""
             }`}
             title={t("pagination.previousPage")}
             aria-label={t("pagination.previousPage")}
@@ -56,7 +58,7 @@ export const BrowsePagination = ({
         {hasNextPage && (
           <Link
             href={`/browse${
-              nextPageParameters.size ? "?" + nextPageParameters : ""
+              nextPageParameters.size ? "?" + nextPageParameters.toString() : ""
             }`}
             className={styles.nextPageLink}
             title={t("pagination.nextPage")}

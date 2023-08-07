@@ -59,12 +59,14 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
     searchParams.set("search", search);
   }
   if (tags.length > 0) {
-    tags.forEach((tag) => searchParams.append("tags", tag));
+    tags.forEach((tag) => {
+      searchParams.append("tags", tag);
+    });
   }
   if (excludedIngredients.length > 0) {
-    excludedIngredients.forEach((ingredient) =>
-      searchParams.append("excludedIngredients", ingredient),
-    );
+    excludedIngredients.forEach((ingredient) => {
+      searchParams.append("excludedIngredients", ingredient);
+    });
   }
 
   if (maximumTime) {
@@ -79,15 +81,17 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      router.push(newUrl);
+      void router.push(newUrl);
     }, 400);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, maximumTime]);
 
   useEffect(() => {
-    router.push(newUrl);
+    void router.push(newUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, tags, excludedIngredients]);
 
@@ -98,7 +102,9 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
       <input
         type="text"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
         placeholder={t("recipeFilter.searchPlaceholder")}
         className={styles.searchInput}
       />

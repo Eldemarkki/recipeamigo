@@ -52,19 +52,21 @@ export const EditableIngredientList = ({
               <EditableIngredientSection
                 key={ingredientSection.name}
                 ingredientSection={ingredientSection}
-                onRemove={() => removeIngredientSection(ingredientSectionIndex)}
-                setIngredients={(ingredients) =>
+                onRemove={() => {
+                  removeIngredientSection(ingredientSectionIndex);
+                }}
+                setIngredients={(ingredients) => {
                   setIngredientSectionIngredients(
                     ingredientSectionIndex,
                     ingredients,
-                  )
-                }
-                onRemoveIngredient={(ingredientIndex) =>
-                  removeIngredient(ingredientIndex, ingredientSection.name)
-                }
-                addIngredient={(ingredient) =>
-                  addIngredient(ingredient, ingredientSection.name)
-                }
+                  );
+                }}
+                onRemoveIngredient={(ingredientIndex) => {
+                  removeIngredient(ingredientIndex, ingredientSection.name);
+                }}
+                addIngredient={(ingredient) => {
+                  addIngredient(ingredient, ingredientSection.name);
+                }}
                 newItemType={newItemType}
                 setNewItemType={setNewItemType}
                 onEditIngredient={(newIngredient, index) => {
@@ -89,11 +91,17 @@ export const EditableIngredientList = ({
             addIngredientSection(ingredientSectionName);
             setNewItemType({ type: "ingredient", ingredientSectionName });
           }}
-          onCancel={() => setNewItemType(null)}
+          onCancel={() => {
+            setNewItemType(null);
+          }}
         />
       ) : (
         <div className={styles.ingredientSectionBottomSection}>
-          <CircularButton onClick={() => setNewItemType({ type: "section" })}>
+          <CircularButton
+            onClick={() => {
+              setNewItemType({ type: "section" });
+            }}
+          >
             <PlusIcon />
           </CircularButton>
         </div>

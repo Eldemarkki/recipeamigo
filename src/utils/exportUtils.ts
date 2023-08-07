@@ -10,7 +10,7 @@ export const recipeToMarkdown = (
   >,
   locale: Locale,
 ) => {
-  let markdown = `---
+  const markdown = `---
 id: ${recipe.id}
 name: ${recipe.name}
 description: ${recipe.description}

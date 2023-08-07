@@ -40,7 +40,12 @@ export const InstructionEditor = ({
 
   return (
     <>
-      <Dialog open={isDialogOpen} onClickOutside={() => setIsDialogOpen(false)}>
+      <Dialog
+        open={isDialogOpen}
+        onClickOutside={() => {
+          setIsDialogOpen(false);
+        }}
+      >
         <NewCountdownDialog editor={editor} setIsDialogOpen={setIsDialogOpen} />
       </Dialog>
       <div className={styles.container}>

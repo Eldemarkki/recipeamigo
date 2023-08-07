@@ -29,11 +29,7 @@ export const Dropzone = ({
   const onDropHandler = useCallback(
     (acceptedFile: File) => {
       onDrop(acceptedFile);
-      if (acceptedFile) {
-        setPreviewImage(URL.createObjectURL(acceptedFile));
-      } else {
-        setPreviewImage(undefined);
-      }
+      setPreviewImage(URL.createObjectURL(acceptedFile));
     },
     [onDrop],
   );
@@ -51,6 +47,7 @@ export const Dropzone = ({
       } else if (rejections.length === 1) {
         console.log(rejections);
         rejections[0].errors.forEach((error) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           if (error.code === ErrorCode.FileTooLarge) {
             setErrors((oldErrors) =>
               removeDuplicateStrings([
@@ -58,6 +55,7 @@ export const Dropzone = ({
                 t("coverImageDropzone.errors.fileIsTooLarge"),
               ]),
             );
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           } else if (error.code === ErrorCode.FileInvalidType) {
             setErrors((oldErrors) =>
               removeDuplicateStrings([

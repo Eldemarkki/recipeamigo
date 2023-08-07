@@ -15,16 +15,19 @@ const handler: NextApiHandler = async (req, res) => {
   if (req.method === "POST") {
     const body = profileSchema.safeParse(req.body);
     if (!body.success) {
-      return res.status(400).json({ error: body.error });
+      res.status(400).json({ error: body.error });
+      return;
     }
 
     const user = await getUserFromRequest(req);
     if (user.status === "Unauthorized") {
-      return res.status(401).json({ message: "Not authenticated" });
+      res.status(401).json({ message: "Not authenticated" });
+      return;
     }
 
     if (user.status === "OK") {
-      return res.status(409).json({ message: "Profile already exists" });
+      res.status(409).json({ message: "Profile already exists" });
+      return;
     }
 
     const existingProfile = await prisma.userProfile.findUnique({
@@ -34,7 +37,8 @@ const handler: NextApiHandler = async (req, res) => {
     });
 
     if (existingProfile) {
-      return res.status(409).json({ message: "Username already taken" });
+      res.status(409).json({ message: "Username already taken" });
+      return;
     }
 
     const profile = await prisma.userProfile.create({
@@ -44,7 +48,8 @@ const handler: NextApiHandler = async (req, res) => {
       },
     });
 
-    return res.status(200).json(profile);
+    res.status(200).json(profile);
+    return;
   }
 };
 

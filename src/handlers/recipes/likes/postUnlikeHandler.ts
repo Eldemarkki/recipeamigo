@@ -16,4 +16,4 @@ export const postUnlikeHandler = {
     await unlikeRecipe(user.userId, recipeId);
     return { message: "Recipe unliked" };
   },
-} satisfies Handler<{}, { id: string }>;
+} satisfies Handler<unknown, { id: string }>;

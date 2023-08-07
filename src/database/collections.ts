@@ -103,7 +103,7 @@ export const getCollection = async (id: string) => {
           coverImageUrl: recipe.coverImageName
             ? await s3.presignedGetObject(
                 process.env.S3_BUCKET_NAME ?? "",
-                recipe?.coverImageName,
+                recipe.coverImageName,
               )
             : undefined,
         };

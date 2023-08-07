@@ -45,9 +45,11 @@ export const recipesPostHandler = {
     let coverImageUploadUrl: string | null = null;
     if (body.hasCoverImage) {
       coverImageName = randomUUID();
-      coverImageUploadUrl = body.hasCoverImage
-        ? await s3.presignedPutObject(DEFAULT_BUCKET_NAME, coverImageName) // TODO: Add checks on file size and type
-        : null;
+      // TODO: Add checks on file size and type
+      coverImageUploadUrl = await s3.presignedPutObject(
+        DEFAULT_BUCKET_NAME,
+        coverImageName,
+      );
     }
 
     const recipe = await createRecipe(user.userId, body, coverImageName);

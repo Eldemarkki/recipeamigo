@@ -50,7 +50,7 @@ export default function EditRecipePage({
         // TODO: Show loading indicator while saving
         try {
           await editRecipe(initialRecipe.id, recipe, coverImage);
-          router.push("/recipe/" + initialRecipe.id);
+          void router.push("/recipe/" + initialRecipe.id);
         } catch {
           // TODO: Show a notification to the user that the recipe failed to save.
           console.log("Failed to save recipe");

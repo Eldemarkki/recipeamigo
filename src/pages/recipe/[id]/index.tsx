@@ -37,17 +37,28 @@ export default function RecipePage(
   const originalQuantity = recipe.quantity;
 
   const likeRecipe = async () => {
-    fetch(`/api/recipes/${recipe.id}/like`, {
+    const response = await fetch(`/api/recipes/${recipe.id}/like`, {
       method: "POST",
     });
+    if (!response.ok) {
+      // TODO: Show a notification to the user that the recipe liking failed
+      console.log("Failed to like recipe");
+      return;
+    }
     setLikeCount(likeCount + 1);
     setLikeStatus(true);
   };
 
   const unlikeRecipe = async () => {
-    await fetch(`/api/recipes/${recipe.id}/unlike`, {
+    const response = await fetch(`/api/recipes/${recipe.id}/unlike`, {
       method: "POST",
     });
+    if (!response.ok) {
+      // TODO: Show a notification to the user that the recipe unliking failed
+      console.log("Failed to unlike recipe");
+      return;
+    }
+
     setLikeCount(likeCount - 1);
     setLikeStatus(false);
   };
@@ -55,7 +66,7 @@ export default function RecipePage(
   const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
 
   const timeEstimateType = getTimeEstimateType(
-    recipe.timeEstimateMinimumMinutes ?? 0,
+    recipe.timeEstimateMinimumMinutes,
     recipe.timeEstimateMaximumMinutes,
   );
 
@@ -99,7 +110,7 @@ export default function RecipePage(
           >
             Created by{" "}
             <Link href={`/user/${recipe.user.username}`}>
-              {/* @ts-ignore, https://github.com/i18next/react-i18next/issues/1543, https://github.com/i18next/react-i18next/issues/1504 */}
+              {/* @ts-expect-error, https://github.com/i18next/react-i18next/issues/1543, https://github.com/i18next/react-i18next/issues/1504 */}
               {{ username: recipe.user.username }}
             </Link>{" "}
             - Viewed {{ count: recipe.viewCount }}{" "}
@@ -108,7 +119,10 @@ export default function RecipePage(
           {props.userId && recipe.user.clerkId !== props.userId && (
             <Button
               variant="secondary"
-              onClick={likeStatus === true ? unlikeRecipe : likeRecipe}
+              onClick={() => {
+                const fn = likeStatus === true ? unlikeRecipe : likeRecipe;
+                void fn();
+              }}
             >
               {likeStatus
                 ? t("recipeView:likes.unlikeButton")

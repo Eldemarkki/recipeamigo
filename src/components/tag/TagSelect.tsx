@@ -96,10 +96,20 @@ export const TagSelect = ({ tags, setTags, id }: TagSelectProps) => {
       }}
       components={{
         MultiValueContainer: (props) => {
-          const value = props.data.value;
-          const className = isSpecialTagValue(value)
-            ? tagAdditionalClassname[value]
-            : undefined;
+          const data = props.data as unknown;
+
+          const value =
+            data &&
+            typeof data === "object" &&
+            "value" in data &&
+            typeof data.value === "string"
+              ? data.value
+              : undefined;
+
+          const className =
+            value && isSpecialTagValue(value)
+              ? tagAdditionalClassname[value]
+              : undefined;
           return (
             <components.MultiValueContainer {...props}>
               <div className={className + " " + tagStyles.tag}>
@@ -124,10 +134,27 @@ export const TagSelect = ({ tags, setTags, id }: TagSelectProps) => {
           );
         },
         MultiValueLabel: (props) => {
-          const value = props.data.value;
-          const display = isSpecialTagValue(value)
-            ? tagPrefixes[value] + " " + t(tagTranslationKeys[value])
-            : props.data.label;
+          const data = props.data as unknown;
+          const value =
+            data &&
+            typeof data === "object" &&
+            "value" in data &&
+            typeof data.value === "string"
+              ? data.value
+              : undefined;
+          const label =
+            data &&
+            typeof data === "object" &&
+            "label" in data &&
+            typeof data.label === "string"
+              ? data.label
+              : undefined;
+
+          const display =
+            value !== undefined && isSpecialTagValue(value)
+              ? tagPrefixes[value] + " " + t(tagTranslationKeys[value])
+              : label;
+
           return (
             <components.MultiValueLabel {...props}>
               {display}

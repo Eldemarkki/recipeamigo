@@ -33,7 +33,6 @@ export const Dialog = ({
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
-        dialogRef &&
         dialogRef.current &&
         event.target instanceof Node &&
         !dialogRef.current.contains(event.target) &&

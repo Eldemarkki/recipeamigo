@@ -64,7 +64,7 @@ export const RecipeForm = ({
   >(
     initialRecipe?.coverImageUrl
       ? {
-          url: initialRecipe?.coverImageUrl,
+          url: initialRecipe.coverImageUrl,
         }
       : null,
   );
@@ -168,7 +168,7 @@ export const RecipeForm = ({
           },
           coverImageFile,
         );
-      } else if (type === "new") {
+      } else {
         await onSubmit(
           {
             ...baseRecipe,
@@ -192,7 +192,12 @@ export const RecipeForm = ({
 
   return (
     <div className={styles.container}>
-      <Dialog open={dialogOpen} onClickOutside={() => setDialogOpen(false)}>
+      <Dialog
+        open={dialogOpen}
+        onClickOutside={() => {
+          setDialogOpen(false);
+        }}
+      >
         <div className={styles.dialogContent}>
           <h1>{t("edit.settings.title")}</h1>
           <div className={styles.settingsContainer}>
@@ -265,15 +270,17 @@ export const RecipeForm = ({
               <TagSelect
                 id={tagSelectId}
                 tags={tags.map((t) => t.text)}
-                setTags={(newTags) =>
-                  setTags(newTags.map((t) => ({ text: t })))
-                }
+                setTags={(newTags) => {
+                  setTags(newTags.map((t) => ({ text: t })));
+                }}
               />
             </div>
           </div>
           <Button
             className={styles.settingsSaveButton}
-            onClick={() => setDialogOpen(false)}
+            onClick={() => {
+              setDialogOpen(false);
+            }}
           >
             {t("common:actions.save")}
           </Button>
@@ -303,14 +310,18 @@ export const RecipeForm = ({
               type="text"
               placeholder={t("edit.recipeName")}
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
               required
             />
             <textarea
               className={styles.descriptionInput}
               placeholder={t("edit.description")}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
               required
             />
           </div>
@@ -367,20 +378,20 @@ export const RecipeForm = ({
                   }),
                 );
               }}
-              addIngredientSection={(name) =>
+              addIngredientSection={(name) => {
                 setIngredientSections([
                   ...ingredientSections,
                   {
                     name,
                     ingredients: [],
                   },
-                ])
-              }
-              removeIngredientSection={(index) =>
+                ]);
+              }}
+              removeIngredientSection={(index) => {
                 setIngredientSections(
                   ingredientSections.filter((_, i) => i !== index),
-                )
-              }
+                );
+              }}
               setIngredientSectionIngredients={(index, ingredients) => {
                 setIngredientSections(
                   ingredientSections.map((section, i) => {
@@ -394,16 +405,18 @@ export const RecipeForm = ({
                   }),
                 );
               }}
-              setIngredientSections={(sections) =>
-                setIngredientSections(sections)
-              }
+              setIngredientSections={(sections) => {
+                setIngredientSections(sections);
+              }}
             />
           </div>
         </div>
         <div className={styles.rightPanel}>
           <div className={styles.buttonsContainer}>
             <Button
-              onClick={() => setDialogOpen(true)}
+              onClick={() => {
+                setDialogOpen(true);
+              }}
               variant="secondary"
               type="button"
             >
@@ -412,7 +425,7 @@ export const RecipeForm = ({
             <Button
               style={{ padding: "0.5rem 1rem" }}
               type="submit"
-              onClick={(e) => handleSubmit(e)}
+              onClick={(e) => void handleSubmit(e)}
             >
               {type === "edit" ? t("edit.saveRecipe") : t("createRecipe")}
             </Button>
@@ -420,12 +433,12 @@ export const RecipeForm = ({
           <h2>{t("instructionsTitle")}</h2>
           <EditableInstructionList
             instructions={instructions}
-            addInstruction={(instruction) =>
-              setInstructions([...instructions, instruction])
-            }
-            removeInstruction={(index) =>
-              setInstructions(instructions.filter((_, i) => i !== index))
-            }
+            addInstruction={(instruction) => {
+              setInstructions([...instructions, instruction]);
+            }}
+            removeInstruction={(index) => {
+              setInstructions(instructions.filter((_, i) => i !== index));
+            }}
             setInstructions={setInstructions}
           />
         </div>
