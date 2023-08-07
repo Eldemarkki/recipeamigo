@@ -62,7 +62,6 @@ export const ExportButton = ({
             </DropdownMenu.Item>
             <DropdownMenu.Item className={styles.dialogButton} asChild>
               <Button
-                textAlign="left"
                 variant="secondary"
                 rectangular
                 onClick={() => {
@@ -74,7 +73,6 @@ export const ExportButton = ({
             </DropdownMenu.Item>
             <DropdownMenu.Item className={styles.dialogButton}>
               <Button
-                textAlign="left"
                 variant="secondary"
                 rectangular
                 onClick={() => {
