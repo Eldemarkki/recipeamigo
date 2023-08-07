@@ -1,16 +1,16 @@
-import {
+import type {
   SortColumn,
   SortDirection,
   SortKey,
 } from "../components/browse/sort/BrowseSort";
 import { prisma } from "../db";
-import { editRecipeSchema } from "../handlers/recipes/recipePutHandler";
-import { createRecipeSchema } from "../handlers/recipes/recipesPostHandler";
+import type { editRecipeSchema } from "../handlers/recipes/recipePutHandler";
+import type { createRecipeSchema } from "../handlers/recipes/recipesPostHandler";
 import { DEFAULT_BUCKET_NAME, s3 } from "../s3";
 import { notNull } from "../utils/arrayUtils";
 import { RecipeVisibility } from "@prisma/client";
 import type { UUID } from "crypto";
-import { z } from "zod";
+import type { z } from "zod";
 
 export const getAllRecipesForUser = async (userId: string) => {
   const recipes = await prisma.recipe.findMany({

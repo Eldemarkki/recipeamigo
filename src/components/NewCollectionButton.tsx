@@ -1,4 +1,4 @@
-import { getAllRecipesForUser } from "../database/recipes";
+import type { getAllRecipesForUser } from "../database/recipes";
 import { Button } from "./button/Button";
 import { NewCollectionDialog } from "./collections/dialogs/NewCollectionDialog";
 import { useTranslation } from "next-i18next";

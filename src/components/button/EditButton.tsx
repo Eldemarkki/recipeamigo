@@ -1,6 +1,6 @@
 import styles from "./EditButton.module.css";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 
 export const EditButton = ({
   className,

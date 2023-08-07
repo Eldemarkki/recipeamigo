@@ -1,6 +1,6 @@
 import { getLikeStatus } from "../../database/likes";
 import { getSingleRecipe } from "../../database/recipes";
-import { AuthorizedUser } from "../auth";
+import type { AuthorizedUser } from "../auth";
 import {
   CannotLikeOwnRecipeError,
   CannotUnlikeOwnRecipeError,

@@ -1,7 +1,7 @@
 import { InstructionRenderer } from "../recipeEngine/InstructionRenderer";
 import { CrossOffText } from "./CrossOffText";
 import styles from "./InstructionsList.module.css";
-import { Instruction } from "@prisma/client";
+import type { Instruction } from "@prisma/client";
 
 export type InstructionsListProps = {
   instructions: Instruction[];

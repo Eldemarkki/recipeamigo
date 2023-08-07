@@ -5,7 +5,7 @@ import { Dialog } from "../../../components/dialog/Dialog";
 import { collectionPageDataLoader } from "../../../dataLoaders/collections/collectionPageDataLoader";
 import { loadProps } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 

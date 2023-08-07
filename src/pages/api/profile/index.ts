@@ -1,6 +1,6 @@
 import { prisma } from "../../../db";
 import { getUserFromRequest } from "../../../utils/auth";
-import { NextApiHandler } from "next";
+import type { NextApiHandler } from "next";
 import { z } from "zod";
 
 export const profileSchema = z.object({

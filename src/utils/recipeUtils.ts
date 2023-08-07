@@ -1,6 +1,7 @@
 import { CountdownExtension } from "../components/recipeEngine/extensions/CountdownExtension";
-import { getUserFromRequest } from "./auth";
-import { Recipe, RecipeVisibility } from "@prisma/client";
+import type { getUserFromRequest } from "./auth";
+import type { Recipe } from "@prisma/client";
+import { RecipeVisibility } from "@prisma/client";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";

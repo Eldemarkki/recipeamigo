@@ -1,6 +1,6 @@
 import { likeRecipe } from "../../../database/likes";
 import { canLikeOrUnlikeRecipe } from "../../../utils/api/likeUtils";
-import { Handler } from "../../../utils/apiUtils";
+import type { Handler } from "../../../utils/apiUtils";
 import { z } from "zod";
 
 export const postLikeHandler = {

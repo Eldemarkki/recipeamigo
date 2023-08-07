@@ -1,6 +1,6 @@
 import styles from "./ErrorText.module.css";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 export const ErrorText = (props: PropsWithChildren) => {
   return (

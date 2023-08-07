@@ -2,7 +2,7 @@ import { getCollection } from "../../database/collections";
 import { getAllRecipesForUser } from "../../database/recipes";
 import { hasReadAccessToCollection } from "../../utils/collectionUtils";
 import { CollectionNotFoundError } from "../../utils/errors";
-import { PropsLoaderHandler } from "../loadProps";
+import type { PropsLoaderHandler } from "../loadProps";
 import { z } from "zod";
 
 export const collectionPageDataLoader = {

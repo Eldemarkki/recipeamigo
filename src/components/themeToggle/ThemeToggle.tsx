@@ -1,4 +1,5 @@
-import { Theme, isTheme, useTheme } from "../../hooks/useTheme";
+import type { Theme } from "../../hooks/useTheme";
+import { isTheme, useTheme } from "../../hooks/useTheme";
 import { Select } from "../Select";
 import styles from "./ThemeToggle.module.css";
 import { useTranslation } from "next-i18next";

@@ -12,7 +12,7 @@ import {
   hasReadAccessToRecipe,
 } from "../../../../../../utils/recipeUtils";
 import { isLocale, locales } from "../../../../../../utils/stringUtils";
-import { NextApiHandler } from "next";
+import type { NextApiHandler } from "next";
 import PDFDocument from "pdfkit";
 
 const handler = (async (req, res) => {

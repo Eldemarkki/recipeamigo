@@ -1,4 +1,5 @@
-import { SortKey, sorts } from "../components/browse/sort/BrowseSort";
+import type { SortKey } from "../components/browse/sort/BrowseSort";
+import { sorts } from "../components/browse/sort/BrowseSort";
 
 export const capitalize = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1);

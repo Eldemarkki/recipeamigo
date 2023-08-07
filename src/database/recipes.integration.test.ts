@@ -1,15 +1,15 @@
-import { editRecipeSchema } from "../handlers/recipes/recipePutHandler";
+import type { editRecipeSchema } from "../handlers/recipes/recipePutHandler";
 import { createRandomRecipe } from "../utils/tests/recipes";
 import { createUserToDatabase } from "../utils/tests/testUtils";
 import { createRecipe, editRecipe, getAllRecipesForUser } from "./recipes";
-import {
+import type {
   Ingredient,
   IngredientSection,
   Instruction,
   Recipe,
-  RecipeVisibility,
 } from "@prisma/client";
-import { z } from "zod";
+import { RecipeVisibility } from "@prisma/client";
+import type { z } from "zod";
 
 describe("recipes", () => {
   it("should return empty array when user has no recipes", async () => {

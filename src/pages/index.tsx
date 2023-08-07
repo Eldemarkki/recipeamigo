@@ -4,7 +4,7 @@ import { RecipeCardGrid } from "../components/RecipeCardGrid";
 import { getAllRecipesForUser } from "../database/recipes";
 import { getUserFromRequest } from "../utils/auth";
 import styles from "./page.module.css";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 

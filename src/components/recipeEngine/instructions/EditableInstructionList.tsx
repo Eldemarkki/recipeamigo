@@ -1,4 +1,4 @@
-import { RawInstruction } from "../ingredients/IngredientForm";
+import type { RawInstruction } from "../ingredients/IngredientForm";
 import styles from "./EditableInstructionList.module.css";
 import { EditableInstructionListItem } from "./EditableInstructionListItem";
 import { InstructionEditor } from "./InstructionEditor";

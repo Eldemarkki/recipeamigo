@@ -1,5 +1,5 @@
-import { getSingleRecipe } from "../../database/recipes";
-import { Locale } from "../../i18next";
+import type { getSingleRecipe } from "../../database/recipes";
+import type { Locale } from "../../i18next";
 import { recipeToMarkdown } from "../../utils/exportUtils";
 import { LinkButton } from "../LinkButton";
 import { Button } from "./Button";

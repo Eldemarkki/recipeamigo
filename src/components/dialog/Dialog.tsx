@@ -1,5 +1,6 @@
 import styles from "./Dialog.module.css";
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import type { PropsWithChildren } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type DialogProps = PropsWithChildren<{
   open: boolean;

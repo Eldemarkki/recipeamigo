@@ -1,11 +1,11 @@
 import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
 import { getSingleRecipe } from "../../../../database/recipes";
-import { editRecipeSchema } from "../../../../handlers/recipes/recipePutHandler";
+import type { editRecipeSchema } from "../../../../handlers/recipes/recipePutHandler";
 import { getUserFromRequest } from "../../../../utils/auth";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import { z } from "zod";
+import type { z } from "zod";
 
 const editRecipe = async (
   recipeId: string,

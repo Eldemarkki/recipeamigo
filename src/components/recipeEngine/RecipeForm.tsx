@@ -1,6 +1,6 @@
-import { getSingleRecipe } from "../../database/recipes";
-import { editRecipeSchema } from "../../handlers/recipes/recipePutHandler";
-import { createRecipeSchema } from "../../handlers/recipes/recipesPostHandler";
+import type { getSingleRecipe } from "../../database/recipes";
+import type { editRecipeSchema } from "../../handlers/recipes/recipePutHandler";
+import type { createRecipeSchema } from "../../handlers/recipes/recipesPostHandler";
 import { Select } from "../Select";
 import { Button } from "../button/Button";
 import { Dialog } from "../dialog/Dialog";
@@ -10,15 +10,16 @@ import { RecipeQuantityPicker } from "../recipeView/RecipeQuantityPicker";
 import { TagSelect } from "../tag/TagSelect";
 import styles from "./RecipeForm.module.css";
 import { EditableIngredientList } from "./ingredients/EditableIngredientList";
-import {
+import type {
   RawIngredientSection,
   RawInstruction,
 } from "./ingredients/IngredientForm";
 import { EditableInstructionList } from "./instructions/EditableInstructionList";
 import { RecipeVisibility } from "@prisma/client";
 import { Trans, useTranslation } from "next-i18next";
-import { MouseEvent, useId, useState } from "react";
-import { z } from "zod";
+import type { MouseEvent } from "react";
+import { useId, useState } from "react";
+import type { z } from "zod";
 
 export type RecipeFormProps = {
   initialRecipe?: Awaited<ReturnType<typeof getSingleRecipe>>;

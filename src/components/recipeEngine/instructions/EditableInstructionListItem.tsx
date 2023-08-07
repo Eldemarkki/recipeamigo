@@ -1,7 +1,7 @@
 import { DeleteButton } from "../../button/DeleteButton";
 import { DragHandle } from "../../misc/DragHandle";
 import { InstructionRenderer } from "../InstructionRenderer";
-import { RawInstruction } from "../ingredients/IngredientForm";
+import type { RawInstruction } from "../ingredients/IngredientForm";
 import styles from "./EditableInstructionListItem.module.css";
 import { Reorder, useDragControls } from "framer-motion";
 

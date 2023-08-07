@@ -1,6 +1,6 @@
 import { Tag, isSpecialTagValue, tagTranslationKeys } from "../tag/Tag";
 import styles from "./TagList.module.css";
-import { Tag as TagType } from "@prisma/client";
+import type { Tag as TagType } from "@prisma/client";
 import { useTranslation } from "next-i18next";
 
 export type TagListProps = {

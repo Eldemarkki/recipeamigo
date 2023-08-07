@@ -1,5 +1,5 @@
 import { editCollection, getCollection } from "../../database/collections";
-import { Handler } from "../../utils/apiUtils";
+import type { Handler } from "../../utils/apiUtils";
 import { hasWriteAccessToCollection } from "../../utils/collectionUtils";
 import { CollectionNotFoundError } from "../../utils/errors";
 import { RecipeCollectionVisibility } from "@prisma/client";

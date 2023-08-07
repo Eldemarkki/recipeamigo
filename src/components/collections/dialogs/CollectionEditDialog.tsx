@@ -1,7 +1,7 @@
-import { getCollection } from "../../../database/collections";
-import { editCollection as editCollectionApi } from "../../../database/collections";
-import { getAllRecipesForUser } from "../../../database/recipes";
-import { editCollectionSchema } from "../../../handlers/collections/collectionsIdPutHandler";
+import type { getCollection } from "../../../database/collections";
+import type { editCollection as editCollectionApi } from "../../../database/collections";
+import type { getAllRecipesForUser } from "../../../database/recipes";
+import type { editCollectionSchema } from "../../../handlers/collections/collectionsIdPutHandler";
 import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
 import { LinkButton } from "../../LinkButton";
 import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
@@ -13,7 +13,7 @@ import { RecipeCollectionVisibility } from "@prisma/client";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
-import { z } from "zod";
+import type { z } from "zod";
 
 const editCollection = async (
   collectionId: string,

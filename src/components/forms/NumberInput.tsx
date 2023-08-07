@@ -1,5 +1,6 @@
 import styles from "./NumberInput.module.css";
-import { ComponentProps, useState } from "react";
+import type { ComponentProps } from "react";
+import { useState } from "react";
 
 export type NumberInputProps = Omit<
   ComponentProps<"input">,

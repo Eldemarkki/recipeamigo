@@ -3,7 +3,7 @@ import { Button } from "../../button/Button";
 import { NumberInput } from "../../forms/NumberInput";
 import { UnitSelect } from "../UnitSelect";
 import styles from "./IngredientForm.module.css";
-import {
+import type {
   Ingredient,
   IngredientSection,
   IngredientUnit,

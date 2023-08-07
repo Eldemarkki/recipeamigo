@@ -5,7 +5,7 @@ import config from "../../config";
 import { getPublicRecipesPaginated } from "../../database/recipes";
 import { isValidSortParam, queryParamToString } from "../../utils/stringUtils";
 import styles from "./index.module.css";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 

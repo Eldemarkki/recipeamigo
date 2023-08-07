@@ -1,6 +1,7 @@
 import styles from "./Link.module.css";
 import NextLink from "next/link";
-import { ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithoutRef } from "react";
+import { forwardRef } from "react";
 
 export const Link = forwardRef<
   HTMLAnchorElement,

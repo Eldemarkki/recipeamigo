@@ -1,9 +1,10 @@
-import { AuthorizedUser, getUserFromRequest } from "../utils/auth";
+import type { AuthorizedUser } from "../utils/auth";
+import { getUserFromRequest } from "../utils/auth";
 import { NotFoundError } from "../utils/errors";
-import { FlatNamespace } from "i18next";
-import { GetServerSidePropsContext } from "next";
+import type { FlatNamespace } from "i18next";
+import type { GetServerSidePropsContext } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { z } from "zod";
+import type { z } from "zod";
 
 export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
   | {

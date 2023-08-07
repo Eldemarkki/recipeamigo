@@ -20,7 +20,8 @@
     "allowJs": true,
     "types": [
       "vitest/globals"
-    ]
+    ],
+    "verbatimModuleSyntax": true
   },
   "include": [
     "next-env.d.ts",

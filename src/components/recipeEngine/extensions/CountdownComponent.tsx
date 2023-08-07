@@ -10,7 +10,8 @@ import {
   PlayIcon,
   SymbolIcon,
 } from "@radix-ui/react-icons";
-import { NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react";
+import type { NodeViewRendererProps } from "@tiptap/react";
+import { NodeViewWrapper } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
 import screenfull from "screenfull";
 

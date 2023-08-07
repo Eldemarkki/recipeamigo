@@ -1,6 +1,6 @@
 import { Link } from "../link/Link";
 import styles from "./CollectionsListItem.module.css";
-import { RecipeCollection } from "@prisma/client";
+import type { RecipeCollection } from "@prisma/client";
 import { PersonIcon, ReaderIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "next-i18next";
 

@@ -1,5 +1,5 @@
-import { getSingleRecipeWithoutCoverImageUrl } from "../database/recipes";
-import { Locale } from "../i18next";
+import type { getSingleRecipeWithoutCoverImageUrl } from "../database/recipes";
+import type { Locale } from "../i18next";
 import { getIngredientText } from "../ingredients/ingredientTranslator";
 import { getInstructionText } from "./recipeUtils";
 

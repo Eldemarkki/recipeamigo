@@ -1,6 +1,7 @@
 import { useId } from "react";
-import SelectComponent, { GroupBase } from "react-select";
-import { StateManagerProps } from "react-select/dist/declarations/src/useStateManager";
+import type { GroupBase } from "react-select";
+import SelectComponent from "react-select";
+import type { StateManagerProps } from "react-select/dist/declarations/src/useStateManager";
 
 export const Select = <
   Option,

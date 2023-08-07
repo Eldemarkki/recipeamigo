@@ -2,7 +2,7 @@ import {
   getPublicCollections,
   getUserCollections,
 } from "../../../database/collections";
-import { PropsLoaderHandler } from "../../loadProps";
+import type { PropsLoaderHandler } from "../../loadProps";
 
 export const browseCollectionsDataLoader = {
   requireUser: false,

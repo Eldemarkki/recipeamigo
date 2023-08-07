@@ -1,6 +1,6 @@
 import { IngredientList } from "./IngredientList";
 import styles from "./IngredientSection.module.css";
-import {
+import type {
   Ingredient,
   IngredientSection as IngredientSectionType,
 } from "@prisma/client";

@@ -1,6 +1,6 @@
-import { Locale } from "../i18next";
+import type { Locale } from "../i18next";
 import { getIngredientText } from "../ingredients/ingredientTranslator";
-import { RawIngredient } from "./recipeEngine/ingredients/IngredientForm";
+import type { RawIngredient } from "./recipeEngine/ingredients/IngredientForm";
 import { useTranslation } from "next-i18next";
 
 export type IngredientTextProps = {

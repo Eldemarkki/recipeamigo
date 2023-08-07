@@ -1,7 +1,7 @@
 import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
 import { getUserAndPublicRecipesByUsername } from "../../../database/users";
-import { Recipe, UserProfile } from "@prisma/client";
-import { GetServerSideProps } from "next";
+import type { Recipe, UserProfile } from "@prisma/client";
+import type { GetServerSideProps } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 

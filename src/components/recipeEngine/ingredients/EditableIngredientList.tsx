@@ -1,7 +1,7 @@
 import { CircularButton } from "../../button/Button";
 import styles from "./EditableIngredientList.module.css";
 import { EditableIngredientSection } from "./EditableIngredientSection";
-import { RawIngredient, RawIngredientSection } from "./IngredientForm";
+import type { RawIngredient, RawIngredientSection } from "./IngredientForm";
 import { IngredientSectionForm } from "./IngredientSectionForm";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Reorder } from "framer-motion";

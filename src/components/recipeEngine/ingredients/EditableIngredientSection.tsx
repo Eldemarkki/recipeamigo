@@ -3,11 +3,8 @@ import { DeleteButton } from "../../button/DeleteButton";
 import { DragHandle } from "../../misc/DragHandle";
 import { EditableIngredientListItem } from "./EditableIngredientListItem";
 import styles from "./EditableIngredientSection.module.css";
-import {
-  IngredientForm,
-  RawIngredient,
-  RawIngredientSection,
-} from "./IngredientForm";
+import type { RawIngredient, RawIngredientSection } from "./IngredientForm";
+import { IngredientForm } from "./IngredientForm";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Reorder, useDragControls } from "framer-motion";
 

@@ -1,6 +1,7 @@
 import styles from "./LinkButton.module.css";
 import { Link } from "./link/Link";
-import { ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithoutRef } from "react";
+import { forwardRef } from "react";
 
 export const LinkButton = forwardRef<
   HTMLAnchorElement,

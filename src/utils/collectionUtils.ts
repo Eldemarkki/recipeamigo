@@ -1,9 +1,6 @@
-import { AnyUser } from "./auth";
-import {
-  RecipeCollection,
-  RecipeCollectionVisibility,
-  RecipeVisibility,
-} from "@prisma/client";
+import type { AnyUser } from "./auth";
+import type { RecipeCollection } from "@prisma/client";
+import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
 
 export const hasReadAccessToCollection = (
   user: AnyUser | null,

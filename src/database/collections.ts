@@ -1,6 +1,6 @@
 import { prisma } from "../db";
-import { editCollectionSchema } from "../handlers/collections/collectionsIdPutHandler";
-import { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
+import type { editCollectionSchema } from "../handlers/collections/collectionsIdPutHandler";
+import type { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
 import { s3 } from "../s3";
 import { isValidVisibilityConfiguration } from "../utils/collectionUtils";
 import {
@@ -11,7 +11,7 @@ import {
 } from "../utils/errors";
 import { hasReadAccessToRecipe } from "../utils/recipeUtils";
 import { RecipeCollectionVisibility } from "@prisma/client";
-import { z } from "zod";
+import type { z } from "zod";
 
 export const createCollection = async (
   userId: string,

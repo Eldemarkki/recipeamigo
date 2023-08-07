@@ -1,7 +1,7 @@
 import { IngredientText } from "../IngredientText";
 import { CrossOffText } from "./CrossOffText";
 import styles from "./IngredientList.module.css";
-import { Ingredient } from "@prisma/client";
+import type { Ingredient } from "@prisma/client";
 
 export type IngredientListProps = {
   ingredients: Ingredient[];

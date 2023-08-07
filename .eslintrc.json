@@ -19,6 +19,7 @@
   },
   "rules": {
     "prettier/prettier": "error",
+    "@typescript-eslint/consistent-type-imports": "error",
     "no-restricted-imports": [
       "error",
       {

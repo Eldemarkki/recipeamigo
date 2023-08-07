@@ -2,7 +2,7 @@ import styles from "./RecipeSelectionTile.module.css";
 import { Button } from "./button/Button";
 import { Link } from "./link/Link";
 import { VisibilityText } from "./misc/VisibilityText";
-import { RecipeVisibility } from "@prisma/client";
+import type { RecipeVisibility } from "@prisma/client";
 import { ImageIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";

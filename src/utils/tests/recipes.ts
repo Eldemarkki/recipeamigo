@@ -1,4 +1,4 @@
-import {
+import type {
   createRecipeSchema,
   ingredientSchema,
   ingredientSectionSchema,
@@ -11,7 +11,7 @@ import {
   createRandomString,
 } from "./testUtils";
 import { IngredientUnit, RecipeVisibility } from "@prisma/client";
-import { z } from "zod";
+import type { z } from "zod";
 
 export const createRandomIngredientUnit = (): IngredientUnit => {
   const units = Object.values(IngredientUnit);

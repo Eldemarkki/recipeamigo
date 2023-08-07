@@ -18,7 +18,7 @@ import {
 } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
 import filenamify from "filenamify";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Trans, useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Image from "next/image";

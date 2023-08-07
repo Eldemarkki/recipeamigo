@@ -3,7 +3,7 @@ import {
   getSingleRecipeWithoutCoverImageUrl,
 } from "../../database/recipes";
 import { DEFAULT_BUCKET_NAME, s3 } from "../../s3";
-import { Handler } from "../../utils/apiUtils";
+import type { Handler } from "../../utils/apiUtils";
 import { RecipeNotFoundError } from "../../utils/errors";
 import { IngredientUnit, RecipeVisibility } from "@prisma/client";
 import { randomUUID } from "crypto";

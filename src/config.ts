@@ -1,4 +1,4 @@
-import { SortKey } from "./components/browse/sort/BrowseSort";
+import type { SortKey } from "./components/browse/sort/BrowseSort";
 
 const config = {
   APP_NAME: "Recipeamigo",

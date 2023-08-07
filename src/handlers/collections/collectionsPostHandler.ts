@@ -1,5 +1,5 @@
 import { createCollection } from "../../database/collections";
-import { Handler } from "../../utils/apiUtils";
+import type { Handler } from "../../utils/apiUtils";
 import { RecipeCollectionVisibility } from "@prisma/client";
 import { z } from "zod";
 

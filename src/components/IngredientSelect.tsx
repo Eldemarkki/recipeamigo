@@ -1,4 +1,4 @@
-import { Locale } from "../i18next";
+import type { Locale } from "../i18next";
 import {
   englishIngredients,
   getIngredientDropdownLabel,

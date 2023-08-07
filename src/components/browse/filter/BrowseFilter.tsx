@@ -6,11 +6,12 @@ import {
 import { IngredientSelect } from "../../IngredientSelect";
 import { NumberInput } from "../../forms/NumberInput";
 import { TagSelect } from "../../tag/TagSelect";
-import { BrowseSort, Sort, getSortKey, sorts } from "../sort/BrowseSort";
+import type { Sort } from "../sort/BrowseSort";
+import { BrowseSort, getSortKey, sorts } from "../sort/BrowseSort";
 import styles from "./BrowseFilter.module.css";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
+import type { ParsedUrlQuery } from "querystring";
 import { useEffect, useId, useState } from "react";
 
 export type Filter = {

@@ -1,8 +1,9 @@
 import { createRecipe } from "../../database/recipes";
 import { DEFAULT_BUCKET_NAME, s3 } from "../../s3";
-import { Handler } from "../../utils/apiUtils";
+import type { Handler } from "../../utils/apiUtils";
 import { IngredientUnit, RecipeVisibility } from "@prisma/client";
-import { UUID, randomUUID } from "crypto";
+import type { UUID } from "crypto";
+import { randomUUID } from "crypto";
 import { z } from "zod";
 
 export const ingredientSchema = z.object({

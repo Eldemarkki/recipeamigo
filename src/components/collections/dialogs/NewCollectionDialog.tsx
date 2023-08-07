@@ -1,6 +1,6 @@
-import { createCollection as createCollectionApi } from "../../../database/collections";
-import { getAllRecipesForUser } from "../../../database/recipes";
-import { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
+import type { createCollection as createCollectionApi } from "../../../database/collections";
+import type { getAllRecipesForUser } from "../../../database/recipes";
+import type { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
 import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
 import { LinkButton } from "../../LinkButton";
 import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
@@ -13,7 +13,7 @@ import { RecipeCollectionVisibility } from "@prisma/client";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
-import { z } from "zod";
+import type { z } from "zod";
 
 const createCollection = async (
   collection: z.infer<typeof createCollectionSchema>,
