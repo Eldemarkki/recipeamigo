@@ -1,5 +1,7 @@
 import type { Locale } from "../i18next";
 import { capitalize } from "../utils/stringUtils";
+import { englishIngredients } from "./ingredientsEnglish";
+import { finnishIngredients } from "./ingredientsFinnish";
 import type { IngredientUnit } from "@prisma/client";
 
 const englishUnits: Record<
@@ -62,75 +64,7 @@ const finnishUnits: Record<
   PACKAGE: { singular: "paketti", plural: "pakettia" },
 } as const;
 
-export const englishIngredients = {
-  tomato: { singular: "tomato", plural: "tomatoes" },
-  garlic: { singular: "garlic", plural: "garlic" },
-  egg: { singular: "egg", plural: "eggs" },
-  flour: { singular: "flour", plural: "flour" },
-  sugar: { singular: "sugar", plural: "sugar" },
-  salt: { singular: "salt", plural: "salt" },
-  water: { singular: "water", plural: "water" },
-  milk: { singular: "milk", plural: "milk" },
-  bakingSoda: { singular: "baking soda", plural: "baking soda" },
-  bakingPowder: { singular: "baking powder", plural: "baking powder" },
-  yeast: { singular: "yeast", plural: "yeast" },
-  whiteSugar: { singular: "white sugar", plural: "white sugar" },
-  brownSugar: { singular: "brown sugar", plural: "brown sugar" },
-  seaSalt: { singular: "sea salt", plural: "sea salt" },
-  butter: { singular: "butter", plural: "butter" },
-  oil: { singular: "oil", plural: "oil" },
-  vegetableOil: { singular: "vegetable oil", plural: "vegetable oil" },
-  oliveOil: { singular: "olive oil", plural: "olive oil" },
-  vanillaExtract: { singular: "vanilla extract", plural: "vanilla extract" },
-  lemonJuice: { singular: "lemon juice", plural: "lemon juice" },
-  limeJuice: { singular: "lime juice", plural: "lime juice" },
-  orangeJuice: { singular: "orange juice", plural: "orange juice" },
-  lemonZest: { singular: "lemon zest", plural: "lemon zest" },
-  limeZest: { singular: "lime zest", plural: "lime zest" },
-  orangeZest: { singular: "orange zest", plural: "orange zest" },
-  lemon: { singular: "lemon", plural: "lemons" },
-  lime: { singular: "lime", plural: "limes" },
-  orange: { singular: "orange", plural: "oranges" },
-  apple: { singular: "apple", plural: "apples" },
-  banana: { singular: "banana", plural: "bananas" },
-  pear: { singular: "pear", plural: "pears" },
-} as const;
-
 export type IngredientType = keyof typeof englishIngredients;
-
-const finnishIngredients = {
-  tomato: { singular: "tomaatti", plural: "tomaattia" },
-  garlic: { singular: "valkosipuli", plural: "valkosipulia" },
-  egg: { singular: "kananmuna", plural: "kananmunaa" },
-  flour: { singular: "vehnäjauho", plural: "vehnäjauhoa" },
-  sugar: { singular: "sokeri", plural: "sokeria" },
-  salt: { singular: "suola", plural: "suolaa" },
-  water: { singular: "vesi", plural: "vettä" },
-  milk: { singular: "maito", plural: "maitoa" },
-  bakingSoda: { singular: "ruokasooda", plural: "ruokasoodaa" },
-  bakingPowder: { singular: "leivinjauhe", plural: "leivinjauhetta" },
-  yeast: { singular: "hiiva", plural: "hiivaa" },
-  whiteSugar: { singular: "valkoinen sokeri", plural: "valkoista sokeria" },
-  brownSugar: { singular: "ruskea sokeri", plural: "ruskeaa sokeria" },
-  seaSalt: { singular: "merisuola", plural: "merisuolaa" },
-  butter: { singular: "voi", plural: "voita" },
-  oil: { singular: "öljy", plural: "öljyä" },
-  vegetableOil: { singular: "kasviöljy", plural: "kasviöljyä" },
-  oliveOil: { singular: "oliiviöljy", plural: "oliiviöljyä" },
-  vanillaExtract: { singular: "vanilja", plural: "vaniljaa" },
-  lemonJuice: { singular: "sitruunamehu", plural: "sitruunamehua" },
-  limeJuice: { singular: "limettimehu", plural: "limettimehua" },
-  orangeJuice: { singular: "appelsiinimehu", plural: "appelsiinimehua" },
-  lemonZest: { singular: "sitruunan kuori", plural: "sitruunan kuorta" },
-  limeZest: { singular: "limen kuori", plural: "limen kuorta" },
-  orangeZest: { singular: "appelsiinin kuori", plural: "appelsiinin kuorta" },
-  lemon: { singular: "sitruuna", plural: "sitruunaa" },
-  lime: { singular: "lime", plural: "limeä" },
-  orange: { singular: "appelsiini", plural: "appelsiinia" },
-  apple: { singular: "omena", plural: "omenaa" },
-  banana: { singular: "banaani", plural: "banaania" },
-  pear: { singular: "päärynä", plural: "päärynää" },
-} satisfies Record<IngredientType, { singular: string; plural: string }>;
 
 const optionalTranslations: Record<Locale, string> = {
   en: "optional",
