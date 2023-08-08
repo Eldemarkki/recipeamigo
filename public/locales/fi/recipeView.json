@@ -1,6 +1,6 @@
 {
-  "line_one": "Luonut <1>{{username}}</1> - Katsottu {{count}} kerran",
-  "line_other": "Luonut <1>{{username}}</1> - Katsottu {{count}} kertaa",
+  "line_one": "Luonut <2>{{username}}</2> - Katsottu {{count}} kerran",
+  "line_other": "Luonut <2>{{username}}</2> - Katsottu {{count}} kertaa",
   "timeEstimate": {
     "single_one": "Aika-arvio: {{count}} minuutti",
     "single_other": "Aika-arvio: {{count}} minuuttia",

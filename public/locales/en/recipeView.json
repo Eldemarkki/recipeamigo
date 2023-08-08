@@ -1,6 +1,6 @@
 {
-  "line_one": "Created by <1>{{username}}</1> - Viewed {{count}} time",
-  "line_other": "Created by <1>{{username}}</1> - Viewed {{count}} times",
+  "line_one": "Created by <2>{{username}}</2> - Viewed {{count}} time",
+  "line_other": "Created by <2>{{username}}</2> - Viewed {{count}} times",
   "timeEstimate": {
     "single_one": "Time estimate: {{count}} minute",
     "single_other": "Time estimate: {{count}} minutes",

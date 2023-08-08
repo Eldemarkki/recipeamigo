@@ -86,36 +86,36 @@ export default function RecipePage(
         </div>
       )}
       <div className={styles.topRow}>
-        <div>
-          <div className={styles.titleRow}>
-            <h3 className={styles.title}>{recipe.name}</h3>
-            <div className={styles.titleRowButtons}>
-              <Button
+        <div className={styles.titleRow}>
+          <h3 className={styles.title}>{recipe.name}</h3>
+          <div className={styles.titleRowButtons}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                window.print();
+              }}
+            >
+              <FiPrinter />
+              {t("actions.print")}
+            </Button>
+            {props.userId && recipe.user.clerkId === props.userId && (
+              <LinkButton
                 variant="secondary"
-                onClick={() => {
-                  window.print();
-                }}
+                href={`/recipe/${recipe.id}/edit`}
+                icon={<Pencil1Icon />}
               >
-                <FiPrinter />
-                {t("actions.print")}
-              </Button>
-              {props.userId && recipe.user.clerkId === props.userId && (
-                <LinkButton
-                  variant="secondary"
-                  href={`/recipe/${recipe.id}/edit`}
-                  icon={<Pencil1Icon />}
-                >
-                  {t("actions.edit")}
-                </LinkButton>
-              )}
-              <ExportButton
-                recipe={recipe}
-                exportJsonFilename={exportJsonFilename}
-                exportMarkdownFilename={exportMarkdownFilename}
-              />
-            </div>
+                {t("actions.edit")}
+              </LinkButton>
+            )}
+            <ExportButton
+              recipe={recipe}
+              exportJsonFilename={exportJsonFilename}
+              exportMarkdownFilename={exportMarkdownFilename}
+            />
           </div>
-          {recipe.tags.length > 0 && <TagList tags={recipe.tags} />}
+        </div>
+        {recipe.tags.length > 0 && <TagList tags={recipe.tags} />}
+        <div>
           <Trans
             i18nKey="recipeView:line"
             username={recipe.user.username}
@@ -129,44 +129,44 @@ export default function RecipePage(
             - Viewed {{ count: recipe.viewCount }}{" "}
             {recipe.viewCount === 1 ? "time" : "times"}
           </Trans>
-          {props.userId && recipe.user.clerkId !== props.userId && (
-            <Button
-              className={styles.likeButton}
-              variant="secondary"
-              onClick={() => {
-                const fn = likeStatus === true ? unlikeRecipe : likeRecipe;
-                void fn();
-              }}
-            >
-              {likeStatus
-                ? t("recipeView:likes.unlikeButton")
-                : t("recipeView:likes.likeButton")}
-            </Button>
-          )}
-          <p>{t("recipeView:likes.likeCountText", { count: likeCount })}</p>
-          {timeEstimateType !== null &&
-            (timeEstimateType === "single" ? (
-              <p>
-                {t("recipeView:timeEstimate.single", {
-                  count: recipe.timeEstimateMinimumMinutes,
-                })}
-              </p>
-            ) : (
-              <p>
-                {t("recipeView:timeEstimate.range", {
-                  min: recipe.timeEstimateMinimumMinutes,
-                  max: recipe.timeEstimateMaximumMinutes,
-                })}
-              </p>
-            ))}
-          <p>{recipe.description}</p>
         </div>
-        <div className={styles.recipeQuantityPickerContainer}>
-          <RecipeQuantityPicker
-            quantity={recipeAmount}
-            onChange={setRecipeAmount}
-          />
-        </div>
+        {props.userId && recipe.user.clerkId !== props.userId && (
+          <Button
+            className={styles.likeButton}
+            variant="secondary"
+            onClick={() => {
+              const fn = likeStatus === true ? unlikeRecipe : likeRecipe;
+              void fn();
+            }}
+          >
+            {likeStatus
+              ? t("recipeView:likes.unlikeButton")
+              : t("recipeView:likes.likeButton")}
+          </Button>
+        )}
+        <p>{t("recipeView:likes.likeCountText", { count: likeCount })}</p>
+        {timeEstimateType !== null &&
+          (timeEstimateType === "single" ? (
+            <p>
+              {t("recipeView:timeEstimate.single", {
+                count: recipe.timeEstimateMinimumMinutes,
+              })}
+            </p>
+          ) : (
+            <p>
+              {t("recipeView:timeEstimate.range", {
+                min: recipe.timeEstimateMinimumMinutes,
+                max: recipe.timeEstimateMaximumMinutes,
+              })}
+            </p>
+          ))}
+        <p>{recipe.description}</p>
+      </div>
+      <div className={styles.recipeQuantityPickerContainer}>
+        <RecipeQuantityPicker
+          quantity={recipeAmount}
+          onChange={setRecipeAmount}
+        />
       </div>
       <div className={styles.splitContainer}>
         <div className={styles.ingredientsContainer}>
