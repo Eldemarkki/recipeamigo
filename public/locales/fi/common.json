@@ -14,7 +14,8 @@
     "edit": "Muokkaa",
     "cancel": "Peruuta",
     "save": "Tallenna",
-    "create": "Luo"
+    "create": "Luo",
+    "print": "Tulosta"
   },
   "recipeFilter": {
     "searchPlaceholder": "Etsi"

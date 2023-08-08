@@ -17,3 +17,9 @@
   border: none;
   text-align: center;
 }
+
+@media print {
+  .changeButton {
+    display: none;
+  }
+}

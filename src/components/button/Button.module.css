@@ -6,6 +6,7 @@
   font-size: var(--font-size-button);
   flex-wrap: nowrap;
   white-space: nowrap;
+  gap: 0.5rem;
 }
 
 .buttonComponent:not(.rectangular) {

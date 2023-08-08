@@ -33,3 +33,9 @@
   display: inline-flex;
   gap: 0.15rem;
 }
+
+@media print {
+  .controlButtonsContainer {
+    display: none;
+  }
+}

@@ -18,12 +18,14 @@ import {
   hasReadAccessToRecipe,
 } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
+import { Pencil1Icon } from "@radix-ui/react-icons";
 import filenamify from "filenamify";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Trans, useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Image from "next/image";
 import { useState } from "react";
+import { FiPrinter } from "react-icons/fi";
 
 export default function RecipePage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -88,10 +90,20 @@ export default function RecipePage(
           <div className={styles.titleRow}>
             <h3 className={styles.title}>{recipe.name}</h3>
             <div className={styles.titleRowButtons}>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  window.print();
+                }}
+              >
+                <FiPrinter />
+                {t("actions.print")}
+              </Button>
               {props.userId && recipe.user.clerkId === props.userId && (
                 <LinkButton
                   variant="secondary"
                   href={`/recipe/${recipe.id}/edit`}
+                  icon={<Pencil1Icon />}
                 >
                   {t("actions.edit")}
                 </LinkButton>
@@ -119,6 +131,7 @@ export default function RecipePage(
           </Trans>
           {props.userId && recipe.user.clerkId !== props.userId && (
             <Button
+              className={styles.likeButton}
               variant="secondary"
               onClick={() => {
                 const fn = likeStatus === true ? unlikeRecipe : likeRecipe;
@@ -158,14 +171,17 @@ export default function RecipePage(
       <div className={styles.splitContainer}>
         <div className={styles.ingredientsContainer}>
           <h2>{t("recipeView:ingredientsTitle")}</h2>
-          {recipe.ingredientSections.map((section) => (
-            <IngredientSection
-              key={section.id}
-              section={section}
-              recipeQuantity={recipeAmount}
-              originalRecipeQuantity={originalQuantity}
-            />
-          ))}
+          <ul>
+            {recipe.ingredientSections.map((section) => (
+              <li key={section.id}>
+                <IngredientSection
+                  section={section}
+                  recipeQuantity={recipeAmount}
+                  originalRecipeQuantity={originalQuantity}
+                />
+              </li>
+            ))}
+          </ul>
         </div>
         <div className={styles.instructionsContainer}>
           <h2>{t("recipeView:instructionsTitle")}</h2>

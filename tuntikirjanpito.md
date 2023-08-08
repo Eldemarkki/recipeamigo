@@ -69,4 +69,5 @@
 | 6.8.2023  | 2      | Luo "split button" reseptien exporttamiselle                                    |
 | 6.8.2023  | 1      | Korjaa ajastin-tekstit reseptien exporttauksissa                                |
 | 7.8.2023  | 2      | Lisää typescript-eslint, pieniä parannuksia                                     |
-| Yhteensä  | 124    |                                                                                 |
+| 8.8.2023  | 1      | Paranna reseptin tulostusnäkymää, pieniä parannuksia                            |
+| Yhteensä  | 125    |                                                                                 |

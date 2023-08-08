@@ -1,6 +1,6 @@
 import styles from "./LinkButton.module.css";
 import { Link } from "./link/Link";
-import type { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { forwardRef } from "react";
 
 export const LinkButton = forwardRef<
@@ -8,6 +8,7 @@ export const LinkButton = forwardRef<
   ComponentPropsWithoutRef<typeof Link> & {
     rectangular?: boolean;
     variant?: "primary" | "secondary";
+    icon?: ReactNode;
   }
 >(
   (
@@ -24,6 +25,7 @@ export const LinkButton = forwardRef<
         styles[variant],
       ].join(" ")}
     >
+      {props.icon}
       {children}
     </Link>
   ),

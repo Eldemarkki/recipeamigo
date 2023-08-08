@@ -7,6 +7,9 @@ import styles from "./ExportButton.module.css";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "next-i18next";
+import { LiaMarkdown } from "react-icons/lia";
+import { LuFileJson } from "react-icons/lu";
+import { PiExport, PiFilePdf } from "react-icons/pi";
 
 export type ExportButtonProps = {
   recipe: Exclude<Awaited<ReturnType<typeof getSingleRecipe>>, null>;
@@ -36,6 +39,7 @@ export const ExportButton = ({
         className={styles.mainExportButton}
         rectangular
         href={`/api/recipes/${recipe.id}/export/pdf?locale=${i18n.language}`}
+        icon={<PiExport size={18} />}
       >
         {t("actions.export")}
       </LinkButton>
@@ -51,28 +55,33 @@ export const ExportButton = ({
             className={styles.dialog}
             sideOffset={8}
           >
-            <DropdownMenu.Item className={styles.dialogButton} asChild>
+            <DropdownMenu.Item asChild>
               <LinkButton
+                className={styles.dialogButton}
                 variant="secondary"
                 rectangular
                 href={`/api/recipes/${recipe.id}/export/pdf?locale=${i18n.language}`}
+                icon={<PiFilePdf />}
               >
                 {t("actions.exportAsPdf")}
               </LinkButton>
             </DropdownMenu.Item>
             <DropdownMenu.Item className={styles.dialogButton} asChild>
               <Button
+                className={styles.dialogButton}
                 variant="secondary"
                 rectangular
                 onClick={() => {
                   exportRecipe(JSON.stringify(recipe), exportJsonFilename);
                 }}
+                icon={<LuFileJson />}
               >
                 {t("actions.exportAsJson")}
               </Button>
             </DropdownMenu.Item>
             <DropdownMenu.Item className={styles.dialogButton}>
               <Button
+                className={styles.dialogButton}
                 variant="secondary"
                 rectangular
                 onClick={() => {
@@ -81,6 +90,7 @@ export const ExportButton = ({
                     exportMarkdownFilename,
                   );
                 }}
+                icon={<LiaMarkdown />}
               >
                 {t("actions.exportAsMarkdown")}
               </Button>

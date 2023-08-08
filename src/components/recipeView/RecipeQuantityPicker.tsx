@@ -22,6 +22,7 @@ export const RecipeQuantityPicker = ({
       <label htmlFor={inputId}>{t("recipeView:recipeQuantity.title")}</label>
       <div className={styles.inputContainer}>
         <CircularButton
+          className={styles.changeButton}
           type="button"
           onClick={() => {
             onChange(Math.max(quantity - 1, 1));
@@ -39,6 +40,7 @@ export const RecipeQuantityPicker = ({
           min={1}
         />
         <CircularButton
+          className={styles.changeButton}
           type="button"
           onClick={() => {
             onChange(quantity + 1);

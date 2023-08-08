@@ -40,7 +40,7 @@ Things you need:
 - [x] Localization (English, Finnish)
 - [ ] Metric/Imperial conversion
 - [ ] Mobile friendly
-- [ ] Print recipe
+- [x] Print recipe
 - [x] Export recipe
   - [x] JSON
   - [x] PDF
