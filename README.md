@@ -66,7 +66,7 @@ Things you need:
 - [ ] Required tools (e.g. oven, blender, etc.)
 - [ ] Ingredient substitution (e.g. "use 1/2 cup of milk instead of 1/2 cup of cream")
 - [ ] Share to social media
-- [ ] Ingredient bank (standardized ingredient names so that they can be translated)
+- [x] Ingredient bank (standardized ingredient names so that they can be translated)
 - [ ] "Forking" a recipe (copying it to your own account, with a link to the original)
 - [ ] Text area for the "story" of the recipe that can be collapsed to hide it
 - [x] Optional ingredients

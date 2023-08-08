@@ -70,4 +70,5 @@
 | 6.8.2023  | 1      | Korjaa ajastin-tekstit reseptien exporttauksissa                                |
 | 7.8.2023  | 2      | Lisää typescript-eslint, pieniä parannuksia                                     |
 | 8.8.2023  | 1      | Paranna reseptin tulostusnäkymää, pieniä parannuksia                            |
-| Yhteensä  | 125    |                                                                                 |
+| 8.8.2023  | 3      | Ainesosien lisäämistä ainesosalistaan                                           |
+| Yhteensä  | 128    |                                                                                 |

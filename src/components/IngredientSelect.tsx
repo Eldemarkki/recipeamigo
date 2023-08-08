@@ -1,8 +1,6 @@
 import type { Locale } from "../i18next";
-import {
-  englishIngredients,
-  getIngredientDropdownLabel,
-} from "../ingredients/ingredientTranslator";
+import { getIngredientDropdownLabel } from "../ingredients/ingredientTranslator";
+import { englishIngredients } from "../ingredients/ingredientsEnglish";
 import { useTranslation } from "next-i18next";
 import { useId } from "react";
 import Select from "react-select/creatable";
