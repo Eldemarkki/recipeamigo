@@ -1,4 +1,7 @@
 .container {
+  z-index: 100;
+  position: absolute;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -20,8 +23,57 @@
   justify-content: space-between;
 }
 
+.titleRow {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @media print {
   .container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 670px) {
+  .container,
+  .navbar,
+  .linkList {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .container.navbarOpen {
+    position: fixed;
+    height: 100%;
+    backdrop-filter: blur(8px) brightness(0.8);
+  }
+
+  .navbar {
+    display: none;
+    justify-content: flex-start;
+  }
+
+  .navbarOpen .navbar {
+    display: inherit;
+  }
+}
+
+.toggleButton {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: none;
+  background: none;
+  color: var(--text);
+}
+
+@media screen and (min-width: 671px) {
+  .toggleButton {
     display: none;
   }
 }

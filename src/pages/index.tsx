@@ -19,8 +19,10 @@ export default function Home({
       titleRow={
         <div className={styles.recipesTitleRow}>
           <h1>{t("myRecipes")}</h1>
-          <LinkButton href="/recipe/new">{t("newRecipeButton")}</LinkButton>
-          <NewCollectionButton recipes={recipes} />
+          <div className={styles.recipesTitleRowButtonContainer}>
+            <LinkButton href="/recipe/new">{t("newRecipeButton")}</LinkButton>
+            <NewCollectionButton recipes={recipes} />
+          </div>
         </div>
       }
     >

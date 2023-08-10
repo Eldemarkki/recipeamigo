@@ -3,3 +3,19 @@
   gap: 2rem;
   align-items: center;
 }
+
+.recipesTitleRowButtonContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media screen and (max-width: 660px) {
+  .recipesTitleRow {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+}

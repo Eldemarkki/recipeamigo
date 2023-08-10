@@ -4,7 +4,9 @@
     "settings": "Settings",
     "browse": "Browse",
     "browseCollections": "Collections",
-    "profile": "Profile"
+    "profile": "Profile",
+    "closeNavbar": "Close navigation menu",
+    "openNavbar": "Open navigation menu"
   },
   "actions": {
     "export": "Export",
