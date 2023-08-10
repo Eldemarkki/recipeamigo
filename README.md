@@ -24,7 +24,7 @@ Things you need:
 1. Clone the repository with `git clone https://github.com/Eldemarkki/recipeamigo.git`
 2. Run `npm install`
 3. Create a `.env.local` file based on `.env.local.example`, and fill in the missing fields for Clerk.
-4. Run the PostgreSQL database and Minio with `docker-compose -f compose-dev.yaml up`
+4. Run the PostgreSQL database and Minio with `docker compose -f compose-dev.yaml up`
 5. Run `npm run dev`
 6. Go to http://localhost:3000
 
