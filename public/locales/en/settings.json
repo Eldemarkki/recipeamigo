@@ -5,5 +5,10 @@
     "lightTheme": "Light",
     "darkTheme": "Dark"
   },
-  "settingsTitle": "Settings"
+  "settingsTitle": "Settings",
+  "language": {
+    "languageTitle": "Language",
+    "en": "English",
+    "fi": "Suomi"
+  }
 }

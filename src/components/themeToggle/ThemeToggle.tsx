@@ -1,7 +1,6 @@
 import type { Theme } from "../../hooks/useTheme";
 import { isTheme, useTheme } from "../../hooks/useTheme";
 import { Select } from "../Select";
-import styles from "./ThemeToggle.module.css";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 
@@ -20,7 +19,7 @@ const ThemeToggle = () => {
   ] as const;
 
   return (
-    <div className={styles.themeToggle}>
+    <div>
       <label htmlFor="theme">{t("themes.themeTitle")}</label>
       <Select
         id="theme"

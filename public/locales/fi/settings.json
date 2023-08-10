@@ -5,5 +5,10 @@
     "lightTheme": "Vaalea",
     "darkTheme": "Tumma"
   },
-  "settingsTitle": "Asetukset"
+  "settingsTitle": "Asetukset",
+  "language": {
+    "languageTitle": "Kieli",
+    "en": "Englanti",
+    "fi": "Suomi"
+  }
 }

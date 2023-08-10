@@ -1,5 +1,7 @@
+import { LanguageSelector } from "../../components/languageSelector/LanguageSelector";
 import { PageWrapper } from "../../components/misc/PageWrapper";
 import ThemeToggle from "../../components/themeToggle/ThemeToggle";
+import styles from "./index.module.css";
 import type { GetServerSideProps } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -9,7 +11,10 @@ export default function SettingsPage() {
 
   return (
     <PageWrapper title={t("settings:settingsTitle")}>
-      <ThemeToggle />
+      <div className={styles.container}>
+        <ThemeToggle />
+        <LanguageSelector />
+      </div>
     </PageWrapper>
   );
 }
