@@ -71,4 +71,5 @@
 | 7.8.2023  | 2      | Lisää typescript-eslint, pieniä parannuksia                                     |
 | 8.8.2023  | 1      | Paranna reseptin tulostusnäkymää, pieniä parannuksia                            |
 | 8.8.2023  | 3      | Ainesosien lisäämistä ainesosalistaan                                           |
-| Yhteensä  | 128    |                                                                                 |
+| 10.8.2023 | 1      | Paranna tietokannan käynnistystä testejä ajettaessa                             |
+| Yhteensä  | 129    |                                                                                 |

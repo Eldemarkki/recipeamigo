@@ -3,3 +3,6 @@
 
 npm run prettier:verify
 npm run lint:verify
+npm run sumHours
+git add tuntikirjanpito.md
+
