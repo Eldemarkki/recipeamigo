@@ -40,7 +40,7 @@
       "newIngredientTitle": "Uusi ainesosa",
       "ingredientName": "Ainesosan nimi",
       "amount": "Määrä",
-      "unit": "Otsikko",
+      "unit": "Yksikkö",
       "noUnit": "Ei yksikköä",
       "noUnitFound": "Yksikköä \"{{query}}\" ei löytynyt",
       "isOptional": "Vapaaehtoinen",

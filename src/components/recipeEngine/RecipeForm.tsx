@@ -288,160 +288,162 @@ export const RecipeForm = ({
         </div>
       </Dialog>
       {/* TODO: Add h1 tag somewhere*/}
-      <main className={styles.splitContainer}>
-        <div className={styles.leftPanel}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-            }}
-          >
-            <Dropzone
-              initialPreviewUrl={initialRecipe?.coverImageUrl}
-              onDrop={(f) => {
-                setCoverImage(f);
+      <main className={styles.mainContainer}>
+        <div className={styles.splitContainer}>
+          <div className={styles.leftPanel}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
               }}
-              onRemove={() => {
-                setCoverImage({ removed: true });
-              }}
-            />
-            <input
-              className={styles.recipeNameInput}
-              type="text"
-              placeholder={t("edit.recipeName")}
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              required
-            />
-            <textarea
-              className={styles.descriptionInput}
-              placeholder={t("edit.description")}
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-              required
-            />
-          </div>
-          <div className={styles.ingredientsSection}>
-            <h2>{t("ingredientsTitle")}</h2>
-            {/* TODO: Implement adding multiple sections */}
-            <EditableIngredientList
-              ingredientSections={ingredientSections}
-              addIngredient={(ingredient, ingredientSectionName) => {
-                const sectionExists = ingredientSections.some(
-                  (section) => section.name === ingredientSectionName,
-                );
-                if (!sectionExists) {
-                  setIngredientSections([
-                    ...ingredientSections,
-                    {
-                      name: ingredientSectionName,
-                      ingredients: [ingredient],
-                    },
-                  ]);
-                } else {
+            >
+              <Dropzone
+                initialPreviewUrl={initialRecipe?.coverImageUrl}
+                onDrop={(f) => {
+                  setCoverImage(f);
+                }}
+                onRemove={() => {
+                  setCoverImage({ removed: true });
+                }}
+              />
+              <input
+                className={styles.recipeNameInput}
+                type="text"
+                placeholder={t("edit.recipeName")}
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                required
+              />
+              <textarea
+                className={styles.descriptionInput}
+                placeholder={t("edit.description")}
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+                required
+              />
+            </div>
+            <div className={styles.ingredientsSection}>
+              <h2>{t("ingredientsTitle")}</h2>
+              {/* TODO: Implement adding multiple sections */}
+              <EditableIngredientList
+                ingredientSections={ingredientSections}
+                addIngredient={(ingredient, ingredientSectionName) => {
+                  const sectionExists = ingredientSections.some(
+                    (section) => section.name === ingredientSectionName,
+                  );
+                  if (!sectionExists) {
+                    setIngredientSections([
+                      ...ingredientSections,
+                      {
+                        name: ingredientSectionName,
+                        ingredients: [ingredient],
+                      },
+                    ]);
+                  } else {
+                    setIngredientSections(
+                      ingredientSections.map((section) => {
+                        if (section.name === ingredientSectionName) {
+                          return {
+                            ...section,
+                            ingredients: [...section.ingredients, ingredient],
+                          };
+                        }
+                        return section;
+                      }),
+                    );
+                  }
+                }}
+                removeIngredient={(index, ingredientSectionName) => {
+                  const exists = ingredientSections.some(
+                    (section) => section.name === ingredientSectionName,
+                  );
+                  if (!exists) {
+                    return;
+                  }
+
                   setIngredientSections(
                     ingredientSections.map((section) => {
                       if (section.name === ingredientSectionName) {
                         return {
                           ...section,
-                          ingredients: [...section.ingredients, ingredient],
+                          ingredients: section.ingredients.filter(
+                            (_, i) => i !== index,
+                          ),
                         };
                       }
                       return section;
                     }),
                   );
-                }
+                }}
+                addIngredientSection={(name) => {
+                  setIngredientSections([
+                    ...ingredientSections,
+                    {
+                      name,
+                      ingredients: [],
+                    },
+                  ]);
+                }}
+                removeIngredientSection={(index) => {
+                  setIngredientSections(
+                    ingredientSections.filter((_, i) => i !== index),
+                  );
+                }}
+                setIngredientSectionIngredients={(index, ingredients) => {
+                  setIngredientSections(
+                    ingredientSections.map((section, i) => {
+                      if (i === index) {
+                        return {
+                          ...section,
+                          ingredients,
+                        };
+                      }
+                      return section;
+                    }),
+                  );
+                }}
+                setIngredientSections={(sections) => {
+                  setIngredientSections(sections);
+                }}
+              />
+            </div>
+          </div>
+          <div className={styles.rightPanel}>
+            <h2>{t("instructionsTitle")}</h2>
+            <EditableInstructionList
+              instructions={instructions}
+              addInstruction={(instruction) => {
+                setInstructions([...instructions, instruction]);
               }}
-              removeIngredient={(index, ingredientSectionName) => {
-                const exists = ingredientSections.some(
-                  (section) => section.name === ingredientSectionName,
-                );
-                if (!exists) {
-                  return;
-                }
-
-                setIngredientSections(
-                  ingredientSections.map((section) => {
-                    if (section.name === ingredientSectionName) {
-                      return {
-                        ...section,
-                        ingredients: section.ingredients.filter(
-                          (_, i) => i !== index,
-                        ),
-                      };
-                    }
-                    return section;
-                  }),
-                );
+              removeInstruction={(index) => {
+                setInstructions(instructions.filter((_, i) => i !== index));
               }}
-              addIngredientSection={(name) => {
-                setIngredientSections([
-                  ...ingredientSections,
-                  {
-                    name,
-                    ingredients: [],
-                  },
-                ]);
-              }}
-              removeIngredientSection={(index) => {
-                setIngredientSections(
-                  ingredientSections.filter((_, i) => i !== index),
-                );
-              }}
-              setIngredientSectionIngredients={(index, ingredients) => {
-                setIngredientSections(
-                  ingredientSections.map((section, i) => {
-                    if (i === index) {
-                      return {
-                        ...section,
-                        ingredients,
-                      };
-                    }
-                    return section;
-                  }),
-                );
-              }}
-              setIngredientSections={(sections) => {
-                setIngredientSections(sections);
-              }}
+              setInstructions={setInstructions}
             />
           </div>
         </div>
-        <div className={styles.rightPanel}>
-          <div className={styles.buttonsContainer}>
-            <Button
-              onClick={() => {
-                setDialogOpen(true);
-              }}
-              variant="secondary"
-              type="button"
-            >
-              {t("edit.settingsButton")}
-            </Button>
-            <Button
-              style={{ padding: "0.5rem 1rem" }}
-              type="submit"
-              onClick={(e) => void handleSubmit(e)}
-            >
-              {type === "edit" ? t("edit.saveRecipe") : t("createRecipe")}
-            </Button>
-          </div>
-          <h2>{t("instructionsTitle")}</h2>
-          <EditableInstructionList
-            instructions={instructions}
-            addInstruction={(instruction) => {
-              setInstructions([...instructions, instruction]);
+        <div className={styles.buttonsContainer}>
+          <Button
+            onClick={() => {
+              setDialogOpen(true);
             }}
-            removeInstruction={(index) => {
-              setInstructions(instructions.filter((_, i) => i !== index));
-            }}
-            setInstructions={setInstructions}
-          />
+            variant="secondary"
+            type="button"
+          >
+            {t("edit.settingsButton")}
+          </Button>
+          <Button
+            style={{ padding: "0.5rem 1rem" }}
+            type="submit"
+            onClick={(e) => void handleSubmit(e)}
+          >
+            {type === "edit" ? t("edit.saveRecipe") : t("createRecipe")}
+          </Button>
         </div>
       </main>
     </div>

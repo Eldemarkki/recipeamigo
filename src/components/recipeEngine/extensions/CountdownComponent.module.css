@@ -26,6 +26,7 @@
 }
 
 .dialogText {
+  padding-inline: 1rem;
   font-size: 10rem;
 }
 
@@ -37,5 +38,11 @@
 @media print {
   .controlButtonsContainer {
     display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .dialogText {
+    font-size: 5rem;
   }
 }

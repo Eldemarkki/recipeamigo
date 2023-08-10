@@ -24,7 +24,9 @@ export const DurationInput = ({
 
   return (
     <div className={styles.container}>
-      <label htmlFor={hourId}>{t("edit.misc.countdown.duration.hours")}</label>
+      <label htmlFor={hourId} className={styles.label}>
+        {t("edit.misc.countdown.duration.hours")}
+      </label>
       <NumberInput
         value={hours}
         onChange={(hours) => {
@@ -32,8 +34,9 @@ export const DurationInput = ({
         }}
         id={hourId}
         key={"hour-" + totalSeconds}
+        className={styles.input}
       />
-      <label htmlFor={minuteId}>
+      <label htmlFor={minuteId} className={styles.label}>
         {t("edit.misc.countdown.duration.minutes")}
       </label>
       <NumberInput
@@ -43,8 +46,9 @@ export const DurationInput = ({
         }}
         id={minuteId}
         key={"minute-" + totalSeconds}
+        className={styles.input}
       />
-      <label htmlFor={secondId}>
+      <label htmlFor={secondId} className={styles.label}>
         {t("edit.misc.countdown.duration.seconds")}
       </label>
       <NumberInput
@@ -54,6 +58,7 @@ export const DurationInput = ({
         }}
         id={secondId}
         key={"second-" + totalSeconds}
+        className={styles.input}
       />
       <label htmlFor={totalSecondsId} className={styles.totalLabel}>
         {t("edit.misc.countdown.duration.totalSeconds")}

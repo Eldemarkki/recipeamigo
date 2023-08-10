@@ -7,6 +7,7 @@ export type DialogProps = PropsWithChildren<{
   onClickOutside?: () => void;
   unstyled?: boolean;
   className?: string;
+  maxWidth?: React.CSSProperties["maxWidth"] | null;
 }>;
 
 export const Dialog = ({
@@ -15,6 +16,7 @@ export const Dialog = ({
   children,
   unstyled,
   className,
+  maxWidth = 600,
 }: DialogProps) => {
   const [isActuallyOpen, setIsActuallyOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -54,7 +56,12 @@ export const Dialog = ({
     .join(" ");
 
   return (
-    <dialog className={finalClassName} ref={dialogRef} open={isActuallyOpen}>
+    <dialog
+      className={finalClassName}
+      ref={dialogRef}
+      open={isActuallyOpen}
+      style={{ maxWidth: maxWidth === null ? undefined : maxWidth }}
+    >
       {isActuallyOpen && children}
     </dialog>
   );

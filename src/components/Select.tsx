@@ -17,6 +17,7 @@ export const Select = <
       instanceId={instanceId}
       unstyled
       styles={{
+        ...props.styles,
         control: (provided) => ({
           ...provided,
           border: "1px solid var(--text)",

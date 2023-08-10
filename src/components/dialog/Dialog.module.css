@@ -9,7 +9,7 @@
   max-width: 800px;
   width: 100%;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow-y: visible;
   flex-direction: column;
 }
 
@@ -17,4 +17,18 @@
   pointer-events: none;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
+}
+
+@media screen and (max-width: 800px) {
+  .dialog {
+    --_margin: 20px;
+    padding: 3rem 3rem;
+    width: calc(100% - var(--_margin) * 2);
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .dialog {
+    padding: 3rem 1rem;
+  }
 }

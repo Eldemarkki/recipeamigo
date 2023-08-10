@@ -72,5 +72,5 @@
 | 8.8.2023  | 1      | Paranna reseptin tulostusnäkymää, pieniä parannuksia                            |
 | 8.8.2023  | 3      | Ainesosien lisäämistä ainesosalistaan                                           |
 | 10.8.2023 | 1      | Paranna tietokannan käynnistystä testejä ajettaessa                             |
-| 10.8.2023 | 1      | Luo mobiiliystävällinen navigointipalkki                                        |
-| Yhteensä  | 130    |                                                                                 |
+| 10.8.2023 | 2      | Luo käyttöliittymästä responsiivisempi                                          |
+| Yhteensä  | 131    |                                                                                 |

@@ -39,7 +39,7 @@ Things you need:
 - [x] Themes (light/dark/others)
 - [x] Localization (English, Finnish)
 - [ ] Metric/Imperial conversion
-- [ ] Mobile friendly
+- [x] Mobile friendly
 - [x] Print recipe
 - [x] Export recipe
   - [x] JSON

@@ -62,7 +62,12 @@ export const CountdownComponent = (
   return (
     <NodeViewWrapper className="countdown-component" as="span">
       {isDialogOpen && (
-        <Dialog open={isDialogOpen} unstyled className={styles.dialog}>
+        <Dialog
+          open={isDialogOpen}
+          unstyled
+          className={styles.dialog}
+          maxWidth={null}
+        >
           <span className={styles.dialogText}>{formattedTimeLeft}</span>
           {hasRanOnce && secondsLeft !== 0 && (
             <CircularButton

@@ -5,7 +5,7 @@
 }
 
 .title {
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .ingredientsContainer {
@@ -21,9 +21,24 @@
 }
 
 @media screen and (max-width: 768px) {
+  .titleRow {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
   .splitContainer {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .title {
+    word-break: break-all;
   }
 }
 
@@ -52,17 +67,20 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem 1rem;
+  gap: 1rem;
 }
 
 .titleRowButtons {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .coverImageContainer {
   position: relative;
   height: 350px;
+  width: 100%;
 }
 
 .coverImage {
