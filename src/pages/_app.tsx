@@ -9,7 +9,7 @@ export type Props = {
   isLoggedIn: boolean;
 };
 
-const navbarHiddenPaths = ["/login", "/profile/create"];
+const navbarHiddenPaths = ["/login", "/sign-up", "/profile/create"];
 
 const App = ({ Component, pageProps, router }: AppProps<Props>) => {
   const showNavbar = !navbarHiddenPaths.some((path) =>
