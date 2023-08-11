@@ -57,8 +57,8 @@ export default function CollectionPage(
   );
 }
 
-export const getServerSideProps = (async (ctx) =>
-  await loadProps({
+export const getServerSideProps = ((ctx) =>
+  loadProps({
     ctx,
     ...collectionPageDataLoader,
   })) satisfies GetServerSideProps;

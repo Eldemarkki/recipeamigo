@@ -8,26 +8,13 @@ import { IngredientSection } from "../../../components/recipeView/IngredientSect
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { TagList } from "../../../components/recipeView/TagList";
-import {
-  getUserCollectionsWithMaximumVisibility,
-  getUserRecipeCollectionRelationships,
-} from "../../../database/collections";
-import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
-import {
-  getSingleRecipe,
-  increaseViewCountForRecipe,
-} from "../../../database/recipes";
-import { getUserFromRequest } from "../../../utils/auth";
-import {
-  getTimeEstimateType,
-  hasReadAccessToRecipe,
-} from "../../../utils/recipeUtils";
+import { loadProps } from "../../../dataLoaders/loadProps";
+import { recipePageDataLoader } from "../../../dataLoaders/recipes/recipePageDataLoader";
+import { getTimeEstimateType } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import filenamify from "filenamify";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Trans, useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Image from "next/image";
 import { useState } from "react";
 import { FiPrinter } from "react-icons/fi";
@@ -99,7 +86,7 @@ export default function RecipePage(
           <div className={styles.titleRowButtons}>
             {props.userId && (
               <AddToCollectionButton
-                collections={props.collections}
+                collections={props.allCollections}
                 recipeVisibility={recipe.visibility}
                 recipeId={recipe.id}
                 selectedRecipeCollections={recipeCollectionIds}
@@ -209,63 +196,8 @@ export default function RecipePage(
   );
 }
 
-export const getServerSideProps = (async ({ query, req, locale }) => {
-  const recipeId = query.id;
-  if (typeof recipeId !== "string" || recipeId.length === 0) {
-    throw new Error("Recipe id is not a string. This should never happen.");
-  }
-
-  const user = await getUserFromRequest(req);
-  const recipe = await getSingleRecipe(recipeId);
-  if (!recipe) {
-    return {
-      notFound: true,
-    };
-  }
-
-  if (!hasReadAccessToRecipe(user, recipe)) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const likeCount = await getLikeCountForRecipe(recipeId);
-
-  const userIdAndInfo =
-    user.status === "Unauthorized"
-      ? ({
-          userId: null,
-        } as const)
-      : ({
-          userId: user.userId,
-          likeStatus: !!(await getLikeStatus(user.userId, recipeId)),
-          collections: await getUserCollectionsWithMaximumVisibility(
-            user.userId,
-            recipe.visibility,
-          ),
-          collectionRelationships: await getUserRecipeCollectionRelationships(
-            recipeId,
-            user.userId,
-          ),
-        } as const);
-
-  const exportJsonFilename = filenamify(recipe.name + ".json", {
-    replacement: "_",
-  });
-  const exportMarkdownFilename = filenamify(recipe.name + ".md", {
-    replacement: "_",
-  });
-
-  await increaseViewCountForRecipe(recipeId);
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? "en")),
-      recipe,
-      likeCount,
-      exportJsonFilename,
-      exportMarkdownFilename,
-      ...userIdAndInfo,
-    },
-  };
-}) satisfies GetServerSideProps;
+export const getServerSideProps = ((ctx) =>
+  loadProps({
+    ctx,
+    ...recipePageDataLoader,
+  })) satisfies GetServerSideProps;
