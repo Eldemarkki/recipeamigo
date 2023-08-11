@@ -70,3 +70,20 @@ export const isValidVisibilityConfiguration = <
     violatingRecipes,
   };
 };
+
+export const getValidCollectionVisibilitiesForRecipeVisibility = (
+  recipeVisibility: RecipeVisibility,
+) => {
+  return {
+    [RecipeVisibility.PRIVATE]: [RecipeCollectionVisibility.PRIVATE],
+    [RecipeVisibility.UNLISTED]: [
+      RecipeCollectionVisibility.PRIVATE,
+      RecipeCollectionVisibility.UNLISTED,
+    ],
+    [RecipeVisibility.PUBLIC]: [
+      RecipeCollectionVisibility.PRIVATE,
+      RecipeCollectionVisibility.UNLISTED,
+      RecipeCollectionVisibility.PUBLIC,
+    ],
+  }[recipeVisibility] as RecipeCollectionVisibility[];
+};

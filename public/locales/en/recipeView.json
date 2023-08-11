@@ -89,5 +89,15 @@
     "tags": "Tags: {{tags, list}}",
     "views_one": "{{count}} view",
     "views_other": "{{count}} views"
+  },
+  "collections": {
+    "addToCollectionButton": "Add to collection",
+    "title": "Select collections",
+    "addToCollections_one": "Add recipe to 1 collection",
+    "addToCollections_other": "Add recipe to {{count}} collections",
+    "hiddenDisclaimers": {
+      "unlisted": "As this recipe is unlisted, it cannot be added to public collections. We have hidden your public collections from this list.",
+      "private": "As this recipe is private, it cannot be added to public or unlisted collections. We have hidden your public and unlisted collections from this list."
+    }
   }
 }

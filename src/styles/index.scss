@@ -24,6 +24,7 @@ html[data-theme="light"] {
   --tag-border-color: #0003;
   --button-disabled-background: #0000000f;
   --button-disabled-text: #0000007f;
+  --disclaimer-info-background-color: #9fd2ff;
 
   --font-size-button: 0.9rem;
 }
@@ -48,6 +49,7 @@ html[data-theme="light"] {
   --tag-border-color: #fff2;
   --button-disabled-background: #ffffff0d;
   --button-disabled-text: #ffffffbd;
+  --disclaimer-info-background-color: #215788;
 }
 
 @media (prefers-color-scheme: dark) {

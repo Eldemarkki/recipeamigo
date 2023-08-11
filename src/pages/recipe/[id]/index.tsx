@@ -1,12 +1,17 @@
 import { LinkButton } from "../../../components/LinkButton";
 import { Button } from "../../../components/button/Button";
 import { ExportButton } from "../../../components/button/ExportButton";
+import { AddToCollectionButton } from "../../../components/collections/AddToCollectionButton";
 import { Link } from "../../../components/link/Link";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { TagList } from "../../../components/recipeView/TagList";
+import {
+  getUserCollectionsWithMaximumVisibility,
+  getUserRecipeCollectionRelationships,
+} from "../../../database/collections";
 import { getLikeCountForRecipe, getLikeStatus } from "../../../database/likes";
 import {
   getSingleRecipe,
@@ -35,6 +40,9 @@ export default function RecipePage(
   const [likeCount, setLikeCount] = useState(props.likeCount);
   const [likeStatus, setLikeStatus] = useState(
     props.userId ? props.likeStatus : null,
+  );
+  const [recipeCollectionIds, setRecipeCollectionIds] = useState(
+    props.collectionRelationships?.map((x) => x.recipeCollectionId) ?? [],
   );
 
   const originalQuantity = recipe.quantity;
@@ -89,6 +97,15 @@ export default function RecipePage(
         <div className={styles.titleRow}>
           <h3 className={styles.title}>{recipe.name}</h3>
           <div className={styles.titleRowButtons}>
+            {props.userId && (
+              <AddToCollectionButton
+                collections={props.collections}
+                recipeVisibility={recipe.visibility}
+                recipeId={recipe.id}
+                selectedRecipeCollections={recipeCollectionIds}
+                setRecipeCollections={setRecipeCollectionIds}
+              />
+            )}
             <Button
               variant="secondary"
               onClick={() => {
@@ -214,22 +231,23 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
 
   const likeCount = await getLikeCountForRecipe(recipeId);
 
-  const likeStatusAndAnonymity:
-    | {
-        userId: null;
-      }
-    | {
-        userId: string;
-        likeStatus: boolean;
-      } =
+  const userIdAndInfo =
     user.status === "Unauthorized"
-      ? {
+      ? ({
           userId: null,
-        }
-      : {
+        } as const)
+      : ({
           userId: user.userId,
           likeStatus: !!(await getLikeStatus(user.userId, recipeId)),
-        };
+          collections: await getUserCollectionsWithMaximumVisibility(
+            user.userId,
+            recipe.visibility,
+          ),
+          collectionRelationships: await getUserRecipeCollectionRelationships(
+            recipeId,
+            user.userId,
+          ),
+        } as const);
 
   const exportJsonFilename = filenamify(recipe.name + ".json", {
     replacement: "_",
@@ -247,7 +265,7 @@ export const getServerSideProps = (async ({ query, req, locale }) => {
       likeCount,
       exportJsonFilename,
       exportMarkdownFilename,
-      ...likeStatusAndAnonymity,
+      ...userIdAndInfo,
     },
   };
 }) satisfies GetServerSideProps;

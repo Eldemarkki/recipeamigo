@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  background-color: var(--disclaimer-info-background-color);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

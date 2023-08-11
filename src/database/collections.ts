@@ -10,7 +10,7 @@ import {
   RecipesNotFoundError,
 } from "../utils/errors";
 import { hasReadAccessToRecipe } from "../utils/recipeUtils";
-import { RecipeCollectionVisibility } from "@prisma/client";
+import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
 import type { z } from "zod";
 
 export const createCollection = async (
@@ -251,4 +251,79 @@ export const editCollection = async (
   });
 
   return await getCollection(collectionId);
+};
+
+export const getUserCollectionsWithMaximumVisibility = async (
+  userId: string,
+  recipeVisibility: RecipeVisibility,
+) => {
+  const allowedCollectionVisibilities = {
+    [RecipeVisibility.PUBLIC]: [
+      RecipeCollectionVisibility.PUBLIC,
+      RecipeCollectionVisibility.UNLISTED,
+      RecipeCollectionVisibility.PRIVATE,
+    ],
+    [RecipeVisibility.UNLISTED]: [
+      RecipeCollectionVisibility.UNLISTED,
+      RecipeCollectionVisibility.PRIVATE,
+    ],
+    [RecipeVisibility.PRIVATE]: [RecipeCollectionVisibility.PRIVATE],
+  }[recipeVisibility];
+
+  return await prisma.recipeCollection.findMany({
+    where: {
+      userId,
+      visibility: {
+        in: allowedCollectionVisibilities,
+      },
+    },
+  });
+};
+
+export const setRecipeToRecipeCollectionRelationships = async (
+  recipeId: string,
+  userId: string,
+  collectionIds: string[],
+) => {
+  await prisma.recipesOnCollections.deleteMany({
+    where: {
+      recipeId,
+      recipeCollection: {
+        userId,
+      },
+      recipeCollectionId: {
+        notIn: collectionIds,
+      },
+    },
+  });
+
+  await prisma.recipesOnCollections.createMany({
+    data: collectionIds.map((collectionId) => ({
+      recipeId,
+      recipeCollectionId: collectionId,
+    })),
+    skipDuplicates: true,
+  });
+};
+
+export const getUserRecipeCollectionRelationships = async (
+  recipeId: string,
+  userId: string,
+) => {
+  return await prisma.recipesOnCollections.findMany({
+    where: {
+      recipeId,
+      recipeCollection: {
+        userId,
+      },
+    },
+    include: {
+      recipeCollection: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
 };

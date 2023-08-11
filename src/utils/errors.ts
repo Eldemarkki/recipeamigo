@@ -15,6 +15,12 @@ export class NotFoundError extends HttpError {
   }
 }
 
+export class ForbiddenError extends HttpError {
+  constructor(message?: string) {
+    super(message || "Forbidden", 403);
+  }
+}
+
 export class RecipeNotFoundError extends NotFoundError {
   constructor(recipeId: string) {
     super(`Recipe with id ${recipeId} not found`);
@@ -89,6 +95,36 @@ export class RecipesMustBePublicOrUnlistedError extends BadRequestError {
     super(
       "All recipes must be public or unlisted to be added to a unlisted collection. The following recipes are not public or unlisted: " +
         violatingRecipeIds.join(", "),
+    );
+  }
+}
+
+export class CannotAddRecipeToCollectionsErrorDontExistOrNoReadAccess extends NotFoundError {
+  constructor(recipeId: string, invalidCollectionIds: string[]) {
+    super(
+      `Cannot add recipe with id ${recipeId} to collections: [${invalidCollectionIds.join(
+        ",",
+      )}]. Make sure they exist and you have read access to them.`,
+    );
+  }
+}
+
+export class CannotAddRecipeToCollectionsNoWriteAccessError extends ForbiddenError {
+  constructor(recipeId: string, invalidCollectionIds: string[]) {
+    super(
+      `Cannot add recipe with id ${recipeId} to collections: [${invalidCollectionIds.join(
+        ",",
+      )}]. Make sure you have write access to them.`,
+    );
+  }
+}
+
+export class CannotAddRecipeToCollectionsErrorInvalidVisibility extends BadRequestError {
+  constructor(recipeId: string, invalidCollectionIds: string[]) {
+    super(
+      `Cannot add recipe with id ${recipeId} to collections: [${invalidCollectionIds.join(
+        ",",
+      )}]. Make sure the collection visibilities are valid for the recipe.`,
     );
   }
 }

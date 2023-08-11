@@ -73,4 +73,5 @@
 | 8.8.2023  | 3      | Ainesosien lisäämistä ainesosalistaan                                           |
 | 10.8.2023 | 1      | Paranna tietokannan käynnistystä testejä ajettaessa                             |
 | 10.8.2023 | 3      | Luo käyttöliittymästä responsiivisempi, luo kielivalintavalikko                 |
-| Yhteensä  | 132    |                                                                                 |
+| 11.8.2023 | 2      | Luo "Lisää kokoelmaan" nappi reseptisivulle                                     |
+| Yhteensä  | 134    |                                                                                 |
