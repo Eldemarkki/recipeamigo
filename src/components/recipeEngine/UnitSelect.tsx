@@ -1,4 +1,3 @@
-import { UNIT_SELECT_TRANSLATION_KEYS } from "../../utils/units";
 import { Select } from "../Select";
 import { IngredientUnit } from "@prisma/client";
 import { useTranslation } from "next-i18next";
@@ -17,7 +16,7 @@ export const UnitSelect = (props: UnitSelectProps) => {
     { value: "", label: t("edit.ingredients.noUnit") },
     ...units.map((unit) => ({
       value: unit,
-      label: t(UNIT_SELECT_TRANSLATION_KEYS[unit]),
+      label: t(`units:unitSelect.${unit}`),
     })),
   ] as const;
 
@@ -28,7 +27,7 @@ export const UnitSelect = (props: UnitSelectProps) => {
         props.value
           ? {
               value: props.value,
-              label: t(UNIT_SELECT_TRANSLATION_KEYS[props.value]),
+              label: t(`units:unitSelect.${props.value}`),
             }
           : {
               value: "" as const,
