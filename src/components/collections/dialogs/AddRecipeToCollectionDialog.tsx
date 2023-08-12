@@ -23,17 +23,19 @@ const Row = (props: RowProps) => {
   const id = useId();
 
   return (
-    <li className={styles.row}>
-      <input
-        className={styles.rowCheckbox}
-        id={id}
-        type="checkbox"
-        checked={props.selected}
-        onChange={(e) => {
-          props.onChange(e.target.checked);
-        }}
-      />
-      <label htmlFor={id}>{props.name}</label>
+    <li>
+      <label htmlFor={id} className={styles.row}>
+        <input
+          className={styles.rowCheckbox}
+          id={id}
+          type="checkbox"
+          checked={props.selected}
+          onChange={(e) => {
+            props.onChange(e.target.checked);
+          }}
+        />
+        {props.name}
+      </label>
     </li>
   );
 };
