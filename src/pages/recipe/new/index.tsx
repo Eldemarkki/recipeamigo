@@ -1,3 +1,4 @@
+import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../components/recipeEngine/RecipeForm";
 import type { createRecipe } from "../../../database/recipes";
 import type { createRecipeSchema } from "../../../handlers/recipes/recipesPostHandler";
@@ -42,19 +43,21 @@ export default function NewRecipePage() {
   const router = useRouter();
 
   return (
-    <RecipeForm
-      type="new"
-      onSubmit={async (recipe, coverImage) => {
-        // TODO: Show loading indicator while saving
-        const savedRecipe = await saveRecipe(recipe, coverImage);
-        if (savedRecipe) {
-          void router.push("/recipe/" + savedRecipe.id);
-        } else {
-          // TODO: Show a notification to the user that the recipe failed to save.
-          console.log("Failed to save recipe");
-        }
-      }}
-    />
+    <PageWrapper>
+      <RecipeForm
+        type="new"
+        onSubmit={async (recipe, coverImage) => {
+          // TODO: Show loading indicator while saving
+          const savedRecipe = await saveRecipe(recipe, coverImage);
+          if (savedRecipe) {
+            void router.push("/recipe/" + savedRecipe.id);
+          } else {
+            // TODO: Show a notification to the user that the recipe failed to save.
+            console.log("Failed to save recipe");
+          }
+        }}
+      />
+    </PageWrapper>
   );
 }
 
