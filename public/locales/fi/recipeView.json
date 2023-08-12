@@ -31,7 +31,7 @@
     "timeEstimateTitle": "Aika-arvio (vapaaehtoinen)",
     "timeEstimate": "<0></0>min - <3></3>min",
     "saveRecipe": "Tallenna resepti",
-    "editingIngredientTitle": "Muokataan {{ingredientName}}",
+    "editingIngredientTitle": "Muokataan \"{{ingredientName}}\"",
     "instructions": {
       "newInstructionPlaceholder": "Uusi ohje",
       "addInstructionButton": "Lisää ohje"

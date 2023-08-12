@@ -91,7 +91,7 @@ const getRequiredAmountType = (amount: number, unit: IngredientUnit | null) => {
 
 export const getIngredientText = (
   ingredient: string,
-  amount: number,
+  amount: number | null,
   unit: IngredientUnit | null,
   isOptional: boolean,
   language: Locale,
@@ -99,6 +99,10 @@ export const getIngredientText = (
   const ingredientText = isIngredientType(ingredient)
     ? ingredientsLocaleMap[language][ingredient]
     : { singular: ingredient, plural: ingredient };
+
+  if (amount === null) {
+    return ingredientText[getRequiredAmountType(1, unit)];
+  }
 
   const requiredAmountType = getRequiredAmountType(amount, unit);
   const finalIngredientText = ingredientText[requiredAmountType];

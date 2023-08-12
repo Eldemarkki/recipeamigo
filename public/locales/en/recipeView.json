@@ -31,7 +31,7 @@
     "timeEstimateTitle": "Time estimate (optional)",
     "timeEstimate": "<0></0>min to <3></3>min",
     "saveRecipe": "Save recipe",
-    "editingIngredientTitle": "Editing {{ingredientName}}",
+    "editingIngredientTitle": "Editing \"{{ingredientName}}\"",
     "instructions": {
       "newInstructionPlaceholder": "New instruction",
       "addInstructionButton": "Add instruction"

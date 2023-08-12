@@ -1,3 +1,5 @@
+import type { Locale } from "../../../i18next";
+import { getIngredientText } from "../../../ingredients/ingredientTranslator";
 import { IngredientText } from "../../IngredientText";
 import { DeleteButton } from "../../button/DeleteButton";
 import { EditButton } from "../../button/EditButton";
@@ -21,7 +23,7 @@ export const EditableIngredientListItem = ({
   onEditIngredient,
   onRemove,
 }: EditableIngredientListItemProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const controls = useDragControls();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -40,7 +42,13 @@ export const EditableIngredientListItem = ({
       >
         <h1>
           {t("recipeView:edit.editingIngredientTitle", {
-            ingredientName: ingredient.name,
+            ingredientName: getIngredientText(
+              ingredient.name,
+              null,
+              null,
+              false,
+              i18n.language as Locale,
+            ),
           })}
         </h1>
         <IngredientForm
