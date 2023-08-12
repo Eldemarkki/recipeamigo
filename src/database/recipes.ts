@@ -780,3 +780,53 @@ export const getPublicRecipesPaginated = async (
 
   return { recipes: recipesWithCoverImageUrls, count };
 };
+
+export const getLikedRecipes = async (userId: string) => {
+  const recipes = await prisma.recipe.findMany({
+    where: {
+      likes: {
+        some: {
+          userId,
+        },
+      },
+    },
+    include: {
+      ingredientSections: {
+        include: {
+          ingredients: {
+            orderBy: {
+              order: "asc",
+            },
+          },
+        },
+        orderBy: {
+          order: "asc",
+        },
+      },
+      instructions: {
+        orderBy: {
+          order: "asc",
+        },
+      },
+      tags: {
+        orderBy: {
+          order: "asc",
+        },
+      },
+    },
+  });
+
+  const recipesWithCoverImageUrls = await Promise.all(
+    recipes.map(async (recipe) => ({
+      ...recipe,
+      coverImageUrl: recipe.coverImageName
+        ? await s3.presignedGetObject(
+            process.env.S3_BUCKET_NAME ?? "",
+            recipe.coverImageName,
+          )
+        : undefined,
+    })),
+  );
+
+  return recipesWithCoverImageUrls;
+};

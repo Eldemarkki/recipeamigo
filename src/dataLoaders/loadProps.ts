@@ -8,6 +8,12 @@ import type { z } from "zod";
 
 export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
   | {
+      requireUser: true;
+      requiredTranslationNamespaces: FlatNamespace[];
+      handler: (user: AuthorizedUser) => Promise<PropsType>;
+      queryValidator?: null;
+    }
+  | {
       requireUser: false;
       requiredTranslationNamespaces: FlatNamespace[];
       handler: (user: AuthorizedUser | null) => Promise<PropsType>;
@@ -29,22 +35,10 @@ export type PropsLoader<QueryType = unknown, PropsType = unknown> = {
 
 export const loadProps = async <QueryType = unknown, PropsType = unknown>({
   ctx,
-  requireUser,
   requiredTranslationNamespaces,
   ...other
 }: PropsLoader<QueryType, PropsType>) => {
   const u = await getUserFromRequest(ctx.req);
-
-  // In the future we may have requireUser: true for some pages
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (requireUser && !u) {
-    return {
-      redirect: {
-        destination: "/login" as const,
-        permanent: false,
-      },
-    };
-  }
 
   const user = u.status === "Unauthorized" ? null : u;
 
@@ -61,7 +55,20 @@ export const loadProps = async <QueryType = unknown, PropsType = unknown>({
         props = await other.handler(user, queryResult.data);
       }
     } else {
-      props = await other.handler(user);
+      if (other.requireUser) {
+        if (user) {
+          props = await other.handler(user);
+        } else {
+          return {
+            redirect: {
+              destination: "/login" as const,
+              permanent: false,
+            },
+          };
+        }
+      } else {
+        props = await other.handler(user);
+      }
     }
 
     return {

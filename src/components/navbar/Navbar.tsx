@@ -66,6 +66,9 @@ export const Navbar = () => {
             </Link>
           </li>
           <li>
+            <Link href="/likes">{t("navbar.likes")}</Link>
+          </li>
+          <li>
             <Link href="/settings">{t("navbar.settings")}</Link>
           </li>
         </ol>

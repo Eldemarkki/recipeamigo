@@ -1,0 +1,6 @@
+{
+  "title": "Tykätyt reseptit",
+  "likedCount_zero": "Et ole tykännyt vielä mistään reseptistä",
+  "likedCount_one": "Olet tykännyt {{count}} reseptistä",
+  "likedCount_other": "Olet tykännyt {{count}} reseptistä"
+}

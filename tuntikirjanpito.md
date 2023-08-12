@@ -74,4 +74,5 @@
 | 10.8.2023 | 1      | Paranna tietokannan käynnistystä testejä ajettaessa                             |
 | 10.8.2023 | 3      | Luo käyttöliittymästä responsiivisempi, luo kielivalintavalikko                 |
 | 11.8.2023 | 3      | Luo "Lisää kokoelmaan" nappi reseptisivulle, refaktorointia, testien tekemistä  |
-| Yhteensä  | 135    |                                                                                 |
+| 12.8.2023 | 2      | Pieniä parannuksia, uusi näkymä tykätyille resepteille                          |
+| Yhteensä  | 137    |                                                                                 |

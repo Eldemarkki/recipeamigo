@@ -2,6 +2,7 @@ import type enBrowse from "../public/locales/en/browse.json";
 import type enCollections from "../public/locales/en/collections.json";
 import type enCommon from "../public/locales/en/common.json";
 import type enHome from "../public/locales/en/home.json";
+import type enLikes from "../public/locales/en/likes.json";
 import type enProfile from "../public/locales/en/profile.json";
 import type enRecipeView from "../public/locales/en/recipeView.json";
 import type enSettings from "../public/locales/en/settings.json";
@@ -12,6 +13,7 @@ import type fiBrowse from "../public/locales/fi/browse.json";
 import type fiCollections from "../public/locales/fi/collections.json";
 import type fiCommon from "../public/locales/fi/common.json";
 import type fiHome from "../public/locales/fi/home.json";
+import type fiLikes from "../public/locales/fi/likes.json";
 import type fiProfile from "../public/locales/fi/profile.json";
 import type fiRecipeView from "../public/locales/fi/recipeView.json";
 import type fiSettings from "../public/locales/fi/settings.json";
@@ -32,6 +34,7 @@ declare module "i18next" {
       units: typeof enUnits | typeof fiUnits;
       browse: typeof enBrowse | typeof fiBrowse;
       collections: typeof enCollections | typeof fiCollections;
+      likes: typeof enLikes | typeof fiLikes;
     };
   }
 }

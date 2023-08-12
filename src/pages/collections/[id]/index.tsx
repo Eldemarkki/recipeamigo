@@ -39,6 +39,7 @@ export default function CollectionPage(
           onClickOutside={() => {
             setIsDialogOpen(false);
           }}
+          maxWidth={1500}
         >
           <CollectionEditDialog
             collection={props.collection}

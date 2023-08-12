@@ -1,0 +1,6 @@
+{
+  "title": "Liked recipes",
+  "likedCount_zero": "You haven't liked any recipes yet",
+  "likedCount_one": "You have liked {{count}} recipe",
+  "likedCount_other": "You have liked {{count}} recipes"
+}

@@ -52,7 +52,7 @@ Things you need:
   - [x] Less than X minutes
 - [x] Recipe tags/categories
 - [x] Likes
-- [ ] Collection for showing liked recipes
+- [x] Collection for showing liked recipes
 - [x] Save recipes to collections
   - [x] Private collections
   - [x] Public collections
