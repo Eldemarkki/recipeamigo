@@ -198,6 +198,7 @@ export const RecipeForm = ({
         onClickOutside={() => {
           setDialogOpen(false);
         }}
+        overflowVisible // TODO: This is broken if user adds a lot of tags
       >
         <div className={styles.dialogContent}>
           <h1>{t("edit.settings.title")}</h1>

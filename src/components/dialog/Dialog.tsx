@@ -8,6 +8,7 @@ export type DialogProps = PropsWithChildren<{
   unstyled?: boolean;
   className?: string;
   maxWidth?: React.CSSProperties["maxWidth"] | null;
+  overflowVisible?: boolean | undefined | null;
 }>;
 
 export const Dialog = ({
@@ -17,6 +18,7 @@ export const Dialog = ({
   unstyled,
   className,
   maxWidth = 600,
+  overflowVisible = false,
 }: DialogProps) => {
   const [isActuallyOpen, setIsActuallyOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -60,7 +62,10 @@ export const Dialog = ({
       className={finalClassName}
       ref={dialogRef}
       open={isActuallyOpen}
-      style={{ maxWidth: maxWidth === null ? undefined : maxWidth }}
+      style={{
+        maxWidth: maxWidth === null ? undefined : maxWidth,
+        overflow: overflowVisible ? "visible" : undefined,
+      }}
     >
       {isActuallyOpen && children}
     </dialog>

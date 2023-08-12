@@ -39,6 +39,7 @@ export const EditableIngredientListItem = ({
         onClickOutside={() => {
           setIsEditing(false);
         }}
+        overflowVisible
       >
         <h1>
           {t("recipeView:edit.editingIngredientTitle", {
