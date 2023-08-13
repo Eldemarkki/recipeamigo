@@ -8,6 +8,7 @@ import type { editRecipeSchema } from "../handlers/recipes/recipePutHandler";
 import type { createRecipeSchema } from "../handlers/recipes/recipesPostHandler";
 import { DEFAULT_BUCKET_NAME, s3 } from "../s3";
 import { notNull } from "../utils/arrayUtils";
+import { getValidCollectionVisibilitiesForRecipeVisibility } from "../utils/collectionUtils";
 import { RecipeVisibility } from "@prisma/client";
 import type { UUID } from "crypto";
 import type { z } from "zod";
@@ -548,6 +549,32 @@ export const editRecipe = async (
           recipeId,
           order: tagIndex,
         })),
+      });
+    }
+
+    if (editedRecipe.visibility === RecipeVisibility.PRIVATE) {
+      await prisma.like.deleteMany({
+        where: {
+          recipeId,
+        },
+      });
+    }
+
+    if (editedRecipe.visibility) {
+      const allowedCollectionVisibilities =
+        getValidCollectionVisibilitiesForRecipeVisibility(
+          editedRecipe.visibility,
+        );
+
+      await prisma.recipesOnCollections.deleteMany({
+        where: {
+          recipeId,
+          recipeCollection: {
+            visibility: {
+              notIn: allowedCollectionVisibilities,
+            },
+          },
+        },
       });
     }
   });
