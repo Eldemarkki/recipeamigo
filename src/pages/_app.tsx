@@ -4,6 +4,19 @@ import "../styles/index.scss";
 import { ClerkProvider } from "@clerk/nextjs";
 import { appWithTranslation } from "next-i18next";
 import type { AppProps } from "next/app";
+import { Open_Sans as OpenSans, DM_Serif_Display } from "next/font/google";
+
+const openSans = OpenSans({
+  variable: "--font-openSans",
+  weight: "400",
+  subsets: ["latin-ext"],
+});
+
+const dmSerifDisplay = DM_Serif_Display({
+  variable: "--font-dmSerifDisplay",
+  weight: "400",
+  subsets: ["latin-ext"],
+});
 
 export type Props = {
   isLoggedIn: boolean;
@@ -19,8 +32,10 @@ const App = ({ Component, pageProps, router }: AppProps<Props>) => {
 
   return (
     <ClerkProvider {...pageProps}>
-      {showNavbar && <Navbar />}
-      <Component {...pageProps} />
+      <div className={openSans.variable + " " + dmSerifDisplay.variable}>
+        {showNavbar && <Navbar />}
+        <Component {...pageProps} />
+      </div>
     </ClerkProvider>
   );
 };
