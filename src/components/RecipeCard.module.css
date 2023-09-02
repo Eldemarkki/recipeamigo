@@ -20,6 +20,7 @@
   border-radius: 0.5rem 0.5rem 0 0;
   justify-content: center;
   align-items: center;
+  background-color: var(--recipe-card-image-background);
 }
 
 .coverImage {

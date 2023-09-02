@@ -25,6 +25,7 @@ html[data-theme="light"] {
   --button-disabled-background: #0000000f;
   --button-disabled-text: #0000007f;
   --disclaimer-info-background-color: #9fd2ff;
+  --recipe-card-image-background: #ececec;
 
   --font-size-button: 0.9rem;
 }
@@ -50,6 +51,7 @@ html[data-theme="light"] {
   --button-disabled-background: #ffffff0d;
   --button-disabled-text: #ffffffbd;
   --disclaimer-info-background-color: #215788;
+  --recipe-card-image-background: #292b31;
 }
 
 @media (prefers-color-scheme: dark) {
