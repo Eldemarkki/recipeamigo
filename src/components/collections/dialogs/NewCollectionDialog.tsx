@@ -89,6 +89,7 @@ export const NewCollectionDialog = ({
       onClickOutside={() => {
         setIsOpen(false);
       }}
+      maxWidth={1200}
     >
       <form
         className={styles.container}
