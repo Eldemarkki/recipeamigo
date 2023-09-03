@@ -76,4 +76,5 @@
 | 11.8.2023 | 3      | Luo "Lisää kokoelmaan" nappi reseptisivulle, refaktorointia, testien tekemistä                                |
 | 12.8.2023 | 2      | Pieniä parannuksia, uusi näkymä tykätyille resepteille                                                        |
 | 13.8.2023 | 1      | Varmista, että tykkäykset ja kokoelmat eivät sisällä listaamattomia/yksityisiä reseptejä muokkaamisen jälkeen |
-| Yhteensä  | 138    |                                                                                                               |
+| 3.9.2023  | 1      | Pieniä parannuksia, 404- ja 505-sivut, Open Graph metatagit                                                   |
+| Yhteensä  | 139    |                                                                                                               |
