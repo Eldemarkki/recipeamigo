@@ -77,4 +77,5 @@
 | 12.8.2023 | 2      | Pieniä parannuksia, uusi näkymä tykätyille resepteille                                                        |
 | 13.8.2023 | 1      | Varmista, että tykkäykset ja kokoelmat eivät sisällä listaamattomia/yksityisiä reseptejä muokkaamisen jälkeen |
 | 3.9.2023  | 1      | Pieniä parannuksia, 404- ja 505-sivut, Open Graph metatagit                                                   |
-| Yhteensä  | 139    |                                                                                                               |
+| 5.9.2023  | 2      | Landing-sivu anonyymeille käyttäjille                                                                 |
+| Yhteensä  | 141    |                                                                                                               |

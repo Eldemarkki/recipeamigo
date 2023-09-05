@@ -5,12 +5,20 @@ import { forwardRef } from "react";
 
 export const Link = forwardRef<
   HTMLAnchorElement,
-  ComponentPropsWithoutRef<typeof NextLink>
->(({ className, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof NextLink> & {
+    unstyled?: boolean;
+  }
+>(({ className, unstyled, ...props }, ref) => (
   <NextLink
     {...props}
     ref={ref}
-    className={className ? styles.link + " " + className : styles.link}
+    className={
+      unstyled
+        ? className
+        : className
+        ? className + " " + styles.link
+        : styles.link
+    }
   />
 ));
 

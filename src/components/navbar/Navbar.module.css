@@ -30,6 +30,12 @@
   align-items: center;
 }
 
+.authButtonsRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 @media print {
   .container {
     display: none;

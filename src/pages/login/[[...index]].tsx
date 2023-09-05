@@ -24,7 +24,7 @@ export default function Home() {
       <div className={styles.innerContainer}>
         <h1 className={styles.title}>
           <span className={styles.titleGradientPart}>{appNameFirst}</span>
-          {appNameSecond}
+          <span>{appNameSecond}</span>
         </h1>
         <SignIn />
       </div>

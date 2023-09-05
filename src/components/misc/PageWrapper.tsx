@@ -35,9 +35,7 @@ export const PageWrapper = ({
         ) : "titleRow" in props ? (
           props.titleRow
         ) : null}
-        <main className={[styles.main, props.mainClass].join(" ")}>
-          {props.children}
-        </main>
+        <main className={props.mainClass}>{props.children}</main>
       </div>
     </div>
   );

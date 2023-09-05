@@ -19,11 +19,12 @@ export const LinkButton = forwardRef<
       {...props}
       ref={ref}
       className={[
-        className,
-        styles.linkButton,
-        rectangular && styles.rectangular,
         styles[variant],
+        rectangular ? styles.rectangular : "",
+        styles.linkButton,
+        className,
       ].join(" ")}
+      unstyled
     >
       {props.icon}
       {children}

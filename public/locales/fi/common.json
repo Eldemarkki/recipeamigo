@@ -18,7 +18,9 @@
     "cancel": "Peruuta",
     "save": "Tallenna",
     "create": "Luo",
-    "print": "Tulosta"
+    "print": "Tulosta",
+    "signUp": "Rekisteröidy",
+    "logIn": "Kirjaudu"
   },
   "recipeFilter": {
     "searchPlaceholder": "Etsi"

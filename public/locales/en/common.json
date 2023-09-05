@@ -18,7 +18,9 @@
     "cancel": "Cancel",
     "save": "Save",
     "create": "Create",
-    "print": "Print"
+    "print": "Print",
+    "signUp": "Sign up",
+    "logIn": "Log in"
   },
   "recipeFilter": {
     "searchPlaceholder": "Search"

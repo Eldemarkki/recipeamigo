@@ -18,13 +18,9 @@ const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin-ext"],
 });
 
-export type Props = {
-  isLoggedIn: boolean;
-};
-
 const navbarHiddenPaths = ["/login", "/sign-up", "/profile/create"];
 
-const App = ({ Component, pageProps, router }: AppProps<Props>) => {
+const App = ({ Component, pageProps, router }: AppProps) => {
   const showNavbar = !navbarHiddenPaths.some((path) =>
     router.pathname.startsWith(path),
   );
@@ -32,7 +28,10 @@ const App = ({ Component, pageProps, router }: AppProps<Props>) => {
 
   return (
     <ClerkProvider {...pageProps}>
-      <div className={openSans.variable + " " + dmSerifDisplay.variable}>
+      <div
+        className={openSans.variable + " " + dmSerifDisplay.variable}
+        style={{ height: "100%" }}
+      >
         {showNavbar && <Navbar />}
         <Component {...pageProps} />
       </div>

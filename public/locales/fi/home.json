@@ -25,5 +25,11 @@
       "private": "Yksityinen",
       "unlisted": "Piilotettu"
     }
+  },
+  "landing": {
+    "tagline": "Keittokirja nykyajan digitaaliseen maailmaan",
+    "subTagline": "Lähde herkulliselle makumatkalle: tutki, luo ja jaa reseptejä ympäri maailmaa alustallamme, joka tuo ruoan ystävät yhteen!",
+    "heroImageAlt": "Kaksi ihmistä sekoittamassa kulhoa.",
+    "getStartedButton": "Rekisteröidy nyt"
   }
 }
