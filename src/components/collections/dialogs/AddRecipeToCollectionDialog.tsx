@@ -51,6 +51,17 @@ export const AddRecipeToCollectionDialog = ({
     initialSelectedCollectionIds,
   );
 
+  const removedFromCollections = initialSelectedCollectionIds.filter(
+    (id) => !selectedCollectionIds.includes(id),
+  );
+
+  const addedToCollections = selectedCollectionIds.filter(
+    (id) => !initialSelectedCollectionIds.includes(id),
+  );
+
+  const isDifferent =
+    removedFromCollections.length > 0 || addedToCollections.length > 0;
+
   const hiddenDisclaimer = {
     [RecipeVisibility.PUBLIC]: null,
     [RecipeVisibility.UNLISTED]: t("collections.hiddenDisclaimers.unlisted"),
@@ -83,13 +94,25 @@ export const AddRecipeToCollectionDialog = ({
         ))}
       </ul>
       <Button
+        disabled={!isDifferent}
         onClick={() => {
           onAdd(selectedCollectionIds);
         }}
       >
-        {t("collections.addToCollections", {
-          count: selectedCollectionIds.length,
-        })}
+        {addedToCollections.length > 0 && removedFromCollections.length > 0
+          ? t("collections.addAndRemoveFromCollections", {
+              addCount: addedToCollections.length,
+              removeCount: removedFromCollections.length,
+            })
+          : addedToCollections.length > 0 && removedFromCollections.length === 0
+          ? t("collections.addToCollections", {
+              count: addedToCollections.length,
+            })
+          : addedToCollections.length === 0 && removedFromCollections.length > 0
+          ? t("collections.removeFromCollections", {
+              count: removedFromCollections.length,
+            })
+          : t("collections.noEdits")}
       </Button>
     </div>
   );

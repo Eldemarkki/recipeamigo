@@ -93,8 +93,14 @@
   "collections": {
     "addToCollectionButton": "Add to collection",
     "title": "Select collections",
-    "addToCollections_one": "Add recipe to 1 collection",
+    "addToCollections_one": "Add recipe to {{count}} collection",
     "addToCollections_other": "Add recipe to {{count}} collections",
+    "removeFromCollections_one": "Remove recipe from {{count}} collection",
+    "removeFromCollections_other": "Remove recipe from {{count}} collections",
+    "removeFromCollectionsCombined_one": "remove recipe from {{count}} collection",
+    "removeFromCollectionsCombined_other": "remove recipe from {{count}} collections",
+    "addAndRemoveFromCollections": "$t(collections.addToCollections, {\"count\": {{addCount}}}) and $t(collections.removeFromCollectionsCombined, {\"count\": {{removeCount}}})",
+    "noEdits": "No edits",
     "hiddenDisclaimers": {
       "unlisted": "As this recipe is unlisted, it cannot be added to public collections. We have hidden your public collections from this list.",
       "private": "As this recipe is private, it cannot be added to public or unlisted collections. We have hidden your public and unlisted collections from this list."
