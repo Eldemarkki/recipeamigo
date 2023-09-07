@@ -8,4 +8,5 @@ module.exports = {
   },
   localePath: path.resolve("./public/locales"),
   defaultNS: "common",
+  reloadOnPrerender: true,
 };
