@@ -17,8 +17,14 @@
     "decrease": "Decrease",
     "increase": "Increase"
   },
-  "ingredientsTitle": "Ingredients",
-  "instructionsTitle": "Instructions",
+  "ingredients": {
+    "title": "Ingredients",
+    "noIngredients": "No ingredients"
+  },
+  "instructions": {
+    "title": "Instructions",
+    "noInstructions": "No instructions"
+  },
   "recipeVisibility": {
     "public": "Public",
     "private": "Private",

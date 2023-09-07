@@ -17,8 +17,14 @@
     "decrease": "Vähennä",
     "increase": "Kasvata"
   },
-  "ingredientsTitle": "Ainesosat",
-  "instructionsTitle": "Ohjeet",
+  "ingredients": {
+    "title": "Ainesosat",
+    "noIngredients": "Ei ainesosia"
+  },
+  "instructions": {
+    "title": "Ohjeet",
+    "noInstructions": "Ei ohjeita"
+  },
   "recipeVisibility": {
     "public": "Julkinen",
     "private": "Yksityinen",

@@ -24,7 +24,7 @@ import { FiPrinter } from "react-icons/fi";
 export default function RecipePage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(["recipeView", "common"]);
   const { recipe, exportJsonFilename, exportMarkdownFilename } = props;
   const [likeCount, setLikeCount] = useState(props.likeCount);
   const [likeStatus, setLikeStatus] = useState(
@@ -126,7 +126,7 @@ export default function RecipePage(
                 }}
               >
                 <FiPrinter />
-                {t("actions.print")}
+                {t("common:actions.print")}
               </Button>
               {props.userId && recipe.user.clerkId === props.userId && (
                 <LinkButton
@@ -134,7 +134,7 @@ export default function RecipePage(
                   href={`/recipe/${recipe.id}/edit`}
                   icon={<Pencil1Icon />}
                 >
-                  {t("actions.edit")}
+                  {t("common:actions.edit")}
                 </LinkButton>
               )}
               <ExportButton
@@ -200,21 +200,25 @@ export default function RecipePage(
         </div>
         <div className={styles.splitContainer}>
           <div className={styles.ingredientsContainer}>
-            <h2>{t("recipeView:ingredientsTitle")}</h2>
-            <ul>
-              {recipe.ingredientSections.map((section) => (
-                <li key={section.id}>
-                  <IngredientSection
-                    section={section}
-                    recipeQuantity={recipeAmount}
-                    originalRecipeQuantity={originalQuantity}
-                  />
-                </li>
-              ))}
-            </ul>
+            <h2>{t("recipeView:ingredients.title")}</h2>
+            {recipe.ingredientSections.length ? (
+              <ul>
+                {recipe.ingredientSections.map((section) => (
+                  <li key={section.id}>
+                    <IngredientSection
+                      section={section}
+                      recipeQuantity={recipeAmount}
+                      originalRecipeQuantity={originalQuantity}
+                    />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>{t("recipeView:ingredients.noIngredients")}</p>
+            )}
           </div>
           <div className={styles.instructionsContainer}>
-            <h2>{t("recipeView:instructionsTitle")}</h2>
+            <h2>{t("recipeView:instructions.title")}</h2>
             <InstructionsList instructions={recipe.instructions} />
           </div>
         </div>
