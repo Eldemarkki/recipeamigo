@@ -11,5 +11,6 @@
       "public": "Koska olet muuttamassa kokoelmaa julkiseksi, kaikkien reseptien tulee olla julkisia. Seuraavat reseptit eivät ole julkisia: {{violatingRecipes, list}}",
       "unlisted": "Koska olet muuttamassa kokoelmaa piilotetuksi, kaikkien reseptien tulee olla joko julkisia tai piilotettuja. Seuraavat reseptit ovat yksityisiä: {{violatingRecipes, list}}"
     }
-  }
+  },
+  "emptyCollection": "Tämä kokoelma on tyhjä."
 }

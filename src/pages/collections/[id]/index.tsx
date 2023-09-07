@@ -13,7 +13,7 @@ import { useState } from "react";
 export default function CollectionPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["common", "collections"]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
@@ -51,9 +51,14 @@ export default function CollectionPage(
         </Dialog>
       )}
       {props.collection.description && <p>{props.collection.description}</p>}
-      <RecipeCardGrid
-        recipes={props.collection.RecipesOnCollections.map((r) => r.recipe)}
-      />
+      <hr />
+      {props.collection.RecipesOnCollections.length ? (
+        <RecipeCardGrid
+          recipes={props.collection.RecipesOnCollections.map((r) => r.recipe)}
+        />
+      ) : (
+        <p>{t("collections:emptyCollection")}</p>
+      )}
     </PageWrapper>
   );
 }

@@ -111,3 +111,8 @@ textarea {
 * {
   font-family: var(--font-openSans);
 }
+
+hr {
+  border: 1px solid var(--text);
+  margin: 1rem 0;
+}
