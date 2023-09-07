@@ -329,7 +329,7 @@ export const RecipeForm = ({
               />
             </div>
             <div className={styles.ingredientsSection}>
-              <h2>{t("ingredientsTitle")}</h2>
+              <h2>{t("ingredients.title")}</h2>
               {/* TODO: Implement adding multiple sections */}
               <EditableIngredientList
                 ingredientSections={ingredientSections}
@@ -415,7 +415,7 @@ export const RecipeForm = ({
             </div>
           </div>
           <div className={styles.rightPanel}>
-            <h2>{t("instructionsTitle")}</h2>
+            <h2>{t("instructions.title")}</h2>
             <EditableInstructionList
               instructions={instructions}
               addInstruction={(instruction) => {
