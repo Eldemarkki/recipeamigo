@@ -27,15 +27,22 @@ const App = ({ Component, pageProps, router }: AppProps) => {
   useTheme();
 
   return (
-    <ClerkProvider {...pageProps}>
-      <div
-        className={openSans.variable + " " + dmSerifDisplay.variable}
-        style={{ height: "100%" }}
-      >
-        {showNavbar && <Navbar />}
-        <Component {...pageProps} />
-      </div>
-    </ClerkProvider>
+    <>
+      <style jsx global>
+        {`
+          :root {
+            --font-openSans: ${openSans.style.fontFamily};
+            --font-dmSerifDisplay: ${dmSerifDisplay.style.fontFamily};
+          }
+        `}
+      </style>
+      <ClerkProvider {...pageProps}>
+        <div style={{ height: "100%" }}>
+          {showNavbar && <Navbar />}
+          <Component {...pageProps} />
+        </div>
+      </ClerkProvider>
+    </>
   );
 };
 
