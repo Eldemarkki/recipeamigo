@@ -1,4 +1,14 @@
-export type HttpStatusCode = 400 | 401 | 403 | 404 | 409 | 500;
+import type { TFunction } from "i18next";
+import { toast } from "react-hot-toast";
+
+const knownHttpErrorStatuses = [400, 401, 403, 404, 409, 500] as const;
+export type HttpStatusCode = (typeof knownHttpErrorStatuses)[number];
+
+export const isKnownHttpStatusCode = (
+  status: number,
+): status is HttpStatusCode => {
+  return knownHttpErrorStatuses.includes(status as HttpStatusCode);
+};
 
 export class HttpError extends Error {
   constructor(
@@ -128,3 +138,38 @@ export class CannotAddRecipeToCollectionsErrorInvalidVisibility extends BadReque
     );
   }
 }
+
+export class ResponseError extends Error {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+export const generateBaseErrors = (t: TFunction<"errors">) => ({
+  400: t("common.400"),
+  401: t("common.401"),
+  403: t("common.403"),
+  404: t("common.404"),
+  409: t("common.409"),
+  500: t("common.500"),
+});
+
+export const showErrorToast = (
+  t: TFunction<"errors">,
+  error: unknown,
+  overrideMessages?: Partial<Record<HttpStatusCode, string>>,
+) => {
+  if (error instanceof HttpError) {
+    const errorMessage = {
+      ...generateBaseErrors(t),
+      ...overrideMessages,
+    }[error.status];
+
+    toast.error(errorMessage);
+  } else {
+    toast.error(t("common.unknownError"));
+  }
+};

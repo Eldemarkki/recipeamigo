@@ -3,7 +3,13 @@ import { RecipeForm } from "../../../components/recipeEngine/RecipeForm";
 import type { createRecipe } from "../../../database/recipes";
 import type { createRecipeSchema } from "../../../handlers/recipes/recipesPostHandler";
 import { getUserFromRequest } from "../../../utils/auth";
+import {
+  HttpError,
+  isKnownHttpStatusCode,
+  showErrorToast,
+} from "../../../utils/errors";
 import type { GetServerSideProps } from "next";
+import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import type { z } from "zod";
@@ -21,7 +27,11 @@ const saveRecipe = async (
   });
 
   if (!response.ok) {
-    return null;
+    if (isKnownHttpStatusCode(response.status)) {
+      throw new HttpError(response.statusText, response.status);
+    } else {
+      throw new Error("Error with status " + response.status);
+    }
   }
 
   const data = (await response.json()) as {
@@ -42,17 +52,20 @@ const saveRecipe = async (
 export default function NewRecipePage() {
   const router = useRouter();
 
+  const { t } = useTranslation("errors");
+
   return (
     <PageWrapper>
       <RecipeForm
         type="new"
         onSubmit={async (recipe, coverImage) => {
-          const savedRecipe = await saveRecipe(recipe, coverImage);
-          if (savedRecipe) {
+          try {
+            const savedRecipe = await saveRecipe(recipe, coverImage);
             void router.push("/recipe/" + savedRecipe.id);
-          } else {
-            // TODO: Show a notification to the user that the recipe failed to save.
-            console.log("Failed to save recipe");
+          } catch (e) {
+            showErrorToast(t, e, {
+              400: t("createRecipe.400"),
+            });
           }
         }}
       />
