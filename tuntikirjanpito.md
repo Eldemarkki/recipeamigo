@@ -79,5 +79,5 @@
 | 3.9.2023  | 1      | Pieniä parannuksia, 404- ja 500-sivut, Open Graph metatagit                                                   |
 | 5.9.2023  | 2      | Landing-sivu anonyymeille käyttäjille                                                                         |
 | 7.9.2023  | 1      | Pieniä parannuksia teksteihin                                                                                 |
-| 10.9.2023 | 1      | Sulkemisnappi dialogiin                                                                                       |
-| Yhteensä  | 143    |                                                                                                               |
+| 10.9.2023 | 4      | Sulkemisnappi dialogiin, nappien latausindikaattorit, toast-virheilmoitukset, pieniä parannuksia              |
+| Yhteensä  | 146    |                                                                                                               |
