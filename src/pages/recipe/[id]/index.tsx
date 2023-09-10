@@ -10,7 +10,9 @@ import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuant
 import { TagList } from "../../../components/recipeView/TagList";
 import { loadProps } from "../../../dataLoaders/loadProps";
 import { recipePageDataLoader } from "../../../dataLoaders/recipes/recipePageDataLoader";
+import { useErrorToast } from "../../../hooks/useErrorToast";
 import type { Locale } from "../../../i18next";
+import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { getTimeEstimateType } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
 import { Pencil1Icon } from "@radix-ui/react-icons";
@@ -40,11 +42,15 @@ export default function RecipePage(
     const response = await fetch(`/api/recipes/${recipe.id}/like`, {
       method: "POST",
     });
+
     if (!response.ok) {
-      // TODO: Show a notification to the user that the recipe liking failed
-      console.log("Failed to like recipe");
-      return;
+      if (isKnownHttpStatusCode(response.status)) {
+        throw new HttpError(response.statusText, response.status);
+      } else {
+        throw new Error("Error with status " + response.status);
+      }
     }
+
     setLikeCount(likeCount + 1);
     setLikeStatus(true);
   };
@@ -54,13 +60,29 @@ export default function RecipePage(
       method: "POST",
     });
     if (!response.ok) {
-      // TODO: Show a notification to the user that the recipe unliking failed
-      console.log("Failed to unlike recipe");
-      return;
+      if (isKnownHttpStatusCode(response.status)) {
+        throw new HttpError(response.statusText, response.status);
+      } else {
+        throw new Error("Error with status " + response.status);
+      }
     }
 
     setLikeCount(likeCount - 1);
     setLikeStatus(false);
+  };
+
+  const { showErrorToast } = useErrorToast();
+
+  const handleLikeButtonClick = async () => {
+    try {
+      if (likeStatus) {
+        await unlikeRecipe();
+      } else {
+        await likeRecipe();
+      }
+    } catch (error) {
+      showErrorToast(error);
+    }
   };
 
   const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
@@ -165,8 +187,7 @@ export default function RecipePage(
               className={styles.likeButton}
               variant="secondary"
               onClick={() => {
-                const fn = likeStatus === true ? unlikeRecipe : likeRecipe;
-                void fn();
+                void handleLikeButtonClick();
               }}
             >
               {likeStatus
