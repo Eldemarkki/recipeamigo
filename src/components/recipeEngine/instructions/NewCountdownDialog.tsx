@@ -20,7 +20,6 @@ export const NewCountdownDialog = ({
 
   return (
     <div className={styles.container}>
-      <h1>{t("recipeView:edit.misc.countdown.newCountdownTitle")}</h1>
       <form
         className={styles.form}
         onSubmit={(e) => {

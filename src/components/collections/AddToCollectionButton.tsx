@@ -21,7 +21,7 @@ export const AddToCollectionButton = ({
   setRecipeCollections,
   selectedRecipeCollections,
 }: AddToCollectionButtonProps) => {
-  const { t } = useTranslation("recipeView");
+  const { t } = useTranslation(["recipeView", "collections"]);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const addRecipeToCollections = async (collectionIds: string[]) => {
@@ -50,10 +50,11 @@ export const AddToCollectionButton = ({
     <>
       <Dialog
         open={dialogOpen}
-        onClickOutside={() => {
+        closeDialog={() => {
           setDialogOpen(false);
         }}
         maxWidth={800}
+        title={t("collections.title")}
       >
         <AddRecipeToCollectionDialog
           collections={collections}

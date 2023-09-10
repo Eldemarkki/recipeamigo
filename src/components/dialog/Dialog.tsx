@@ -1,27 +1,35 @@
+import { CircularButton } from "../button/Button";
 import styles from "./Dialog.module.css";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import { useTranslation } from "next-i18next";
 import type { PropsWithChildren } from "react";
 import { useEffect, useRef, useState } from "react";
 
 export type DialogProps = PropsWithChildren<{
   open: boolean;
-  onClickOutside?: () => void;
+  closeDialog?: () => void;
   unstyled?: boolean;
   className?: string;
   maxWidth?: React.CSSProperties["maxWidth"] | null;
   overflowVisible?: boolean | undefined | null;
+  title?: string;
+  showCloseButton?: boolean;
 }>;
 
 export const Dialog = ({
   open,
-  onClickOutside,
+  closeDialog,
   children,
   unstyled,
   className,
   maxWidth = 600,
   overflowVisible = false,
+  title,
+  showCloseButton = true,
 }: DialogProps) => {
   const [isActuallyOpen, setIsActuallyOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     if (dialogRef.current) {
@@ -43,7 +51,7 @@ export const Dialog = ({
         !dialogRef.current.contains(event.target) &&
         open
       ) {
-        onClickOutside?.();
+        closeDialog?.();
       }
     }
 
@@ -51,7 +59,7 @@ export const Dialog = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [open, dialogRef, onClickOutside]);
+  }, [open, dialogRef, closeDialog]);
 
   const finalClassName = [unstyled ? undefined : styles.dialog, className]
     .filter(Boolean)
@@ -67,7 +75,26 @@ export const Dialog = ({
         overflow: overflowVisible ? "visible" : undefined,
       }}
     >
-      {isActuallyOpen && children}
+      {isActuallyOpen && (
+        <div className={styles.content}>
+          <div
+            className={styles.titleRow + (!title ? " " + styles.noTitle : "")}
+          >
+            {title && <h1>{title}</h1>}
+            {showCloseButton && (
+              <CircularButton
+                onClick={() => {
+                  closeDialog?.();
+                }}
+                aria-label={t("dialog.closeLabel")}
+              >
+                <Cross1Icon />
+              </CircularButton>
+            )}
+          </div>
+          {children}
+        </div>
+      )}
     </dialog>
   );
 };

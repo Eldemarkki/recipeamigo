@@ -36,10 +36,13 @@ export default function CollectionPage(
       {props.isOwner && props.allRecipes && (
         <Dialog
           open={isDialogOpen}
-          onClickOutside={() => {
+          closeDialog={() => {
             setIsDialogOpen(false);
           }}
           maxWidth={1500}
+          title={t("collections:edit.dialogTitle", {
+            name: props.collection.name,
+          })}
         >
           <CollectionEditDialog
             collection={props.collection}

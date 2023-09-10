@@ -1,5 +1,6 @@
 {
   "new": {
+    "title": "New collection",
     "invalidVisibilityConfiguration": {
       "public": "Because you are creating a public collection, all recipes must be public. The following recipes are not public: {{violatingRecipes, list}}",
       "unlisted": "Because you are creating an unlisted collection, all recipes must be either public or unlisted. The following recipes are private: {{violatingRecipes, list}}"

@@ -69,8 +69,7 @@ export const AddRecipeToCollectionDialog = ({
   }[recipeVisibility];
 
   return (
-    <div className={styles.container}>
-      <h1>{t("collections.title")}</h1>
+    <>
       {hiddenDisclaimer && <InfoDisclaimer>{hiddenDisclaimer}</InfoDisclaimer>}
       <ul>
         {collections.map((collection) => (
@@ -114,6 +113,6 @@ export const AddRecipeToCollectionDialog = ({
             })
           : t("collections.noEdits")}
       </Button>
-    </div>
+    </>
   );
 };

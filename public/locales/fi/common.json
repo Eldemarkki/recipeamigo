@@ -24,5 +24,8 @@
   },
   "recipeFilter": {
     "searchPlaceholder": "Etsi"
+  },
+  "dialog": {
+    "closeLabel": "Sulje"
   }
 }

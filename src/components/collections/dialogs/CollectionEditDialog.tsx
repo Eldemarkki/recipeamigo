@@ -93,168 +93,165 @@ export const CollectionEditDialog = ({
     isValidVisibilityConfiguration(visibility, selectedRecipes);
 
   return (
-    <>
-      <h1>{t("collections:edit.dialogTitle", { name: collection.name })}</h1>
-      <form
-        className={styles.container}
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (selectedRecipeIds.length === 0) {
-            return;
+    <form
+      className={styles.container}
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (selectedRecipeIds.length === 0) {
+          return;
+        }
+
+        void (async () => {
+          const editedCollection = await editCollection(collection.id, {
+            name: collectionName,
+            recipeIds: selectedRecipeIds,
+            visibility,
+            description,
+          });
+
+          if (editedCollection) {
+            onClose();
+            void router.push(`/collections/${editedCollection.id}`);
+          } else {
+            // TODO: Show error message
+            console.error("Failed to edit collection");
           }
-
-          void (async () => {
-            const editedCollection = await editCollection(collection.id, {
-              name: collectionName,
-              recipeIds: selectedRecipeIds,
-              visibility,
-              description,
-            });
-
-            if (editedCollection) {
-              onClose();
-              void router.push(`/collections/${editedCollection.id}`);
-            } else {
-              // TODO: Show error message
-              console.error("Failed to edit collection");
+        })();
+      }}
+    >
+      <h1>
+        <input
+          required
+          minLength={1}
+          className={styles.collectionNameInput}
+          type="text"
+          value={collectionName}
+          onChange={(e) => {
+            setCollectionName(e.target.value);
+          }}
+          placeholder={t("home:collections.newCollectionNamePlaceholder")}
+        />
+      </h1>
+      <div>
+        <label htmlFor={descriptionId}>
+          {t("home:collections.descriptionLabel")}
+        </label>
+        <textarea
+          className={styles.descriptionInput}
+          id={descriptionId}
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
+          placeholder={t("home:collections.descriptionPlaceholder")}
+        />
+      </div>
+      <div className={styles.visibilityContainer}>
+        <label htmlFor={visibilitySelectId}>
+          {t("home:collections.newCollectionVisibility")}
+        </label>
+        <Select
+          inputId={visibilitySelectId}
+          value={{
+            value: visibility,
+            label: visibilityLabelMap[visibility],
+          }}
+          options={Object.entries(RecipeCollectionVisibility).map(
+            ([, value]) => ({
+              label: visibilityLabelMap[value],
+              value,
+            }),
+          )}
+          onChange={(option) => {
+            if (option) {
+              setVisibility(option.value);
             }
-          })();
-        }}
-      >
-        <h1>
-          <input
-            required
-            minLength={1}
-            className={styles.collectionNameInput}
-            type="text"
-            value={collectionName}
-            onChange={(e) => {
-              setCollectionName(e.target.value);
-            }}
-            placeholder={t("home:collections.newCollectionNamePlaceholder")}
-          />
-        </h1>
-        <div>
-          <label htmlFor={descriptionId}>
-            {t("home:collections.descriptionLabel")}
-          </label>
-          <textarea
-            className={styles.descriptionInput}
-            id={descriptionId}
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-            placeholder={t("home:collections.descriptionPlaceholder")}
-          />
+          }}
+        />
+      </div>
+      {hasAnyRecipes && (
+        <input
+          className={styles.search}
+          type="text"
+          placeholder={t("home:collections.searchPlaceholder")}
+          value={recipeFilter}
+          onChange={(e) => {
+            setRecipeFilter(e.target.value);
+          }}
+        />
+      )}
+      {recipes.length > 0 ? (
+        <RecipeSelectionGrid
+          recipes={recipes.map((r) => ({
+            id: r.id,
+            name: r.name,
+            coverImageUrl: r.coverImageUrl,
+            visibility: r.visibility,
+            isSelected: selectedRecipeIds.includes(r.id),
+            onClickSelect: () => {
+              setSelectedRecipeIds((selectedRecipes) => {
+                if (selectedRecipes.includes(r.id)) {
+                  return selectedRecipes.filter((id) => id !== r.id);
+                } else {
+                  return [...selectedRecipes, r.id];
+                }
+              });
+            },
+          }))}
+        />
+      ) : (
+        <div className={styles.noResultsContainer}>
+          {hasAnyRecipes ? (
+            <span>
+              {t("home:collections.noRecipesFound", { query: recipeFilter })}
+            </span>
+          ) : (
+            <>
+              <span>{t("home:collections.noRecipesExist")}</span>
+              <LinkButton href="/recipe/new">
+                {t("home:collections.noRecipesExistCreate")}
+              </LinkButton>
+            </>
+          )}
         </div>
-        <div className={styles.visibilityContainer}>
-          <label htmlFor={visibilitySelectId}>
-            {t("home:collections.newCollectionVisibility")}
-          </label>
-          <Select
-            inputId={visibilitySelectId}
-            value={{
-              value: visibility,
-              label: visibilityLabelMap[visibility],
-            }}
-            options={Object.entries(RecipeCollectionVisibility).map(
-              ([, value]) => ({
-                label: visibilityLabelMap[value],
-                value,
-              }),
-            )}
-            onChange={(option) => {
-              if (option) {
-                setVisibility(option.value);
-              }
-            }}
-          />
-        </div>
-        {hasAnyRecipes && (
-          <input
-            className={styles.search}
-            type="text"
-            placeholder={t("home:collections.searchPlaceholder")}
-            value={recipeFilter}
-            onChange={(e) => {
-              setRecipeFilter(e.target.value);
-            }}
-          />
-        )}
-        {recipes.length > 0 ? (
-          <RecipeSelectionGrid
-            recipes={recipes.map((r) => ({
-              id: r.id,
-              name: r.name,
-              coverImageUrl: r.coverImageUrl,
-              visibility: r.visibility,
-              isSelected: selectedRecipeIds.includes(r.id),
-              onClickSelect: () => {
-                setSelectedRecipeIds((selectedRecipes) => {
-                  if (selectedRecipes.includes(r.id)) {
-                    return selectedRecipes.filter((id) => id !== r.id);
-                  } else {
-                    return [...selectedRecipes, r.id];
-                  }
-                });
-              },
-            }))}
-          />
-        ) : (
-          <div className={styles.noResultsContainer}>
-            {hasAnyRecipes ? (
-              <span>
-                {t("home:collections.noRecipesFound", { query: recipeFilter })}
-              </span>
-            ) : (
-              <>
-                <span>{t("home:collections.noRecipesExist")}</span>
-                <LinkButton href="/recipe/new">
-                  {t("home:collections.noRecipesExistCreate")}
-                </LinkButton>
-              </>
-            )}
-          </div>
-        )}
-        {!validVisibilityConfiguration && (
-          <ErrorText>
-            {/* TODO: Different message if collection is already public and the user is trying to add private recipes */}
+      )}
+      {!validVisibilityConfiguration && (
+        <ErrorText>
+          {/* TODO: Different message if collection is already public and the user is trying to add private recipes */}
+          {
             {
-              {
-                [RecipeCollectionVisibility.PRIVATE]: null,
-                [RecipeCollectionVisibility.PUBLIC]: t(
-                  "collections:edit.invalidVisibilityConfiguration.public",
-                  {
-                    violatingRecipes: violatingRecipes.map((r) => r.name),
-                  },
-                ),
-                [RecipeCollectionVisibility.UNLISTED]: t(
-                  "collections:edit.invalidVisibilityConfiguration.unlisted",
-                  {
-                    violatingRecipes: violatingRecipes.map((r) => r.name),
-                  },
-                ),
-              }[visibility]
-            }
-          </ErrorText>
-        )}
-        <div className={styles.buttonsContainer}>
-          <Button variant="secondary" onClick={onClose}>
-            {t("common:actions.cancel")}
-          </Button>
-          <Button
-            type="submit"
-            disabled={
-              selectedRecipeIds.length === 0 ||
-              !collectionName ||
-              !validVisibilityConfiguration
-            }
-          >
-            {t("common:actions.save")}
-          </Button>
-        </div>
-      </form>
-    </>
+              [RecipeCollectionVisibility.PRIVATE]: null,
+              [RecipeCollectionVisibility.PUBLIC]: t(
+                "collections:edit.invalidVisibilityConfiguration.public",
+                {
+                  violatingRecipes: violatingRecipes.map((r) => r.name),
+                },
+              ),
+              [RecipeCollectionVisibility.UNLISTED]: t(
+                "collections:edit.invalidVisibilityConfiguration.unlisted",
+                {
+                  violatingRecipes: violatingRecipes.map((r) => r.name),
+                },
+              ),
+            }[visibility]
+          }
+        </ErrorText>
+      )}
+      <div className={styles.buttonsContainer}>
+        <Button variant="secondary" onClick={onClose}>
+          {t("common:actions.cancel")}
+        </Button>
+        <Button
+          type="submit"
+          disabled={
+            selectedRecipeIds.length === 0 ||
+            !collectionName ||
+            !validVisibilityConfiguration
+          }
+        >
+          {t("common:actions.save")}
+        </Button>
+      </div>
+    </form>
   );
 };

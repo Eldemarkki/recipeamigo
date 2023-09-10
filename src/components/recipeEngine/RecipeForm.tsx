@@ -195,13 +195,13 @@ export const RecipeForm = ({
     <div className={styles.container}>
       <Dialog
         open={dialogOpen}
-        onClickOutside={() => {
+        closeDialog={() => {
           setDialogOpen(false);
         }}
         overflowVisible // TODO: This is broken if user adds a lot of tags
+        title={t("edit.settings.title")}
       >
         <div className={styles.dialogContent}>
-          <h1>{t("edit.settings.title")}</h1>
           <div className={styles.settingsContainer}>
             <div className={styles.recipeSettingsContainer}>
               <span>{t("edit.timeEstimateTitle")}</span>

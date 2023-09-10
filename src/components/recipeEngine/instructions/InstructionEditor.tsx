@@ -42,9 +42,10 @@ export const InstructionEditor = ({
     <>
       <Dialog
         open={isDialogOpen}
-        onClickOutside={() => {
+        closeDialog={() => {
           setIsDialogOpen(false);
         }}
+        title={t("recipeView:edit.misc.countdown.newCountdownTitle")}
       >
         <NewCountdownDialog editor={editor} setIsDialogOpen={setIsDialogOpen} />
       </Dialog>

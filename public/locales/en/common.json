@@ -24,5 +24,8 @@
   },
   "recipeFilter": {
     "searchPlaceholder": "Search"
+  },
+  "dialog": {
+    "closeLabel": "Close"
   }
 }

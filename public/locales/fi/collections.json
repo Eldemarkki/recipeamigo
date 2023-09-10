@@ -1,5 +1,6 @@
 {
   "new": {
+    "title": "Uusi kokoelma",
     "invalidVisibilityConfiguration": {
       "public": "Koska olet luomassa uutta julkista kokoelmaa, kaikkien reseptien tulee olla julkisia. Seuraavat reseptit eivät ole julkisia: {{violatingRecipes, list}}",
       "unlisted": "Koska olet luomassa uutta piilotettua kokoelmaa, kaikkien reseptien tulee olla joko julkisia tai piilotettuja. Seuraavat reseptit ovat yksityisiä: {{violatingRecipes, list}}"

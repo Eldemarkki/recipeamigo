@@ -36,22 +36,20 @@ export const EditableIngredientListItem = ({
     >
       <Dialog
         open={isEditing}
-        onClickOutside={() => {
+        closeDialog={() => {
           setIsEditing(false);
         }}
         overflowVisible
+        title={t("recipeView:edit.editingIngredientTitle", {
+          ingredientName: getIngredientText(
+            ingredient.name,
+            null,
+            null,
+            false,
+            i18n.language as Locale,
+          ),
+        })}
       >
-        <h1>
-          {t("recipeView:edit.editingIngredientTitle", {
-            ingredientName: getIngredientText(
-              ingredient.name,
-              null,
-              null,
-              false,
-              i18n.language as Locale,
-            ),
-          })}
-        </h1>
         <IngredientForm
           type="edit"
           addIngredient={(newIngredient) => {

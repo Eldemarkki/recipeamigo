@@ -86,10 +86,11 @@ export const NewCollectionDialog = ({
   return (
     <Dialog
       open={isOpen}
-      onClickOutside={() => {
+      closeDialog={() => {
         setIsOpen(false);
       }}
       maxWidth={1200}
+      title={t("collections:new.title")}
     >
       <form
         className={styles.container}

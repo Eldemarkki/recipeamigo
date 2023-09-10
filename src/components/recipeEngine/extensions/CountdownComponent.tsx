@@ -67,31 +67,41 @@ export const CountdownComponent = (
           unstyled
           className={styles.dialog}
           maxWidth={null}
+          showCloseButton={false}
         >
-          <span className={styles.dialogText}>{formattedTimeLeft}</span>
-          {hasRanOnce && secondsLeft !== 0 && (
-            <CircularButton
-              style={{ display: "inline" }}
-              onClick={() => {
-                setIsPaused(!isPaused);
-              }}
-            >
-              {isPaused ? (
-                <PlayIcon style={{ pointerEvents: "none" }} />
-              ) : (
-                <PauseIcon style={{ pointerEvents: "none" }} />
-              )}
-            </CircularButton>
-          )}
-          <div className={styles.dialogCloseButton}>
-            <CircularButton
-              onClick={() => {
-                void screenfull.exit();
-                setIsDialogOpen(false);
-              }}
-            >
-              <Cross1Icon />
-            </CircularButton>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <span className={styles.dialogText}>{formattedTimeLeft}</span>
+            {hasRanOnce && secondsLeft !== 0 && (
+              <CircularButton
+                style={{ display: "inline" }}
+                onClick={() => {
+                  setIsPaused(!isPaused);
+                }}
+              >
+                {isPaused ? (
+                  <PlayIcon style={{ pointerEvents: "none" }} />
+                ) : (
+                  <PauseIcon style={{ pointerEvents: "none" }} />
+                )}
+              </CircularButton>
+            )}
+            <div className={styles.dialogCloseButton}>
+              <CircularButton
+                onClick={() => {
+                  setIsDialogOpen(false);
+                  void screenfull.exit();
+                }}
+              >
+                <Cross1Icon />
+              </CircularButton>
+            </div>
           </div>
         </Dialog>
       )}
@@ -129,10 +139,10 @@ export const CountdownComponent = (
           <CircularButton>
             <EnterFullScreenIcon
               onClick={() => {
+                setIsDialogOpen(true);
                 if (screenfull.isEnabled) {
                   void screenfull.request();
                 }
-                setIsDialogOpen(true);
               }}
             />
           </CircularButton>
