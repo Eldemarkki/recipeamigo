@@ -2,12 +2,9 @@ import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../components/recipeEngine/RecipeForm";
 import type { createRecipe } from "../../../database/recipes";
 import type { createRecipeSchema } from "../../../handlers/recipes/recipesPostHandler";
+import { useErrorToast } from "../../../hooks/useErrorToast";
 import { getUserFromRequest } from "../../../utils/auth";
-import {
-  HttpError,
-  isKnownHttpStatusCode,
-  showErrorToast,
-} from "../../../utils/errors";
+import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import type { GetServerSideProps } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -51,7 +48,7 @@ const saveRecipe = async (
 
 export default function NewRecipePage() {
   const router = useRouter();
-
+  const { showErrorToast } = useErrorToast();
   const { t } = useTranslation("errors");
 
   return (
@@ -63,7 +60,7 @@ export default function NewRecipePage() {
             const savedRecipe = await saveRecipe(recipe, coverImage);
             void router.push("/recipe/" + savedRecipe.id);
           } catch (e) {
-            showErrorToast(t, e, {
+            showErrorToast(e, {
               400: t("createRecipe.400"),
             });
           }

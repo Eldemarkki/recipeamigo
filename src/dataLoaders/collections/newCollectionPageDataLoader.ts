@@ -8,6 +8,7 @@ export const newCollectionPageDataLoader = {
     "collections",
     "home",
     "recipeView",
+    "errors",
   ],
   handler: async (user) => {
     return {

@@ -2,14 +2,10 @@ import { PageWrapper } from "../../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
 import { getSingleRecipe } from "../../../../database/recipes";
 import type { editRecipeSchema } from "../../../../handlers/recipes/recipePutHandler";
+import { useErrorToast } from "../../../../hooks/useErrorToast";
 import { getUserFromRequest } from "../../../../utils/auth";
-import {
-  HttpError,
-  isKnownHttpStatusCode,
-  showErrorToast,
-} from "../../../../utils/errors";
+import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import type { z } from "zod";
@@ -56,7 +52,7 @@ export default function EditRecipePage({
   recipe: initialRecipe,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const { t } = useTranslation("errors");
+  const { showErrorToast } = useErrorToast();
 
   return (
     <PageWrapper>
@@ -68,7 +64,7 @@ export default function EditRecipePage({
             await editRecipe(initialRecipe.id, recipe, coverImage);
             void router.push("/recipe/" + initialRecipe.id);
           } catch (error) {
-            showErrorToast(t, error);
+            showErrorToast(error);
           }
         }}
       />

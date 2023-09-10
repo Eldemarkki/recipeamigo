@@ -8,8 +8,10 @@ import { newCollectionPageDataLoader } from "../../../dataLoaders/collections/ne
 import { loadProps } from "../../../dataLoaders/loadProps";
 import type { createCollection as createCollectionApi } from "../../../database/collections";
 import type { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
+import { useErrorToast } from "../../../hooks/useErrorToast";
 import { useLoadingState } from "../../../hooks/useLoadingState";
 import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
+import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -30,7 +32,11 @@ const createCollection = async (
   });
 
   if (!response.ok) {
-    return null;
+    if (isKnownHttpStatusCode(response.status)) {
+      throw new HttpError(response.statusText, response.status);
+    } else {
+      throw new Error("Error with status " + response.status);
+    }
   }
 
   const data = (await response.json()) as Awaited<
@@ -45,6 +51,7 @@ export default function NewCollectionPage({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { t } = useTranslation(["home", "collections"]);
   const router = useRouter();
+  const { showErrorToast } = useErrorToast();
 
   const [collectionName, setCollectionName] = useState("");
   const [description, setDescription] = useState("");
@@ -98,16 +105,9 @@ export default function NewCollectionPage({
                 visibility,
                 description,
               });
-
-              if (collection) {
-                void router.push(`/collections/${collection.id}`);
-              } else {
-                // TODO: Show some notification to the user.
-                console.error("Failed to create collection");
-              }
-            } catch {
-              // TODO: Show some notification to the user.
-              console.error("Failed to create collection");
+              void router.push(`/collections/${collection.id}`);
+            } catch (error) {
+              showErrorToast(error);
             }
             stopLoading();
           })();
