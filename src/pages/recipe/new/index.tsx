@@ -47,7 +47,6 @@ export default function NewRecipePage() {
       <RecipeForm
         type="new"
         onSubmit={async (recipe, coverImage) => {
-          // TODO: Show loading indicator while saving
           const savedRecipe = await saveRecipe(recipe, coverImage);
           if (savedRecipe) {
             void router.push("/recipe/" + savedRecipe.id);

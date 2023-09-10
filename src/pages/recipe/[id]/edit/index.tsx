@@ -49,7 +49,6 @@ export default function EditRecipePage({
         type="edit"
         initialRecipe={initialRecipe}
         onSubmit={async (recipe, coverImage) => {
-          // TODO: Show loading indicator while saving
           try {
             await editRecipe(initialRecipe.id, recipe, coverImage);
             void router.push("/recipe/" + initialRecipe.id);

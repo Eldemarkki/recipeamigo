@@ -1,5 +1,12 @@
+import { Spinner } from "../spinner/Spinner";
 import styles from "./Button.module.css";
-import React, { forwardRef, type ReactNode } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 export type ButtonVariant = "primary" | "secondary";
 export type ButtonSize = "small" | "medium";
@@ -9,6 +16,7 @@ export type RequiredButtonProps = {
   size: ButtonSize;
   rectangular?: boolean;
   icon?: ReactNode;
+  loading?: boolean;
 };
 
 export type ButtonProps = Partial<RequiredButtonProps>;
@@ -23,27 +31,46 @@ export const Button = forwardRef<
       size = "medium",
       type = "button",
       rectangular = false,
+      loading = false,
       children,
       ...props
     },
     ref,
-  ) => (
-    <button
-      {...props}
-      ref={ref}
-      type={type}
-      className={[
-        props.className,
-        styles.buttonComponent,
-        styles[variant],
-        styles["size-" + size],
-        rectangular ? styles.rectangular : "",
-      ].join(" ")}
-    >
-      {props.icon}
-      {children}
-    </button>
-  ),
+  ) => {
+    const ref2 = useRef<HTMLButtonElement>(null);
+    const [width, setWidth] = useState(0);
+
+    const refToUse = ref ?? ref2;
+    useEffect(() => {
+      // Maintain the width of the button when the loading state changes.
+      if ("current" in refToUse && refToUse.current?.offsetWidth) {
+        setWidth(refToUse.current.offsetWidth);
+      }
+    }, [refToUse]);
+
+    return (
+      <button
+        {...props}
+        disabled={props.disabled || loading}
+        ref={refToUse}
+        type={type}
+        className={[
+          props.className,
+          styles.buttonComponent,
+          styles[variant],
+          styles["size-" + size],
+          rectangular ? styles.rectangular : "",
+        ].join(" ")}
+        style={{
+          ...props.style,
+          width: props.style?.width ?? (width || undefined),
+        }}
+      >
+        {props.icon}
+        {loading ? <Spinner /> : children}
+      </button>
+    );
+  },
 );
 
 Button.displayName = "Button";

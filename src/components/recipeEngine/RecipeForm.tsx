@@ -1,6 +1,7 @@
 import type { getSingleRecipe } from "../../database/recipes";
 import type { editRecipeSchema } from "../../handlers/recipes/recipePutHandler";
 import type { createRecipeSchema } from "../../handlers/recipes/recipesPostHandler";
+import { useLoadingState } from "../../hooks/useLoadingState";
 import { Select } from "../Select";
 import { Button } from "../button/Button";
 import { Dialog } from "../dialog/Dialog";
@@ -46,6 +47,7 @@ export const RecipeForm = ({
   type,
 }: RecipeFormProps) => {
   const { t } = useTranslation(["recipeView", "common"]);
+  const { isLoading, startLoading, stopLoading } = useLoadingState();
 
   const [name, setName] = useState(initialRecipe?.name ?? "");
   const [description, setDescription] = useState(
@@ -127,8 +129,8 @@ export const RecipeForm = ({
 
   const handleSubmit = async (e: MouseEvent) => {
     e.preventDefault();
-    // TODO: Show loading indicator while saving
     try {
+      startLoading();
       const baseRecipe = {
         name,
         description,
@@ -183,6 +185,8 @@ export const RecipeForm = ({
       // TODO: Show a notification to the user that the recipe failed to save.
       console.log("Failed to save recipe");
     }
+
+    stopLoading();
   };
 
   const visibilityLabelMap: Record<RecipeVisibility, string> = {
@@ -442,6 +446,7 @@ export const RecipeForm = ({
             style={{ padding: "0.5rem 1rem" }}
             type="submit"
             onClick={(e) => void handleSubmit(e)}
+            loading={isLoading}
           >
             {type === "edit" ? t("edit.saveRecipe") : t("createRecipe")}
           </Button>

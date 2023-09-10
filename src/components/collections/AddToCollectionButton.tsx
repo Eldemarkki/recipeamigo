@@ -58,9 +58,7 @@ export const AddToCollectionButton = ({
       >
         <AddRecipeToCollectionDialog
           collections={collections}
-          onAdd={(ids) => {
-            void addRecipeToCollections(ids);
-          }}
+          onAdd={addRecipeToCollections}
           recipeVisibility={recipeVisibility}
           selectedCollectionIds={selectedRecipeCollections}
         />

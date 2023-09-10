@@ -1,6 +1,7 @@
 import type { createCollection as createCollectionApi } from "../../../database/collections";
 import type { getAllRecipesForUser } from "../../../database/recipes";
 import type { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
+import { useLoadingState } from "../../../hooks/useLoadingState";
 import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
 import { LinkButton } from "../../LinkButton";
 import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
@@ -57,6 +58,7 @@ export const NewCollectionDialog = ({
     RecipeCollectionVisibility.PRIVATE,
   );
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([]);
+  const { isLoading, startLoading, stopLoading } = useLoadingState();
 
   const selectedRecipes = allRecipes.filter((r) =>
     selectedRecipeIds.includes(r.id),
@@ -101,19 +103,26 @@ export const NewCollectionDialog = ({
           }
 
           void (async () => {
-            const collection = await createCollection({
-              name: collectionName,
-              recipeIds: selectedRecipeIds,
-              visibility,
-              description,
-            });
+            startLoading();
+            try {
+              const collection = await createCollection({
+                name: collectionName,
+                recipeIds: selectedRecipeIds,
+                visibility,
+                description,
+              });
 
-            if (collection) {
-              void router.push(`/collections/${collection.id}`);
-            } else {
+              if (collection) {
+                void router.push(`/collections/${collection.id}`);
+              } else {
+                // TODO: Show some notification to the user.
+                console.error("Failed to create collection");
+              }
+            } catch {
               // TODO: Show some notification to the user.
               console.error("Failed to create collection");
             }
+            stopLoading();
           })();
         }}
       >
@@ -241,6 +250,7 @@ export const NewCollectionDialog = ({
             !collectionName ||
             !validVisibilityConfiguration
           }
+          loading={isLoading}
         >
           {t("collections.createCollection", {
             count: selectedRecipeIds.length,

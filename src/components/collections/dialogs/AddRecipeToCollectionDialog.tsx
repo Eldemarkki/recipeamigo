@@ -1,3 +1,4 @@
+import { useLoadingState } from "../../../hooks/useLoadingState";
 import { Button } from "../../button/Button";
 import { InfoDisclaimer } from "../../disclaimers/InfoDisclaimer";
 import styles from "./AddRecipeToCollectionDialog.module.css";
@@ -8,7 +9,7 @@ import { useId, useState } from "react";
 
 export type AddRecipeToCollectionDialogProps = {
   collections: RecipeCollection[];
-  onAdd: (collectionIds: string[]) => void;
+  onAdd: (collectionIds: string[]) => Promise<void>;
   recipeVisibility: RecipeVisibility;
   selectedCollectionIds: string[];
 };
@@ -47,6 +48,7 @@ export const AddRecipeToCollectionDialog = ({
   selectedCollectionIds: initialSelectedCollectionIds,
 }: AddRecipeToCollectionDialogProps) => {
   const { t } = useTranslation("recipeView");
+  const { isLoading, startLoading, stopLoading } = useLoadingState();
   const [selectedCollectionIds, setSelectedCollectionIds] = useState(
     initialSelectedCollectionIds,
   );
@@ -67,6 +69,17 @@ export const AddRecipeToCollectionDialog = ({
     [RecipeVisibility.UNLISTED]: t("collections.hiddenDisclaimers.unlisted"),
     [RecipeVisibility.PRIVATE]: t("collections.hiddenDisclaimers.private"),
   }[recipeVisibility];
+
+  const handleAdd = async () => {
+    startLoading();
+    try {
+      await onAdd(selectedCollectionIds);
+    } catch (err) {
+      // TODO: show error notification
+      console.error(err);
+    }
+    stopLoading();
+  };
 
   return (
     <>
@@ -94,8 +107,9 @@ export const AddRecipeToCollectionDialog = ({
       </ul>
       <Button
         disabled={!isDifferent}
+        loading={isLoading}
         onClick={() => {
-          onAdd(selectedCollectionIds);
+          void handleAdd();
         }}
       >
         {addedToCollections.length > 0 && removedFromCollections.length > 0

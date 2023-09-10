@@ -2,6 +2,7 @@ import type { getCollection } from "../../../database/collections";
 import type { editCollection as editCollectionApi } from "../../../database/collections";
 import type { getAllRecipesForUser } from "../../../database/recipes";
 import type { editCollectionSchema } from "../../../handlers/collections/collectionsIdPutHandler";
+import { useLoadingState } from "../../../hooks/useLoadingState";
 import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
 import { LinkButton } from "../../LinkButton";
 import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
@@ -60,6 +61,7 @@ export const CollectionEditDialog = ({
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>(
     collection.RecipesOnCollections.map((r) => r.recipeId),
   );
+  const { isLoading, startLoading, stopLoading } = useLoadingState();
 
   const selectedRecipes = allRecipes.filter((r) =>
     selectedRecipeIds.includes(r.id),
@@ -102,20 +104,26 @@ export const CollectionEditDialog = ({
         }
 
         void (async () => {
-          const editedCollection = await editCollection(collection.id, {
-            name: collectionName,
-            recipeIds: selectedRecipeIds,
-            visibility,
-            description,
-          });
+          startLoading();
+          try {
+            const editedCollection = await editCollection(collection.id, {
+              name: collectionName,
+              recipeIds: selectedRecipeIds,
+              visibility,
+              description,
+            });
 
-          if (editedCollection) {
-            onClose();
-            void router.push(`/collections/${editedCollection.id}`);
-          } else {
-            // TODO: Show error message
+            if (editedCollection) {
+              onClose();
+              void router.push(`/collections/${editedCollection.id}`);
+            } else {
+              // TODO: Show error message
+              console.error("Failed to edit collection");
+            }
+          } catch {
             console.error("Failed to edit collection");
           }
+          stopLoading();
         })();
       }}
     >
@@ -248,6 +256,7 @@ export const CollectionEditDialog = ({
             !collectionName ||
             !validVisibilityConfiguration
           }
+          loading={isLoading}
         >
           {t("common:actions.save")}
         </Button>
