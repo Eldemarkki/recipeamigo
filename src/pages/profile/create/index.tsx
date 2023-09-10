@@ -84,7 +84,7 @@ export default function CreateProfilePage() {
             pattern="[a-zA-Z0-9_]+"
             required
           />
-          <Button>{t("profile:createProfileButton")}</Button>
+          <Button type="submit">{t("profile:createProfileButton")}</Button>
         </form>
       </div>
     </div>
