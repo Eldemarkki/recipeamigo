@@ -1,16 +1,18 @@
+import { LinkButton } from "../../../components/LinkButton";
+import { RecipeSelectionGrid } from "../../../components/RecipeSelectionGrid";
+import { Select } from "../../../components/Select";
+import { Button } from "../../../components/button/Button";
+import { ErrorText } from "../../../components/error/ErrorText";
+import { PageWrapper } from "../../../components/misc/PageWrapper";
+import { newCollectionPageDataLoader } from "../../../dataLoaders/collections/newCollectionPageDataLoader";
+import { loadProps } from "../../../dataLoaders/loadProps";
 import type { createCollection as createCollectionApi } from "../../../database/collections";
-import type { getAllRecipesForUser } from "../../../database/recipes";
 import type { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
 import { useLoadingState } from "../../../hooks/useLoadingState";
 import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
-import { LinkButton } from "../../LinkButton";
-import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
-import { Select } from "../../Select";
-import { Button } from "../../button/Button";
-import { Dialog } from "../../dialog/Dialog";
-import { ErrorText } from "../../error/ErrorText";
-import styles from "./NewCollectionDialog.module.css";
+import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
@@ -38,17 +40,9 @@ const createCollection = async (
   return data;
 };
 
-export type NewCollectionDialogProps = {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-  allRecipes: Awaited<ReturnType<typeof getAllRecipesForUser>>;
-};
-
-export const NewCollectionDialog = ({
-  isOpen,
-  setIsOpen,
+export default function NewCollectionPage({
   allRecipes,
-}: NewCollectionDialogProps) => {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { t } = useTranslation(["home", "collections"]);
   const router = useRouter();
 
@@ -86,14 +80,7 @@ export const NewCollectionDialog = ({
     isValidVisibilityConfiguration(visibility, selectedRecipes);
 
   return (
-    <Dialog
-      open={isOpen}
-      closeDialog={() => {
-        setIsOpen(false);
-      }}
-      maxWidth={1200}
-      title={t("collections:new.title")}
-    >
+    <PageWrapper title={t("collections:new.title")}>
       <form
         className={styles.container}
         onSubmit={(e) => {
@@ -257,6 +244,12 @@ export const NewCollectionDialog = ({
           })}
         </Button>
       </form>
-    </Dialog>
+    </PageWrapper>
   );
-};
+}
+
+export const getServerSideProps = ((ctx) =>
+  loadProps({
+    ctx,
+    ...newCollectionPageDataLoader,
+  })) satisfies GetServerSideProps;

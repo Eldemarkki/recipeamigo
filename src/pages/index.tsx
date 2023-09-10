@@ -1,6 +1,5 @@
 import HeroImage from "../../public/undraw_cooking.svg";
 import { LinkButton } from "../components/LinkButton";
-import { NewCollectionButton } from "../components/NewCollectionButton";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
 import { PageWrapper } from "../components/misc/PageWrapper";
 import { getAllRecipesForUser } from "../database/recipes";
@@ -45,7 +44,9 @@ export default function Home(
             <h1>{t("myRecipes")}</h1>
             <div className={styles.recipesTitleRowButtonContainer}>
               <LinkButton href="/recipe/new">{t("newRecipeButton")}</LinkButton>
-              <NewCollectionButton recipes={props.recipes} />
+              <LinkButton href="/collections/new" variant="secondary">
+                {t("newCollectionButton")}
+              </LinkButton>
             </div>
           </div>
         }
