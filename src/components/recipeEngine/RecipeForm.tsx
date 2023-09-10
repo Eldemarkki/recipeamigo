@@ -129,61 +129,58 @@ export const RecipeForm = ({
 
   const handleSubmit = async (e: MouseEvent) => {
     e.preventDefault();
-    try {
-      startLoading();
-      const baseRecipe = {
-        name,
-        description,
-        ingredientSections: ingredientSections.map((section) => ({
-          ...section,
-          ingredients: section.ingredients.map((ingredient) => ({
-            ...ingredient,
-            unit: ingredient.unit ?? undefined,
-          })),
+
+    startLoading();
+    const baseRecipe = {
+      name,
+      description,
+      ingredientSections: ingredientSections.map((section) => ({
+        ...section,
+        ingredients: section.ingredients.map((ingredient) => ({
+          ...ingredient,
+          unit: ingredient.unit ?? undefined,
         })),
-        instructions,
-        quantity: recipeQuantity,
-        visibility,
-        timeEstimateMinimumMinutes: timeEstimateMin,
-        timeEstimateMaximumMinutes:
-          timeEstimateMax === 0 ? undefined : timeEstimateMax,
-        tags: tags,
-      };
+      })),
+      instructions,
+      quantity: recipeQuantity,
+      visibility,
+      timeEstimateMinimumMinutes: timeEstimateMin,
+      timeEstimateMaximumMinutes:
+        timeEstimateMax === 0 ? undefined : timeEstimateMax,
+      tags: tags,
+    };
 
-      const coverImageFile = coverImage instanceof File ? coverImage : null;
-      if (type === "edit") {
-        const coverImageAction: "remove" | "keep" | "replace" = (() => {
-          if (coverImage === null) {
-            return "keep";
-          } else if ("removed" in coverImage) {
-            return "remove";
-          } else if ("url" in coverImage) {
-            return "keep";
-          } else {
-            return "replace";
-          }
-        })();
+    const coverImageFile = coverImage instanceof File ? coverImage : null;
 
-        await onSubmit(
-          {
-            ...baseRecipe,
-            coverImageAction,
-          },
-          coverImageFile,
-        );
-      } else {
-        await onSubmit(
-          {
-            ...baseRecipe,
-            tags: tags.map((t) => t.text),
-            hasCoverImage: coverImage !== null,
-          },
-          coverImageFile,
-        );
-      }
-    } catch {
-      // TODO: Show a notification to the user that the recipe failed to save.
-      console.log("Failed to save recipe");
+    if (type === "edit") {
+      const coverImageAction: "remove" | "keep" | "replace" = (() => {
+        if (coverImage === null) {
+          return "keep";
+        } else if ("removed" in coverImage) {
+          return "remove";
+        } else if ("url" in coverImage) {
+          return "keep";
+        } else {
+          return "replace";
+        }
+      })();
+
+      await onSubmit(
+        {
+          ...baseRecipe,
+          coverImageAction,
+        },
+        coverImageFile,
+      );
+    } else {
+      await onSubmit(
+        {
+          ...baseRecipe,
+          tags: tags.map((t) => t.text),
+          hasCoverImage: coverImage !== null,
+        },
+        coverImageFile,
+      );
     }
 
     stopLoading();

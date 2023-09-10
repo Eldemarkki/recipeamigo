@@ -3,7 +3,13 @@ import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
 import { getSingleRecipe } from "../../../../database/recipes";
 import type { editRecipeSchema } from "../../../../handlers/recipes/recipePutHandler";
 import { getUserFromRequest } from "../../../../utils/auth";
+import {
+  HttpError,
+  isKnownHttpStatusCode,
+  showErrorToast,
+} from "../../../../utils/errors";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import type { z } from "zod";
@@ -20,6 +26,14 @@ const editRecipe = async (
       "Content-Type": "application/json",
     },
   });
+
+  if (!response.ok) {
+    if (isKnownHttpStatusCode(response.status)) {
+      throw new HttpError(response.statusText, response.status);
+    } else {
+      throw new Error("Error with status " + response.status);
+    }
+  }
 
   const data = (await response.json()) as Awaited<
     ReturnType<typeof editRecipe>
@@ -42,6 +56,7 @@ export default function EditRecipePage({
   recipe: initialRecipe,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const { t } = useTranslation("errors");
 
   return (
     <PageWrapper>
@@ -52,9 +67,8 @@ export default function EditRecipePage({
           try {
             await editRecipe(initialRecipe.id, recipe, coverImage);
             void router.push("/recipe/" + initialRecipe.id);
-          } catch {
-            // TODO: Show a notification to the user that the recipe failed to save.
-            console.log("Failed to save recipe");
+          } catch (error) {
+            showErrorToast(t, error);
           }
         }}
       />
