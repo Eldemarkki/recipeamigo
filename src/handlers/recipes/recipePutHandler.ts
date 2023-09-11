@@ -1,3 +1,4 @@
+import config from "../../config";
 import {
   editRecipe,
   getSingleRecipeWithoutCoverImageUrl,
@@ -7,6 +8,7 @@ import type { Handler } from "../../utils/apiUtils";
 import { RecipeNotFoundError } from "../../utils/errors";
 import { IngredientUnit, RecipeVisibility } from "@prisma/client";
 import { randomUUID } from "crypto";
+import type { PostPolicyResult } from "minio";
 import { z } from "zod";
 
 const newIngredientSchema = z.object({
@@ -106,27 +108,31 @@ export const recipesPutHandler = {
       await s3.removeObject(DEFAULT_BUCKET_NAME, originalRecipe.coverImageName);
     }
 
-    let coverImageUploadUrl: string | undefined = undefined;
-    const newCoverImageName = randomUUID();
-    if (coverImageAction === "replace") {
-      // TODO: Add checks on file size and type
-      coverImageUploadUrl = await s3.presignedPutObject(
-        DEFAULT_BUCKET_NAME,
-        newCoverImageName,
-      );
-    }
+    let coverImageUpload: PostPolicyResult | null = null;
+    let coverImageNameForPrisma: string | null | undefined;
 
-    const coverImageNameForPrisma = {
-      keep: undefined,
-      remove: null,
-      replace: newCoverImageName,
-    }[coverImageAction];
+    if (coverImageAction === "replace") {
+      const newCoverImageName = randomUUID();
+      const policy = s3.newPostPolicy();
+      policy.setKey(newCoverImageName);
+      policy.setBucket(DEFAULT_BUCKET_NAME);
+      policy.setContentLengthRange(0, config.RECIPE_COVER_IMAGE_MAX_SIZE_BYTES);
+      policy.setExpires(
+        new Date(Date.now() + config.RECIPE_COVER_POST_POLICY_EXPIRATION),
+      );
+      coverImageUpload = await s3.presignedPostPolicy(policy);
+      coverImageNameForPrisma = newCoverImageName;
+    } else if (coverImageAction === "remove") {
+      coverImageNameForPrisma = null;
+    } else {
+      coverImageNameForPrisma = undefined;
+    }
 
     const edited = await editRecipe(id, body, coverImageNameForPrisma);
 
     return {
       recipe: edited,
-      coverImageUploadUrl,
+      coverImageUpload,
     };
   },
 } satisfies Handler<z.infer<typeof editRecipeSchema>, { id: string }>;

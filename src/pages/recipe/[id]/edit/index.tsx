@@ -1,10 +1,14 @@
 import { PageWrapper } from "../../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
 import { getSingleRecipe } from "../../../../database/recipes";
-import type { editRecipeSchema } from "../../../../handlers/recipes/recipePutHandler";
+import type {
+  editRecipeSchema,
+  recipesPutHandler,
+} from "../../../../handlers/recipes/recipePutHandler";
 import { useErrorToast } from "../../../../hooks/useErrorToast";
 import { getUserFromRequest } from "../../../../utils/auth";
 import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
+import { formDataFromS3PostPolicy } from "../../../../utils/objectUtils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
@@ -32,18 +36,20 @@ const editRecipe = async (
   }
 
   const data = (await response.json()) as Awaited<
-    ReturnType<typeof editRecipe>
-  > & {
-    coverImageUploadUrl: string;
-  };
+    ReturnType<typeof recipesPutHandler.handler>
+  >;
 
-  if (recipe.coverImageAction === "replace" && coverImage) {
-    await fetch(data.coverImageUploadUrl, {
-      method: "PUT",
-      body: coverImage,
-      headers: {
-        "Content-Type": coverImage.type,
-      },
+  if (
+    recipe.coverImageAction === "replace" &&
+    data.coverImageUpload &&
+    coverImage
+  ) {
+    await fetch(data.coverImageUpload.postURL, {
+      method: "POST",
+      body: formDataFromS3PostPolicy(
+        data.coverImageUpload.formData,
+        coverImage,
+      ),
     });
   }
 };
