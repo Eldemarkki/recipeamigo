@@ -80,5 +80,5 @@
 | 5.9.2023  | 2      | Landing-sivu anonyymeille käyttäjille                                                                         |
 | 7.9.2023  | 1      | Pieniä parannuksia teksteihin                                                                                 |
 | 10.9.2023 | 4      | Sulkemisnappi dialogiin, nappien latausindikaattorit, toast-virheilmoitukset, pieniä parannuksia              |
-| 11.9.2023 | 1      | Rajoita kansikuvan kokoa S3-tasolla                                                                           |
-| Yhteensä  | 147    |                                                                                                               |
+| 11.9.2023 | 2      | Rajoita kansikuvan kokoa S3-tasolla, paranna Markdown-vientiä                                                 |
+| Yhteensä  | 148    |                                                                                                               |
