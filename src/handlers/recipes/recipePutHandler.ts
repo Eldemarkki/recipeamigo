@@ -128,6 +128,10 @@ export const recipesPutHandler = {
       coverImageNameForPrisma = undefined;
     }
 
+    // TODO: Create a callback endpoint for when the upload has completed, and only then save the coverImageName into the database.
+    // Now it's saved even if the upload fails. If the image doesn't exist when the recipe is viewed, it generates these errors:
+    // `upstream image response failed for <url> 404`
+
     const edited = await editRecipe(id, body, coverImageNameForPrisma);
 
     return {

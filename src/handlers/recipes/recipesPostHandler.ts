@@ -60,6 +60,10 @@ export const recipesPostHandler = {
       coverImageUpload = await s3.presignedPostPolicy(policy);
     }
 
+    // TODO: Create a callback endpoint for when the upload has completed, and only then save the coverImageName into the database.
+    // Now it's saved even if the upload fails. If the image doesn't exist when the recipe is viewed, it generates these errors:
+    // `upstream image response failed for <url> 404`
+
     const recipe = await createRecipe(user.userId, body, coverImageName);
 
     return {
