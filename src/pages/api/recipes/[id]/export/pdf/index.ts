@@ -5,7 +5,6 @@ import {
 import { getSingleRecipe } from "../../../../../../database/recipes";
 import { getIngredientText } from "../../../../../../ingredients/ingredientTranslator";
 import { getUserFromRequest } from "../../../../../../utils/auth";
-import { getI18nClient } from "../../../../../../utils/getI18nClient";
 import {
   getInstructionText,
   getTimeEstimateType,
@@ -13,6 +12,8 @@ import {
 } from "../../../../../../utils/recipeUtils";
 import { isLocale, locales } from "../../../../../../utils/stringUtils";
 import type { NextApiHandler } from "next";
+import { i18n } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import PDFDocument from "pdfkit";
 
 const handler = (async (req, res) => {
@@ -43,8 +44,8 @@ const handler = (async (req, res) => {
       return;
     }
 
-    const t = (await getI18nClient(locale))?.t;
-
+    await serverSideTranslations(locale, ["common", "recipeView"]);
+    const t = i18n?.t;
     if (!t) {
       console.log("Failed to get t function");
       res.status(500).end();
@@ -124,7 +125,7 @@ const handler = (async (req, res) => {
     doc.moveDown();
     doc.moveDown();
 
-    doc.fontSize(18).text(t("recipeView:ingredientsTitle"));
+    doc.fontSize(18).text(t("recipeView:ingredients.title"));
     for (const section of recipe.ingredientSections) {
       doc.fontSize(14);
       doc.moveDown();
@@ -147,7 +148,7 @@ const handler = (async (req, res) => {
 
     doc.moveDown();
     doc.moveDown();
-    doc.fontSize(18).text(t("recipeView:instructionsTitle"));
+    doc.fontSize(18).text(t("recipeView:instructions.title"));
     for (const instruction of recipe.instructions) {
       doc.fontSize(12);
       doc.text(
