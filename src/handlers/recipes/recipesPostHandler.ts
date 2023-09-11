@@ -1,9 +1,11 @@
+import config from "../../config";
 import { createRecipe } from "../../database/recipes";
 import { DEFAULT_BUCKET_NAME, s3 } from "../../s3";
 import type { Handler } from "../../utils/apiUtils";
 import { IngredientUnit, RecipeVisibility } from "@prisma/client";
 import type { UUID } from "crypto";
 import { randomUUID } from "crypto";
+import type { PostPolicyResult } from "minio";
 import { z } from "zod";
 
 export const ingredientSchema = z.object({
@@ -43,21 +45,26 @@ export const recipesPostHandler = {
   bodyValidator: createRecipeSchema,
   handler: async (user, body) => {
     let coverImageName: UUID | null = null;
-    let coverImageUploadUrl: string | null = null;
+    let coverImageUpload: PostPolicyResult | null = null;
     if (body.hasCoverImage) {
       coverImageName = randomUUID();
-      // TODO: Add checks on file size and type
-      coverImageUploadUrl = await s3.presignedPutObject(
-        DEFAULT_BUCKET_NAME,
-        coverImageName,
+
+      const policy = s3.newPostPolicy();
+      policy.setKey(coverImageName);
+      policy.setBucket(DEFAULT_BUCKET_NAME);
+      policy.setContentLengthRange(0, config.RECIPE_COVER_IMAGE_MAX_SIZE_BYTES);
+      policy.setExpires(
+        new Date(Date.now() + config.RECIPE_COVER_POST_POLICY_EXPIRATION),
       );
+
+      coverImageUpload = await s3.presignedPostPolicy(policy);
     }
 
     const recipe = await createRecipe(user.userId, body, coverImageName);
 
     return {
       recipe,
-      coverImageUploadUrl,
+      coverImageUpload,
     };
   },
 } satisfies Handler<z.infer<typeof createRecipeSchema>>;

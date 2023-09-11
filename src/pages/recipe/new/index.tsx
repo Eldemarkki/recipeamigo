@@ -1,10 +1,13 @@
 import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../components/recipeEngine/RecipeForm";
-import type { createRecipe } from "../../../database/recipes";
-import type { createRecipeSchema } from "../../../handlers/recipes/recipesPostHandler";
+import type {
+  createRecipeSchema,
+  recipesPostHandler,
+} from "../../../handlers/recipes/recipesPostHandler";
 import { useErrorToast } from "../../../hooks/useErrorToast";
 import { getUserFromRequest } from "../../../utils/auth";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
+import { formDataFromS3PostPolicy } from "../../../utils/objectUtils";
 import type { GetServerSideProps } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -31,15 +34,17 @@ const saveRecipe = async (
     }
   }
 
-  const data = (await response.json()) as {
-    recipe: Awaited<ReturnType<typeof createRecipe>>;
-    coverImageUploadUrl: string;
-  };
+  const data = (await response.json()) as Awaited<
+    ReturnType<typeof recipesPostHandler.handler>
+  >;
 
-  if (data.coverImageUploadUrl) {
-    await fetch(data.coverImageUploadUrl, {
-      method: "PUT",
-      body: coverImage,
+  if (data.coverImageUpload && coverImage) {
+    await fetch(data.coverImageUpload.postURL, {
+      method: "POST",
+      body: formDataFromS3PostPolicy(
+        data.coverImageUpload.formData,
+        coverImage,
+      ),
     });
   }
 

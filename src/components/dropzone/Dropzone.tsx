@@ -1,3 +1,4 @@
+import config from "../../config";
 import { removeDuplicateStrings } from "../../utils/arrayUtils";
 import { DeleteButton } from "../button/DeleteButton";
 import styles from "./Dropzone.module.css";
@@ -39,7 +40,7 @@ export const Dropzone = ({
     accept: {
       "image/*": [".jpeg", ".jpg", ".png"],
     },
-    maxSize: 1024 * 1024 * 5, // 5 MB
+    maxSize: config.RECIPE_COVER_IMAGE_MAX_SIZE_BYTES,
     onDrop: (acceptedFiles, rejections) => {
       if (acceptedFiles.length === 1) {
         setErrors([]);
