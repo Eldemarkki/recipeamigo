@@ -2,14 +2,10 @@ import type { getSingleRecipe } from "../../database/recipes";
 import type { editRecipeSchema } from "../../handlers/recipes/recipePutHandler";
 import type { createRecipeSchema } from "../../handlers/recipes/recipesPostHandler";
 import { useLoadingState } from "../../hooks/useLoadingState";
-import { Select } from "../Select";
 import { Button } from "../button/Button";
-import { Dialog } from "../dialog/Dialog";
 import { Dropzone } from "../dropzone/Dropzone";
-import { NumberInput } from "../forms/NumberInput";
-import { RecipeQuantityPicker } from "../recipeView/RecipeQuantityPicker";
-import { TagSelect } from "../tag/TagSelect";
 import styles from "./RecipeForm.module.css";
+import { RecipeSettingsEditDialog } from "./RecipeSettingsEditDialog";
 import { EditableIngredientList } from "./ingredients/EditableIngredientList";
 import type {
   RawIngredientSection,
@@ -17,9 +13,9 @@ import type {
 } from "./ingredients/IngredientForm";
 import { EditableInstructionList } from "./instructions/EditableInstructionList";
 import { RecipeVisibility } from "@prisma/client";
-import { Trans, useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 import type { MouseEvent } from "react";
-import { useId, useState } from "react";
+import { useState } from "react";
 import type { z } from "zod";
 
 export type RecipeFormProps = {
@@ -124,9 +120,6 @@ export const RecipeForm = ({
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const visibilityId = useId();
-  const tagSelectId = useId();
-
   const handleSubmit = async (e: MouseEvent) => {
     e.preventDefault();
 
@@ -186,109 +179,22 @@ export const RecipeForm = ({
     stopLoading();
   };
 
-  const visibilityLabelMap: Record<RecipeVisibility, string> = {
-    [RecipeVisibility.PRIVATE]: t("recipeVisibility.private"),
-    [RecipeVisibility.PUBLIC]: t("recipeVisibility.public"),
-    [RecipeVisibility.UNLISTED]: t("recipeVisibility.unlisted"),
-  };
-
   return (
     <div className={styles.container}>
-      <Dialog
-        open={dialogOpen}
-        closeDialog={() => {
-          setDialogOpen(false);
-        }}
-        overflowVisible // TODO: This is broken if user adds a lot of tags
-        title={t("edit.settings.title")}
-      >
-        <div className={styles.dialogContent}>
-          <div className={styles.settingsContainer}>
-            <div className={styles.recipeSettingsContainer}>
-              <span>{t("edit.timeEstimateTitle")}</span>
-              {/* TODO: Allow empty value (now it's just 0 if user tries to clear all) */}
-              <div>
-                <Trans i18nKey="recipeView:edit.timeEstimate">
-                  <NumberInput
-                    value={timeEstimateMin}
-                    onChange={setTimeEstimateMin}
-                    min={0}
-                    style={{
-                      width: "3rem",
-                      textAlign: "center",
-                    }}
-                  />
-                  <span>min </span>
-                  <span>to </span>
-                  <NumberInput
-                    value={timeEstimateMax}
-                    onChange={setTimeEstimateMax}
-                    min={0}
-                    style={{
-                      width: "3rem",
-                      textAlign: "center",
-                    }}
-                  />
-                  <span>min</span>
-                </Trans>
-              </div>
-            </div>
-            <RecipeQuantityPicker
-              quantity={recipeQuantity}
-              onChange={setRecipeQuantity}
-            />
-            <div className={styles.recipeSettingsContainer}>
-              <label htmlFor={visibilityId}>{t("edit.visibility")}</label>
-              <Select
-                id={visibilityId}
-                options={[
-                  {
-                    label: t("recipeVisibility.private"),
-                    value: RecipeVisibility.PRIVATE,
-                  },
-                  {
-                    label: t("recipeVisibility.public"),
-                    value: RecipeVisibility.PUBLIC,
-                  },
-                  {
-                    label: t("recipeVisibility.unlisted"),
-                    value: RecipeVisibility.UNLISTED,
-                  },
-                ]}
-                value={{
-                  label: visibilityLabelMap[visibility],
-                  value: visibility,
-                }}
-                onChange={(option) => {
-                  if (option) {
-                    setVisibility(option.value);
-                  }
-                }}
-              />
-            </div>
-            <div className={styles.tagsContainer}>
-              <label htmlFor={tagSelectId}>
-                {t("edit.settings.tagsLabel")}
-              </label>
-              <TagSelect
-                id={tagSelectId}
-                tags={tags.map((t) => t.text)}
-                setTags={(newTags) => {
-                  setTags(newTags.map((t) => ({ text: t })));
-                }}
-              />
-            </div>
-          </div>
-          <Button
-            className={styles.settingsSaveButton}
-            onClick={() => {
-              setDialogOpen(false);
-            }}
-          >
-            {t("common:actions.save")}
-          </Button>
-        </div>
-      </Dialog>
+      <RecipeSettingsEditDialog
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        recipeQuantity={recipeQuantity}
+        setRecipeQuantity={setRecipeQuantity}
+        tags={tags}
+        setTags={setTags}
+        visibility={visibility}
+        setVisibility={setVisibility}
+        timeEstimateMin={timeEstimateMin}
+        setTimeEstimateMin={setTimeEstimateMin}
+        timeEstimateMax={timeEstimateMax}
+        setTimeEstimateMax={setTimeEstimateMax}
+      />
       {/* TODO: Add h1 tag somewhere*/}
       <main className={styles.mainContainer}>
         <div className={styles.splitContainer}>

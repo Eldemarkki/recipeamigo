@@ -1,0 +1,30 @@
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+}
+
+.settingsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1 1 auto;
+}
+
+.recipeSettingsContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.settingsSaveButton {
+  align-self: flex-end;
+}
