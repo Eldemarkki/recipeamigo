@@ -39,7 +39,7 @@ model Instruction {
   order       Int
   description String
   recipeId    String
-  recipe      Recipe @relation(fields: [recipeId], references: [id])
+  recipe      Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@unique([recipeId, order])
 }
@@ -49,7 +49,7 @@ model IngredientSection {
   name        String
   order       Int
   recipeId    String
-  recipe      Recipe       @relation(fields: [recipeId], references: [id])
+  recipe      Recipe       @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   ingredients Ingredient[]
 
   @@unique([recipeId, order])
@@ -61,7 +61,7 @@ model Ingredient {
   order               Int
   quantity            Float
   unit                IngredientUnit?
-  ingredientSection   IngredientSection @relation(fields: [ingredientSectionId], references: [id])
+  ingredientSection   IngredientSection @relation(fields: [ingredientSectionId], references: [id], onDelete: Cascade)
   ingredientSectionId String
   isOptional          Boolean           @default(false)
 
@@ -101,7 +101,7 @@ model UserProfile {
 }
 
 model Like {
-  recipe    Recipe      @relation(fields: [recipeId], references: [id])
+  recipe    Recipe      @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId  String
   user      UserProfile @relation(fields: [userId], references: [clerkId])
   userId    String
@@ -112,7 +112,7 @@ model Like {
 
 model Tag {
   text     String
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId String
   order    Int
 
@@ -140,7 +140,7 @@ model RecipeCollection {
 
 model RecipesOnCollections {
   recipeId           String
-  recipe             Recipe           @relation(fields: [recipeId], references: [id])
+  recipe             Recipe           @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeCollectionId String
   recipeCollection   RecipeCollection @relation(fields: [recipeCollectionId], references: [id])
   createdAt          DateTime         @default(now())

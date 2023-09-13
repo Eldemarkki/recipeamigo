@@ -20,7 +20,8 @@
     "create": "Luo",
     "print": "Tulosta",
     "signUp": "Rekisteröidy",
-    "logIn": "Kirjaudu"
+    "logIn": "Kirjaudu",
+    "delete": "Poista"
   },
   "recipeFilter": {
     "searchPlaceholder": "Etsi"

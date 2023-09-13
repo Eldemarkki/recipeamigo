@@ -8,7 +8,7 @@ import React, {
   type ReactNode,
 } from "react";
 
-export type ButtonVariant = "primary" | "secondary";
+export type ButtonVariant = "primary" | "secondary" | "danger";
 export type ButtonSize = "small" | "medium";
 
 export type RequiredButtonProps = {

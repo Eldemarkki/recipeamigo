@@ -181,20 +181,23 @@ export const RecipeForm = ({
 
   return (
     <div className={styles.container}>
-      <RecipeSettingsEditDialog
-        dialogOpen={dialogOpen}
-        setDialogOpen={setDialogOpen}
-        recipeQuantity={recipeQuantity}
-        setRecipeQuantity={setRecipeQuantity}
-        tags={tags}
-        setTags={setTags}
-        visibility={visibility}
-        setVisibility={setVisibility}
-        timeEstimateMin={timeEstimateMin}
-        setTimeEstimateMin={setTimeEstimateMin}
-        timeEstimateMax={timeEstimateMax}
-        setTimeEstimateMax={setTimeEstimateMax}
-      />
+      {initialRecipe?.id && type === "edit" && (
+        <RecipeSettingsEditDialog
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
+          recipeQuantity={recipeQuantity}
+          setRecipeQuantity={setRecipeQuantity}
+          tags={tags}
+          setTags={setTags}
+          visibility={visibility}
+          setVisibility={setVisibility}
+          timeEstimateMin={timeEstimateMin}
+          setTimeEstimateMin={setTimeEstimateMin}
+          timeEstimateMax={timeEstimateMax}
+          setTimeEstimateMax={setTimeEstimateMax}
+          recipeId={initialRecipe.id}
+        />
+      )}
       {/* TODO: Add h1 tag somewhere*/}
       <main className={styles.mainContainer}>
         <div className={styles.splitContainer}>

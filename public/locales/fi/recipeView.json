@@ -76,6 +76,11 @@
           "totalSeconds": "Sekuntia yhteensä"
         }
       }
+    },
+    "delete": {
+      "title": "Poistetaanko resepti?",
+      "text": "Oletko varma, että haluat poistaa tämän reseptin? Tätä ei voi peruuttaa.",
+      "success": "Resepti poistettu."
     }
   },
   "createRecipe": "Luo resepti",

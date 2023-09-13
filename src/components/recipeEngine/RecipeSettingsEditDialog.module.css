@@ -28,3 +28,9 @@
 .settingsSaveButton {
   align-self: flex-end;
 }
+
+.buttonRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}

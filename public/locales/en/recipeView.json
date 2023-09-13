@@ -76,6 +76,11 @@
           "totalSeconds": "Total seconds"
         }
       }
+    },
+    "delete": {
+      "title": "Delete recipe?",
+      "text": "Are you sure you want to delete this recipe? This action cannot be undone.",
+      "success": "Recipe deleted."
     }
   },
   "createRecipe": "Create recipe",

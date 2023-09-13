@@ -1,13 +1,18 @@
+import { HttpError, isKnownHttpStatusCode } from "../../utils/errors";
 import { Select } from "../Select";
 import { Button } from "../button/Button";
+import { ConfirmationDialog } from "../dialog/ConfirmationDialog";
 import { Dialog } from "../dialog/Dialog";
 import { NumberInput } from "../forms/NumberInput";
 import { RecipeQuantityPicker } from "../recipeView/RecipeQuantityPicker";
 import { TagSelect } from "../tag/TagSelect";
 import styles from "./RecipeSettingsEditDialog.module.css";
 import { RecipeVisibility } from "@prisma/client";
+import { TrashIcon } from "@radix-ui/react-icons";
 import { Trans, useTranslation } from "next-i18next";
-import { useId } from "react";
+import { useRouter } from "next/router";
+import { useId, useState } from "react";
+import { toast } from "react-hot-toast";
 
 export type RecipeSettingsEditDialogProps = {
   dialogOpen: boolean;
@@ -22,6 +27,7 @@ export type RecipeSettingsEditDialogProps = {
   setVisibility: (value: RecipeVisibility) => void;
   tags: { id?: string; text: string }[];
   setTags: (tags: { id?: string; text: string }[]) => void;
+  recipeId: string;
 };
 
 export const RecipeSettingsEditDialog = ({
@@ -37,8 +43,12 @@ export const RecipeSettingsEditDialog = ({
   setVisibility,
   tags,
   setTags,
+  recipeId,
 }: RecipeSettingsEditDialogProps) => {
   const { t } = useTranslation(["recipeView", "common"]);
+  const router = useRouter();
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const visibilityId = useId();
   const tagSelectId = useId();
@@ -49,15 +59,46 @@ export const RecipeSettingsEditDialog = ({
     [RecipeVisibility.UNLISTED]: t("recipeVisibility.unlisted"),
   };
 
+  const deleteRecipe = async () => {
+    const response = await fetch(`/api/recipes/${recipeId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      if (isKnownHttpStatusCode(response.status)) {
+        throw new HttpError(response.statusText, response.status);
+      } else {
+        throw new Error("Error with status " + response.status);
+      }
+    }
+
+    await router.push("/");
+    toast.success(t("edit.delete.success"));
+  };
+
   return (
     <Dialog
       open={dialogOpen}
       closeDialog={() => {
+        setDeleteDialogOpen(false);
         setDialogOpen(false);
       }}
       overflowVisible // TODO: This is broken if user adds a lot of tags
       title={t("edit.settings.title")}
     >
+      <ConfirmationDialog
+        isOpen={deleteDialogOpen}
+        message={t("edit.delete.text")}
+        onConfirm={() => {
+          void deleteRecipe();
+        }}
+        onCancel={() => {
+          setDeleteDialogOpen(false);
+        }}
+        title={t("edit.delete.title")}
+        cancelButtonText={t("common:actions.cancel")}
+        confirmButtonText={t("common:actions.delete")}
+      />
       <div className={styles.dialogContent}>
         <div className={styles.settingsContainer}>
           <div className={styles.recipeSettingsContainer}>
@@ -133,14 +174,25 @@ export const RecipeSettingsEditDialog = ({
             />
           </div>
         </div>
-        <Button
-          className={styles.settingsSaveButton}
-          onClick={() => {
-            setDialogOpen(false);
-          }}
-        >
-          {t("common:actions.save")}
-        </Button>
+        <div className={styles.buttonRow}>
+          <Button
+            variant="danger"
+            icon={<TrashIcon />}
+            onClick={() => {
+              setDeleteDialogOpen(true);
+            }}
+          >
+            {t("common:actions.delete")}
+          </Button>
+          <Button
+            className={styles.settingsSaveButton}
+            onClick={() => {
+              setDialogOpen(false);
+            }}
+          >
+            {t("common:actions.save")}
+          </Button>
+        </div>
       </div>
     </Dialog>
   );

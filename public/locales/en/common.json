@@ -20,7 +20,8 @@
     "create": "Create",
     "print": "Print",
     "signUp": "Sign up",
-    "logIn": "Log in"
+    "logIn": "Log in",
+    "delete": "Delete"
   },
   "recipeFilter": {
     "searchPlaceholder": "Search"

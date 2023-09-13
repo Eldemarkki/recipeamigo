@@ -1,5 +1,5 @@
 import { CountdownExtension } from "../components/recipeEngine/extensions/CountdownExtension";
-import type { getUserFromRequest } from "./auth";
+import type { AuthorizedUser, getUserFromRequest } from "./auth";
 import type { Recipe } from "@prisma/client";
 import { RecipeVisibility } from "@prisma/client";
 import Document from "@tiptap/extension-document";
@@ -55,6 +55,13 @@ export const hasReadAccessToRecipe = (
     return false;
   }
 
+  return recipe.userId === user.userId;
+};
+
+export const hasWriteAccessToRecipe = (
+  user: AuthorizedUser,
+  recipe: Recipe,
+) => {
   return recipe.userId === user.userId;
 };
 
