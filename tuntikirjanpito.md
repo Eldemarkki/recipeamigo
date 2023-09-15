@@ -82,4 +82,5 @@
 | 10.9.2023 | 4      | Sulkemisnappi dialogiin, nappien latausindikaattorit, toast-virheilmoitukset, pieniä parannuksia              |
 | 11.9.2023 | 2      | Rajoita kansikuvan kokoa S3-tasolla, paranna Markdown-vientiä                                                 |
 | 13.9.2023 | 1      | Reseptien poistaminen                                                                                         |
-| Yhteensä  | 149    |                                                                                                               |
+| 15.9.2023 | 3      | Pieniä parannuksia virheilmoituksiin, dialogeihin, teksteihin, näytä käyttäjän julkiset kokoelmat             |
+| Yhteensä  | 152    |                                                                                                               |
