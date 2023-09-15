@@ -38,6 +38,7 @@
   },
   "collections": {
     "title": "Browse collections",
+    "new": "New collection",
     "myCollections": "My collections",
     "publicCollections": "Public collections",
     "item": {
