@@ -1,7 +1,9 @@
 import { prisma } from "../db";
 import { RecipeVisibility } from "@prisma/client";
 
-export const getUserAndPublicRecipesByUsername = (username: string) => {
+export const getUserAndPublicRecipesAndPublicCollectionsByUsername = (
+  username: string,
+) => {
   return prisma.userProfile.findUnique({
     where: {
       username,
@@ -10,6 +12,23 @@ export const getUserAndPublicRecipesByUsername = (username: string) => {
       recipes: {
         where: {
           visibility: RecipeVisibility.PUBLIC,
+        },
+      },
+      recipeCollections: {
+        where: {
+          visibility: RecipeVisibility.PUBLIC,
+        },
+        include: {
+          _count: {
+            select: {
+              RecipesOnCollections: true,
+            },
+          },
+          user: {
+            select: {
+              username: true,
+            },
+          },
         },
       },
     },

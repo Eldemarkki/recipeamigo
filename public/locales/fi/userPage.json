@@ -2,5 +2,11 @@
   "recipesTitle": "Reseptit",
   "recipeCount_one": "{{count}} resepti",
   "recipeCount_other": "{{count}} reseptiä",
-  "noRecipes": "Tällä käyttäjällä ei ole julkisia reseptejä."
+  "noRecipes": "Tällä käyttäjällä ei ole julkisia reseptejä.",
+  "collections": {
+    "title": "Kokoelmat",
+    "noCollections": "Tällä käyttäjällä ei ole julkisia kokoelmia.",
+    "collectionCount_one": "{{count}} kokoelma",
+    "collectionCount_other": "{{count}} kokoelmaa"
+  }
 }

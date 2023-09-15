@@ -2,5 +2,11 @@
   "recipesTitle": "Recipes",
   "recipeCount_one": "{{count}} recipe",
   "recipeCount_other": "{{count}} recipes",
-  "noRecipes": "This user doesn't have any public recipes."
+  "noRecipes": "This user doesn't have any public recipes.",
+  "collections": {
+    "title": "Collections",
+    "noCollections": "This user doesn't have any public collections.",
+    "collectionCount_one": "{{count}} collection",
+    "collectionCount_other": "{{count}} collections"
+  }
 }
