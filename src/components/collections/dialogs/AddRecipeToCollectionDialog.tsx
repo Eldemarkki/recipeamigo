@@ -1,7 +1,9 @@
+import { useErrors } from "../../../hooks/useErrors";
 import { useLoadingState } from "../../../hooks/useLoadingState";
 import { LinkButton } from "../../LinkButton";
 import { Button } from "../../button/Button";
 import { InfoDisclaimer } from "../../disclaimers/InfoDisclaimer";
+import { ErrorText } from "../../error/ErrorText";
 import styles from "./AddRecipeToCollectionDialog.module.css";
 import type { RecipeCollection } from "@prisma/client";
 import { RecipeVisibility } from "@prisma/client";
@@ -53,6 +55,8 @@ export const AddRecipeToCollectionDialog = ({
   const [selectedCollectionIds, setSelectedCollectionIds] = useState(
     initialSelectedCollectionIds,
   );
+  const { getErrorMessage } = useErrors();
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   if (collections.length === 0) {
     return (
@@ -84,11 +88,11 @@ export const AddRecipeToCollectionDialog = ({
 
   const handleAdd = async () => {
     startLoading();
+    setErrorText(null);
     try {
       await onAdd(selectedCollectionIds);
     } catch (err) {
-      // TODO: show error notification
-      console.error(err);
+      setErrorText(getErrorMessage(err));
     }
     stopLoading();
   };
@@ -117,6 +121,7 @@ export const AddRecipeToCollectionDialog = ({
           />
         ))}
       </ul>
+      {errorText && <ErrorText>{errorText}</ErrorText>}
       <Button
         disabled={!isDifferent}
         loading={isLoading}

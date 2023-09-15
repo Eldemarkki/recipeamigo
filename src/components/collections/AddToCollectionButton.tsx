@@ -1,3 +1,4 @@
+import { HttpError, isKnownHttpStatusCode } from "../../utils/errors";
 import { Button } from "../button/Button";
 import { Dialog } from "../dialog/Dialog";
 import { AddRecipeToCollectionDialog } from "./dialogs/AddRecipeToCollectionDialog";
@@ -38,12 +39,16 @@ export const AddToCollectionButton = ({
       },
     );
 
-    if (response.ok) {
-      setRecipeCollections(collectionIds);
-      setDialogOpen(false);
-    } else {
-      console.error("Error while trying to add recipe to collections");
+    if (!response.ok) {
+      if (isKnownHttpStatusCode(response.status)) {
+        throw new HttpError(response.statusText, response.status);
+      } else {
+        throw new Error("Error with status " + response.status);
+      }
     }
+
+    setRecipeCollections(collectionIds);
+    setDialogOpen(false);
   };
 
   return (
