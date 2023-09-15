@@ -1,12 +1,6 @@
 import { Spinner } from "../spinner/Spinner";
 import styles from "./Button.module.css";
-import React, {
-  forwardRef,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import React, { forwardRef, type ReactNode } from "react";
 
 export type ButtonVariant = "primary" | "secondary" | "danger";
 export type ButtonSize = "small" | "medium";
@@ -37,22 +31,11 @@ export const Button = forwardRef<
     },
     ref,
   ) => {
-    const ref2 = useRef<HTMLButtonElement>(null);
-    const [width, setWidth] = useState(0);
-
-    const refToUse = ref ?? ref2;
-    useEffect(() => {
-      // Maintain the width of the button when the loading state changes.
-      if ("current" in refToUse && refToUse.current?.offsetWidth) {
-        setWidth(refToUse.current.offsetWidth);
-      }
-    }, [refToUse]);
-
     return (
       <button
         {...props}
         disabled={props.disabled || loading}
-        ref={refToUse}
+        ref={ref}
         type={type}
         className={[
           props.className,
@@ -61,10 +44,6 @@ export const Button = forwardRef<
           styles["size-" + size],
           rectangular ? styles.rectangular : "",
         ].join(" ")}
-        style={{
-          ...props.style,
-          width: props.style?.width ?? (width || undefined),
-        }}
       >
         {props.icon}
         {loading ? <Spinner /> : children}

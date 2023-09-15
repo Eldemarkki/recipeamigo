@@ -263,6 +263,7 @@ export const CollectionEditDialog = ({
             !validVisibilityConfiguration
           }
           loading={isLoading}
+          style={{ minWidth: 100 }}
         >
           {t("common:actions.save")}
         </Button>

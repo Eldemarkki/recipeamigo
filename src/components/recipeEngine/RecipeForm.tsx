@@ -349,7 +349,7 @@ export const RecipeForm = ({
             {t("edit.settingsButton")}
           </Button>
           <Button
-            style={{ padding: "0.5rem 1rem" }}
+            style={{ padding: "0.5rem 1rem", minWidth: 150 }}
             type="submit"
             onClick={(e) => void handleSubmit(e)}
             loading={isLoading}
