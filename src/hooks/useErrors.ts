@@ -12,24 +12,33 @@ export const generateBaseErrors = (t: TFunction<"errors">) => ({
   500: t("common.500"),
 });
 
-export const useErrorToast = () => {
+export const useErrors = () => {
   const { t } = useTranslation("errors");
+
+  const getErrorMessage = (
+    error: unknown,
+    overrideMessages?: Partial<Record<HttpStatusCode, string>>,
+  ) => {
+    if (error instanceof HttpError) {
+      const errorMessage = {
+        ...generateBaseErrors(t),
+        ...overrideMessages,
+      }[error.status];
+
+      return errorMessage;
+    } else {
+      return t("common.unknownError");
+    }
+  };
 
   return {
     showErrorToast: (
       error: unknown,
       overrideMessages?: Partial<Record<HttpStatusCode, string>>,
     ) => {
-      if (error instanceof HttpError) {
-        const errorMessage = {
-          ...generateBaseErrors(t),
-          ...overrideMessages,
-        }[error.status];
-
-        toast.error(errorMessage);
-      } else {
-        toast.error(t("common.unknownError"));
-      }
+      const errorMessage = getErrorMessage(error, overrideMessages);
+      toast.error(errorMessage);
     },
+    getErrorMessage,
   };
 };

@@ -12,6 +12,7 @@ export const collectionPageDataLoader = {
     "home",
     "recipeView",
     "collections",
+    "errors",
   ],
   queryValidator: z.object({ id: z.string() }),
   handler: async (user, query) => {

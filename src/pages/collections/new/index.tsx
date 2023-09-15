@@ -8,7 +8,7 @@ import { newCollectionPageDataLoader } from "../../../dataLoaders/collections/ne
 import { loadProps } from "../../../dataLoaders/loadProps";
 import type { createCollection as createCollectionApi } from "../../../database/collections";
 import type { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
-import { useErrorToast } from "../../../hooks/useErrorToast";
+import { useErrors } from "../../../hooks/useErrors";
 import { useLoadingState } from "../../../hooks/useLoadingState";
 import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
@@ -51,7 +51,7 @@ export default function NewCollectionPage({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { t } = useTranslation(["home", "collections"]);
   const router = useRouter();
-  const { showErrorToast } = useErrorToast();
+  const { showErrorToast } = useErrors();
 
   const [collectionName, setCollectionName] = useState("");
   const [description, setDescription] = useState("");

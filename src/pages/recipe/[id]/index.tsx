@@ -10,7 +10,7 @@ import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuant
 import { TagList } from "../../../components/recipeView/TagList";
 import { loadProps } from "../../../dataLoaders/loadProps";
 import { recipePageDataLoader } from "../../../dataLoaders/recipes/recipePageDataLoader";
-import { useErrorToast } from "../../../hooks/useErrorToast";
+import { useErrors } from "../../../hooks/useErrors";
 import type { Locale } from "../../../i18next";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { getTimeEstimateType } from "../../../utils/recipeUtils";
@@ -71,7 +71,7 @@ export default function RecipePage(
     setLikeStatus(false);
   };
 
-  const { showErrorToast } = useErrorToast();
+  const { showErrorToast } = useErrors();
 
   const handleLikeButtonClick = async () => {
     try {

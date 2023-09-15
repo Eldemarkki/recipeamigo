@@ -250,7 +250,15 @@ export const editCollection = async (
     },
   });
 
-  return await getCollection(collectionId);
+  // TODO: Use the returned collection instead of fetching it again
+  const editedCollection = await getCollection(collectionId);
+  if (!editedCollection) {
+    throw new Error(
+      "Collection not found after editing. This should never happen",
+    );
+  }
+
+  return editedCollection;
 };
 
 export const getUserCollectionsWithMaximumVisibility = async (

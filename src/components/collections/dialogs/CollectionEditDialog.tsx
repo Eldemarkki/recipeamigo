@@ -2,8 +2,10 @@ import type { getCollection } from "../../../database/collections";
 import type { editCollection as editCollectionApi } from "../../../database/collections";
 import type { getAllRecipesForUser } from "../../../database/recipes";
 import type { editCollectionSchema } from "../../../handlers/collections/collectionsIdPutHandler";
+import { useErrors } from "../../../hooks/useErrors";
 import { useLoadingState } from "../../../hooks/useLoadingState";
 import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
+import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { LinkButton } from "../../LinkButton";
 import { RecipeSelectionGrid } from "../../RecipeSelectionGrid";
 import { Select } from "../../Select";
@@ -29,7 +31,11 @@ const editCollection = async (
   });
 
   if (!response.ok) {
-    return null;
+    if (isKnownHttpStatusCode(response.status)) {
+      throw new HttpError(response.statusText, response.status);
+    } else {
+      throw new Error("Error with status " + response.status);
+    }
   }
 
   const data = (await response.json()) as Awaited<
@@ -52,6 +58,8 @@ export const CollectionEditDialog = ({
 }: CollectionEditDialogProps) => {
   const { t } = useTranslation(["collections", "home", "common"]);
   const router = useRouter();
+  const { getErrorMessage } = useErrors();
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   const [collectionName, setCollectionName] = useState(collection.name);
   const [description, setDescription] = useState(collection.description ?? "");
@@ -105,6 +113,7 @@ export const CollectionEditDialog = ({
 
         void (async () => {
           startLoading();
+          setErrorText(null);
           try {
             const editedCollection = await editCollection(collection.id, {
               name: collectionName,
@@ -113,15 +122,11 @@ export const CollectionEditDialog = ({
               description,
             });
 
-            if (editedCollection) {
-              onClose();
-              void router.push(`/collections/${editedCollection.id}`);
-            } else {
-              // TODO: Show error message
-              console.error("Failed to edit collection");
-            }
-          } catch {
-            console.error("Failed to edit collection");
+            onClose();
+            void router.push(`/collections/${editedCollection.id}`);
+          } catch (error) {
+            const message = getErrorMessage(error);
+            setErrorText(message);
           }
           stopLoading();
         })();
@@ -245,6 +250,7 @@ export const CollectionEditDialog = ({
           }
         </ErrorText>
       )}
+      {errorText && <ErrorText>{errorText}</ErrorText>}
       <div className={styles.buttonsContainer}>
         <Button variant="secondary" onClick={onClose}>
           {t("common:actions.cancel")}

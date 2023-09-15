@@ -5,7 +5,7 @@ import type {
   editRecipeSchema,
   recipesPutHandler,
 } from "../../../../handlers/recipes/recipePutHandler";
-import { useErrorToast } from "../../../../hooks/useErrorToast";
+import { useErrors } from "../../../../hooks/useErrors";
 import { getUserFromRequest } from "../../../../utils/auth";
 import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
 import { formDataFromS3PostPolicy } from "../../../../utils/objectUtils";
@@ -58,7 +58,7 @@ export default function EditRecipePage({
   recipe: initialRecipe,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const { showErrorToast } = useErrorToast();
+  const { showErrorToast } = useErrors();
 
   return (
     <PageWrapper>

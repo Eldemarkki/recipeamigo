@@ -4,7 +4,7 @@ import type {
   createRecipeSchema,
   recipesPostHandler,
 } from "../../../handlers/recipes/recipesPostHandler";
-import { useErrorToast } from "../../../hooks/useErrorToast";
+import { useErrors } from "../../../hooks/useErrors";
 import { getUserFromRequest } from "../../../utils/auth";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { formDataFromS3PostPolicy } from "../../../utils/objectUtils";
@@ -53,7 +53,7 @@ const saveRecipe = async (
 
 export default function NewRecipePage() {
   const router = useRouter();
-  const { showErrorToast } = useErrorToast();
+  const { showErrorToast } = useErrors();
   const { t } = useTranslation("errors");
 
   return (
