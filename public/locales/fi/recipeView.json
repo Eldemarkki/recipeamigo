@@ -112,6 +112,10 @@
     "removeFromCollectionsCombined_other": "poista resepti {{count}} kokoelmasta",
     "addAndRemoveFromCollections": "$t(collections.addToCollections, {\"count\": {{addCount}}}) ja $t(collections.removeFromCollectionsCombined, {\"count\": {{removeCount}}})",
     "noEdits": "Ei muutoksia",
+    "noCollections": {
+      "text": "Sinulla ei ole vielä kokoelmia.",
+      "link": "Luo ensimmäinen kokoelmasi"
+    },
     "hiddenDisclaimers": {
       "unlisted": "Koska tämä resepti on piilotettu, sitä ei voi lisätä julkisiin kokoelmiin. Olemme piilottaneet julkiset kokoelmasi tästä listasta.",
       "private": "Koska tämä resepti on yksityinen, sitä ei voi lisätä julkisiin eikä piilotettuihin kokoelmiin. Olemme piilottaneet julkiset ja piilotetut kokoelmasi tästä listasta."

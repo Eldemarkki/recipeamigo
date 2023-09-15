@@ -1,4 +1,5 @@
 import { useLoadingState } from "../../../hooks/useLoadingState";
+import { LinkButton } from "../../LinkButton";
 import { Button } from "../../button/Button";
 import { InfoDisclaimer } from "../../disclaimers/InfoDisclaimer";
 import styles from "./AddRecipeToCollectionDialog.module.css";
@@ -52,6 +53,17 @@ export const AddRecipeToCollectionDialog = ({
   const [selectedCollectionIds, setSelectedCollectionIds] = useState(
     initialSelectedCollectionIds,
   );
+
+  if (collections.length === 0) {
+    return (
+      <>
+        <p>{t("collections.noCollections.text")}</p>
+        <LinkButton href="/collections/new">
+          {t("collections.noCollections.link")}
+        </LinkButton>
+      </>
+    );
+  }
 
   const removedFromCollections = initialSelectedCollectionIds.filter(
     (id) => !selectedCollectionIds.includes(id),

@@ -112,6 +112,10 @@
     "removeFromCollectionsCombined_other": "remove recipe from {{count}} collections",
     "addAndRemoveFromCollections": "$t(collections.addToCollections, {\"count\": {{addCount}}}) and $t(collections.removeFromCollectionsCombined, {\"count\": {{removeCount}}})",
     "noEdits": "No edits",
+    "noCollections": {
+      "text": "You don't have any collections yet.",
+      "link": "Create your first collection"
+    },
     "hiddenDisclaimers": {
       "unlisted": "As this recipe is unlisted, it cannot be added to public collections. We have hidden your public collections from this list.",
       "private": "As this recipe is private, it cannot be added to public or unlisted collections. We have hidden your public and unlisted collections from this list."
