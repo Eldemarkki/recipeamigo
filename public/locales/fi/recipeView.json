@@ -52,7 +52,7 @@
       "isOptional": "Vapaaehtoinen",
       "addIngredientButton": "Lisää ainesosa",
       "selectPlaceholder": "Kirjoita luodaksesi tai etsiäksesi...",
-      "newIngredientPrompt": "Luo {{name}}"
+      "newIngredientPrompt": "Luo \"{{name}}\""
     },
     "ingredientSections": {
       "newSectionTitle": "Uusi osio",

@@ -52,7 +52,7 @@
       "isOptional": "Optional",
       "addIngredientButton": "Add ingredient",
       "selectPlaceholder": "Type to create or search...",
-      "newIngredientPrompt": "Create {{name}}"
+      "newIngredientPrompt": "Create \"{{name}}\""
     },
     "ingredientSections": {
       "newSectionTitle": "New section",
