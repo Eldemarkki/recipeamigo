@@ -240,7 +240,6 @@ export const RecipeForm = ({
             </div>
             <div className={styles.ingredientsSection}>
               <h2>{t("ingredients.title")}</h2>
-              {/* TODO: Implement adding multiple sections */}
               <EditableIngredientList
                 ingredientSections={ingredientSections}
                 addIngredient={(ingredient, ingredientSectionName) => {
