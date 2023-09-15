@@ -56,7 +56,11 @@
     },
     "ingredientSections": {
       "newSectionTitle": "Uusi osio",
-      "sectionName": "Osion nimi"
+      "sectionName": "Osion nimi",
+      "deletion": {
+        "title": "Poistetaanko osio?",
+        "text": "Oletko varma, että haluat poistaa tämän osion? Tätä ei voi peruuttaa."
+      }
     },
     "settingsButton": "Asetukset",
     "settings": {

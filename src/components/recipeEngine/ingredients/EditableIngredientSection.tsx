@@ -1,5 +1,6 @@
 import { CircularButton } from "../../button/Button";
 import { DeleteButton } from "../../button/DeleteButton";
+import { ConfirmationDialog } from "../../dialog/ConfirmationDialog";
 import { DragHandle } from "../../misc/DragHandle";
 import { EditableIngredientListItem } from "./EditableIngredientListItem";
 import styles from "./EditableIngredientSection.module.css";
@@ -7,6 +8,8 @@ import type { RawIngredient, RawIngredientSection } from "./IngredientForm";
 import { IngredientForm } from "./IngredientForm";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Reorder, useDragControls } from "framer-motion";
+import { useTranslation } from "next-i18next";
+import { useState } from "react";
 
 export type EditableIngredientSectionProps = {
   ingredientSection: RawIngredientSection;
@@ -35,6 +38,10 @@ export const EditableIngredientSection = ({
   onEditIngredient,
 }: EditableIngredientSectionProps) => {
   const controls = useDragControls();
+  const [deletionConfirmationOpen, setDeletionConfirmationOpen] =
+    useState(false);
+
+  const { t } = useTranslation(["common", "recipeView"]);
 
   return (
     <Reorder.Item
@@ -43,6 +50,22 @@ export const EditableIngredientSection = ({
       dragListener={false}
       dragControls={controls}
     >
+      <ConfirmationDialog
+        isOpen={deletionConfirmationOpen}
+        title={t("recipeView:edit.ingredientSections.deletion.title")}
+        message={t("recipeView:edit.ingredientSections.deletion.text")}
+        onCancel={() => {
+          setDeletionConfirmationOpen(false);
+        }}
+        onConfirm={() => {
+          setDeletionConfirmationOpen(false);
+          onRemove();
+        }}
+        cancelButtonText={t("common:actions.cancel")}
+        cancelButtonVariant="secondary"
+        confirmButtonText={t("common:actions.delete")}
+        confirmButtonVariant="danger"
+      />
       <div className={styles.topRow}>
         <DragHandle
           onPointerDown={(e) => {
@@ -53,14 +76,7 @@ export const EditableIngredientSection = ({
         <h3 className={styles.title}>{ingredientSection.name}</h3>
         <DeleteButton
           onClick={() => {
-            // TODO: Implement a more beautiful confirmation dialog
-            if (
-              confirm(
-                `Are you sure you want to delete the ingredient section "${ingredientSection.name}"?`,
-              )
-            ) {
-              onRemove();
-            }
+            setDeletionConfirmationOpen(true);
           }}
         />
       </div>

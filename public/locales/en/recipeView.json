@@ -56,7 +56,11 @@
     },
     "ingredientSections": {
       "newSectionTitle": "New section",
-      "sectionName": "Section name"
+      "sectionName": "Section name",
+      "deletion": {
+        "title": "Delete section?",
+        "text": "Are you sure you want to delete this ingredient section? This action cannot be undone."
+      }
     },
     "settingsButton": "Settings",
     "settings": {
