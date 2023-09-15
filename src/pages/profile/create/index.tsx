@@ -7,9 +7,10 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function CreateProfilePage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("profile");
   const [profileName, setProfileName] = useState("");
 
   const router = useRouter();
@@ -44,16 +45,13 @@ export default function CreateProfilePage() {
           break;
         case "Profile already exists":
           setProfileName("");
-          // TODO: Show better error message
-          alert(t("profile:errors.profileAlreadyExists"));
+          toast.error(t("errors.profileAlreadyExists"));
           break;
         case "Username already taken":
-          // TODO: Show better error message
-          alert(t("errors.usernameAlreadyTaken"));
+          toast.error(t("errors.usernameAlreadyTaken"));
           break;
         default:
-          // TODO: Show better error message
-          alert(t("errors.unknownError"));
+          toast.error(t("errors.unknownError"));
           break;
       }
     } else {
@@ -64,7 +62,7 @@ export default function CreateProfilePage() {
   return (
     <div className={styles.container}>
       <div className={styles.innerContainer}>
-        <h1>{t("profile:question")}</h1>
+        <h1>{t("question")}</h1>
         <form
           className={styles.form}
           onSubmit={(e) => {
@@ -78,13 +76,13 @@ export default function CreateProfilePage() {
             onChange={(e) => {
               setProfileName(e.target.value);
             }}
-            placeholder={t("profile:placeholderName")}
+            placeholder={t("placeholderName")}
             minLength={3}
             maxLength={32}
             pattern="[a-zA-Z0-9_]+"
             required
           />
-          <Button type="submit">{t("profile:createProfileButton")}</Button>
+          <Button type="submit">{t("createProfileButton")}</Button>
         </form>
       </div>
     </div>
@@ -114,7 +112,7 @@ export const getServerSideProps = (async ({ req, locale }) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "en")),
+      ...(await serverSideTranslations(locale ?? "en", ["profile"])),
     },
   };
 }) satisfies GetServerSideProps;
