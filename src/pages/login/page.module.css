@@ -17,10 +17,11 @@
   justify-content: center;
   align-items: center;
   flex: 1 1 auto;
+  height: 100%;
 }
 
 .innerContainer {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 2rem;
 }
