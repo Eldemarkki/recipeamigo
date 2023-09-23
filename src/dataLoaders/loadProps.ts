@@ -14,6 +14,12 @@ export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
       queryValidator?: null;
     }
   | {
+      requireUser: true;
+      requiredTranslationNamespaces: FlatNamespace[];
+      handler: (user: AuthorizedUser, query: QueryType) => Promise<PropsType>;
+      queryValidator: z.ZodType<QueryType>;
+    }
+  | {
       requireUser: false;
       requiredTranslationNamespaces: FlatNamespace[];
       handler: (user: AuthorizedUser | null) => Promise<PropsType>;

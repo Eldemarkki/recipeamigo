@@ -7,7 +7,7 @@
     }
   },
   "edit": {
-    "dialogTitle": "Editing {{name}}",
+    "title": "Editing {{name}}",
     "invalidVisibilityConfiguration": {
       "public": "Because you are making this collection public, all recipes must be public. The following recipes are not public: {{violatingRecipes, list}}",
       "unlisted": "Because you are making this collection unlisted, all recipes must be either public or unlisted. The following recipes are private: {{violatingRecipes, list}}"

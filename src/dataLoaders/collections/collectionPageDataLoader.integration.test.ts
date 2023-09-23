@@ -42,7 +42,6 @@ describe("collectionPageDataLoader", () => {
       });
       expect(response.isOwner).toBe(true);
       expect(response.collection).not.toBeNull();
-      expect(response.allRecipes).toHaveLength(2);
       expect(response.collection.RecipesOnCollections).toHaveLength(2);
     },
   );
@@ -85,7 +84,6 @@ describe("collectionPageDataLoader", () => {
         });
         expect(response.isOwner).toBe(false);
         expect(response.collection).not.toBeNull();
-        expect(response.allRecipes).toBeUndefined();
         expect(response.collection.RecipesOnCollections).toHaveLength(2);
       } else {
         void expect(
