@@ -196,6 +196,7 @@ export const handle = async <BodyType, QueryType, ResponseType>({
       }
     }
   } catch (e) {
+    console.error(e);
     const { message, status } = errorMapper(e);
     res.status(status).json({ message });
   }
