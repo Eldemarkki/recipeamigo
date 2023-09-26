@@ -20,7 +20,8 @@
     "sumHours": "node ./sumHours.js",
     "prepare": "husky install",
     "commitlint": "commitlint --edit",
-    "prisma:studio": "dotenv -e .env.local -- prisma studio"
+    "prisma:studio": "dotenv -e .env.local -- prisma studio",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.24.1",
