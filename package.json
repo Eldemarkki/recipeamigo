@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:verify": "dotenv -e .env.local.test -- next build",
     "analyze": "dotenv -v ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
