@@ -47,5 +47,6 @@ export default function BrowseCollectionsPage({
 export const getServerSideProps = (async (ctx) =>
   await loadProps({
     ctx,
+    requiredTranslationNamespaces: ["common", "browse"],
     ...browseCollectionsDataLoader,
   })) satisfies GetServerSideProps;

@@ -7,13 +7,6 @@ import { z } from "zod";
 
 export const collectionEditPageDataLoader = {
   requireUser: true,
-  requiredTranslationNamespaces: [
-    "collections",
-    "home",
-    "common",
-    "recipeView",
-    "errors",
-  ],
   handler: async (user, query) => {
     const id = query.id;
 

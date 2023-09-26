@@ -24,5 +24,6 @@ export default function LikesPage({
 export const getServerSideProps = ((ctx) =>
   loadProps({
     ctx,
+    requiredTranslationNamespaces: ["common", "likes"],
     ...likesPageDataLoader,
   })) satisfies GetServerSideProps;

@@ -251,5 +251,12 @@ export default function NewCollectionPage({
 export const getServerSideProps = ((ctx) =>
   loadProps({
     ctx,
+    requiredTranslationNamespaces: [
+      "common",
+      "collections",
+      "home",
+      "recipeView",
+      "errors",
+    ],
     ...newCollectionPageDataLoader,
   })) satisfies GetServerSideProps;

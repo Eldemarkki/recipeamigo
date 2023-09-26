@@ -251,5 +251,6 @@ export default function RecipePage(
 export const getServerSideProps = ((ctx) =>
   loadProps({
     ctx,
+    requiredTranslationNamespaces: ["common", "recipeView", "tags", "errors"],
     ...recipePageDataLoader,
   })) satisfies GetServerSideProps;

@@ -42,5 +42,12 @@ export default function CollectionPage({
 export const getServerSideProps = ((ctx) =>
   loadProps({
     ctx,
+    requiredTranslationNamespaces: [
+      "common",
+      "home",
+      "recipeView",
+      "collections",
+      "errors",
+    ],
     ...collectionPageDataLoader,
   })) satisfies GetServerSideProps;

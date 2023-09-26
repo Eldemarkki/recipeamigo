@@ -328,5 +328,12 @@ export default function EditCollectionPage({
 export const getServerSideProps = ((ctx) =>
   loadProps({
     ctx,
+    requiredTranslationNamespaces: [
+      "collections",
+      "home",
+      "common",
+      "recipeView",
+      "errors",
+    ],
     ...collectionEditPageDataLoader,
   })) satisfies GetServerSideProps;

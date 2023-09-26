@@ -15,7 +15,6 @@ import { z } from "zod";
 
 export const recipePageDataLoader = {
   requireUser: false,
-  requiredTranslationNamespaces: ["common", "recipeView", "tags", "errors"],
   queryValidator: z.object({ id: z.string() }),
   handler: async (user, { id: recipeId }) => {
     const recipe = await getSingleRecipe(recipeId);

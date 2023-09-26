@@ -6,13 +6,6 @@ import { z } from "zod";
 
 export const collectionPageDataLoader = {
   requireUser: false,
-  requiredTranslationNamespaces: [
-    "common",
-    "home",
-    "recipeView",
-    "collections",
-    "errors",
-  ],
   queryValidator: z.object({ id: z.string() }),
   handler: async (user, query) => {
     const id = query.id;

@@ -9,25 +9,21 @@ import type { z } from "zod";
 export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
   | {
       requireUser: true;
-      requiredTranslationNamespaces: FlatNamespace[];
       handler: (user: AuthorizedUser) => Promise<PropsType>;
       queryValidator?: null;
     }
   | {
       requireUser: true;
-      requiredTranslationNamespaces: FlatNamespace[];
       handler: (user: AuthorizedUser, query: QueryType) => Promise<PropsType>;
       queryValidator: z.ZodType<QueryType>;
     }
   | {
       requireUser: false;
-      requiredTranslationNamespaces: FlatNamespace[];
       handler: (user: AuthorizedUser | null) => Promise<PropsType>;
       queryValidator?: null;
     }
   | {
       requireUser: false;
-      requiredTranslationNamespaces: FlatNamespace[];
       handler: (
         user: AuthorizedUser | null,
         query: QueryType,
@@ -37,6 +33,7 @@ export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
 
 export type PropsLoader<QueryType = unknown, PropsType = unknown> = {
   ctx: GetServerSidePropsContext;
+  requiredTranslationNamespaces: FlatNamespace[];
 } & PropsLoaderHandler<QueryType, PropsType>;
 
 export const loadProps = async <QueryType = unknown, PropsType = unknown>({
