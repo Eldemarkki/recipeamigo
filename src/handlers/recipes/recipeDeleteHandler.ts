@@ -12,8 +12,7 @@ export const recipesDeleteHandler = {
   queryValidator: z.object({
     id: z.string().uuid(),
   }),
-  bodyValidator: z.any(),
-  handler: async (user, _, query) => {
+  handler: async (user, query) => {
     const id = query.id;
     const recipe = await getSingleRecipeWithoutCoverImageUrl(id);
 
@@ -23,4 +22,4 @@ export const recipesDeleteHandler = {
 
     await deleteRecipeById(id);
   },
-} satisfies Handler<unknown, { id: string }>;
+} satisfies Handler<never, { id: string }>;
