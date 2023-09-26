@@ -28,11 +28,11 @@ export type PropsLoaderHandler<QueryType = unknown, PropsType = unknown> =
   | {
       requireUser: false;
       requiredTranslationNamespaces: FlatNamespace[];
-      queryValidator: z.ZodType<QueryType>;
       handler: (
         user: AuthorizedUser | null,
         query: QueryType,
       ) => Promise<PropsType>;
+      queryValidator: z.ZodType<QueryType>;
     };
 
 export type PropsLoader<QueryType = unknown, PropsType = unknown> = {
@@ -58,7 +58,20 @@ export const loadProps = async <QueryType = unknown, PropsType = unknown>({
           notFound: true as const,
         };
       } else {
-        props = await other.handler(user, queryResult.data);
+        if (other.requireUser) {
+          if (user) {
+            props = await other.handler(user, queryResult.data);
+          } else {
+            return {
+              redirect: {
+                destination: "/login" as const,
+                permanent: false,
+              },
+            };
+          }
+        } else {
+          props = await other.handler(user, queryResult.data);
+        }
       }
     } else {
       if (other.requireUser) {
