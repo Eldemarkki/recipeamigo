@@ -12,6 +12,7 @@ export const collectionEditPageDataLoader = {
     "home",
     "common",
     "recipeView",
+    "errors",
   ],
   handler: async (user, query) => {
     const id = query.id;

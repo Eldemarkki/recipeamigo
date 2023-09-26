@@ -11,6 +11,10 @@
     "invalidVisibilityConfiguration": {
       "public": "Because you are making this collection public, all recipes must be public. The following recipes are not public: {{violatingRecipes, list}}",
       "unlisted": "Because you are making this collection unlisted, all recipes must be either public or unlisted. The following recipes are private: {{violatingRecipes, list}}"
+    },
+    "delete": {
+      "title": "Delete \"{{name}}\"",
+      "message": "Are you sure you want to delete this collection? This action cannot be undone."
     }
   },
   "emptyCollection": "This collection is empty."

@@ -142,7 +142,7 @@ model RecipesOnCollections {
   recipeId           String
   recipe             Recipe           @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeCollectionId String
-  recipeCollection   RecipeCollection @relation(fields: [recipeCollectionId], references: [id])
+  recipeCollection   RecipeCollection @relation(fields: [recipeCollectionId], references: [id], onDelete: Cascade)
   createdAt          DateTime         @default(now())
 
   @@id([recipeId, recipeCollectionId])

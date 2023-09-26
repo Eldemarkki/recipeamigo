@@ -2,11 +2,12 @@ import { LinkButton } from "../../../../components/LinkButton";
 import { RecipeSelectionGrid } from "../../../../components/RecipeSelectionGrid";
 import { Select } from "../../../../components/Select";
 import { Button } from "../../../../components/button/Button";
+import { ConfirmationDialog } from "../../../../components/dialog/ConfirmationDialog";
 import { ErrorText } from "../../../../components/error/ErrorText";
 import { PageWrapper } from "../../../../components/misc/PageWrapper";
 import { collectionEditPageDataLoader } from "../../../../dataLoaders/collections/collectionEditPageDataLoader";
 import { loadProps } from "../../../../dataLoaders/loadProps";
-import type { editCollection as editCollectionApi } from "../../../../database/collections";
+import { type editCollection as editCollectionApi } from "../../../../database/collections";
 import type { editCollectionSchema } from "../../../../handlers/collections/collectionsIdPutHandler";
 import { useErrors } from "../../../../hooks/useErrors";
 import { useLoadingState } from "../../../../hooks/useLoadingState";
@@ -14,6 +15,7 @@ import { isValidVisibilityConfiguration } from "../../../../utils/collectionUtil
 import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
 import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
+import { TrashIcon } from "@radix-ui/react-icons";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -47,14 +49,30 @@ const editCollection = async (
   return data;
 };
 
+const deleteCollection = async (collectionId: string) => {
+  const response = await fetch(`/api/collections/${collectionId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    if (isKnownHttpStatusCode(response.status)) {
+      throw new HttpError(response.statusText, response.status);
+    } else {
+      throw new Error("Error with status " + response.status);
+    }
+  }
+};
+
 export default function EditCollectionPage({
   collection,
   allRecipes,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { t } = useTranslation(["collections", "home", "common"]);
+  const { t } = useTranslation(["collections", "home", "common", "errors"]);
   const router = useRouter();
-  const { getErrorMessage } = useErrors();
+  const { getErrorMessage, showErrorToast } = useErrors();
   const [errorText, setErrorText] = useState<string | null>(null);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const [collectionName, setCollectionName] = useState(collection.name);
   const [description, setDescription] = useState(collection.description ?? "");
@@ -98,170 +116,212 @@ export default function EditCollectionPage({
     isValidVisibilityConfiguration(visibility, selectedRecipes);
 
   return (
-    <PageWrapper title={t("edit.title", { name: collection.name })}>
-      <form
-        className={styles.container}
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (selectedRecipeIds.length === 0) {
-            return;
-          }
-
+    <>
+      <ConfirmationDialog
+        isOpen={deleteDialogOpen}
+        title={t("collections:edit.delete.title", { name: collection.name })}
+        message={t("collections:edit.delete.message")}
+        onCancel={() => {
+          setDeleteDialogOpen(false);
+        }}
+        onConfirm={() => {
           void (async () => {
-            startLoading();
-            setErrorText(null);
             try {
-              const editedCollection = await editCollection(collection.id, {
-                name: collectionName,
-                recipeIds: selectedRecipeIds,
-                visibility,
-                description,
-              });
-
-              void router.push(`/collections/${editedCollection.id}`);
-            } catch (error) {
-              const message = getErrorMessage(error);
-              setErrorText(message);
+              await deleteCollection(collection.id);
+              await router.push("/browse/collections");
+            } catch (e) {
+              setDeleteDialogOpen(false);
+              showErrorToast(e);
             }
-            stopLoading();
           })();
         }}
-      >
-        <h1>
-          <input
-            required
-            minLength={1}
-            className={styles.collectionNameInput}
-            type="text"
-            value={collectionName}
-            onChange={(e) => {
-              setCollectionName(e.target.value);
-            }}
-            placeholder={t("home:collections.newCollectionNamePlaceholder")}
-          />
-        </h1>
-        <div>
-          <label htmlFor={descriptionId}>
-            {t("home:collections.descriptionLabel")}
-          </label>
-          <textarea
-            className={styles.descriptionInput}
-            id={descriptionId}
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-            placeholder={t("home:collections.descriptionPlaceholder")}
-          />
-        </div>
-        <div className={styles.visibilityContainer}>
-          <label htmlFor={visibilitySelectId}>
-            {t("home:collections.newCollectionVisibility")}
-          </label>
-          <Select
-            inputId={visibilitySelectId}
-            value={{
-              value: visibility,
-              label: visibilityLabelMap[visibility],
-            }}
-            options={Object.entries(RecipeCollectionVisibility).map(
-              ([, value]) => ({
-                label: visibilityLabelMap[value],
-                value,
-              }),
-            )}
-            onChange={(option) => {
-              if (option) {
-                setVisibility(option.value);
-              }
-            }}
-          />
-        </div>
-        {hasAnyRecipes && (
-          <input
-            className={styles.search}
-            type="text"
-            placeholder={t("home:collections.searchPlaceholder")}
-            value={recipeFilter}
-            onChange={(e) => {
-              setRecipeFilter(e.target.value);
-            }}
-          />
-        )}
-        {recipes.length > 0 ? (
-          <RecipeSelectionGrid
-            recipes={recipes.map((r) => ({
-              id: r.id,
-              name: r.name,
-              coverImageUrl: r.coverImageUrl,
-              visibility: r.visibility,
-              isSelected: selectedRecipeIds.includes(r.id),
-              onClickSelect: () => {
-                setSelectedRecipeIds((selectedRecipes) => {
-                  if (selectedRecipes.includes(r.id)) {
-                    return selectedRecipes.filter((id) => id !== r.id);
-                  } else {
-                    return [...selectedRecipes, r.id];
-                  }
-                });
-              },
-            }))}
-          />
-        ) : (
-          <div className={styles.noResultsContainer}>
-            {hasAnyRecipes ? (
-              <span>
-                {t("home:collections.noRecipesFound", { query: recipeFilter })}
-              </span>
-            ) : (
-              <>
-                <span>{t("home:collections.noRecipesExist")}</span>
-                <LinkButton href="/recipe/new">
-                  {t("home:collections.noRecipesExistCreate")}
-                </LinkButton>
-              </>
-            )}
+        cancelButtonText={t("common:actions.cancel")}
+        confirmButtonText={t("common:actions.delete")}
+        cancelButtonVariant="secondary"
+        confirmButtonVariant="danger"
+      />
+      <PageWrapper
+        titleRow={
+          <div className={styles.titleRow}>
+            <h1>{t("edit.title", { name: collection.name })}</h1>
+            <Button
+              icon={<TrashIcon />}
+              variant="danger"
+              onClick={() => {
+                setDeleteDialogOpen(true);
+              }}
+            >
+              {t("common:actions.delete")}
+            </Button>
           </div>
-        )}
-        {!validVisibilityConfiguration && (
-          <ErrorText>
-            {/* TODO: Different message if collection is already public and the user is trying to add private recipes */}
-            {
+        }
+      >
+        <form
+          className={styles.container}
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (selectedRecipeIds.length === 0) {
+              return;
+            }
+
+            void (async () => {
+              startLoading();
+              setErrorText(null);
+              try {
+                const editedCollection = await editCollection(collection.id, {
+                  name: collectionName,
+                  recipeIds: selectedRecipeIds,
+                  visibility,
+                  description,
+                });
+
+                void router.push(`/collections/${editedCollection.id}`);
+              } catch (error) {
+                const message = getErrorMessage(error);
+                setErrorText(message);
+              }
+              stopLoading();
+            })();
+          }}
+        >
+          <h1>
+            <input
+              required
+              minLength={1}
+              className={styles.collectionNameInput}
+              type="text"
+              value={collectionName}
+              onChange={(e) => {
+                setCollectionName(e.target.value);
+              }}
+              placeholder={t("home:collections.newCollectionNamePlaceholder")}
+            />
+          </h1>
+          <div>
+            <label htmlFor={descriptionId}>
+              {t("home:collections.descriptionLabel")}
+            </label>
+            <textarea
+              className={styles.descriptionInput}
+              id={descriptionId}
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              placeholder={t("home:collections.descriptionPlaceholder")}
+            />
+          </div>
+          <div className={styles.visibilityContainer}>
+            <label htmlFor={visibilitySelectId}>
+              {t("home:collections.newCollectionVisibility")}
+            </label>
+            <Select
+              inputId={visibilitySelectId}
+              value={{
+                value: visibility,
+                label: visibilityLabelMap[visibility],
+              }}
+              options={Object.entries(RecipeCollectionVisibility).map(
+                ([, value]) => ({
+                  label: visibilityLabelMap[value],
+                  value,
+                }),
+              )}
+              onChange={(option) => {
+                if (option) {
+                  setVisibility(option.value);
+                }
+              }}
+            />
+          </div>
+          {hasAnyRecipes && (
+            <input
+              className={styles.search}
+              type="text"
+              placeholder={t("home:collections.searchPlaceholder")}
+              value={recipeFilter}
+              onChange={(e) => {
+                setRecipeFilter(e.target.value);
+              }}
+            />
+          )}
+          {recipes.length > 0 ? (
+            <RecipeSelectionGrid
+              recipes={recipes.map((r) => ({
+                id: r.id,
+                name: r.name,
+                coverImageUrl: r.coverImageUrl,
+                visibility: r.visibility,
+                isSelected: selectedRecipeIds.includes(r.id),
+                onClickSelect: () => {
+                  setSelectedRecipeIds((selectedRecipes) => {
+                    if (selectedRecipes.includes(r.id)) {
+                      return selectedRecipes.filter((id) => id !== r.id);
+                    } else {
+                      return [...selectedRecipes, r.id];
+                    }
+                  });
+                },
+              }))}
+            />
+          ) : (
+            <div className={styles.noResultsContainer}>
+              {hasAnyRecipes ? (
+                <span>
+                  {t("home:collections.noRecipesFound", {
+                    query: recipeFilter,
+                  })}
+                </span>
+              ) : (
+                <>
+                  <span>{t("home:collections.noRecipesExist")}</span>
+                  <LinkButton href="/recipe/new">
+                    {t("home:collections.noRecipesExistCreate")}
+                  </LinkButton>
+                </>
+              )}
+            </div>
+          )}
+          {!validVisibilityConfiguration && (
+            <ErrorText>
+              {/* TODO: Different message if collection is already public and the user is trying to add private recipes */}
               {
-                [RecipeCollectionVisibility.PRIVATE]: null,
-                [RecipeCollectionVisibility.PUBLIC]: t(
-                  "collections:edit.invalidVisibilityConfiguration.public",
-                  {
-                    violatingRecipes: violatingRecipes.map((r) => r.name),
-                  },
-                ),
-                [RecipeCollectionVisibility.UNLISTED]: t(
-                  "collections:edit.invalidVisibilityConfiguration.unlisted",
-                  {
-                    violatingRecipes: violatingRecipes.map((r) => r.name),
-                  },
-                ),
-              }[visibility]
-            }
-          </ErrorText>
-        )}
-        {errorText && <ErrorText>{errorText}</ErrorText>}
-        <div className={styles.buttonsContainer}>
-          <Button
-            type="submit"
-            disabled={
-              selectedRecipeIds.length === 0 ||
-              !collectionName ||
-              !validVisibilityConfiguration
-            }
-            loading={isLoading}
-            style={{ minWidth: 100 }}
-          >
-            {t("common:actions.save")}
-          </Button>
-        </div>
-      </form>
-    </PageWrapper>
+                {
+                  [RecipeCollectionVisibility.PRIVATE]: null,
+                  [RecipeCollectionVisibility.PUBLIC]: t(
+                    "collections:edit.invalidVisibilityConfiguration.public",
+                    {
+                      violatingRecipes: violatingRecipes.map((r) => r.name),
+                    },
+                  ),
+                  [RecipeCollectionVisibility.UNLISTED]: t(
+                    "collections:edit.invalidVisibilityConfiguration.unlisted",
+                    {
+                      violatingRecipes: violatingRecipes.map((r) => r.name),
+                    },
+                  ),
+                }[visibility]
+              }
+            </ErrorText>
+          )}
+          {errorText && <ErrorText>{errorText}</ErrorText>}
+          <div className={styles.buttonsContainer}>
+            <Button
+              type="submit"
+              disabled={
+                selectedRecipeIds.length === 0 ||
+                !collectionName ||
+                !validVisibilityConfiguration
+              }
+              loading={isLoading}
+              style={{ minWidth: 100 }}
+            >
+              {t("common:actions.save")}
+            </Button>
+          </div>
+        </form>
+      </PageWrapper>
+    </>
   );
 }
 

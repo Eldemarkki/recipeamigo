@@ -11,6 +11,10 @@
     "invalidVisibilityConfiguration": {
       "public": "Koska olet muuttamassa kokoelmaa julkiseksi, kaikkien reseptien tulee olla julkisia. Seuraavat reseptit eivät ole julkisia: {{violatingRecipes, list}}",
       "unlisted": "Koska olet muuttamassa kokoelmaa piilotetuksi, kaikkien reseptien tulee olla joko julkisia tai piilotettuja. Seuraavat reseptit ovat yksityisiä: {{violatingRecipes, list}}"
+    },
+    "delete": {
+      "title": "Poista \"{{name}}\"",
+      "message": "Oletko varma, että haluat poistaa tämän kokoelman? Tätä ei voi peruuttaa."
     }
   },
   "emptyCollection": "Tämä kokoelma on tyhjä."

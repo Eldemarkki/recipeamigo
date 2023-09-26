@@ -77,7 +77,7 @@ export const createCollection = async (
   return newCollection;
 };
 
-export const getCollection = async (id: string) => {
+export const getCollectionWithoutCoverImages = async (id: string) => {
   const collection = await prisma.recipeCollection.findUnique({
     where: {
       id,
@@ -90,6 +90,12 @@ export const getCollection = async (id: string) => {
       },
     },
   });
+
+  return collection;
+};
+
+export const getCollection = async (id: string) => {
+  const collection = await getCollectionWithoutCoverImages(id);
 
   if (!collection) {
     return null;
@@ -332,6 +338,14 @@ export const getUserRecipeCollectionRelationships = async (
           name: true,
         },
       },
+    },
+  });
+};
+
+export const deleteCollection = async (collectionId: string) => {
+  await prisma.recipeCollection.delete({
+    where: {
+      id: collectionId,
     },
   });
 };
