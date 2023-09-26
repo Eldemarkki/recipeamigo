@@ -39,8 +39,14 @@
   "collections": {
     "title": "Selaa kokoelmia",
     "new": "Uusi kokoelma",
-    "myCollections": "Omat kokoelmat",
-    "publicCollections": "Julkiset kokoelmat",
+    "myCollections": {
+      "title": "Omat kokoelmat",
+      "none": "Sinulla ei ole vielä omia kokoelmia."
+    },
+    "publicCollections": {
+      "title": "Julkiset kokoelmat",
+      "none": "Kukaan ei ole vielä luonut julkisia kokoelmia."
+    },
     "item": {
       "recipeCount_one": "{{count}} resepti",
       "recipeCount_other": "{{count}} reseptiä"

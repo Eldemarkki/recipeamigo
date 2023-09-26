@@ -39,8 +39,14 @@
   "collections": {
     "title": "Browse collections",
     "new": "New collection",
-    "myCollections": "My collections",
-    "publicCollections": "Public collections",
+    "myCollections": {
+      "title": "My collections",
+      "none": "You don't have any collections yet."
+    },
+    "publicCollections": {
+      "title": "Public collections",
+      "none": "There are no public collections yet."
+    },
     "item": {
       "recipeCount_one": "{{count}} recipe",
       "recipeCount_other": "{{count}} recipes"

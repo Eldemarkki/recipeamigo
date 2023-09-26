@@ -32,13 +32,21 @@ export default function BrowseCollectionsPage({
     >
       {userCollections && (
         <div className={styles.collectionSection}>
-          <h2>{t("collections.myCollections")}</h2>
-          <CollectionsList collections={userCollections} />
+          <h2>{t("collections.myCollections.title")}</h2>
+          {userCollections.length > 0 ? (
+            <CollectionsList collections={userCollections} />
+          ) : (
+            <p>{t("collections.myCollections.none")}</p>
+          )}
         </div>
       )}
       <div className={styles.collectionSection}>
-        <h2>{t("collections.publicCollections")}</h2>
-        <CollectionsList collections={publicCollections} />
+        <h2>{t("collections.publicCollections.title")}</h2>
+        {publicCollections.length > 0 ? (
+          <CollectionsList collections={publicCollections} />
+        ) : (
+          <p>{t("collections.publicCollections.none")}</p>
+        )}
       </div>
     </PageWrapper>
   );
