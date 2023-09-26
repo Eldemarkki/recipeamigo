@@ -83,4 +83,6 @@
 | 11.9.2023 | 2      | Rajoita kansikuvan kokoa S3-tasolla, paranna Markdown-vientiä                                                 |
 | 13.9.2023 | 1      | Reseptien poistaminen                                                                                         |
 | 15.9.2023 | 3      | Pieniä parannuksia virheilmoituksiin, dialogeihin, teksteihin, näytä käyttäjän julkiset kokoelmat             |
-| Yhteensä  | 152    |                                                                                                               |
+| 23.9.2023 | 1      | Siirrä kokoelman muokkaaminen dialogista omalle sivulleen                                                     |
+| 26.9.2023 | 2      | Luo nappi kokoelmien poistamiselle, CI-parannuksia                                                            |
+| Yhteensä  | 155    |                                                                                                               |
