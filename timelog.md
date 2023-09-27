@@ -1,4 +1,4 @@
-# Hour logging
+# Time logging
 
 | Day       | Hours | What I did                                                                                       |
 | --------- | ----- | ------------------------------------------------------------------------------------------------ |
@@ -86,5 +86,4 @@
 | 23.9.2023 | 1     | Move collection editing from dialog to its own page                                              |
 | 26.9.2023 | 2     | Add button for deleting collections, improve CI pipeline                                         |
 | 27.9.2023 | 1     | Create infrastructure diagram, documentation                                                     |
-| Total     | 155   |                                                                                                  |
-| Yhteensä  | 156    |                                                                                                 |
+| Total  | 156    |                                                                                                 |
