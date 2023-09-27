@@ -85,5 +85,5 @@
 | 15.9.2023 | 3     | Small improvements to error messages, dialogs and texts. Show user's public collections          |
 | 23.9.2023 | 1     | Move collection editing from dialog to its own page                                              |
 | 26.9.2023 | 2     | Add button for deleting collections, improve CI pipeline                                         |
-| 27.9.2023 | 1     | Create infrastructure diagram, documentation                                                     |
-| Total     | 156    |                                                                                                 |
+| 27.9.2023 | 2     | Create infrastructure diagram, documentation, adding tests                                       |
+| Total     | 157    |                                                                                                 |
