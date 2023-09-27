@@ -11,15 +11,15 @@ const longestLine = Math.max(...lines.map((line) => line.length));
 
 if (totalLines.length === 0) {
   allLines.push(
-    `| Total     | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(
-      longestLine - 25,
+    `| Total     | ${sum.toString().padEnd(5, " ")} | ${" ".repeat(
+      longestLine - 24,
     )} |`,
   );
 } else {
   allLines[
     allLines.indexOf(totalLines[totalLines.length - 1])
-  ] = `| Total     | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(
-    longestLine - 25,
+  ] = `| Total     | ${sum.toString().padEnd(5, " ")} | ${" ".repeat(
+    longestLine - 24,
   )} |`;
 }
 allLines.push("");
