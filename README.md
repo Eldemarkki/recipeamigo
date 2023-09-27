@@ -2,6 +2,12 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). This is my project for the [Full Stack Open course](https://fullstackopen.com/osa0/yleista#full-stack-harjoitustyo).
 
+## Infrastructure
+
+The app is hosted on [Vercel](https://vercel.com/), and uses [Clerk](https://clerk.dev/) for authentication. The database and S3/object storage are hosted on a Linux/Ubuntu server from [OVH](https://ovhcloud.com/) (1vCPU, 2GB RAM, 20GB SSD).
+
+![Infrastructure diagram. Three sections, from left to right: Clerk.com (authentication), Vercel (has boxes "Next.js backend" and "Next.js" frontend), Linux/Ubuntu VPS (1vCPU, OVH, 2GB RAM, 20GB SSD) (has boxes "PostgreSQL database", "Minio (S3/object storage)" and "Minio admin panel"). There are arrows between Clerk.com and Next.js backend, Clerk.com and Next.js frontend, Next.js backend and Next.js frontend, Next.js backend and PostgreSQL database, Next.js backend and Minio, Next.js frontend and Minio, and Minio and Minio admin panel](./docs/infrastructure.png)
+
 ## To deploy
 
 Things you need:
@@ -15,8 +21,8 @@ Things you need:
 
 Things you need:
 
-- Node.js
-- Docker
+- Node.js (tested with Node.js 18)
+- Docker (or PostgreSQL and Minio hosted somehow)
 - Clerk.com account
 
 ### Run the development environment
