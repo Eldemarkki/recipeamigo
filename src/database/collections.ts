@@ -183,7 +183,12 @@ export const editCollection = async (
     !hasAccessToAll ||
     requestedRecipes.length !== collection.recipeIds.length
   ) {
-    throw new Error("User does not have access to all referenced recipes");
+    const missingIds = collection.recipeIds.filter((id) => {
+      const recipe = requestedRecipes.find((r) => r.id === id);
+      return !recipe || !hasReadAccessToRecipe(userId, recipe);
+    });
+
+    throw new RecipesNotFoundError(missingIds);
   }
 
   const configurationValidity = isValidVisibilityConfiguration(
