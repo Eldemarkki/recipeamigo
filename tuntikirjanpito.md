@@ -1,88 +1,90 @@
-# Tuntikirjanpito
+# Hour logging
 
-| Päivä     | Tunnit | Mitä tein                                                                                                     |
-| --------- | ------ | ------------------------------------------------------------------------------------------------------------- |
-| 20.3.2023 | 3      | Repositoryn luominen, Next.js setup, Hanko-autentikaation setup                                               |
-| 21.3.2023 | 1      | Tietokannan setup, Prisma setup, /api/recipes routen luominen                                                 |
-| 21.3.2023 | 1      | Tyylien lisääminen                                                                                            |
-| 21.3.2023 | 4      | Reseptin luomissivun tekeminen, UI ja API-routet                                                              |
-| 24.3.2023 | 1      | Julkiset reseptit, reseptin annosmäärän lisääminen                                                            |
-| 25.3.2023 | 1      | Reseptisivun luominen                                                                                         |
-| 25.3.2023 | 1      | NumberInput-komponentin parantelu                                                                             |
-| 26.3.2023 | 1      | Reseptin ainesosien jakaminen osiin                                                                           |
-| 26.3.2023 | 1      | Käyttäjäprofiilien luominen                                                                                   |
-| 28.3.2023 | 1      | Näytä resepteissä linkki käyttäjän profiiliin, aloita käyttäjäsivujen luominen                                |
-| 1.4.2023  | 1      | Luo navigointipalkki                                                                                          |
-| 1.4.2023  | 1      | Reseptiruudukon parantelu                                                                                     |
-| 1.4.2023  | 2      | Ainesosaluettelon parantelu, kun luodaan uutta reseptiä                                                       |
-| 2.4.2023  | 2      | Salli ainesosien järjestyksen muuttaminen                                                                     |
-| 2.4.2023  | 1      | Luo jaettu Button-komponentti                                                                                 |
-| 3.4.2023  | 1      | Lisää reseptien näyttökerrat ja aika-arviot                                                                   |
-| 5.4.2023  | 2      | Lisää vapaaehtoiset ainesosat, salli ainesosien muokkaaminen                                                  |
-| 15.4.2023 | 2      | Vitest ja testaamisen setup                                                                                   |
-| 23.4.2023 | 6      | Endpoint reseptien muokkaamiselle                                                                             |
-| 23.4.2023 | 2      | Vaihda styled-component CSS modulesiin, luo sivu reseptien muokkaukselle                                      |
-| 24.4.2023 | 4      | Reseptien kansikuvien upload, S3 (Minio) integrointi                                                          |
-| 25.4.2023 | 2      | Kansikuvien näyttäminen, muokkaaminen ja poistaminen                                                          |
-| 26.4.2023 | 3      | Tumman teeman parantelu, tykkäysten lisääminen                                                                |
-| 27.4.2023 | 1      | Tykkäysten viimeistely                                                                                        |
-| 29.4.2023 | 1      | Dialog-komponentin refactorointi                                                                              |
-| 29.4.2023 | 1      | Teemavalintakomponentin luominen                                                                              |
-| 29.4.2023 | 2      | Kielikäännösten aloittaminen                                                                                  |
-| 30.4.2023 | 3      | Kielikäännösten jatkaminen ja viimeistely                                                                     |
-| 4.5.2023  | 1      | Reseptiohjeiden siirtäminen omaan tauluun                                                                     |
-| 17.5.2023 | 4      | Reseptien tagit/kategoriat                                                                                    |
-| 17.5.2023 | 1      | Pieniä parannuksia                                                                                            |
-| 11.6.2023 | 2      | Yksikkövalitsimen luominen                                                                                    |
-| 27.6.2023 | 4      | Ainesosavalitsimen luominen, ainesosien kielikäännökset                                                       |
-| 27.6.2023 | 1      | Riippuvuuksien päivittäminen                                                                                  |
-| 28.6.2023 | 1      | Riippuvuuksien päivittäminen                                                                                  |
-| 7.7.2023  | 2      | Muuta S3 käyttämään presigned URL:ja kansikuvien tallentamiseen/lataamiseen                                   |
-| 8.7.2023  | 2      | Muuta S3 käyttämään presigned URL:ja kansikuvien tallentamiseen/lataamiseen                                   |
-| 8.7.2023  | 3      | Julkaise Next.js-palvelin Verceliin, ja Minio ja tietokanta VPS:lle                                           |
-| 9.7.2023  | 3      | Vaihda Hanko:sta Clerk:iin                                                                                    |
-| 9.7.2023  | 1      | Reseptin muokkausnäkymän asettelun parantelua, pieniä yleisiä parannuksia                                     |
-| 9.7.2023  | 1      | Markdown export -ominaisuus                                                                                   |
-| 10.7.2023 | 2      | Reseptikokoelmien luomiskäyttöliittymän aloittaminen                                                          |
-| 10.7.2023 | 1      | Testien korjaus, muutaman puuttuvan käännöksen lisääminen, pieniä parannuksia                                 |
-| 15.7.2023 | 2      | Selaa-sivun tekeminen                                                                                         |
-| 16.7.2023 | 1      | Selaa-sivun hakusuodattimen tekeminen                                                                         |
-| 16.7.2023 | 2      | Pieniä yleisiä parannuksia, Selaa-sivun järjestämisen tekeminen                                               |
-| 22.7.2023 | 1      | Prettierin setup, CI-pipelinen parantelu, dokumentaation parantelu                                            |
-| 22.7.2023 | 1      | Selaa-sivun parantelu                                                                                         |
-| 26.7.2023 | 4      | PDF-exportin tekeminen                                                                                        |
-| 26.7.2023 | 1      | Reseptien suodattaminen enimmäisajan mukaan                                                                   |
-| 27.7.2023 | 1      | Reseptien suodattaminen poissulkemalla tiettyjä ainesosia                                                     |
-| 27.7.2023 | 2      | Tiptapin setup parempien ohjetekstien mahdollistamiseksi                                                      |
-| 28.7.2023 | 3      | Ohjeisiin upotettavan ajastinkomponentin aloittaminen                                                         |
-| 29.7.2023 | 3      | Ajastinkomponentin parantelua                                                                                 |
-| 30.7.2023 | 2      | Lisää tuki listaamattomille/piilotetuille resepteille                                                         |
-| 30.7.2023 | 2      | Luo kokoelmasivu, parannuksia kokoelmien luomisdialogiin                                                      |
-| 31.7.2023 | 1      | Luo sivu kokoelmien selaamiselle                                                                              |
-| 31.7.2023 | 1      | Estä julkisten kokoelmien luominen jos kokoelma sisältää yksityisiä reseptejä                                 |
-| 1.8.2023  | 2      | Salli kokoelmien muokkaaminen                                                                                 |
-| 2.8.2023  | 2      | Refaktoroi API-handlereita, luo yksinkertaisia API handler -testejä kokoelmille                               |
-| 5.8.2023  | 2      | Refaktoroi API-handlereita, luo testejä                                                                       |
-| 5.8.2023  | 1      | Pieniä parannuksia                                                                                            |
-| 5.8.2023  | 3      | Lisää integraatiotestejä                                                                                      |
-| 6.8.2023  | 1      | Lisää integraatiotestejä                                                                                      |
-| 6.8.2023  | 2      | Luo "split button" reseptien exporttamiselle                                                                  |
-| 6.8.2023  | 1      | Korjaa ajastin-tekstit reseptien exporttauksissa                                                              |
-| 7.8.2023  | 2      | Lisää typescript-eslint, pieniä parannuksia                                                                   |
-| 8.8.2023  | 1      | Paranna reseptin tulostusnäkymää, pieniä parannuksia                                                          |
-| 8.8.2023  | 3      | Ainesosien lisäämistä ainesosalistaan                                                                         |
-| 10.8.2023 | 1      | Paranna tietokannan käynnistystä testejä ajettaessa                                                           |
-| 10.8.2023 | 3      | Luo käyttöliittymästä responsiivisempi, luo kielivalintavalikko                                               |
-| 11.8.2023 | 3      | Luo "Lisää kokoelmaan" nappi reseptisivulle, refaktorointia, testien tekemistä                                |
-| 12.8.2023 | 2      | Pieniä parannuksia, uusi näkymä tykätyille resepteille                                                        |
-| 13.8.2023 | 1      | Varmista, että tykkäykset ja kokoelmat eivät sisällä listaamattomia/yksityisiä reseptejä muokkaamisen jälkeen |
-| 3.9.2023  | 1      | Pieniä parannuksia, 404- ja 500-sivut, Open Graph metatagit                                                   |
-| 5.9.2023  | 2      | Landing-sivu anonyymeille käyttäjille                                                                         |
-| 7.9.2023  | 1      | Pieniä parannuksia teksteihin                                                                                 |
-| 10.9.2023 | 4      | Sulkemisnappi dialogiin, nappien latausindikaattorit, toast-virheilmoitukset, pieniä parannuksia              |
-| 11.9.2023 | 2      | Rajoita kansikuvan kokoa S3-tasolla, paranna Markdown-vientiä                                                 |
-| 13.9.2023 | 1      | Reseptien poistaminen                                                                                         |
-| 15.9.2023 | 3      | Pieniä parannuksia virheilmoituksiin, dialogeihin, teksteihin, näytä käyttäjän julkiset kokoelmat             |
-| 23.9.2023 | 1      | Siirrä kokoelman muokkaaminen dialogista omalle sivulleen                                                     |
-| 26.9.2023 | 2      | Luo nappi kokoelmien poistamiselle, CI-parannuksia                                                            |
-| Yhteensä  | 155    |                                                                                                               |
+| Day       | Hours | What I did                                                                                       |
+| --------- | ----- | ------------------------------------------------------------------------------------------------ |
+| 20.3.2023 | 3     | Create the repository, Next.js setup, Hanko-authentication setup                                 |
+| 21.3.2023 | 1     | Database setup, Prisma setup, creating /api/recipes route                                        |
+| 21.3.2023 | 1     | Adding styles                                                                                    |
+| 21.3.2023 | 4     | Implement page for creating recipes, UI ja API routes                                            |
+| 24.3.2023 | 1     | Public recipes, add quantity to recipes                                                          |
+| 25.3.2023 | 1     | Implement recipe page                                                                            |
+| 25.3.2023 | 1     | Improving the NumberInput component                                                              |
+| 26.3.2023 | 1     | Implement breaking recipe ingredients into sections                                              |
+| 26.3.2023 | 1     | Implement user profiles                                                                          |
+| 28.3.2023 | 1     | Show a link to the user's profile in recipe page, start creating user page                       |
+| 1.4.2023  | 1     | Create navigation bar                                                                            |
+| 1.4.2023  | 1     | Improve recipe grid                                                                              |
+| 1.4.2023  | 2     | Improve ingredient list when creating new recipe                                                 |
+| 2.4.2023  | 2     | Allow reordering ingredients                                                                     |
+| 2.4.2023  | 1     | Create shared Button component                                                                   |
+| 3.4.2023  | 1     | Add recipe view count and time estimates                                                         |
+| 5.4.2023  | 2     | Add optional ingredients, allow editing ingredients                                              |
+| 15.4.2023 | 2     | Setup Vitest and testing                                                                         |
+| 23.4.2023 | 6     | Create endpoint for editing recipes                                                              |
+| 23.4.2023 | 2     | Switch styled-components to CSS modules, create page for editing recipes                         |
+| 24.4.2023 | 4     | Allow uploading recipe cover images, integrating S3 (Minio)                                      |
+| 25.4.2023 | 2     | Show recipe cover images, and allow editing and deleting them                                    |
+| 26.4.2023 | 3     | Improve dark theme, add likes                                                                    |
+| 27.4.2023 | 1     | Finalize likes                                                                                   |
+| 29.4.2023 | 1     | Refactor the Dialog component                                                                    |
+| 29.4.2023 | 1     | Implement theme switcher component                                                               |
+| 29.4.2023 | 2     | Starting implementing translations                                                               |
+| 30.4.2023 | 3     | Continue and finalize translations                                                               |
+| 4.5.2023  | 1     | Move recipe ingredients to their own table in database                                           |
+| 17.5.2023 | 4     | Implement recipe tags/categories                                                                 |
+| 17.5.2023 | 1     | Small improvements                                                                               |
+| 11.6.2023 | 2     | Implement unit selector                                                                          |
+| 27.6.2023 | 4     | Implement ingredient selector, add translations for ingredients                                  |
+| 27.6.2023 | 1     | Update dependencies                                                                              |
+| 28.6.2023 | 1     | Update dependencies                                                                              |
+| 7.7.2023  | 2     | Switch S3 to use presigned URLs for saving and loading cover images                              |
+| 8.7.2023  | 2     | Switch S3 to use presigned URLs for saving and loading cover images                              |
+| 8.7.2023  | 3     | Publish Next.js server to Vercel, and Minio and database to VPS                                  |
+| 9.7.2023  | 3     | Switch from Hanko to Clerk                                                                       |
+| 9.7.2023  | 1     | Improve recipe editing page layout, small general improvements                                   |
+| 9.7.2023  | 1     | Implement Markdown export                                                                        |
+| 10.7.2023 | 2     | Start implementing UI for creating recipe collections                                            |
+| 10.7.2023 | 1     | Fix tests, add missing translations, small improvements                                          |
+| 15.7.2023 | 2     | Create Browse page                                                                               |
+| 16.7.2023 | 1     | Implement search filter to Browse page                                                           |
+| 16.7.2023 | 2     | Small improvements, allow ordering in Browse page                                                |
+| 22.7.2023 | 1     | Set up Prettier, improve CI-pipeline, improve documentation                                      |
+| 22.7.2023 | 1     | Improvements to Browse page                                                                      |
+| 26.7.2023 | 4     | Implement PDF export                                                                             |
+| 26.7.2023 | 1     | Filter recipes by maximum estimated time                                                         |
+| 27.7.2023 | 1     | Filter recipes by excluding selected ingredients                                                 |
+| 27.7.2023 | 2     | Setup Tiptap to allow for better instruction texts                                               |
+| 28.7.2023 | 3     | Start creating an embeddable timer to instructions                                               |
+| 29.7.2023 | 3     | Improvements to timer component                                                                  |
+| 30.7.2023 | 2     | Add support for unlisted/hidden recipes                                                          |
+| 30.7.2023 | 2     | Create page for collections, improvements to the collection creation dialog                      |
+| 31.7.2023 | 1     | Create page for browsing collections                                                             |
+| 31.7.2023 | 1     | Block creating public collections if it contains private recipes                                 |
+| 1.8.2023  | 2     | Implement editing collections                                                                    |
+| 2.8.2023  | 2     | Refactor API handlers, create simple API handler tests for collections                           |
+| 5.8.2023  | 2     | Refactor API-handlers, implement more tests                                                      |
+| 5.8.2023  | 1     | Small improvements                                                                               |
+| 5.8.2023  | 3     | Implement more integration tests                                                                 |
+| 6.8.2023  | 1     | Implement more integration tests                                                                 |
+| 6.8.2023  | 2     | Implement a split button for exporting recipes                                                   |
+| 6.8.2023  | 1     | Fix timer texts when exporting recipes                                                           |
+| 7.8.2023  | 2     | Add typescript-eslint, small improvements                                                        |
+| 8.8.2023  | 1     | Improve recipe printing view, small improvements                                                 |
+| 8.8.2023  | 3     | Add more ingredients to the ingredients list                                                     |
+| 10.8.2023 | 1     | Improve database launching when running tests                                                    |
+| 10.8.2023 | 3     | Make UI more responsive, create language switcher                                                |
+| 11.8.2023 | 3     | Create "Add to collection" button to recipe view, refactoring, add tests                         |
+| 12.8.2023 | 2     | Small improvements, new view for showing liked recipes                                           |
+| 13.8.2023 | 1     | Ensure that likes and collections respect recipe visibility                                      |
+| 3.9.2023  | 1     | Small improvements, 404 and 500 pages, Open Graph meta tags                                      |
+| 5.9.2023  | 2     | Landing page for anonymous users                                                                 |
+| 7.9.2023  | 1     | Small improvements to texts                                                                      |
+| 10.9.2023 | 4     | Close button to dialog, button loading indicators, error toast notifications, small improvements |
+| 11.9.2023 | 2     | Limit cover image size at S3 level, improve Markdown exports                                     |
+| 13.9.2023 | 1     | Allow deleting recipes                                                                           |
+| 15.9.2023 | 3     | Small improvements to error messages, dialogs and texts. Show user's public collections          |
+| 23.9.2023 | 1     | Move collection editing from dialog to its own page                                              |
+| 26.9.2023 | 2     | Add button for deleting collections, improve CI pipeline                                         |
+| 27.9.2023 | 1     | Create infrastructure diagram, documentation                                                     |
+| Total     | 155   |                                                                                                  |
+| Yhteensä  | 156    |                                                                                                 |
