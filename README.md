@@ -2,6 +2,8 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). This is my project for the [Full Stack Open course](https://fullstackopen.com/osa0/yleista#full-stack-harjoitustyo).
 
+The time logging is at [docs/timelog.md](./docs/timelog.md).
+
 ## Infrastructure
 
 The app is hosted on [Vercel](https://vercel.com/), and uses [Clerk](https://clerk.dev/) for authentication. The database and S3/object storage are hosted on a Linux/Ubuntu server from [OVH](https://ovhcloud.com/) (1vCPU, 2GB RAM, 20GB SSD).

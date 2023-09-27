@@ -1,6 +1,6 @@
 const { readFileSync, writeFileSync } = require("fs");
 
-const file = readFileSync("./timelog.md");
+const file = readFileSync("./docs/timelog.md");
 const allLines = file.toString().trim().split("\n");
 const lines = allLines.filter((line) => /\d{1,2}\.\d{1,2}\.\d{4}/.test(line));
 const hours = lines.map((line) => Number(line.split("|")[2].trim()));
@@ -11,14 +11,14 @@ const longestLine = Math.max(...lines.map((line) => line.length));
 
 if (totalLines.length === 0) {
   allLines.push(
-    `| Total  | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(
+    `| Total     | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(
       longestLine - 25,
     )} |`,
   );
 } else {
   allLines[
     allLines.indexOf(totalLines[totalLines.length - 1])
-  ] = `| Total  | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(
+  ] = `| Total     | ${sum.toString().padEnd(6, " ")} | ${" ".repeat(
     longestLine - 25,
   )} |`;
 }
@@ -26,4 +26,4 @@ allLines.push("");
 
 const newFile = allLines.join("\n");
 
-writeFileSync("./timelog.md", newFile);
+writeFileSync("./docs/timelog.md", newFile);
