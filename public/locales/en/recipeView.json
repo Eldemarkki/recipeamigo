@@ -60,7 +60,8 @@
       "deletion": {
         "title": "Delete section?",
         "text": "Are you sure you want to delete this ingredient section? This action cannot be undone."
-      }
+      },
+      "empty": "No ingredients"
     },
     "settingsButton": "Settings",
     "settings": {

@@ -4,6 +4,7 @@ import type {
   Ingredient,
   IngredientSection as IngredientSectionType,
 } from "@prisma/client";
+import { useTranslation } from "next-i18next";
 
 export type IngredientSectionProps = {
   section: IngredientSectionType & {
@@ -18,14 +19,20 @@ export const IngredientSection = ({
   recipeQuantity,
   originalRecipeQuantity,
 }: IngredientSectionProps) => {
+  const { t } = useTranslation("recipeView");
+
   return (
     <div className={styles.container}>
       <h3>{section.name}</h3>
-      <IngredientList
-        ingredients={section.ingredients}
-        recipeQuantity={recipeQuantity}
-        originalRecipeQuantity={originalRecipeQuantity}
-      />
+      {section.ingredients.length > 0 ? (
+        <IngredientList
+          ingredients={section.ingredients}
+          recipeQuantity={recipeQuantity}
+          originalRecipeQuantity={originalRecipeQuantity}
+        />
+      ) : (
+        <p>{t("edit.ingredientSections.empty")}</p>
+      )}
     </div>
   );
 };
