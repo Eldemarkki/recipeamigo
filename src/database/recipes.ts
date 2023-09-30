@@ -638,26 +638,17 @@ export const getSingleRecipe = async (id: string) => {
   };
 };
 
-export const increaseViewCountForRecipe = async (id: string) => {
-  const recipe = await prisma.recipe.findUnique({
-    where: {
-      id,
-    },
-  });
-
-  if (!recipe) {
-    throw new Error("Recipe not found");
-  }
-
-  await prisma.recipe.update({
+export const increaseViewCountForRecipe = (id: string) =>
+  prisma.recipe.update({
     where: {
       id,
     },
     data: {
-      viewCount: recipe.viewCount + 1,
+      viewCount: {
+        increment: 1,
+      },
     },
   });
-};
 
 export const getPublicRecipesPaginated = async (
   filter: {

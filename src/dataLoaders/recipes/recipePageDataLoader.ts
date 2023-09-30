@@ -48,7 +48,8 @@ export const recipePageDataLoader = {
       replacement: "_",
     });
 
-    await increaseViewCountForRecipe(recipeId);
+    // No need to run as `await` since we don't care about the result
+    void increaseViewCountForRecipe(recipeId);
 
     return {
       recipe,
