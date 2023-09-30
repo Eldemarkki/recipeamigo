@@ -10,6 +10,7 @@ export type RecipeSelectionGridProps = {
     visibility: RecipeVisibility;
     isSelected: boolean;
     onClickSelect: () => void;
+    selectable?: boolean | undefined | null;
   }[];
 };
 

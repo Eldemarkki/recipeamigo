@@ -10,7 +10,10 @@ import type { createCollection as createCollectionApi } from "../../../database/
 import type { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
 import { useErrors } from "../../../hooks/useErrors";
 import { useLoadingState } from "../../../hooks/useLoadingState";
-import { isValidVisibilityConfiguration } from "../../../utils/collectionUtils";
+import {
+  isValidVisibilityConfiguration,
+  isVisibilityValidForCollection,
+} from "../../../utils/collectionUtils";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
@@ -181,6 +184,9 @@ export default function NewCollectionPage({
               name: r.name,
               coverImageUrl: r.coverImageUrl,
               visibility: r.visibility,
+              selectable:
+                selectedRecipeIds.includes(r.id) ||
+                isVisibilityValidForCollection(r.visibility, visibility),
               isSelected: selectedRecipeIds.includes(r.id),
               onClickSelect: () => {
                 setSelectedRecipeIds((selectedRecipes) => {

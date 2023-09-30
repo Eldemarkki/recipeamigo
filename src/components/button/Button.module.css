@@ -33,6 +33,11 @@
   color: var(--text);
 }
 
+.secondary:disabled {
+  box-shadow: inset 0 0 0 2px var(--button-disabled-border);
+  color: var(--button-disabled-text);
+}
+
 .secondary:hover:not(:disabled) {
   background-color: var(--button-secondary-hover-background);
 }
