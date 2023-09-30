@@ -17,13 +17,11 @@ const BrowsePage = ({
 
   return (
     <PageWrapper title={t("title")}>
-      <div className={styles.container}>
-        <div className={styles.main}>
-          <BrowseFilter query={query} />
-          <RecipeCardGrid recipes={recipes} />
-        </div>
-        <BrowsePagination {...pagination} />
+      <div className={styles.main}>
+        <BrowseFilter query={query} />
+        <RecipeCardGrid recipes={recipes} />
       </div>
+      <BrowsePagination {...pagination} />
     </PageWrapper>
   );
 };
