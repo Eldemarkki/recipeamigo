@@ -1,11 +1,7 @@
 import config from "../../config";
-import {
-  editRecipe,
-  getSingleRecipeWithoutCoverImageUrl,
-} from "../../database/recipes";
+import { editRecipe } from "../../database/recipes";
 import { DEFAULT_BUCKET_NAME, s3 } from "../../s3";
 import type { Handler } from "../../utils/apiUtils";
-import { RecipeNotFoundError } from "../../utils/errors";
 import { IngredientUnit, RecipeVisibility } from "@prisma/client";
 import { randomUUID } from "crypto";
 import type { PostPolicyResult } from "minio";
@@ -95,21 +91,9 @@ export const recipesPutHandler = {
   handler: async (user, body, query) => {
     const id = query.id;
 
-    const originalRecipe = await getSingleRecipeWithoutCoverImageUrl(id);
-    if (originalRecipe === null || originalRecipe.userId !== user.userId) {
-      throw new RecipeNotFoundError(id);
-    }
-
-    const coverImageAction = body.coverImageAction;
-    if (
-      (coverImageAction === "remove" || coverImageAction === "replace") &&
-      originalRecipe.coverImageName
-    ) {
-      await s3.removeObject(DEFAULT_BUCKET_NAME, originalRecipe.coverImageName);
-    }
-
     let coverImageUpload: PostPolicyResult | null = null;
     let coverImageNameForPrisma: string | null | undefined;
+    const coverImageAction = body.coverImageAction;
 
     if (coverImageAction === "replace") {
       const newCoverImageName = randomUUID();
@@ -132,7 +116,19 @@ export const recipesPutHandler = {
     // Now it's saved even if the upload fails. If the image doesn't exist when the recipe is viewed, it generates these errors:
     // `upstream image response failed for <url> 404`
 
-    const edited = await editRecipe(id, body, coverImageNameForPrisma);
+    const edited = await editRecipe(
+      user.userId,
+      id,
+      body,
+      coverImageNameForPrisma,
+    );
+
+    if (
+      (coverImageAction === "remove" || coverImageAction === "replace") &&
+      edited.coverImageName
+    ) {
+      await s3.removeObject(DEFAULT_BUCKET_NAME, edited.coverImageName);
+    }
 
     return {
       recipe: edited,

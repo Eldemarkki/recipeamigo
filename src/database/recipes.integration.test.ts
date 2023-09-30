@@ -1,7 +1,12 @@
 import type { editRecipeSchema } from "../handlers/recipes/recipePutHandler";
 import { createRandomRecipe } from "../utils/tests/recipes";
 import { createUserToDatabase } from "../utils/tests/testUtils";
-import { createRecipe, editRecipe, getAllRecipesForUser } from "./recipes";
+import {
+  createRecipe,
+  editRecipe,
+  getAllRecipesForUser,
+  getSingleRecipeWithoutCoverImageUrl,
+} from "./recipes";
 import type {
   Ingredient,
   IngredientSection,
@@ -159,7 +164,12 @@ describe("editRecipes", () => {
       timeEstimateMaximumMinutes: 100000,
     };
 
-    const actual = await editRecipe(recipe.id, editedRecipe);
+    await editRecipe(userId, recipe.id, editedRecipe);
+
+    const actual = await getSingleRecipeWithoutCoverImageUrl(recipe.id);
+    if (!actual) {
+      throw new Error("Recipe not found");
+    }
 
     compareRecipes(actual, editedRecipe, recipe);
   });
@@ -206,7 +216,12 @@ describe("editRecipes", () => {
       ],
     };
 
-    const actual = await editRecipe(recipe.id, editedRecipe);
+    await editRecipe(userId, recipe.id, editedRecipe);
+
+    const actual = await getSingleRecipeWithoutCoverImageUrl(recipe.id);
+    if (!actual) {
+      throw new Error("Recipe not found");
+    }
 
     compareRecipes(actual, editedRecipe, recipe);
   });
@@ -236,7 +251,12 @@ describe("editRecipes", () => {
       ],
     };
 
-    const actual = await editRecipe(recipe.id, editedRecipe);
+    await editRecipe(userId, recipe.id, editedRecipe);
+
+    const actual = await getSingleRecipeWithoutCoverImageUrl(recipe.id);
+    if (!actual) {
+      throw new Error("Recipe not found");
+    }
 
     compareRecipes(actual, editedRecipe, recipe);
   });

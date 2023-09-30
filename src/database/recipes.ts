@@ -9,6 +9,8 @@ import type { createRecipeSchema } from "../handlers/recipes/recipesPostHandler"
 import { DEFAULT_BUCKET_NAME, s3 } from "../s3";
 import { notNull } from "../utils/arrayUtils";
 import { getValidCollectionVisibilitiesForRecipeVisibility } from "../utils/collectionUtils";
+import { RecipeNotFoundError } from "../utils/errors";
+import { hasWriteAccessToRecipe } from "../utils/recipeUtils";
 import { RecipeVisibility } from "@prisma/client";
 import type { UUID } from "crypto";
 import type { z } from "zod";
@@ -172,10 +174,11 @@ export const createRecipe = async (
 };
 
 export const editRecipe = async (
+  userId: string,
   recipeId: string,
   editedRecipe: z.infer<typeof editRecipeSchema>,
   coverImageName?: string | undefined | null,
-) => {
+) =>
   await prisma.$transaction(async (prisma) => {
     const originalRecipe = await prisma.recipe.findUnique({
       where: {
@@ -191,8 +194,8 @@ export const editRecipe = async (
       },
     });
 
-    if (!originalRecipe) {
-      throw new Error("Recipe not found");
+    if (!originalRecipe || !hasWriteAccessToRecipe(userId, originalRecipe)) {
+      throw new RecipeNotFoundError(recipeId);
     }
 
     const touchedIngredientSectionIds = (editedRecipe.ingredientSections ?? [])
@@ -262,21 +265,6 @@ export const editRecipe = async (
     if (!hasAccessToAllInstructions) {
       throw new Error("Cannot move instruction to another recipe");
     }
-
-    await prisma.recipe.update({
-      where: {
-        id: recipeId,
-      },
-      data: {
-        name: editedRecipe.name,
-        description: editedRecipe.description,
-        quantity: editedRecipe.quantity,
-        visibility: editedRecipe.visibility,
-        timeEstimateMinimumMinutes: editedRecipe.timeEstimateMinimumMinutes,
-        timeEstimateMaximumMinutes: editedRecipe.timeEstimateMaximumMinutes,
-        coverImageName,
-      },
-    });
 
     if (editedRecipe.ingredientSections) {
       // Delete any ingredients that were removed
@@ -577,16 +565,22 @@ export const editRecipe = async (
         },
       });
     }
+
+    return await prisma.recipe.update({
+      where: {
+        id: recipeId,
+      },
+      data: {
+        name: editedRecipe.name,
+        description: editedRecipe.description,
+        quantity: editedRecipe.quantity,
+        visibility: editedRecipe.visibility,
+        timeEstimateMinimumMinutes: editedRecipe.timeEstimateMinimumMinutes,
+        timeEstimateMaximumMinutes: editedRecipe.timeEstimateMaximumMinutes,
+        coverImageName,
+      },
+    });
   });
-
-  const result = await getSingleRecipeWithoutCoverImageUrl(recipeId);
-
-  if (!result) {
-    throw new Error("Recipe not found after editing. This should never happen");
-  }
-
-  return result;
-};
 
 export const getSingleRecipeWithoutCoverImageUrl = async (id: string) => {
   const recipe = await prisma.recipe.findUnique({

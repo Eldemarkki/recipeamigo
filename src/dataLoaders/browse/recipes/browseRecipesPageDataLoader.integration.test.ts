@@ -799,7 +799,7 @@ describe("browseRecipesPageDataLoader", () => {
       null,
     );
 
-    await editRecipe(recipe1.id, {
+    await editRecipe(user.userId, recipe1.id, {
       name: "new name",
       coverImageAction: "keep",
     });
@@ -832,7 +832,7 @@ describe("browseRecipesPageDataLoader", () => {
       null,
     );
 
-    await editRecipe(recipe1.id, {
+    await editRecipe(user.userId, recipe1.id, {
       name: "new name",
       coverImageAction: "keep",
     });

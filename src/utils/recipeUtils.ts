@@ -59,10 +59,14 @@ export const hasReadAccessToRecipe = (
 };
 
 export const hasWriteAccessToRecipe = (
-  user: AuthorizedUser,
+  userOrUserId: AuthorizedUser | string,
   recipe: Recipe,
 ) => {
-  return recipe.userId === user.userId;
+  if (typeof userOrUserId === "string") {
+    return recipe.userId === userOrUserId;
+  } else {
+    return recipe.userId === userOrUserId.userId;
+  }
 };
 
 export const getInstructionText = (instructionHtml: string) => {
