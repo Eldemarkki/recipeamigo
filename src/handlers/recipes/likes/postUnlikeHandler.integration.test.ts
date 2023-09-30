@@ -1,5 +1,7 @@
-import { getLikeCountForRecipe } from "../../../database/likes";
-import { createRecipe } from "../../../database/recipes";
+import {
+  createRecipe,
+  getSingleRecipeWithoutCoverImageUrl,
+} from "../../../database/recipes";
 import {
   CannotUnlikeOwnRecipeError,
   RecipeAlreadyUnlikedError,
@@ -10,6 +12,14 @@ import { createUserToDatabaseAndAuthenticate } from "../../../utils/tests/testUt
 import { postLikeHandler } from "./postLikeHandler";
 import { postUnlikeHandler } from "./postUnlikeHandler";
 import { RecipeVisibility } from "@prisma/client";
+
+const getLikeCountForRecipe = async (id: string) => {
+  const recipe = await getSingleRecipeWithoutCoverImageUrl(id);
+  if (!recipe) {
+    throw new Error("Recipe not found");
+  }
+  return recipe._count.likes;
+};
 
 describe("postUnlikeHandler", () => {
   test("can't unlike an unliked recipe", async () => {

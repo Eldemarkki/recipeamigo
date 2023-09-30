@@ -2,7 +2,7 @@ import {
   getUserCollectionsWithMaximumVisibility,
   getUserRecipeCollectionRelationships,
 } from "../../database/collections";
-import { getLikeCountForRecipe, getLikeStatus } from "../../database/likes";
+import { getLikeStatus } from "../../database/likes";
 import {
   getSingleRecipe,
   increaseViewCountForRecipe,
@@ -21,8 +21,6 @@ export const recipePageDataLoader = {
     if (!recipe || !hasReadAccessToRecipe(user, recipe)) {
       throw new RecipeNotFoundError(recipeId);
     }
-
-    const likeCount = await getLikeCountForRecipe(recipeId);
 
     const userIdAndInfo = !user
       ? ({
@@ -53,7 +51,6 @@ export const recipePageDataLoader = {
 
     return {
       recipe,
-      likeCount,
       exportJsonFilename,
       exportMarkdownFilename,
       ...userIdAndInfo,

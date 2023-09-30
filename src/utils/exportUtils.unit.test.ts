@@ -101,6 +101,9 @@ describe("recipeToMarkdown", () => {
         ],
         userId: "userId_1",
         viewCount: 13,
+        _count: {
+          likes: 5,
+        },
       },
       "en",
     );
@@ -204,6 +207,9 @@ This is a test recipe
         ],
         userId: "userId_1",
         viewCount: 13,
+        _count: {
+          likes: 5,
+        },
       },
       "en",
     );
@@ -280,6 +286,9 @@ This is a test recipe
         ],
         userId: "userId_1",
         viewCount: 13,
+        _count: {
+          likes: 5,
+        },
       },
       "en",
     );
@@ -341,6 +350,9 @@ This is a test recipe
         ],
         userId: "userId_1",
         viewCount: 13,
+        _count: {
+          likes: 5,
+        },
       },
       "en",
     );
@@ -398,6 +410,9 @@ This is a test recipe
         ],
         userId: "userId_1",
         viewCount: 13,
+        _count: {
+          likes: 5,
+        },
       },
       "en",
     );
@@ -460,6 +475,9 @@ timeEstimate: 10-20
         ],
         userId: "userId_1",
         viewCount: 13,
+        _count: {
+          likes: 5,
+        },
       },
       "en",
     );
@@ -515,6 +533,9 @@ timeEstimate: 10-20
         tags: [],
         userId: "userId_1",
         viewCount: 13,
+        _count: {
+          likes: 5,
+        },
       },
       "en",
     );

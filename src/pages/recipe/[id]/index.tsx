@@ -28,7 +28,7 @@ export default function RecipePage(
 ) {
   const { t, i18n } = useTranslation(["recipeView", "common"]);
   const { recipe, exportJsonFilename, exportMarkdownFilename } = props;
-  const [likeCount, setLikeCount] = useState(props.likeCount);
+  const [likeCount, setLikeCount] = useState(props.recipe._count.likes);
   const [likeStatus, setLikeStatus] = useState(
     props.userId ? props.likeStatus : null,
   );

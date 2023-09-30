@@ -594,6 +594,11 @@ export const getSingleRecipeWithoutCoverImageUrl = async (id: string) => {
       id,
     },
     include: {
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
       ingredientSections: {
         include: {
           ingredients: {

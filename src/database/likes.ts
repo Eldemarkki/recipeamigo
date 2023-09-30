@@ -32,13 +32,3 @@ export const unlikeRecipe = async (userId: string, recipeId: string) => {
 
   return like;
 };
-
-export const getLikeCountForRecipe = async (recipeId: string) => {
-  const count = await prisma.like.count({
-    where: {
-      recipeId,
-    },
-  });
-
-  return count;
-};

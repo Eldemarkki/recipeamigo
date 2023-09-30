@@ -1,6 +1,9 @@
 import { createCollection, getCollection } from "../../database/collections";
-import { getLikeCountForRecipe } from "../../database/likes";
-import { createRecipe, getSingleRecipe } from "../../database/recipes";
+import {
+  createRecipe,
+  getSingleRecipe,
+  getSingleRecipeWithoutCoverImageUrl,
+} from "../../database/recipes";
 import { RecipeNotFoundError } from "../../utils/errors";
 import { createRandomRecipe } from "../../utils/tests/recipes";
 import { createUserToDatabaseAndAuthenticate } from "../../utils/tests/testUtils";
@@ -9,6 +12,14 @@ import { recipesPutHandler } from "./recipePutHandler";
 import { RecipeCollectionVisibility, RecipeVisibility } from "@prisma/client";
 
 // Recipe property editing is also tested in src/database/recipes.integration.test.ts
+
+const getLikeCountForRecipe = async (id: string) => {
+  const recipe = await getSingleRecipeWithoutCoverImageUrl(id);
+  if (!recipe) {
+    throw new Error("Recipe not found");
+  }
+  return recipe._count.likes;
+};
 
 describe("recipePutHandler", () => {
   test("can edit own recipe", async () => {
