@@ -2,9 +2,13 @@ import { prisma } from "../db";
 import type { editCollectionSchema } from "../handlers/collections/collectionsIdPutHandler";
 import type { createCollectionSchema } from "../handlers/collections/collectionsPostHandler";
 import { s3 } from "../s3";
-import { isValidVisibilityConfiguration } from "../utils/collectionUtils";
+import {
+  hasWriteAccessToCollection,
+  isValidVisibilityConfiguration,
+} from "../utils/collectionUtils";
 import {
   BadRequestError,
+  CollectionNotFoundError,
   RecipesMustBePublicError,
   RecipesMustBePublicOrUnlistedError,
   RecipesNotFoundError,
@@ -167,13 +171,34 @@ export const editCollection = async (
   collectionId: string,
   collection: z.infer<typeof editCollectionSchema>,
 ) => {
-  const requestedRecipes = await prisma.recipe.findMany({
-    where: {
-      id: {
-        in: collection.recipeIds,
+  const [requestedRecipes, collectionToUpdate] = await Promise.all([
+    prisma.recipe.findMany({
+      where: {
+        id: {
+          in: collection.recipeIds,
+        },
       },
-    },
-  });
+    }),
+    prisma.recipeCollection.findUnique({
+      where: {
+        id: collectionId,
+      },
+      include: {
+        RecipesOnCollections: {
+          include: {
+            recipe: true,
+          },
+        },
+      },
+    }),
+  ]);
+
+  if (
+    !collectionToUpdate ||
+    !hasWriteAccessToCollection(userId, collectionToUpdate)
+  ) {
+    throw new CollectionNotFoundError(collectionId);
+  }
 
   const hasAccessToAll = requestedRecipes.every((recipe) =>
     hasReadAccessToRecipe(userId, recipe),
@@ -210,28 +235,7 @@ export const editCollection = async (
     );
   }
 
-  const collectionToUpdate = await prisma.recipeCollection.findUnique({
-    where: {
-      id: collectionId,
-    },
-    include: {
-      RecipesOnCollections: {
-        include: {
-          recipe: true,
-        },
-      },
-    },
-  });
-
-  if (!collectionToUpdate) {
-    throw new Error("Collection not found");
-  }
-
-  if (collectionToUpdate.userId !== userId) {
-    throw new Error("User does not have access to this collection");
-  }
-
-  await prisma.recipeCollection.update({
+  const editedCollection = await prisma.recipeCollection.update({
     where: {
       id: collectionId,
     },
@@ -260,14 +264,6 @@ export const editCollection = async (
       },
     },
   });
-
-  // TODO: Use the returned collection instead of fetching it again
-  const editedCollection = await getCollection(collectionId);
-  if (!editedCollection) {
-    throw new Error(
-      "Collection not found after editing. This should never happen",
-    );
-  }
 
   return editedCollection;
 };

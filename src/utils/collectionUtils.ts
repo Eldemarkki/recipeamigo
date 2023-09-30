@@ -25,14 +25,18 @@ export const hasReadAccessToCollection = (
 };
 
 export const hasWriteAccessToCollection = (
-  user: AnyUser,
+  userOrUserId: AnyUser | string,
   collection: RecipeCollection,
 ) => {
-  if (user.status === "Unauthorized") {
-    return false;
-  }
+  if (typeof userOrUserId === "string") {
+    return collection.userId === userOrUserId;
+  } else {
+    if (userOrUserId.status === "Unauthorized") {
+      return false;
+    }
 
-  return collection.userId === user.userId;
+    return collection.userId === userOrUserId.userId;
+  }
 };
 
 export const isVisibilityValidForCollection = (

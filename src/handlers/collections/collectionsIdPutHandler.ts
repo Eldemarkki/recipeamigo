@@ -1,7 +1,5 @@
-import { editCollection, getCollection } from "../../database/collections";
+import { editCollection } from "../../database/collections";
 import type { Handler } from "../../utils/apiUtils";
-import { hasWriteAccessToCollection } from "../../utils/collectionUtils";
-import { CollectionNotFoundError } from "../../utils/errors";
 import { RecipeCollectionVisibility } from "@prisma/client";
 import { z } from "zod";
 
@@ -18,14 +16,6 @@ export const collectionsIdPutHandler = {
   queryValidator: z.object({
     id: z.string(),
   }),
-  handler: async (user, body, query) => {
-    const originalCollection = await getCollection(query.id);
-
-    if (!originalCollection) throw new CollectionNotFoundError(query.id);
-    if (!hasWriteAccessToCollection(user, originalCollection))
-      throw new CollectionNotFoundError(query.id);
-
-    const editedCollection = await editCollection(user.userId, query.id, body);
-    return editedCollection;
-  },
+  handler: async (user, body, query) =>
+    await editCollection(user.userId, query.id, body),
 } satisfies Handler<z.infer<typeof editCollectionSchema>, { id: string }>;
