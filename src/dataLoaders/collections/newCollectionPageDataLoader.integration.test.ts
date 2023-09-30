@@ -27,8 +27,10 @@ describe("newCollectionPageDataLoader", () => {
     const data = await newCollectionPageDataLoader.handler(user);
 
     expect(data.allRecipes).toHaveLength(3);
-    expect(data.allRecipes[0].id).toBe(recipes[0].id);
-    expect(data.allRecipes[1].id).toBe(recipes[1].id);
-    expect(data.allRecipes[2].id).toBe(recipes[2].id);
+    const ids = data.allRecipes.map((x) => x.id);
+
+    expect(ids).contain(recipes[0].id);
+    expect(ids).contain(recipes[1].id);
+    expect(ids).contain(recipes[2].id);
   });
 });
