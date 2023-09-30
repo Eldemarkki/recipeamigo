@@ -770,6 +770,7 @@ export const getPublicRecipesPaginated = async (
                 some: {
                   text: {
                     in: filter.tags,
+                    mode: "insensitive" as const,
                   },
                 },
               }
