@@ -181,7 +181,7 @@ export const RecipeForm = ({
 
   return (
     <div className={styles.container}>
-      {initialRecipe?.id && type === "edit" && (
+      {type === "new" ? (
         <RecipeSettingsEditDialog
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
@@ -195,7 +195,24 @@ export const RecipeForm = ({
           setTimeEstimateMin={setTimeEstimateMin}
           timeEstimateMax={timeEstimateMax}
           setTimeEstimateMax={setTimeEstimateMax}
-          recipeId={initialRecipe.id}
+          type="new"
+        />
+      ) : (
+        <RecipeSettingsEditDialog
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
+          recipeQuantity={recipeQuantity}
+          setRecipeQuantity={setRecipeQuantity}
+          tags={tags}
+          setTags={setTags}
+          visibility={visibility}
+          setVisibility={setVisibility}
+          timeEstimateMin={timeEstimateMin}
+          setTimeEstimateMin={setTimeEstimateMin}
+          timeEstimateMax={timeEstimateMax}
+          setTimeEstimateMax={setTimeEstimateMax}
+          type="edit"
+          recipeId={initialRecipe?.id || ""}
         />
       )}
       {/* TODO: Add h1 tag somewhere*/}
@@ -340,6 +357,7 @@ export const RecipeForm = ({
         <div className={styles.buttonsContainer}>
           <Button
             onClick={() => {
+              console.log("Aaaa");
               setDialogOpen(true);
             }}
             variant="secondary"

@@ -27,8 +27,15 @@ export type RecipeSettingsEditDialogProps = {
   setVisibility: (value: RecipeVisibility) => void;
   tags: { id?: string; text: string }[];
   setTags: (tags: { id?: string; text: string }[]) => void;
-  recipeId: string;
-};
+} & (
+  | {
+      type: "new";
+    }
+  | {
+      type: "edit";
+      recipeId: string;
+    }
+);
 
 export const RecipeSettingsEditDialog = ({
   dialogOpen,
@@ -43,7 +50,7 @@ export const RecipeSettingsEditDialog = ({
   setVisibility,
   tags,
   setTags,
-  recipeId,
+  ...props
 }: RecipeSettingsEditDialogProps) => {
   const { t } = useTranslation(["recipeView", "common"]);
   const router = useRouter();
@@ -60,20 +67,22 @@ export const RecipeSettingsEditDialog = ({
   };
 
   const deleteRecipe = async () => {
-    const response = await fetch(`/api/recipes/${recipeId}`, {
-      method: "DELETE",
-    });
+    if (props.type === "edit") {
+      const response = await fetch(`/api/recipes/${props.recipeId}`, {
+        method: "DELETE",
+      });
 
-    if (!response.ok) {
-      if (isKnownHttpStatusCode(response.status)) {
-        throw new HttpError(response.statusText, response.status);
-      } else {
-        throw new Error("Error with status " + response.status);
+      if (!response.ok) {
+        if (isKnownHttpStatusCode(response.status)) {
+          throw new HttpError(response.statusText, response.status);
+        } else {
+          throw new Error("Error with status " + response.status);
+        }
       }
-    }
 
-    await router.push("/");
-    toast.success(t("edit.delete.success"));
+      await router.push("/");
+      toast.success(t("edit.delete.success"));
+    }
   };
 
   return (
@@ -175,15 +184,17 @@ export const RecipeSettingsEditDialog = ({
           </div>
         </div>
         <div className={styles.buttonRow}>
-          <Button
-            variant="danger"
-            icon={<TrashIcon />}
-            onClick={() => {
-              setDeleteDialogOpen(true);
-            }}
-          >
-            {t("common:actions.delete")}
-          </Button>
+          {props.type === "edit" && (
+            <Button
+              variant="danger"
+              icon={<TrashIcon />}
+              onClick={() => {
+                setDeleteDialogOpen(true);
+              }}
+            >
+              {t("common:actions.delete")}
+            </Button>
+          )}
           <Button
             className={styles.settingsSaveButton}
             onClick={() => {
