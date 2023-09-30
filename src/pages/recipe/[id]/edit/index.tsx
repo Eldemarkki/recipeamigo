@@ -1,16 +1,15 @@
 import { PageWrapper } from "../../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
-import { getSingleRecipe } from "../../../../database/recipes";
+import { createPropsLoader } from "../../../../dataLoaders/loadProps";
+import { editRecipePageDataLoader } from "../../../../dataLoaders/recipes/editRecipePageDataLoader";
 import type {
   editRecipeSchema,
   recipesPutHandler,
 } from "../../../../handlers/recipes/recipePutHandler";
 import { useErrors } from "../../../../hooks/useErrors";
-import { getUserFromRequest } from "../../../../utils/auth";
 import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
 import { formDataFromS3PostPolicy } from "../../../../utils/objectUtils";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import type { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import type { z } from "zod";
 
@@ -78,35 +77,10 @@ export default function EditRecipePage({
   );
 }
 
-export const getServerSideProps = (async ({ req, params, locale }) => {
-  const user = await getUserFromRequest(req);
-  if (user.status === "Unauthorized") {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-
-  const recipeId = params?.id;
-  if (!recipeId || typeof recipeId !== "string") {
-    throw new Error("Invalid recipe id. This should never happen");
-  }
-
-  const recipe = await getSingleRecipe(recipeId);
-
-  const hasAccess = recipe && recipe.userId === user.userId;
-  if (!hasAccess) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? "en")),
-      recipe,
-    },
-  };
-}) satisfies GetServerSideProps;
+export const getServerSideProps = createPropsLoader(editRecipePageDataLoader, [
+  "common",
+  "recipeView",
+  "units",
+  "errors",
+  "tags",
+]);
