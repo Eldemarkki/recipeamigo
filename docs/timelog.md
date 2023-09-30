@@ -86,4 +86,6 @@
 | 23.9.2023 | 1     | Move collection editing from dialog to its own page                                              |
 | 26.9.2023 | 2     | Add button for deleting collections, improve CI pipeline                                         |
 | 27.9.2023 | 2     | Create infrastructure diagram, documentation, adding tests                                       |
-| Total     | 157   |                                                                                                  |
+| 30.9.2023 | 2     | Refactoring, small improvements                                                                  |
+| 30.9.2023 | 4     | Add integration tests, optimizing creating/editing recipes and collections                       |
+| Total     | 163   |                                                                                                  |
