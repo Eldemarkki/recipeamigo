@@ -5,7 +5,7 @@ import { Button } from "../../../components/button/Button";
 import { ErrorText } from "../../../components/error/ErrorText";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { newCollectionPageDataLoader } from "../../../dataLoaders/collections/newCollectionPageDataLoader";
-import { loadProps } from "../../../dataLoaders/loadProps";
+import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import type { createCollection as createCollectionApi } from "../../../database/collections";
 import type { createCollectionSchema } from "../../../handlers/collections/collectionsPostHandler";
 import { useErrors } from "../../../hooks/useErrors";
@@ -17,7 +17,7 @@ import {
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
@@ -254,15 +254,7 @@ export default function NewCollectionPage({
   );
 }
 
-export const getServerSideProps = ((ctx) =>
-  loadProps({
-    ctx,
-    requiredTranslationNamespaces: [
-      "common",
-      "collections",
-      "home",
-      "recipeView",
-      "errors",
-    ],
-    ...newCollectionPageDataLoader,
-  })) satisfies GetServerSideProps;
+export const getServerSideProps = createPropsLoader(
+  newCollectionPageDataLoader,
+  ["common", "collections", "home", "recipeView", "errors"],
+);

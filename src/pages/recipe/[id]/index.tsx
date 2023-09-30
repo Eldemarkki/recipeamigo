@@ -8,7 +8,7 @@ import { IngredientSection } from "../../../components/recipeView/IngredientSect
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { TagList } from "../../../components/recipeView/TagList";
-import { loadProps } from "../../../dataLoaders/loadProps";
+import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import { recipePageDataLoader } from "../../../dataLoaders/recipes/recipePageDataLoader";
 import { useErrors } from "../../../hooks/useErrors";
 import type { Locale } from "../../../i18next";
@@ -16,7 +16,7 @@ import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { getTimeEstimateType } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType } from "next";
 import { Trans, useTranslation } from "next-i18next";
 import Head from "next/head";
 import Image from "next/image";
@@ -248,9 +248,9 @@ export default function RecipePage(
   );
 }
 
-export const getServerSideProps = ((ctx) =>
-  loadProps({
-    ctx,
-    requiredTranslationNamespaces: ["common", "recipeView", "tags", "errors"],
-    ...recipePageDataLoader,
-  })) satisfies GetServerSideProps;
+export const getServerSideProps = createPropsLoader(recipePageDataLoader, [
+  "common",
+  "recipeView",
+  "tags",
+  "errors",
+]);

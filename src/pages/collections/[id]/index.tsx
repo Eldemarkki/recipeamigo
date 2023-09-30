@@ -2,9 +2,9 @@ import { LinkButton } from "../../../components/LinkButton";
 import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { collectionPageDataLoader } from "../../../dataLoaders/collections/collectionPageDataLoader";
-import { loadProps } from "../../../dataLoaders/loadProps";
+import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 
 export default function CollectionPage({
@@ -39,15 +39,10 @@ export default function CollectionPage({
   );
 }
 
-export const getServerSideProps = ((ctx) =>
-  loadProps({
-    ctx,
-    requiredTranslationNamespaces: [
-      "common",
-      "home",
-      "recipeView",
-      "collections",
-      "errors",
-    ],
-    ...collectionPageDataLoader,
-  })) satisfies GetServerSideProps;
+export const getServerSideProps = createPropsLoader(collectionPageDataLoader, [
+  "common",
+  "home",
+  "recipeView",
+  "collections",
+  "errors",
+]);

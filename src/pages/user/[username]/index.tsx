@@ -1,10 +1,10 @@
 import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
 import { CollectionsList } from "../../../components/collections/CollectionsList";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
-import { loadProps } from "../../../dataLoaders/loadProps";
+import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import { userPageDataLoader } from "../../../dataLoaders/user/userPageDataLoader";
 import styles from "./index.module.css";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 
 export default function UserPage({
@@ -44,9 +44,7 @@ export default function UserPage({
   );
 }
 
-export const getServerSideProps = ((ctx) =>
-  loadProps({
-    ctx,
-    requiredTranslationNamespaces: ["common", "userPage"],
-    ...userPageDataLoader,
-  })) satisfies GetServerSideProps;
+export const getServerSideProps = createPropsLoader(userPageDataLoader, [
+  "common",
+  "userPage",
+]);

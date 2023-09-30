@@ -2,7 +2,7 @@ import type { AuthorizedUser } from "../utils/auth";
 import { getUserFromRequest } from "../utils/auth";
 import { NotFoundError } from "../utils/errors";
 import type { FlatNamespace } from "i18next";
-import type { GetServerSidePropsContext } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import type { z } from "zod";
 
@@ -105,3 +105,14 @@ export const loadProps = async <QueryType = unknown, PropsType = unknown>({
     throw e;
   }
 };
+
+export const createPropsLoader = <QueryType = unknown, PropsType = unknown>(
+  loader: PropsLoaderHandler<QueryType, PropsType>,
+  requiredTranslationNamespaces: FlatNamespace[],
+) =>
+  ((ctx) =>
+    loadProps({
+      ctx,
+      requiredTranslationNamespaces,
+      ...loader,
+    })) satisfies GetServerSideProps;

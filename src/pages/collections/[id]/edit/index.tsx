@@ -6,7 +6,7 @@ import { ConfirmationDialog } from "../../../../components/dialog/ConfirmationDi
 import { ErrorText } from "../../../../components/error/ErrorText";
 import { PageWrapper } from "../../../../components/misc/PageWrapper";
 import { collectionEditPageDataLoader } from "../../../../dataLoaders/collections/collectionEditPageDataLoader";
-import { loadProps } from "../../../../dataLoaders/loadProps";
+import { createPropsLoader } from "../../../../dataLoaders/loadProps";
 import { type editCollection as editCollectionApi } from "../../../../database/collections";
 import type { editCollectionSchema } from "../../../../handlers/collections/collectionsIdPutHandler";
 import { useErrors } from "../../../../hooks/useErrors";
@@ -16,7 +16,7 @@ import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
 import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
 import { TrashIcon } from "@radix-ui/react-icons";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
@@ -325,15 +325,7 @@ export default function EditCollectionPage({
   );
 }
 
-export const getServerSideProps = ((ctx) =>
-  loadProps({
-    ctx,
-    requiredTranslationNamespaces: [
-      "collections",
-      "home",
-      "common",
-      "recipeView",
-      "errors",
-    ],
-    ...collectionEditPageDataLoader,
-  })) satisfies GetServerSideProps;
+export const getServerSideProps = createPropsLoader(
+  collectionEditPageDataLoader,
+  ["collections", "home", "common", "recipeView", "errors"],
+);

@@ -2,9 +2,9 @@ import { LinkButton } from "../../../components/LinkButton";
 import { CollectionsList } from "../../../components/collections/CollectionsList";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { browseCollectionsDataLoader } from "../../../dataLoaders/browse/collections/browseCollectionsDataLoader";
-import { loadProps } from "../../../dataLoaders/loadProps";
+import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 
 export default function BrowseCollectionsPage({
@@ -51,10 +51,7 @@ export default function BrowseCollectionsPage({
     </PageWrapper>
   );
 }
-
-export const getServerSideProps = (async (ctx) =>
-  await loadProps({
-    ctx,
-    requiredTranslationNamespaces: ["common", "browse"],
-    ...browseCollectionsDataLoader,
-  })) satisfies GetServerSideProps;
+export const getServerSideProps = createPropsLoader(
+  browseCollectionsDataLoader,
+  ["common", "browse"],
+);
