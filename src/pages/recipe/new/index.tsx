@@ -1,16 +1,15 @@
 import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../components/recipeEngine/RecipeForm";
+import { createPropsLoader } from "../../../dataLoaders/loadProps";
+import { newRecipePageDataLoader } from "../../../dataLoaders/recipes/newRecipePageDataLoader";
 import type {
   createRecipeSchema,
   recipesPostHandler,
 } from "../../../handlers/recipes/recipesPostHandler";
 import { useErrors } from "../../../hooks/useErrors";
-import { getUserFromRequest } from "../../../utils/auth";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { formDataFromS3PostPolicy } from "../../../utils/objectUtils";
-import type { GetServerSideProps } from "next";
 import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import type { z } from "zod";
 
@@ -75,20 +74,10 @@ export default function NewRecipePage() {
   );
 }
 
-export const getServerSideProps = (async ({ req, locale }) => {
-  const user = await getUserFromRequest(req);
-  if (user.status === "Unauthorized") {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? "en")),
-    },
-  };
-}) satisfies GetServerSideProps;
+export const getServerSideProps = createPropsLoader(newRecipePageDataLoader, [
+  "common",
+  "recipeView",
+  "tags",
+  "units",
+  "errors",
+]);
