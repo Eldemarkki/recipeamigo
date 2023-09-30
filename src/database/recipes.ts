@@ -69,109 +69,57 @@ export const createRecipe = async (
   userId: string,
   recipe: z.infer<typeof createRecipeSchema>,
   coverImageName: UUID | null,
-) => {
-  return await prisma.$transaction(async (prisma) => {
-    const createdRecipe = await prisma.recipe.create({
-      data: {
-        name: recipe.name,
-        description: recipe.description,
-        quantity: recipe.quantity,
-        visibility: recipe.visibility,
-        userId,
-        timeEstimateMinimumMinutes: recipe.timeEstimateMinimumMinutes,
-        timeEstimateMaximumMinutes: recipe.timeEstimateMaximumMinutes,
-        coverImageName,
-      },
-    });
-
-    await prisma.instruction.createMany({
-      data: recipe.instructions.map((instruction, index) => ({
-        description: instruction.description,
-        recipeId: createdRecipe.id,
-        order: index,
-      })),
-    });
-
-    await prisma.ingredientSection.createMany({
-      data: recipe.ingredientSections.map((ingredientSection, index) => ({
-        name: ingredientSection.name,
-        recipeId: createdRecipe.id,
-        order: index,
-      })),
-    });
-
-    const ingredientSections = await prisma.ingredientSection.findMany({
-      where: {
-        recipeId: createdRecipe.id,
-      },
-    });
-
-    await prisma.ingredient.createMany({
-      data: recipe.ingredientSections.flatMap(
-        (ingredientSection, ingredientSectionIndex) => {
-          return ingredientSection.ingredients.map(
-            (ingredient, ingredientIndex) => ({
-              name: ingredient.name,
-              quantity: ingredient.quantity,
-              unit: ingredient.unit,
-              isOptional: ingredient.isOptional,
-              ingredientSectionId:
-                ingredientSections[ingredientSectionIndex].id,
-              order: ingredientIndex,
-            }),
-          );
+) =>
+  await prisma.recipe.create({
+    data: {
+      name: recipe.name,
+      description: recipe.description,
+      quantity: recipe.quantity,
+      visibility: recipe.visibility,
+      userId,
+      timeEstimateMinimumMinutes: recipe.timeEstimateMinimumMinutes,
+      timeEstimateMaximumMinutes: recipe.timeEstimateMaximumMinutes,
+      coverImageName,
+      instructions: {
+        createMany: {
+          data: recipe.instructions.map((instruction, index) => ({
+            description: instruction.description,
+            order: index,
+          })),
         },
-      ),
-    });
-
-    if (recipe.tags && recipe.tags.length > 0) {
-      await prisma.tag.createMany({
-        data: recipe.tags.map((tag, tagIndex) => ({
-          text: tag,
-          recipeId: createdRecipe.id,
-          order: tagIndex,
-        })),
-      });
-    }
-
-    const recipeWithIngredients = await prisma.recipe.findUnique({
-      where: {
-        id: createdRecipe.id,
       },
-      include: {
-        ingredientSections: {
-          include: {
-            ingredients: {
-              orderBy: {
-                order: "asc",
-              },
+      ingredientSections: {
+        create: recipe.ingredientSections.map((ingredientSection, index) => ({
+          name: ingredientSection.name,
+          order: index,
+          ingredients: {
+            createMany: {
+              data: ingredientSection.ingredients.map(
+                (ingredient, ingredientIndex) => ({
+                  name: ingredient.name,
+                  quantity: ingredient.quantity,
+                  unit: ingredient.unit,
+                  isOptional: ingredient.isOptional,
+                  order: ingredientIndex,
+                }),
+              ),
             },
           },
-          orderBy: {
-            order: "asc",
-          },
-        },
-        instructions: {
-          orderBy: {
-            order: "asc",
-          },
-        },
-        tags: {
-          orderBy: {
-            order: "asc",
-          },
-        },
+        })),
       },
-    });
-
-    if (!recipeWithIngredients)
-      throw new Error(
-        "Recipe not found after creation. This should never happen.",
-      );
-
-    return recipeWithIngredients;
+      tags:
+        recipe.tags && recipe.tags.length > 0
+          ? {
+              createMany: {
+                data: recipe.tags.map((tag, tagIndex) => ({
+                  text: tag,
+                  order: tagIndex,
+                })),
+              },
+            }
+          : undefined,
+    },
   });
-};
 
 export const editRecipe = async (
   userId: string,

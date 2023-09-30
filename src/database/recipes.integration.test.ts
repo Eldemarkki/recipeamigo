@@ -28,7 +28,7 @@ describe("recipes", () => {
     const newRecipe = await createRecipe(userId, createRandomRecipe(), null);
     const recipes = await getAllRecipesForUser(userId);
     expect(recipes).toHaveLength(1);
-    expect(recipes[0]).toEqual(newRecipe);
+    expect(recipes[0].id).toEqual(newRecipe.id);
   });
 
   it("should return array with 2 elements when user has 2 recipes", async () => {
@@ -48,8 +48,8 @@ describe("recipes", () => {
     const recipes2 = await getAllRecipesForUser(userId2);
     expect(recipes1).toHaveLength(1);
     expect(recipes2).toHaveLength(1);
-    expect(recipes1[0]).toEqual(newRecipe1);
-    expect(recipes2[0]).toEqual(newRecipe2);
+    expect(recipes1[0].id).toEqual(newRecipe1.id);
+    expect(recipes2[0].id).toEqual(newRecipe2.id);
   });
 });
 
@@ -149,7 +149,15 @@ const compareRecipes = (
 describe("editRecipes", () => {
   it("should update basic recipe properties", async () => {
     const userId = await createUserToDatabase();
-    const recipe = await createRecipe(userId, createRandomRecipe(), null);
+    const createdRecipeShallow = await createRecipe(
+      userId,
+      createRandomRecipe(),
+      null,
+    );
+    const recipe = await getSingleRecipeWithoutCoverImageUrl(
+      createdRecipeShallow.id,
+    );
+    if (!recipe) throw new Error("Recipe not found. This should never happen");
 
     const editedRecipe: z.infer<typeof editRecipeSchema> = {
       coverImageAction: "keep",
@@ -176,7 +184,15 @@ describe("editRecipes", () => {
 
   it("should update recipe ingredients", async () => {
     const userId = await createUserToDatabase();
-    const recipe = await createRecipe(userId, createRandomRecipe(), null);
+    const createdRecipeShallow = await createRecipe(
+      userId,
+      createRandomRecipe(),
+      null,
+    );
+    const recipe = await getSingleRecipeWithoutCoverImageUrl(
+      createdRecipeShallow.id,
+    );
+    if (!recipe) throw new Error("Recipe not found. This should never happen");
 
     const editedRecipe: z.infer<typeof editRecipeSchema> = {
       coverImageAction: "keep",
@@ -228,7 +244,15 @@ describe("editRecipes", () => {
 
   it("should update recipe instructions", async () => {
     const userId = await createUserToDatabase();
-    const recipe = await createRecipe(userId, createRandomRecipe(), null);
+    const createdRecipeShallow = await createRecipe(
+      userId,
+      createRandomRecipe(),
+      null,
+    );
+    const recipe = await getSingleRecipeWithoutCoverImageUrl(
+      createdRecipeShallow.id,
+    );
+    if (!recipe) throw new Error("Recipe not found. This should never happen");
 
     const editedRecipe: z.infer<typeof editRecipeSchema> = {
       coverImageAction: "keep",
