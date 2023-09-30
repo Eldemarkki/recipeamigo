@@ -1,11 +1,11 @@
 import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
 import { CollectionsList } from "../../../components/collections/CollectionsList";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
-import { getUserAndPublicRecipesAndPublicCollectionsByUsername } from "../../../database/users";
+import { loadProps } from "../../../dataLoaders/loadProps";
+import { userPageDataLoader } from "../../../dataLoaders/user/userPageDataLoader";
 import styles from "./index.module.css";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function UserPage({
   user,
@@ -44,25 +44,9 @@ export default function UserPage({
   );
 }
 
-// TODO: Refactor to use props loader
-export const getServerSideProps = (async (context) => {
-  const username = context.params?.username;
-  if (typeof username !== "string") {
-    throw new Error("Username is not a string. This should never happen");
-  }
-
-  const visitingUser =
-    await getUserAndPublicRecipesAndPublicCollectionsByUsername(username);
-  if (!visitingUser) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      ...(await serverSideTranslations(context.locale ?? "en")),
-      user: visitingUser,
-    },
-  };
-}) satisfies GetServerSideProps;
+export const getServerSideProps = ((ctx) =>
+  loadProps({
+    ctx,
+    requiredTranslationNamespaces: ["common", "userPage"],
+    ...userPageDataLoader,
+  })) satisfies GetServerSideProps;
