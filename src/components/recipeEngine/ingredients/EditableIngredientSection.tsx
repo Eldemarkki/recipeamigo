@@ -1,7 +1,10 @@
 import { CircularButton } from "../../button/Button";
 import { DeleteButton } from "../../button/DeleteButton";
+import { EditButton } from "../../button/EditButton";
 import { ConfirmationDialog } from "../../dialog/ConfirmationDialog";
+import { Dialog } from "../../dialog/Dialog";
 import { DragHandle } from "../../misc/DragHandle";
+import { EditIngredientSectionDialog } from "./EditIngredientSectionDialog";
 import { EditableIngredientListItem } from "./EditableIngredientListItem";
 import styles from "./EditableIngredientSection.module.css";
 import type { RawIngredient, RawIngredientSection } from "./IngredientForm";
@@ -25,6 +28,7 @@ export type EditableIngredientSectionProps = {
   ) => void;
   addIngredient: (ingredient: RawIngredient) => void;
   onEditIngredient: (ingredient: RawIngredient, index: number) => void;
+  updateIngredientSectionName: (newName: string) => void;
 };
 
 export const EditableIngredientSection = ({
@@ -36,10 +40,12 @@ export const EditableIngredientSection = ({
   setNewItemType,
   addIngredient,
   onEditIngredient,
+  updateIngredientSectionName,
 }: EditableIngredientSectionProps) => {
   const controls = useDragControls();
   const [deletionConfirmationOpen, setDeletionConfirmationOpen] =
     useState(false);
+  const [editTitleDialogOpen, setEditTitleDialogOpen] = useState(false);
 
   const { t } = useTranslation(["common", "recipeView"]);
 
@@ -66,11 +72,30 @@ export const EditableIngredientSection = ({
         confirmButtonText={t("common:actions.delete")}
         confirmButtonVariant="danger"
       />
+      <Dialog
+        open={editTitleDialogOpen}
+        closeDialog={() => {
+          setEditTitleDialogOpen(false);
+        }}
+        title={t("recipeView:edit.ingredientSections.edit.title", {
+          name: ingredientSection.name,
+        })}
+      >
+        <EditIngredientSectionDialog
+          initialName={ingredientSection.name}
+          onSave={updateIngredientSectionName}
+        />
+      </Dialog>
       <div className={styles.topRow}>
         <DragHandle
           onPointerDown={(e) => {
             controls.start(e);
             e.preventDefault();
+          }}
+        />
+        <EditButton
+          onClick={() => {
+            setEditTitleDialogOpen(true);
           }}
         />
         <h3 className={styles.title}>{ingredientSection.name}</h3>

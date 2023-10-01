@@ -80,6 +80,18 @@ export const EditableIngredientList = ({
                     }),
                   );
                 }}
+                updateIngredientSectionName={(newName) => {
+                  setIngredientSections(
+                    ingredientSections.map((ingredientSection, i) =>
+                      i === ingredientSectionIndex
+                        ? {
+                            ...ingredientSection,
+                            name: newName,
+                          }
+                        : ingredientSection,
+                    ),
+                  );
+                }}
               />
             ),
           )}

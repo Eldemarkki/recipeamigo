@@ -62,7 +62,10 @@
         "title": "Poistetaanko osio?",
         "text": "Oletko varma, että haluat poistaa tämän osion? Tätä ei voi peruuttaa."
       },
-      "empty": "Ei ainesosia"
+      "empty": "Ei ainesosia",
+      "edit": {
+        "title": "Muokataan \"{{name}}\""
+      }
     },
     "settingsButton": "Asetukset",
     "settings": {
