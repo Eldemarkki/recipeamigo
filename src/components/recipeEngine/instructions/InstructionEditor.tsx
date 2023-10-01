@@ -18,15 +18,19 @@ const OneLiner = Node.create({
 });
 
 export type InstructionEditorProps = {
-  addInstruction: (instruction: string) => void;
+  initialContent?: string | undefined | null;
+  onSave: (instruction: string) => void;
+  buttonText: string;
 };
 
 export const InstructionEditor = ({
-  addInstruction,
+  initialContent = "",
+  onSave,
+  buttonText,
 }: InstructionEditorProps) => {
   const editor = useEditor({
     extensions: [OneLiner, Paragraph, Text, CountdownExtension],
-    content: "",
+    content: initialContent,
     editorProps: {
       attributes: {
         class: "instruction-editor instruction-editor-editable",
@@ -68,16 +72,14 @@ export const InstructionEditor = ({
           type="submit"
           onClick={() => {
             if (editor) {
-              addInstruction(editor.getHTML());
+              onSave(editor.getHTML());
               editor.commands.clearContent();
             } else {
-              console.error(
-                "Editor was null when trying to add an instruction",
-              );
+              console.error("Editor was null when trying to save instruction");
             }
           }}
         >
-          {t("recipeView:edit.instructions.newInstructionPlaceholder")}
+          {buttonText}
         </Button>
       </div>
     </>

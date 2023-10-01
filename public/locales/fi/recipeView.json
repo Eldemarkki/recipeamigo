@@ -38,6 +38,7 @@
     "timeEstimate": "<0></0>min - <3></3>min",
     "saveRecipe": "Tallenna resepti",
     "editingIngredientTitle": "Muokataan \"{{ingredientName}}\"",
+    "editingInstructionTitle": "Muokataan ohjetta",
     "instructions": {
       "newInstructionPlaceholder": "Uusi ohje",
       "addInstructionButton": "Lisää ohje"

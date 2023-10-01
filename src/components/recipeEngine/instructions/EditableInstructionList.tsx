@@ -3,6 +3,7 @@ import styles from "./EditableInstructionList.module.css";
 import { EditableInstructionListItem } from "./EditableInstructionListItem";
 import { InstructionEditor } from "./InstructionEditor";
 import { Reorder } from "framer-motion";
+import { useTranslation } from "next-i18next";
 
 export type InstructionListProps = {
   instructions: (RawInstruction & {
@@ -23,6 +24,8 @@ export const EditableInstructionList = ({
   removeInstruction,
   setInstructions,
 }: InstructionListProps) => {
+  const { t } = useTranslation("recipeView");
+
   return (
     <div className={styles.container}>
       <Reorder.Group
@@ -38,15 +41,28 @@ export const EditableInstructionList = ({
             onRemoveInstruction={() => {
               removeInstruction(index);
             }}
+            updateInstruction={(instruction) => {
+              setInstructions(
+                instructions.map((oldInstruction, oldIndex) =>
+                  oldIndex === index
+                    ? {
+                        ...oldInstruction,
+                        description: instruction,
+                      }
+                    : oldInstruction,
+                ),
+              );
+            }}
           />
         ))}
       </Reorder.Group>
       <InstructionEditor
-        addInstruction={(instruction) => {
+        onSave={(instruction) => {
           addInstruction({
             description: instruction,
           });
         }}
+        buttonText={t("edit.instructions.newInstructionPlaceholder")}
       />
     </div>
   );

@@ -49,7 +49,12 @@ export const Dialog = ({
         dialogRef.current &&
         event.target instanceof Node &&
         !dialogRef.current.contains(event.target) &&
-        open
+        open &&
+        // If any child dialog is open, don't close this one. This makes it so
+        // that only the topmost dialog will be closed.
+        !Array.from(dialogRef.current.querySelectorAll("dialog")).some(
+          (d) => d.open,
+        )
       ) {
         closeDialog?.();
       }
