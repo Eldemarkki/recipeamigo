@@ -131,253 +131,202 @@ export const editRecipe = async (
   recipeId: string,
   editedRecipe: z.infer<typeof editRecipeSchema>,
   coverImageName?: string | undefined | null,
-) =>
-  await prisma.$transaction(async (prisma) => {
-    const originalRecipe = await prisma.recipe.findUnique({
-      where: {
-        id: recipeId,
-      },
-      include: {
-        ingredientSections: {
-          include: {
-            ingredients: true,
-          },
+) => {
+  const touchedIngredientSectionIds = (editedRecipe.ingredientSections ?? [])
+    .map((ingredientSection) =>
+      "id" in ingredientSection ? ingredientSection.id : undefined,
+    )
+    .filter((id): id is string => id !== undefined);
+
+  const touchedIngredientIds = (editedRecipe.ingredientSections ?? [])
+    .flatMap((ingredientSection) => ingredientSection.ingredients)
+    .map((ingredient) =>
+      ingredient && "id" in ingredient ? ingredient.id : undefined,
+    )
+    .filter((id): id is string => id !== undefined);
+
+  const touchedInstructionIds = (editedRecipe.instructions ?? [])
+    .map((instruction) => ("id" in instruction ? instruction.id : undefined))
+    .filter((id): id is string => id !== undefined);
+
+  const [originalRecipe, touchedIngredientSections, ingredients, instructions] =
+    await Promise.all([
+      prisma.recipe.findUnique({
+        where: {
+          id: recipeId,
         },
-        instructions: true,
-      },
-    });
-
-    if (!originalRecipe || !hasWriteAccessToRecipe(userId, originalRecipe)) {
-      throw new RecipeNotFoundError(recipeId);
-    }
-
-    const touchedIngredientSectionIds = (editedRecipe.ingredientSections ?? [])
-      .map((ingredientSection) =>
-        "id" in ingredientSection ? ingredientSection.id : undefined,
-      )
-      .filter((id): id is string => id !== undefined);
-
-    const touchedIngredientSections = await prisma.ingredientSection.findMany({
-      where: {
-        id: {
-          in: touchedIngredientSectionIds,
-        },
-        recipeId,
-      },
-    });
-
-    const missingIngredientSectionIds = touchedIngredientSectionIds.filter(
-      (id) => !touchedIngredientSections.some((x) => x.id === id),
-    );
-
-    if (missingIngredientSectionIds.length > 0) {
-      throw new IngredientSectionsNotFoundError(missingIngredientSectionIds);
-    }
-
-    const ingredientIds = (editedRecipe.ingredientSections ?? [])
-      .flatMap((ingredientSection) => ingredientSection.ingredients)
-      .map((ingredient) =>
-        ingredient && "id" in ingredient ? ingredient.id : undefined,
-      )
-      .filter((id): id is string => id !== undefined);
-
-    const ingredients = await prisma.ingredient.findMany({
-      where: {
-        id: {
-          in: ingredientIds,
-        },
-        ingredientSectionId: {
-          in: touchedIngredientSectionIds,
-        },
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    const missingIngredientIds = ingredientIds.filter(
-      (id) => !ingredients.some((x) => x.id === id),
-    );
-
-    if (missingIngredientIds.length > 0) {
-      throw new IngredientsNotFoundError(missingIngredientIds);
-    }
-
-    const touchedInstructionIds = (editedRecipe.instructions ?? [])
-      .map((instruction) => ("id" in instruction ? instruction.id : undefined))
-      .filter((id): id is string => id !== undefined);
-
-    const instructions = await prisma.instruction.findMany({
-      where: {
-        id: {
-          in: touchedInstructionIds,
-        },
-        recipeId,
-      },
-    });
-
-    const missingInstructionIds = touchedInstructionIds.filter(
-      (id) => !instructions.some((x) => x.id === id),
-    );
-
-    if (missingInstructionIds.length > 0) {
-      throw new InstructionsNotFoundError(missingInstructionIds);
-    }
-
-    if (editedRecipe.ingredientSections) {
-      // Delete any ingredients that were removed
-      const ingredientsToRemove = originalRecipe.ingredientSections.flatMap(
-        (originalIngredientSection) => {
-          return originalIngredientSection.ingredients.filter(
-            (originalIngredient) => {
-              return !editedRecipe.ingredientSections?.some(
-                (ingredientSection) =>
-                  "id" in ingredientSection &&
-                  ingredientSection.id === originalIngredientSection.id &&
-                  ingredientSection.ingredients?.some(
-                    (ingredient) =>
-                      "id" in ingredient &&
-                      ingredient.id === originalIngredient.id,
-                  ),
-              );
+        include: {
+          ingredientSections: {
+            include: {
+              ingredients: true,
             },
-          );
+          },
+          instructions: true,
         },
-      );
-
-      await prisma.ingredient.deleteMany({
+      }),
+      prisma.ingredientSection.findMany({
         where: {
           id: {
-            in: ingredientsToRemove.map((ingredient) => ingredient.id),
+            in: touchedIngredientSectionIds,
           },
-          ingredientSection: {
-            recipe: {
-              userId: originalRecipe.userId,
-            },
+          recipeId,
+        },
+      }),
+      prisma.ingredient.findMany({
+        where: {
+          id: {
+            in: touchedIngredientIds,
+          },
+          ingredientSectionId: {
+            in: touchedIngredientSectionIds,
           },
         },
-      });
+        select: {
+          id: true,
+        },
+      }),
+      prisma.instruction.findMany({
+        where: {
+          id: {
+            in: touchedInstructionIds,
+          },
+          recipeId,
+        },
+      }),
+    ]);
 
-      // Delete any ingredient sections that were removed
-      const ingredientSectionsToRemove =
-        originalRecipe.ingredientSections.filter(
-          (originalIngredientSection) => {
+  if (!originalRecipe || !hasWriteAccessToRecipe(userId, originalRecipe)) {
+    throw new RecipeNotFoundError(recipeId);
+  }
+
+  const missingIngredientSectionIds = touchedIngredientSectionIds.filter(
+    (id) => !touchedIngredientSections.some((x) => x.id === id),
+  );
+  if (missingIngredientSectionIds.length > 0) {
+    throw new IngredientSectionsNotFoundError(missingIngredientSectionIds);
+  }
+
+  const missingIngredientIds = touchedIngredientIds.filter(
+    (id) => !ingredients.some((x) => x.id === id),
+  );
+  if (missingIngredientIds.length > 0) {
+    throw new IngredientsNotFoundError(missingIngredientIds);
+  }
+
+  const missingInstructionIds = touchedInstructionIds.filter(
+    (id) => !instructions.some((x) => x.id === id),
+  );
+  if (missingInstructionIds.length > 0) {
+    throw new InstructionsNotFoundError(missingInstructionIds);
+  }
+
+  if (editedRecipe.ingredientSections) {
+    // Delete any ingredients that were removed
+    const ingredientsToRemove = originalRecipe.ingredientSections.flatMap(
+      (originalIngredientSection) => {
+        return originalIngredientSection.ingredients.filter(
+          (originalIngredient) => {
             return !editedRecipe.ingredientSections?.some(
               (ingredientSection) =>
                 "id" in ingredientSection &&
-                ingredientSection.id === originalIngredientSection.id,
+                ingredientSection.id === originalIngredientSection.id &&
+                ingredientSection.ingredients?.some(
+                  (ingredient) =>
+                    "id" in ingredient &&
+                    ingredient.id === originalIngredient.id,
+                ),
             );
           },
         );
+      },
+    );
 
-      await prisma.ingredientSection.deleteMany({
-        where: {
-          id: {
-            in: ingredientSectionsToRemove.map(
-              (ingredientSection) => ingredientSection.id,
-            ),
-          },
+    await prisma.ingredient.deleteMany({
+      where: {
+        id: {
+          in: ingredientsToRemove.map((ingredient) => ingredient.id),
+        },
+        ingredientSection: {
           recipe: {
             userId: originalRecipe.userId,
           },
         },
-      });
+      },
+    });
 
-      // make all orders negative to allow the them to be changed correctly
-      for (let i = 0; i < editedRecipe.ingredientSections.length; i++) {
-        const ingredientSection = editedRecipe.ingredientSections[i];
-        if ("id" in ingredientSection) {
-          await prisma.ingredientSection.update({
-            where: {
-              id: ingredientSection.id,
-            },
-            data: {
-              order: -i - 1,
-            },
-          });
-        }
-      }
+    // Delete any ingredient sections that were removed
+    const ingredientSectionsToRemove = originalRecipe.ingredientSections.filter(
+      (originalIngredientSection) => {
+        return !editedRecipe.ingredientSections?.some(
+          (ingredientSection) =>
+            "id" in ingredientSection &&
+            ingredientSection.id === originalIngredientSection.id,
+        );
+      },
+    );
 
-      for (let i = 0; i < ingredientIds.length; i++) {
-        const ingredientId = ingredientIds[i];
+    await prisma.ingredientSection.deleteMany({
+      where: {
+        id: {
+          in: ingredientSectionsToRemove.map(
+            (ingredientSection) => ingredientSection.id,
+          ),
+        },
+        recipe: {
+          userId: originalRecipe.userId,
+        },
+      },
+    });
 
-        await prisma.ingredient.update({
+    // make all orders negative to allow the them to be changed correctly
+    for (let i = 0; i < editedRecipe.ingredientSections.length; i++) {
+      const ingredientSection = editedRecipe.ingredientSections[i];
+      if ("id" in ingredientSection) {
+        await prisma.ingredientSection.update({
           where: {
-            id: ingredientId,
+            id: ingredientSection.id,
           },
           data: {
             order: -i - 1,
           },
         });
       }
+    }
 
-      for (
-        let ingredientSectionIndex = 0;
-        ingredientSectionIndex < editedRecipe.ingredientSections.length;
-        ingredientSectionIndex++
-      ) {
-        const ingredientSection =
-          editedRecipe.ingredientSections[ingredientSectionIndex];
+    for (let i = 0; i < touchedIngredientIds.length; i++) {
+      const ingredientId = touchedIngredientIds[i];
 
-        if ("id" in ingredientSection) {
-          // This should be updated
-          await prisma.ingredientSection.update({
-            where: {
-              id: ingredientSection.id,
-            },
-            data: {
-              name: ingredientSection.name,
-              order: ingredientSectionIndex,
-            },
-          });
+      await prisma.ingredient.update({
+        where: {
+          id: ingredientId,
+        },
+        data: {
+          order: -i - 1,
+        },
+      });
+    }
 
-          if (ingredientSection.ingredients !== undefined) {
-            for (
-              let ingredientIndex = 0;
-              ingredientIndex < ingredientSection.ingredients.length;
-              ingredientIndex++
-            ) {
-              const ingredient = ingredientSection.ingredients[ingredientIndex];
-              if ("id" in ingredient) {
-                // This should be updated
-                await prisma.ingredient.update({
-                  where: {
-                    id: ingredient.id,
-                  },
-                  data: {
-                    name: ingredient.name,
-                    quantity: ingredient.quantity,
-                    unit: ingredient.unit,
-                    isOptional: ingredient.isOptional,
-                    order: ingredientIndex,
-                  },
-                });
-              } else {
-                // This should be created
-                await prisma.ingredient.create({
-                  data: {
-                    name: ingredient.name,
-                    quantity: ingredient.quantity,
-                    unit: ingredient.unit,
-                    isOptional: ingredient.isOptional,
-                    ingredientSectionId: ingredientSection.id,
-                    order: ingredientIndex,
-                  },
-                });
-              }
-            }
-          }
-        } else {
-          // This should be created
-          const createdIngredientSection =
-            await prisma.ingredientSection.create({
-              data: {
-                name: ingredientSection.name,
-                recipeId,
-                order: ingredientSectionIndex,
-              },
-            });
+    for (
+      let ingredientSectionIndex = 0;
+      ingredientSectionIndex < editedRecipe.ingredientSections.length;
+      ingredientSectionIndex++
+    ) {
+      const ingredientSection =
+        editedRecipe.ingredientSections[ingredientSectionIndex];
 
+      if ("id" in ingredientSection) {
+        // This should be updated
+        await prisma.ingredientSection.update({
+          where: {
+            id: ingredientSection.id,
+          },
+          data: {
+            name: ingredientSection.name,
+            order: ingredientSectionIndex,
+          },
+        });
+
+        if (ingredientSection.ingredients !== undefined) {
           for (
             let ingredientIndex = 0;
             ingredientIndex < ingredientSection.ingredients.length;
@@ -395,7 +344,6 @@ export const editRecipe = async (
                   quantity: ingredient.quantity,
                   unit: ingredient.unit,
                   isOptional: ingredient.isOptional,
-                  ingredientSectionId: createdIngredientSection.id,
                   order: ingredientIndex,
                 },
               });
@@ -407,138 +355,184 @@ export const editRecipe = async (
                   quantity: ingredient.quantity,
                   unit: ingredient.unit,
                   isOptional: ingredient.isOptional,
-                  ingredientSectionId: createdIngredientSection.id,
+                  ingredientSectionId: ingredientSection.id,
                   order: ingredientIndex,
                 },
               });
             }
           }
         }
-      }
-    }
-
-    if (editedRecipe.instructions) {
-      // Delete any instructions that were removed
-      const instructionsToRemove = originalRecipe.instructions.filter(
-        (originalInstruction) => {
-          return !editedRecipe.instructions?.some(
-            (instruction) =>
-              "id" in instruction && instruction.id === originalInstruction.id,
-          );
-        },
-      );
-
-      await prisma.instruction.deleteMany({
-        where: {
-          id: {
-            in: instructionsToRemove.map((instruction) => instruction.id),
+      } else {
+        // This should be created
+        const createdIngredientSection = await prisma.ingredientSection.create({
+          data: {
+            name: ingredientSection.name,
+            recipeId,
+            order: ingredientSectionIndex,
           },
-          recipe: {
-            userId: originalRecipe.userId,
-          },
-        },
-      });
+        });
 
-      // make all orders negative to allow the them to be changed correctly
-      for (let i = 0; i < editedRecipe.instructions.length; i++) {
-        const instruction = editedRecipe.instructions[i];
-        if ("id" in instruction) {
-          await prisma.instruction.update({
-            where: {
-              id: instruction.id,
-            },
-            data: {
-              order: -i - 1,
-            },
-          });
-        }
-      }
-
-      for (let i = 0; i < editedRecipe.instructions.length; i++) {
-        const instruction = editedRecipe.instructions[i];
-
-        if ("id" in instruction) {
-          // This should be updated
-          await prisma.instruction.update({
-            where: {
-              id: instruction.id,
-            },
-            data: {
-              description: instruction.description,
-              order: i,
-            },
-          });
-        } else {
-          // This should be created
-          await prisma.instruction.create({
-            data: {
-              description: instruction.description,
-              recipeId,
-              order: i,
-            },
-          });
+        for (
+          let ingredientIndex = 0;
+          ingredientIndex < ingredientSection.ingredients.length;
+          ingredientIndex++
+        ) {
+          const ingredient = ingredientSection.ingredients[ingredientIndex];
+          if ("id" in ingredient) {
+            // This should be updated
+            await prisma.ingredient.update({
+              where: {
+                id: ingredient.id,
+              },
+              data: {
+                name: ingredient.name,
+                quantity: ingredient.quantity,
+                unit: ingredient.unit,
+                isOptional: ingredient.isOptional,
+                ingredientSectionId: createdIngredientSection.id,
+                order: ingredientIndex,
+              },
+            });
+          } else {
+            // This should be created
+            await prisma.ingredient.create({
+              data: {
+                name: ingredient.name,
+                quantity: ingredient.quantity,
+                unit: ingredient.unit,
+                isOptional: ingredient.isOptional,
+                ingredientSectionId: createdIngredientSection.id,
+                order: ingredientIndex,
+              },
+            });
+          }
         }
       }
     }
+  }
 
-    if (editedRecipe.tags) {
-      // TODO: Allow reordering while preserving ids
-      await prisma.tag.deleteMany({
-        where: {
-          recipeId,
-        },
-      });
-
-      await prisma.tag.createMany({
-        data: editedRecipe.tags.map((tag, tagIndex) => ({
-          text: tag.text,
-          recipeId,
-          order: tagIndex,
-        })),
-      });
-    }
-
-    if (editedRecipe.visibility === RecipeVisibility.PRIVATE) {
-      await prisma.like.deleteMany({
-        where: {
-          recipeId,
-        },
-      });
-    }
-
-    if (editedRecipe.visibility) {
-      const allowedCollectionVisibilities =
-        getValidCollectionVisibilitiesForRecipeVisibility(
-          editedRecipe.visibility,
+  if (editedRecipe.instructions) {
+    // Delete any instructions that were removed
+    const instructionsToRemove = originalRecipe.instructions.filter(
+      (originalInstruction) => {
+        return !editedRecipe.instructions?.some(
+          (instruction) =>
+            "id" in instruction && instruction.id === originalInstruction.id,
         );
-
-      await prisma.recipesOnCollections.deleteMany({
-        where: {
-          recipeId,
-          recipeCollection: {
-            visibility: {
-              notIn: allowedCollectionVisibilities,
-            },
-          },
-        },
-      });
-    }
-
-    return await prisma.recipe.update({
-      where: {
-        id: recipeId,
       },
-      data: {
-        name: editedRecipe.name,
-        description: editedRecipe.description,
-        quantity: editedRecipe.quantity,
-        visibility: editedRecipe.visibility,
-        timeEstimateMinimumMinutes: editedRecipe.timeEstimateMinimumMinutes,
-        timeEstimateMaximumMinutes: editedRecipe.timeEstimateMaximumMinutes,
-        coverImageName,
+    );
+
+    await prisma.instruction.deleteMany({
+      where: {
+        id: {
+          in: instructionsToRemove.map((instruction) => instruction.id),
+        },
+        recipe: {
+          userId: originalRecipe.userId,
+        },
       },
     });
+
+    // make all orders negative to allow the them to be changed correctly
+    for (let i = 0; i < editedRecipe.instructions.length; i++) {
+      const instruction = editedRecipe.instructions[i];
+      if ("id" in instruction) {
+        await prisma.instruction.update({
+          where: {
+            id: instruction.id,
+          },
+          data: {
+            order: -i - 1,
+          },
+        });
+      }
+    }
+
+    for (let i = 0; i < editedRecipe.instructions.length; i++) {
+      const instruction = editedRecipe.instructions[i];
+
+      if ("id" in instruction) {
+        // This should be updated
+        await prisma.instruction.update({
+          where: {
+            id: instruction.id,
+          },
+          data: {
+            description: instruction.description,
+            order: i,
+          },
+        });
+      } else {
+        // This should be created
+        await prisma.instruction.create({
+          data: {
+            description: instruction.description,
+            recipeId,
+            order: i,
+          },
+        });
+      }
+    }
+  }
+
+  if (editedRecipe.tags) {
+    // TODO: Allow reordering while preserving ids
+    await prisma.tag.deleteMany({
+      where: {
+        recipeId,
+      },
+    });
+
+    await prisma.tag.createMany({
+      data: editedRecipe.tags.map((tag, tagIndex) => ({
+        text: tag.text,
+        recipeId,
+        order: tagIndex,
+      })),
+    });
+  }
+
+  if (editedRecipe.visibility === RecipeVisibility.PRIVATE) {
+    await prisma.like.deleteMany({
+      where: {
+        recipeId,
+      },
+    });
+  }
+
+  if (editedRecipe.visibility) {
+    const allowedCollectionVisibilities =
+      getValidCollectionVisibilitiesForRecipeVisibility(
+        editedRecipe.visibility,
+      );
+
+    await prisma.recipesOnCollections.deleteMany({
+      where: {
+        recipeId,
+        recipeCollection: {
+          visibility: {
+            notIn: allowedCollectionVisibilities,
+          },
+        },
+      },
+    });
+  }
+
+  return await prisma.recipe.update({
+    where: {
+      id: recipeId,
+    },
+    data: {
+      name: editedRecipe.name,
+      description: editedRecipe.description,
+      quantity: editedRecipe.quantity,
+      visibility: editedRecipe.visibility,
+      timeEstimateMinimumMinutes: editedRecipe.timeEstimateMinimumMinutes,
+      timeEstimateMaximumMinutes: editedRecipe.timeEstimateMaximumMinutes,
+      coverImageName,
+    },
   });
+};
 
 export const getSingleRecipeWithoutCoverImageUrl = async (id: string) => {
   const recipe = await prisma.recipe.findUnique({
