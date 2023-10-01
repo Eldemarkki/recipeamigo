@@ -100,8 +100,8 @@ export const getIngredientText = (
     ? ingredientsLocaleMap[language][ingredient]
     : { singular: ingredient, plural: ingredient };
 
-  if (amount === null) {
-    return ingredientText[getRequiredAmountType(1, unit)];
+  if (amount === null || amount === 0) {
+    return capitalize(ingredientText[getRequiredAmountType(1, unit)]);
   }
 
   const requiredAmountType = getRequiredAmountType(amount, unit);
