@@ -89,4 +89,5 @@
 | 30.9.2023 | 2     | Refactoring, small improvements                                                                  |
 | 30.9.2023 | 4     | Add integration tests, optimizing creating/editing recipes and collections                       |
 | 1.10.2023 | 1     | Allow editing instructions, ingredient section names, show recipe cover images on recipe page    |
-| Total     | 164   |                                                                                                  |
+| 1.10.2023 | 1     | Adding tests, refactoring, fix bug with PDF export                                               |
+| Total     | 165   |                                                                                                  |
