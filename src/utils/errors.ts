@@ -141,3 +141,27 @@ export class UserNotFoundError extends NotFoundError {
     super(`User with username ${username} not found`);
   }
 }
+
+export class IngredientSectionsNotFoundError extends NotFoundError {
+  constructor(missingIngredientSectionIds: string[]) {
+    super(
+      `Ingredient sections with ids ${missingIngredientSectionIds.join(
+        ", ",
+      )} not found`,
+    );
+  }
+}
+
+export class IngredientsNotFoundError extends NotFoundError {
+  constructor(missingIngredientIds: string[]) {
+    super(`Ingredients with ids ${missingIngredientIds.join(", ")} not found`);
+  }
+}
+
+export class InstructionsNotFoundError extends NotFoundError {
+  constructor(missingInstructionIds: string[]) {
+    super(
+      `Instructions with ids ${missingInstructionIds.join(", ")} not found`,
+    );
+  }
+}

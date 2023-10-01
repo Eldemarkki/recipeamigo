@@ -4,7 +4,12 @@ import {
   getSingleRecipe,
   getSingleRecipeWithoutCoverImageUrl,
 } from "../../database/recipes";
-import { RecipeNotFoundError } from "../../utils/errors";
+import {
+  IngredientSectionsNotFoundError,
+  IngredientsNotFoundError,
+  InstructionsNotFoundError,
+  RecipeNotFoundError,
+} from "../../utils/errors";
 import { createRandomRecipe } from "../../utils/tests/recipes";
 import { createUserToDatabaseAndAuthenticate } from "../../utils/tests/testUtils";
 import { postLikeHandler } from "./likes/postLikeHandler";
@@ -260,4 +265,174 @@ describe("recipePutHandler", () => {
       expect(afterLikeCount).toBe(shouldRemoveLikes ? 0 : 1);
     },
   );
+
+  test("can not include ingredient sections from other recipes", async () => {
+    const victim = await createUserToDatabaseAndAuthenticate();
+    const victimRecipeShallow = await createRecipe(
+      victim.userId,
+      createRandomRecipe({
+        visibility: RecipeVisibility.PUBLIC,
+      }),
+      null,
+    );
+    const victimRecipe = await getSingleRecipeWithoutCoverImageUrl(
+      victimRecipeShallow.id,
+    );
+
+    if (!victimRecipe) {
+      throw new Error("Recipe not found. This should never happen");
+    }
+
+    const attacker = await createUserToDatabaseAndAuthenticate();
+    const attackerRecipe = await createRecipe(
+      attacker.userId,
+      createRandomRecipe({
+        visibility: RecipeVisibility.PUBLIC,
+      }),
+      null,
+    );
+
+    await expect(
+      recipesPutHandler.handler(
+        attacker,
+        {
+          coverImageAction: "keep",
+          visibility: RecipeVisibility.PUBLIC,
+          ingredientSections: [
+            {
+              id: victimRecipe.ingredientSections[0].id,
+              name: "Updated ingredient section name",
+            },
+          ],
+        },
+        {
+          id: attackerRecipe.id,
+        },
+      ),
+    ).rejects.toThrowError(
+      new IngredientSectionsNotFoundError([
+        victimRecipe.ingredientSections[0].id,
+      ]),
+    );
+  });
+
+  test("can not move ingredients between recipes", async () => {
+    const victim = await createUserToDatabaseAndAuthenticate();
+    const victimRecipeShallow = await createRecipe(
+      victim.userId,
+      createRandomRecipe({
+        visibility: RecipeVisibility.PUBLIC,
+      }),
+      null,
+    );
+    const victimRecipe = await getSingleRecipeWithoutCoverImageUrl(
+      victimRecipeShallow.id,
+    );
+
+    if (!victimRecipe) {
+      throw new Error("Recipe not found. This should never happen");
+    }
+
+    const attacker = await createUserToDatabaseAndAuthenticate();
+    const attackerRecipeShallow = await createRecipe(
+      attacker.userId,
+      createRandomRecipe({
+        visibility: RecipeVisibility.PUBLIC,
+      }),
+      null,
+    );
+    const attackerRecipe = await getSingleRecipeWithoutCoverImageUrl(
+      attackerRecipeShallow.id,
+    );
+
+    if (!attackerRecipe) {
+      throw new Error("Recipe not found. This should never happen");
+    }
+
+    await expect(
+      recipesPutHandler.handler(
+        attacker,
+        {
+          coverImageAction: "keep",
+          visibility: RecipeVisibility.PUBLIC,
+          ingredientSections: [
+            {
+              id: attackerRecipe.ingredientSections[0].id,
+              name: "Updated ingredient section name",
+              ingredients: [
+                {
+                  id: victimRecipe.ingredientSections[0].ingredients[0].id,
+                  quantity: 1,
+                  name: "Updated ingredient name",
+                  unit: "TABLESPOON" as const,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: attackerRecipe.id,
+        },
+      ),
+    ).rejects.toThrowError(
+      new IngredientsNotFoundError([
+        victimRecipe.ingredientSections[0].ingredients[0].id,
+      ]),
+    );
+  });
+
+  test("can not move instructions to other recipes", async () => {
+    const victim = await createUserToDatabaseAndAuthenticate();
+    const victimRecipeShallow = await createRecipe(
+      victim.userId,
+      createRandomRecipe({
+        visibility: RecipeVisibility.PUBLIC,
+      }),
+      null,
+    );
+    const victimRecipe = await getSingleRecipeWithoutCoverImageUrl(
+      victimRecipeShallow.id,
+    );
+
+    if (!victimRecipe) {
+      throw new Error("Recipe not found. This should never happen");
+    }
+
+    const attacker = await createUserToDatabaseAndAuthenticate();
+    const attackerRecipeShallow = await createRecipe(
+      attacker.userId,
+      createRandomRecipe({
+        visibility: RecipeVisibility.PUBLIC,
+      }),
+      null,
+    );
+    const attackerRecipe = await getSingleRecipeWithoutCoverImageUrl(
+      attackerRecipeShallow.id,
+    );
+
+    if (!attackerRecipe) {
+      throw new Error("Recipe not found. This should never happen");
+    }
+
+    await expect(
+      recipesPutHandler.handler(
+        attacker,
+        {
+          coverImageAction: "keep",
+          visibility: RecipeVisibility.PUBLIC,
+          instructions: [
+            {
+              id: victimRecipe.instructions[0].id,
+              description: "Updated instruction text",
+            },
+          ],
+        },
+        {
+          id: attackerRecipe.id,
+        },
+      ),
+    ).rejects.toThrowError(
+      new InstructionsNotFoundError([victimRecipe.instructions[0].id]),
+    );
+  });
 });

@@ -9,7 +9,12 @@ import type { createRecipeSchema } from "../handlers/recipes/recipesPostHandler"
 import { DEFAULT_BUCKET_NAME, s3 } from "../s3";
 import { notNull } from "../utils/arrayUtils";
 import { getValidCollectionVisibilitiesForRecipeVisibility } from "../utils/collectionUtils";
-import { RecipeNotFoundError } from "../utils/errors";
+import {
+  IngredientSectionsNotFoundError,
+  IngredientsNotFoundError,
+  InstructionsNotFoundError,
+  RecipeNotFoundError,
+} from "../utils/errors";
 import { hasWriteAccessToRecipe } from "../utils/recipeUtils";
 import { RecipeVisibility } from "@prisma/client";
 import type { UUID } from "crypto";
@@ -157,13 +162,16 @@ export const editRecipe = async (
         id: {
           in: touchedIngredientSectionIds,
         },
+        recipeId,
       },
     });
-    const hasAccessToAllIngredientSections = touchedIngredientSections.every(
-      (ingredientSection) => ingredientSection.recipeId === recipeId,
+
+    const missingIngredientSectionIds = touchedIngredientSectionIds.filter(
+      (id) => !touchedIngredientSections.some((x) => x.id === id),
     );
-    if (!hasAccessToAllIngredientSections) {
-      throw new Error("Cannot move ingredient section to another recipe");
+
+    if (missingIngredientSectionIds.length > 0) {
+      throw new IngredientSectionsNotFoundError(missingIngredientSectionIds);
     }
 
     const ingredientIds = (editedRecipe.ingredientSections ?? [])
@@ -178,21 +186,21 @@ export const editRecipe = async (
         id: {
           in: ingredientIds,
         },
+        ingredientSectionId: {
+          in: touchedIngredientSectionIds,
+        },
       },
       select: {
-        ingredientSection: {
-          select: {
-            recipeId: true,
-          },
-        },
+        id: true,
       },
     });
 
-    const hasAccessToAllIngredients = ingredients.every(
-      (ingredient) => ingredient.ingredientSection.recipeId === recipeId,
+    const missingIngredientIds = ingredientIds.filter(
+      (id) => !ingredients.some((x) => x.id === id),
     );
-    if (!hasAccessToAllIngredients) {
-      throw new Error("Cannot move ingredient to another recipe");
+
+    if (missingIngredientIds.length > 0) {
+      throw new IngredientsNotFoundError(missingIngredientIds);
     }
 
     const touchedInstructionIds = (editedRecipe.instructions ?? [])
@@ -204,14 +212,16 @@ export const editRecipe = async (
         id: {
           in: touchedInstructionIds,
         },
+        recipeId,
       },
     });
 
-    const hasAccessToAllInstructions = instructions.every(
-      (instruction) => instruction.recipeId === recipeId,
+    const missingInstructionIds = touchedInstructionIds.filter(
+      (id) => !instructions.some((x) => x.id === id),
     );
-    if (!hasAccessToAllInstructions) {
-      throw new Error("Cannot move instruction to another recipe");
+
+    if (missingInstructionIds.length > 0) {
+      throw new InstructionsNotFoundError(missingInstructionIds);
     }
 
     if (editedRecipe.ingredientSections) {
