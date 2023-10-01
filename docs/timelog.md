@@ -88,4 +88,5 @@
 | 27.9.2023 | 2     | Create infrastructure diagram, documentation, adding tests                                       |
 | 30.9.2023 | 2     | Refactoring, small improvements                                                                  |
 | 30.9.2023 | 4     | Add integration tests, optimizing creating/editing recipes and collections                       |
-| Total     | 163   |                                                                                                  |
+| 1.10.2023 | 1     | Allow editing instructions, ingredient section names, show recipe cover images on recipe page    |
+| Total     | 164   |                                                                                                  |
