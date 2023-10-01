@@ -47,7 +47,7 @@ export const recipePageDataLoader = {
     });
 
     // No need to run as `await` since we don't care about the result
-    void increaseViewCountForRecipe(recipeId);
+    void increaseViewCountForRecipe(recipeId).then(() => {});
 
     return {
       recipe,
