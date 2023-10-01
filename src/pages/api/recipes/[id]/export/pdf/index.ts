@@ -5,6 +5,7 @@ import {
 import { getSingleRecipe } from "../../../../../../database/recipes";
 import { getIngredientText } from "../../../../../../ingredients/ingredientTranslator";
 import { getUserFromRequest } from "../../../../../../utils/auth";
+import { getI18nClient } from "../../../../../../utils/getI18nClient";
 import {
   getInstructionText,
   getTimeEstimateType,
@@ -45,7 +46,7 @@ const handler = (async (req, res) => {
     }
 
     await serverSideTranslations(locale, ["common", "recipeView"]);
-    const t = i18n?.t;
+    const t = i18n?.t ?? (await getI18nClient(locale))?.t;
     if (!t) {
       console.log("Failed to get t function");
       res.status(500).end();
