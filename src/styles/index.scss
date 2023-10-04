@@ -6,6 +6,7 @@ html[data-theme="light"] {
   --text-white: #fff;
   --text: var(--text-black);
   --text-inverted: var(--text-white);
+  --text-placeholder: #0000007f;
   --primary: #f2c61d;
   --primary-light: #fde47d;
   --primary-shade-1: #dfb81c;
@@ -38,6 +39,7 @@ html[data-theme="light"] {
   --background-color-secondary: #2e323d;
   --text: var(--text-white);
   --text-inverted: var(--text-black);
+  --text-placeholder: #ffffff7f;
   --primary: #f2c61d;
   --primary-shade-1: #dfb81c;
   --button-secondary-hover-background: #7a662957;
@@ -119,4 +121,12 @@ textarea {
 hr {
   border: 1px solid var(--text);
   margin: 1rem 0;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--text-placeholder);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }

@@ -40,7 +40,7 @@
     "editingIngredientTitle": "Editing \"{{ingredientName}}\"",
     "editingInstructionTitle": "Editing instruction",
     "instructions": {
-      "newInstructionPlaceholder": "New instruction",
+      "newInstructionPlaceholder": "Mix eggs and flour...",
       "addInstructionButton": "Add instruction"
     },
     "ingredients": {

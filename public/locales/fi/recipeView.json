@@ -40,7 +40,7 @@
     "editingIngredientTitle": "Muokataan \"{{ingredientName}}\"",
     "editingInstructionTitle": "Muokataan ohjetta",
     "instructions": {
-      "newInstructionPlaceholder": "Uusi ohje",
+      "newInstructionPlaceholder": "Sekoita kananmunat ja vehnäjauho...",
       "addInstructionButton": "Lisää ohje"
     },
     "ingredients": {

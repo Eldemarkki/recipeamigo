@@ -62,7 +62,7 @@ export const EditableInstructionList = ({
             description: instruction,
           });
         }}
-        buttonText={t("edit.instructions.newInstructionPlaceholder")}
+        buttonText={t("edit.instructions.addInstructionButton")}
       />
     </div>
   );

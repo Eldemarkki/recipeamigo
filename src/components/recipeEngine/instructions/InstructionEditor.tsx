@@ -6,6 +6,7 @@ import { NewCountdownDialog } from "./NewCountdownDialog";
 import { TimerIcon } from "@radix-ui/react-icons";
 import { Node } from "@tiptap/core";
 import Paragraph from "@tiptap/extension-paragraph";
+import Placeholder from "@tiptap/extension-placeholder";
 import Text from "@tiptap/extension-text";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { useTranslation } from "next-i18next";
@@ -28,8 +29,20 @@ export const InstructionEditor = ({
   onSave,
   buttonText,
 }: InstructionEditorProps) => {
+  const { t } = useTranslation(["common", "recipeView"]);
+
   const editor = useEditor({
-    extensions: [OneLiner, Paragraph, Text, CountdownExtension],
+    extensions: [
+      OneLiner,
+      Paragraph,
+      Text,
+      CountdownExtension,
+      Placeholder.configure({
+        placeholder: t(
+          "recipeView:edit.instructions.newInstructionPlaceholder",
+        ),
+      }),
+    ],
     content: initialContent,
     editorProps: {
       attributes: {
@@ -37,8 +50,6 @@ export const InstructionEditor = ({
       },
     },
   });
-
-  const { t } = useTranslation(["common", "recipeView"]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -78,6 +89,7 @@ export const InstructionEditor = ({
               console.error("Editor was null when trying to save instruction");
             }
           }}
+          disabled={editor?.getText().length === 0}
         >
           {buttonText}
         </Button>
