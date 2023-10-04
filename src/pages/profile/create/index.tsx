@@ -62,7 +62,7 @@ export default function CreateProfilePage() {
   return (
     <div className={styles.container}>
       <div className={styles.innerContainer}>
-        <h1>{t("question")}</h1>
+        <h1 className={styles.title}>{t("question")}</h1>
         <form
           className={styles.form}
           onSubmit={(e) => {
@@ -112,7 +112,7 @@ export const getServerSideProps = (async ({ req, locale }) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "en", ["profile"])),
+      ...(await serverSideTranslations(locale ?? "en", ["common", "profile"])),
     },
   };
 }) satisfies GetServerSideProps;

@@ -1,6 +1,8 @@
 import config from "../../config";
 import styles from "./page.module.css";
 import { SignIn } from "@clerk/nextjs";
+import type { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 // Currently the app name is "Recipeamigo" and the "Recipe" part should have a gradient.
 // If/when the app name is changed, the styling part will have to be reconsidered, so this
@@ -31,3 +33,9 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps = (async (ctx) => ({
+  props: {
+    ...(await serverSideTranslations(ctx.locale ?? "en", ["common"])),
+  },
+})) satisfies GetServerSideProps;

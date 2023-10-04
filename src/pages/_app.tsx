@@ -19,12 +19,7 @@ const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin-ext"],
 });
 
-const navbarHiddenPaths = ["/login", "/sign-up", "/profile/create"];
-
-const App = ({ Component, pageProps, router }: AppProps) => {
-  const showNavbar = !navbarHiddenPaths.some((path) =>
-    router.pathname.startsWith(path),
-  );
+const App = ({ Component, pageProps }: AppProps) => {
   useTheme();
 
   return (
@@ -48,7 +43,7 @@ const App = ({ Component, pageProps, router }: AppProps) => {
           }}
         />
         <div style={{ height: "100%" }}>
-          {showNavbar && <Navbar />}
+          <Navbar />
           <Component {...pageProps} />
         </div>
       </ClerkProvider>
