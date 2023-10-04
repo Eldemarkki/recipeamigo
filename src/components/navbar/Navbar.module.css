@@ -42,7 +42,7 @@
   }
 }
 
-@media screen and (max-width: 670px) {
+@media screen and (max-width: 800px) {
   .container,
   .navbar,
   .linkList {
@@ -78,7 +78,7 @@
   color: var(--text);
 }
 
-@media screen and (min-width: 671px) {
+@media screen and (min-width: 801px) {
   .toggleButton {
     display: none;
   }
