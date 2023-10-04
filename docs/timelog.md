@@ -91,4 +91,5 @@
 | 1.10.2023 | 1     | Allow editing instructions, ingredient section names, show recipe cover images on recipe page    |
 | 1.10.2023 | 1     | Adding tests, refactoring, fix bug with PDF export                                               |
 | 2.10.2023 | 1     | Enable Clerk production mode (only changes in DNS records, Vercel and Clerk. No changes in Git)  |
-| Total     | 166   |                                                                                                  |
+| 4.10.2023 | 1     | Bunch of small improvements                                                                      |
+| Total     | 167   |                                                                                                  |
