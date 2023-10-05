@@ -47,4 +47,5 @@ export default function UserPage({
 export const getServerSideProps = createPropsLoader(userPageDataLoader, [
   "common",
   "userPage",
+  "browse",
 ]);
