@@ -129,6 +129,7 @@
     }
   },
   "pageTitle": {
-    "edit": "Muokataan {{name}}"
+    "edit": "Muokataan {{name}}",
+    "new": "Uusi resepti"
   }
 }

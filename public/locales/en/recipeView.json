@@ -129,6 +129,7 @@
     }
   },
   "pageTitle": {
-    "edit": "Editing {{name}}"
+    "edit": "Editing {{name}}",
+    "new": "New recipe"
   }
 }

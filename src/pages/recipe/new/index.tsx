@@ -1,5 +1,6 @@
 import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../components/recipeEngine/RecipeForm";
+import config from "../../../config";
 import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import { newRecipePageDataLoader } from "../../../dataLoaders/recipes/newRecipePageDataLoader";
 import type {
@@ -10,6 +11,7 @@ import { useErrors } from "../../../hooks/useErrors";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { formDataFromS3PostPolicy } from "../../../utils/objectUtils";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import type { z } from "zod";
 
@@ -53,24 +55,31 @@ const saveRecipe = async (
 export default function NewRecipePage() {
   const router = useRouter();
   const { showErrorToast } = useErrors();
-  const { t } = useTranslation("errors");
+  const { t } = useTranslation(["errors", "recipeView"]);
 
   return (
-    <PageWrapper>
-      <RecipeForm
-        type="new"
-        onSubmit={async (recipe, coverImage) => {
-          try {
-            const savedRecipe = await saveRecipe(recipe, coverImage);
-            void router.push("/recipe/" + savedRecipe.id);
-          } catch (e) {
-            showErrorToast(e, {
-              400: t("createRecipe.400"),
-            });
-          }
-        }}
-      />
-    </PageWrapper>
+    <>
+      <Head>
+        <title>
+          {t("recipeView:pageTitle.new")} | {config.APP_NAME}
+        </title>
+      </Head>
+      <PageWrapper>
+        <RecipeForm
+          type="new"
+          onSubmit={async (recipe, coverImage) => {
+            try {
+              const savedRecipe = await saveRecipe(recipe, coverImage);
+              void router.push("/recipe/" + savedRecipe.id);
+            } catch (e) {
+              showErrorToast(e, {
+                400: t("createRecipe.400"),
+              });
+            }
+          }}
+        />
+      </PageWrapper>
+    </>
   );
 }
 
