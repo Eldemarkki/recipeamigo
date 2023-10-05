@@ -9,6 +9,7 @@ import { IngredientSection } from "../../../components/recipeView/IngredientSect
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
 import { TagList } from "../../../components/recipeView/TagList";
+import config from "../../../config";
 import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import { recipePageDataLoader } from "../../../dataLoaders/recipes/recipePageDataLoader";
 import { useErrors } from "../../../hooks/useErrors";
@@ -129,6 +130,9 @@ export default function RecipePage(
         {recipe.tags.map((tag) => (
           <meta property="article:tag" content={tag.text} key={tag.order} />
         ))}
+        <title>
+          {recipe.name} | {config.APP_NAME}
+        </title>
       </Head>
       <PageWrapper mainClass={styles.container} maxWidth={1000}>
         {recipe.coverImageUrl && (
