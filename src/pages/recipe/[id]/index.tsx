@@ -81,7 +81,10 @@ export default function RecipePage(
 
   const { showErrorToast } = useErrors();
 
+  const [likeLoading, setLikeLoading] = useState(false);
+
   const handleLikeButtonClick = async () => {
+    setLikeLoading(true);
     try {
       if (likeStatus) {
         await unlikeRecipe();
@@ -90,6 +93,8 @@ export default function RecipePage(
       }
     } catch (error) {
       showErrorToast(error);
+    } finally {
+      setLikeLoading(false);
     }
   };
 
@@ -224,6 +229,7 @@ export default function RecipePage(
                 icon={
                   likeStatus ? <HiMiniHandThumbDown /> : <HiMiniHandThumbUp />
                 }
+                loading={likeLoading}
               >
                 {likeStatus
                   ? t("recipeView:likes.unlikeButton")
