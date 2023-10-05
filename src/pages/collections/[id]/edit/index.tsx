@@ -5,6 +5,7 @@ import { Button } from "../../../../components/button/Button";
 import { ConfirmationDialog } from "../../../../components/dialog/ConfirmationDialog";
 import { ErrorText } from "../../../../components/error/ErrorText";
 import { PageWrapper } from "../../../../components/misc/PageWrapper";
+import config from "../../../../config";
 import { collectionEditPageDataLoader } from "../../../../dataLoaders/collections/collectionEditPageDataLoader";
 import { createPropsLoader } from "../../../../dataLoaders/loadProps";
 import { type editCollection as editCollectionApi } from "../../../../database/collections";
@@ -18,6 +19,7 @@ import { RecipeCollectionVisibility } from "@prisma/client";
 import { TrashIcon } from "@radix-ui/react-icons";
 import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
 import type { z } from "zod";
@@ -117,6 +119,12 @@ export default function EditCollectionPage({
 
   return (
     <>
+      <Head>
+        <title>
+          {t("collections:pageTitles.edit", { name: collection.name })} |{" "}
+          {config.APP_NAME}
+        </title>
+      </Head>
       <ConfirmationDialog
         isOpen={deleteDialogOpen}
         title={t("collections:edit.delete.title", { name: collection.name })}

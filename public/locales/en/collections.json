@@ -19,5 +19,8 @@
   },
   "emptyCollection": "This collection is empty.",
   "recipeCount_one": "{{count}} recipe",
-  "recipeCount_other": "{{count}} recipes"
+  "recipeCount_other": "{{count}} recipes",
+  "pageTitles": {
+    "edit": "Editing {{name}}"
+  }
 }

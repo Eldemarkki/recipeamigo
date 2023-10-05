@@ -19,5 +19,8 @@
   },
   "emptyCollection": "Tämä kokoelma on tyhjä.",
   "recipeCount_one": "{{count}} resepti",
-  "recipeCount_other": "{{count}} reseptiä"
+  "recipeCount_other": "{{count}} reseptiä",
+  "pageTitles": {
+    "edit": "Muokataan {{name}}"
+  }
 }
