@@ -1,10 +1,12 @@
 import { LinkButton } from "../../../components/LinkButton";
 import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
+import { Link } from "../../../components/link/Link";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
 import { VisibilityText } from "../../../components/misc/VisibilityText";
 import { collectionPageDataLoader } from "../../../dataLoaders/collections/collectionPageDataLoader";
 import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
+import { PersonIcon } from "@radix-ui/react-icons";
 import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 
@@ -35,9 +37,12 @@ export default function CollectionPage({
             visibility={collection.visibility}
           />
           <span>{"\u2022"}</span>
-          <span>
-            {t("collections:createdBy", { name: collection.user.username })}
-          </span>
+          <Link
+            href={`/user/${collection.user.username}`}
+            icon={<PersonIcon />}
+          >
+            {collection.user.username}
+          </Link>
           <span>{"\u2022"}</span>
           <span>
             {t("collections:recipeCount", {

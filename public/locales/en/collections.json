@@ -18,7 +18,6 @@
     }
   },
   "emptyCollection": "This collection is empty.",
-  "createdBy": "Created by {{name}}",
   "recipeCount_one": "{{count}} recipe",
   "recipeCount_other": "{{count}} recipes"
 }

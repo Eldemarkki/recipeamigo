@@ -18,7 +18,6 @@
     }
   },
   "emptyCollection": "Tämä kokoelma on tyhjä.",
-  "createdBy": "Luonut {{name}}",
   "recipeCount_one": "{{count}} resepti",
   "recipeCount_other": "{{count}} reseptiä"
 }
