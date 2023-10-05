@@ -1,5 +1,6 @@
 import { PageWrapper } from "../../../../components/misc/PageWrapper";
 import { RecipeForm } from "../../../../components/recipeEngine/RecipeForm";
+import config from "../../../../config";
 import { createPropsLoader } from "../../../../dataLoaders/loadProps";
 import { editRecipePageDataLoader } from "../../../../dataLoaders/recipes/editRecipePageDataLoader";
 import type {
@@ -10,6 +11,8 @@ import { useErrors } from "../../../../hooks/useErrors";
 import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
 import { formDataFromS3PostPolicy } from "../../../../utils/objectUtils";
 import type { InferGetServerSidePropsType } from "next";
+import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import type { z } from "zod";
 
@@ -58,22 +61,31 @@ export default function EditRecipePage({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const { showErrorToast } = useErrors();
+  const { t } = useTranslation("recipeView");
 
   return (
-    <PageWrapper>
-      <RecipeForm
-        type="edit"
-        initialRecipe={initialRecipe}
-        onSubmit={async (recipe, coverImage) => {
-          try {
-            await editRecipe(initialRecipe.id, recipe, coverImage);
-            void router.push("/recipe/" + initialRecipe.id);
-          } catch (error) {
-            showErrorToast(error);
-          }
-        }}
-      />
-    </PageWrapper>
+    <>
+      <Head>
+        <title>
+          {t("pageTitle.edit", { name: initialRecipe.name })} |{" "}
+          {config.APP_NAME}
+        </title>
+      </Head>
+      <PageWrapper>
+        <RecipeForm
+          type="edit"
+          initialRecipe={initialRecipe}
+          onSubmit={async (recipe, coverImage) => {
+            try {
+              await editRecipe(initialRecipe.id, recipe, coverImage);
+              void router.push("/recipe/" + initialRecipe.id);
+            } catch (error) {
+              showErrorToast(error);
+            }
+          }}
+        />
+      </PageWrapper>
+    </>
   );
 }
 

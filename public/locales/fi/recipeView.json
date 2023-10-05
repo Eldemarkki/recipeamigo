@@ -127,5 +127,8 @@
       "unlisted": "Koska tämä resepti on piilotettu, sitä ei voi lisätä julkisiin kokoelmiin. Olemme piilottaneet julkiset kokoelmasi tästä listasta.",
       "private": "Koska tämä resepti on yksityinen, sitä ei voi lisätä julkisiin eikä piilotettuihin kokoelmiin. Olemme piilottaneet julkiset ja piilotetut kokoelmasi tästä listasta."
     }
+  },
+  "pageTitle": {
+    "edit": "Muokataan {{name}}"
   }
 }
