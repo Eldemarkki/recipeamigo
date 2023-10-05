@@ -10,26 +10,18 @@ export const LinkButton = forwardRef<
     variant?: "primary" | "secondary";
     icon?: ReactNode;
   }
->(
-  (
-    { children, className, rectangular = false, variant = "primary", ...props },
-    ref,
-  ) => (
-    <Link
-      {...props}
-      ref={ref}
-      className={[
-        styles[variant],
-        rectangular ? styles.rectangular : "",
-        styles.linkButton,
-        className,
-      ].join(" ")}
-      unstyled
-    >
-      {props.icon}
-      {children}
-    </Link>
-  ),
-);
+>(({ className, rectangular = false, variant = "primary", ...props }, ref) => (
+  <Link
+    {...props}
+    ref={ref}
+    className={[
+      styles[variant],
+      rectangular ? styles.rectangular : "",
+      styles.linkButton,
+      className,
+    ].join(" ")}
+    unstyled
+  />
+));
 
 LinkButton.displayName = "LinkButton";
