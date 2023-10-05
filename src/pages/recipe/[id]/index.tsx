@@ -17,6 +17,7 @@ import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { getTimeEstimateType } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
 import {
+  ClockIcon,
   EyeOpenIcon,
   HeartFilledIcon,
   Pencil1Icon,
@@ -185,6 +186,28 @@ export default function RecipePage(
               <EyeOpenIcon />
               {recipe.viewCount}
             </span>
+            {timeEstimateType !== null && (
+              <>
+                <span>{"\u2022"}</span>
+                <span className={styles.timeEstimate}>
+                  <ClockIcon />
+                  {timeEstimateType === "single" ? (
+                    <p>
+                      {t("recipeView:timeEstimate.single", {
+                        count: recipe.timeEstimateMinimumMinutes,
+                      })}
+                    </p>
+                  ) : (
+                    <p>
+                      {t("recipeView:timeEstimate.range", {
+                        min: recipe.timeEstimateMinimumMinutes,
+                        max: recipe.timeEstimateMaximumMinutes,
+                      })}
+                    </p>
+                  )}
+                </span>
+              </>
+            )}
             <span>{"\u2022"}</span>
             <span className={styles.likeCount}>
               <HeartFilledIcon />
@@ -208,21 +231,6 @@ export default function RecipePage(
               </Button>
             )}
           </div>
-          {timeEstimateType !== null &&
-            (timeEstimateType === "single" ? (
-              <p>
-                {t("recipeView:timeEstimate.single", {
-                  count: recipe.timeEstimateMinimumMinutes,
-                })}
-              </p>
-            ) : (
-              <p>
-                {t("recipeView:timeEstimate.range", {
-                  min: recipe.timeEstimateMinimumMinutes,
-                  max: recipe.timeEstimateMaximumMinutes,
-                })}
-              </p>
-            ))}
           <p>{recipe.description}</p>
         </div>
         <div className={styles.recipeQuantityPickerContainer}>

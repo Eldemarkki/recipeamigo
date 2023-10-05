@@ -1,8 +1,8 @@
 {
   "timeEstimate": {
-    "single_one": "Time estimate: {{count}} minute",
-    "single_other": "Time estimate: {{count}} minutes",
-    "range": "Time estimate: {{min}} - {{max}} minutes"
+    "single_one": "{{count}} minute",
+    "single_other": "{{count}} minutes",
+    "range": "{{min}} - {{max}} minutes"
   },
   "likes": {
     "likeCountText_one": "{{count}} like",
