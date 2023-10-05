@@ -6,5 +6,6 @@
     "profileAlreadyExists": "Profile already exists",
     "usernameAlreadyTaken": "Username already taken",
     "unknownError": "Unknown error"
-  }
+  },
+  "pageTitle": "Create profile"
 }

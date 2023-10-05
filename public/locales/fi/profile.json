@@ -6,5 +6,6 @@
     "profileAlreadyExists": "Profiili on jo olemassa",
     "usernameAlreadyTaken": "Samanniminen käyttäjä on jo olemassa",
     "unknownError": "Tuntematon virhe"
-  }
+  },
+  "pageTitle": "Luo profiili"
 }

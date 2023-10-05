@@ -5,6 +5,7 @@ import type { UserProfile } from "@prisma/client";
 import type { GetServerSideProps } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -60,32 +61,37 @@ export default function CreateProfilePage() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.innerContainer}>
-        <h1 className={styles.title}>{t("question")}</h1>
-        <form
-          className={styles.form}
-          onSubmit={(e) => {
-            e.preventDefault();
-            void saveProfile();
-          }}
-        >
-          <input
-            type="text"
-            value={profileName}
-            onChange={(e) => {
-              setProfileName(e.target.value);
+    <>
+      <Head>
+        <title>{t("pageTitle")}</title>
+      </Head>
+      <div className={styles.container}>
+        <div className={styles.innerContainer}>
+          <h1 className={styles.title}>{t("question")}</h1>
+          <form
+            className={styles.form}
+            onSubmit={(e) => {
+              e.preventDefault();
+              void saveProfile();
             }}
-            placeholder={t("placeholderName")}
-            minLength={3}
-            maxLength={32}
-            pattern="[a-zA-Z0-9_]+"
-            required
-          />
-          <Button type="submit">{t("createProfileButton")}</Button>
-        </form>
+          >
+            <input
+              type="text"
+              value={profileName}
+              onChange={(e) => {
+                setProfileName(e.target.value);
+              }}
+              placeholder={t("placeholderName")}
+              minLength={3}
+              maxLength={32}
+              pattern="[a-zA-Z0-9_]+"
+              required
+            />
+            <Button type="submit">{t("createProfileButton")}</Button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
