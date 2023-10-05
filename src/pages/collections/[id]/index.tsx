@@ -27,19 +27,24 @@ export default function CollectionPage({
         </div>
       }
     >
-      {collection.description && <p>{collection.description}</p>}
-      <div className={styles.infoRow}>
-        <VisibilityText type="collection" visibility={collection.visibility} />
-        <span>{"\u2022"}</span>
-        <span>
-          {t("collections:createdBy", { name: collection.user.username })}
-        </span>
-        <span>{"\u2022"}</span>
-        <span>
-          {t("collections:recipeCount", {
-            count: collection.RecipesOnCollections.length,
-          })}
-        </span>
+      <div className={styles.infoSection}>
+        {collection.description && <p>{collection.description}</p>}
+        <div className={styles.infoRow}>
+          <VisibilityText
+            type="collection"
+            visibility={collection.visibility}
+          />
+          <span>{"\u2022"}</span>
+          <span>
+            {t("collections:createdBy", { name: collection.user.username })}
+          </span>
+          <span>{"\u2022"}</span>
+          <span>
+            {t("collections:recipeCount", {
+              count: collection.RecipesOnCollections.length,
+            })}
+          </span>
+        </div>
       </div>
       <hr />
       {collection.RecipesOnCollections.length ? (
