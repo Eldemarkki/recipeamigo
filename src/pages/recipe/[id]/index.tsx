@@ -16,13 +16,19 @@ import type { Locale } from "../../../i18next";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { getTimeEstimateType } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
-import { EyeOpenIcon, Pencil1Icon, PersonIcon } from "@radix-ui/react-icons";
+import {
+  EyeOpenIcon,
+  HeartFilledIcon,
+  Pencil1Icon,
+  PersonIcon,
+} from "@radix-ui/react-icons";
 import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
 import { FiPrinter } from "react-icons/fi";
+import { HiMiniHandThumbUp, HiMiniHandThumbDown } from "react-icons/hi2";
 
 export default function RecipePage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -179,21 +185,29 @@ export default function RecipePage(
               <EyeOpenIcon />
               {recipe.viewCount}
             </span>
+            <span>{"\u2022"}</span>
+            <span className={styles.likeCount}>
+              <HeartFilledIcon />
+              {likeCount}
+            </span>
+            {props.userId && recipe.user.clerkId !== props.userId && (
+              <Button
+                className={styles.likeButton}
+                variant="secondary"
+                size="small"
+                onClick={() => {
+                  void handleLikeButtonClick();
+                }}
+                icon={
+                  likeStatus ? <HiMiniHandThumbDown /> : <HiMiniHandThumbUp />
+                }
+              >
+                {likeStatus
+                  ? t("recipeView:likes.unlikeButton")
+                  : t("recipeView:likes.likeButton")}
+              </Button>
+            )}
           </div>
-          {props.userId && recipe.user.clerkId !== props.userId && (
-            <Button
-              className={styles.likeButton}
-              variant="secondary"
-              onClick={() => {
-                void handleLikeButtonClick();
-              }}
-            >
-              {likeStatus
-                ? t("recipeView:likes.unlikeButton")
-                : t("recipeView:likes.likeButton")}
-            </Button>
-          )}
-          <p>{t("recipeView:likes.likeCountText", { count: likeCount })}</p>
           {timeEstimateType !== null &&
             (timeEstimateType === "single" ? (
               <p>

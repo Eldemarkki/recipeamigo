@@ -94,6 +94,10 @@
   gap: 1rem;
 }
 
+.likeButton {
+  width: fit-content;
+}
+
 @media print {
   .likeButton,
   .titleRowButtons {
@@ -107,7 +111,8 @@
   gap: 0.5rem;
 }
 
-.viewCount {
+.viewCount,
+.likeCount {
   display: flex;
   align-items: center;
   gap: 0.3rem;

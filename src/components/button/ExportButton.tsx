@@ -26,6 +26,7 @@ const exportRecipe = (data: string, filename: string) => {
   window.URL.revokeObjectURL(url);
 };
 
+// TODO: Doesn't work with right-to-left layout
 export const ExportButton = ({
   recipe,
   exportJsonFilename,
