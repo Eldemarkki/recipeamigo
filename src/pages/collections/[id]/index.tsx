@@ -1,6 +1,7 @@
 import { LinkButton } from "../../../components/LinkButton";
 import { RecipeCardGrid } from "../../../components/RecipeCardGrid";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
+import { VisibilityText } from "../../../components/misc/VisibilityText";
 import { collectionPageDataLoader } from "../../../dataLoaders/collections/collectionPageDataLoader";
 import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import styles from "./index.module.css";
@@ -27,17 +28,19 @@ export default function CollectionPage({
       }
     >
       {collection.description && <p>{collection.description}</p>}
-      <p>
+      <div className={styles.infoRow}>
+        <VisibilityText type="collection" visibility={collection.visibility} />
+        <span>{"\u2022"}</span>
         <span>
           {t("collections:createdBy", { name: collection.user.username })}
         </span>
-        <span>{" \u2022 "}</span>
+        <span>{"\u2022"}</span>
         <span>
           {t("collections:recipeCount", {
             count: collection.RecipesOnCollections.length,
           })}
         </span>
-      </p>
+      </div>
       <hr />
       {collection.RecipesOnCollections.length ? (
         <RecipeCardGrid

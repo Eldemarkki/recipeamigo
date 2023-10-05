@@ -3,3 +3,9 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
