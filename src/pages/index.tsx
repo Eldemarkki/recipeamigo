@@ -2,12 +2,14 @@ import HeroImage from "../../public/undraw_cooking.svg";
 import { LinkButton } from "../components/LinkButton";
 import { RecipeCardGrid } from "../components/RecipeCardGrid";
 import { PageWrapper } from "../components/misc/PageWrapper";
+import config from "../config";
 import { getAllRecipesForUser } from "../database/recipes";
 import { getUserFromRequest } from "../utils/auth";
 import styles from "./page.module.css";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 import Image from "next/image";
 
 export default function Home(
@@ -17,42 +19,58 @@ export default function Home(
 
   if (!props.loggedIn) {
     return (
-      <PageWrapper mainClass={styles.main}>
-        <div className={styles.landingContainer}>
-          <div className={styles.landingLeft}>
-            <span className={styles.tagline}>{t("landing.tagline")}</span>
-            <span className={styles.subTagline}>{t("landing.subTagline")}</span>
-            <LinkButton href="/sign-up" style={{ width: "fit-content" }}>
-              {t("landing.getStartedButton")}
-            </LinkButton>
+      <>
+        <Head>
+          <title>{config.APP_NAME}</title>
+        </Head>
+        <PageWrapper mainClass={styles.main}>
+          <div className={styles.landingContainer}>
+            <div className={styles.landingLeft}>
+              <span className={styles.tagline}>{t("landing.tagline")}</span>
+              <span className={styles.subTagline}>
+                {t("landing.subTagline")}
+              </span>
+              <LinkButton href="/sign-up" style={{ width: "fit-content" }}>
+                {t("landing.getStartedButton")}
+              </LinkButton>
+            </div>
+            <Image
+              // Image from https://undraw.co/ with name "Cooking"
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              src={HeroImage}
+              alt={t("landing.heroImageAlt")}
+              className={styles.heroImage}
+            />
           </div>
-          <Image
-            // Image from https://undraw.co/ with name "Cooking"
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            src={HeroImage}
-            alt={t("landing.heroImageAlt")}
-            className={styles.heroImage}
-          />
-        </div>
-      </PageWrapper>
+        </PageWrapper>
+      </>
     );
   } else {
     return (
-      <PageWrapper
-        titleRow={
-          <div className={styles.recipesTitleRow}>
-            <h1>{t("myRecipes")}</h1>
-            <div className={styles.recipesTitleRowButtonContainer}>
-              <LinkButton href="/recipe/new">{t("newRecipeButton")}</LinkButton>
-              <LinkButton href="/collections/new" variant="secondary">
-                {t("newCollectionButton")}
-              </LinkButton>
+      <>
+        <Head>
+          <title>
+            {t("pageTitle")} | {config.APP_NAME}
+          </title>
+        </Head>
+        <PageWrapper
+          titleRow={
+            <div className={styles.recipesTitleRow}>
+              <h1>{t("myRecipes")}</h1>
+              <div className={styles.recipesTitleRowButtonContainer}>
+                <LinkButton href="/recipe/new">
+                  {t("newRecipeButton")}
+                </LinkButton>
+                <LinkButton href="/collections/new" variant="secondary">
+                  {t("newCollectionButton")}
+                </LinkButton>
+              </div>
             </div>
-          </div>
-        }
-      >
-        <RecipeCardGrid showCreateButton recipes={props.recipes} />
-      </PageWrapper>
+          }
+        >
+          <RecipeCardGrid showCreateButton recipes={props.recipes} />
+        </PageWrapper>
+      </>
     );
   }
 }
