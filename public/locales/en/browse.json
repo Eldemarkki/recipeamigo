@@ -51,5 +51,9 @@
       "recipeCount_one": "{{count}} recipe",
       "recipeCount_other": "{{count}} recipes"
     }
+  },
+  "pageTitle": {
+    "collection": "Browse collections",
+    "recipe": "Browse recipes"
   }
 }
