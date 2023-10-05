@@ -100,3 +100,15 @@
     display: none;
   }
 }
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.viewCount {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}

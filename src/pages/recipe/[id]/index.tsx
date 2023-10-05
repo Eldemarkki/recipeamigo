@@ -4,6 +4,7 @@ import { ExportButton } from "../../../components/button/ExportButton";
 import { AddToCollectionButton } from "../../../components/collections/AddToCollectionButton";
 import { Link } from "../../../components/link/Link";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
+import { VisibilityText } from "../../../components/misc/VisibilityText";
 import { IngredientSection } from "../../../components/recipeView/IngredientSection";
 import { InstructionsList } from "../../../components/recipeView/InstructionsList";
 import { RecipeQuantityPicker } from "../../../components/recipeView/RecipeQuantityPicker";
@@ -15,9 +16,9 @@ import type { Locale } from "../../../i18next";
 import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
 import { getTimeEstimateType } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
-import { Pencil1Icon } from "@radix-ui/react-icons";
+import { EyeOpenIcon, Pencil1Icon, PersonIcon } from "@radix-ui/react-icons";
 import type { InferGetServerSidePropsType } from "next";
-import { Trans, useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
@@ -167,20 +168,17 @@ export default function RecipePage(
             </div>
           </div>
           {recipe.tags.length > 0 && <TagList tags={recipe.tags} />}
-          <div>
-            <Trans
-              i18nKey="recipeView:line"
-              username={recipe.user.username}
-              count={recipe.viewCount}
-            >
-              Created by{" "}
-              <Link href={`/user/${recipe.user.username}`}>
-                {/* @ts-expect-error, https://github.com/i18next/react-i18next/issues/1543, https://github.com/i18next/react-i18next/issues/1504 */}
-                {{ username: recipe.user.username }}
-              </Link>{" "}
-              - Viewed {{ count: recipe.viewCount }}{" "}
-              {recipe.viewCount === 1 ? "time" : "times"}
-            </Trans>
+          <div className={styles.infoRow}>
+            <VisibilityText type="recipe" visibility={recipe.visibility} />
+            <span>{"\u2022"}</span>
+            <Link href={`/user/${recipe.user.username}`} icon={<PersonIcon />}>
+              {recipe.user.username}
+            </Link>
+            <span>{"\u2022"}</span>
+            <span className={styles.viewCount}>
+              <EyeOpenIcon />
+              {recipe.viewCount}
+            </span>
           </div>
           {props.userId && recipe.user.clerkId !== props.userId && (
             <Button
