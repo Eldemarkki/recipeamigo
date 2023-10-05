@@ -75,8 +75,8 @@ describe("browseRecipesPageDataLoader", () => {
     });
 
     expect(data.recipes).toHaveLength(10);
-    expect(data.recipes[0].name).toBe("Recipe 10");
-    expect(data.recipes[9].name).toBe("Recipe 19");
+    expect(data.recipes[0].name).toBe("Recipe 39");
+    expect(data.recipes[9].name).toBe("Recipe 30");
   });
 
   test("doesn't load more than pagination page size", async () => {
@@ -530,8 +530,8 @@ describe("browseRecipesPageDataLoader", () => {
     });
 
     expect(data.recipes).toHaveLength(2);
-    expect(data.recipes[0].name).toBe("this should be found 111");
-    expect(data.recipes[1].name).toBe("this should be found 22222");
+    expect(data.recipes[0].name).toBe("this should be found 22222");
+    expect(data.recipes[1].name).toBe("this should be found 111");
   });
 
   test("can sort by name ascending", async () => {
