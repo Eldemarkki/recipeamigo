@@ -17,7 +17,10 @@ export type RecipeSelectionTileProps = {
   selectable?: boolean | undefined | null;
 };
 
-export const RecipeSelectionTile = (props: RecipeSelectionTileProps) => {
+export const RecipeSelectionTile = ({
+  selectable = true,
+  ...props
+}: RecipeSelectionTileProps) => {
   const { t } = useTranslation(["home", "recipeView"]);
 
   return (
@@ -46,7 +49,7 @@ export const RecipeSelectionTile = (props: RecipeSelectionTileProps) => {
           onClick={props.onClickSelect}
           variant={!props.isSelected ? "secondary" : "primary"}
           className={styles.button}
-          disabled={!props.selectable}
+          disabled={!selectable}
         >
           {props.isSelected
             ? t("collections.tile.removeButton")
