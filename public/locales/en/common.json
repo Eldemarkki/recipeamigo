@@ -28,5 +28,9 @@
   },
   "dialog": {
     "closeLabel": "Close"
+  },
+  "pageTitles": {
+    "login": "Log in",
+    "signUp": "Sign up"
   }
 }

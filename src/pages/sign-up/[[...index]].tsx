@@ -2,7 +2,9 @@ import config from "../../config";
 import styles from "./page.module.css";
 import { SignUp } from "@clerk/nextjs";
 import type { GetServerSideProps } from "next";
+import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 
 // Currently the app name is "Recipeamigo" and the "Recipe" part should have a gradient.
 // If/when the app name is changed, the styling part will have to be reconsidered, so this
@@ -21,16 +23,23 @@ const ensureAppNameStyle = () => {
 
 export default function Home() {
   const { appNameFirst, appNameSecond } = ensureAppNameStyle();
+  const { t } = useTranslation("common");
+
   return (
-    <div className={styles.container}>
-      <div className={styles.innerContainer}>
-        <h1 className={styles.title}>
-          <span className={styles.titleGradientPart}>{appNameFirst}</span>
-          <span>{appNameSecond}</span>
-        </h1>
-        <SignUp />
+    <>
+      <Head>
+        <title>{t("pageTitles.signUp")}</title>
+      </Head>
+      <div className={styles.container}>
+        <div className={styles.innerContainer}>
+          <h1 className={styles.title}>
+            <span className={styles.titleGradientPart}>{appNameFirst}</span>
+            <span>{appNameSecond}</span>
+          </h1>
+          <SignUp />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

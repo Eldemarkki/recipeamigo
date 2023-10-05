@@ -28,5 +28,9 @@
   },
   "dialog": {
     "closeLabel": "Sulje"
+  },
+  "pageTitles": {
+    "login": "Kirjaudu",
+    "signUp": "Rekisteröidy"
   }
 }
