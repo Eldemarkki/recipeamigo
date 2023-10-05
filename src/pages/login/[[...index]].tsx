@@ -28,7 +28,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>{t("pageTitles.login")}</title>
+        <title>
+          {t("pageTitles.login")} | {config.APP_NAME}
+        </title>
       </Head>
       <div className={styles.container}>
         <div className={styles.innerContainer}>

@@ -1,4 +1,5 @@
 import { Button } from "../../../components/button/Button";
+import config from "../../../config";
 import { getUserFromRequest } from "../../../utils/auth";
 import styles from "./page.module.css";
 import type { UserProfile } from "@prisma/client";
@@ -63,7 +64,9 @@ export default function CreateProfilePage() {
   return (
     <>
       <Head>
-        <title>{t("pageTitle")}</title>
+        <title>
+          {t("pageTitle")} | {config.APP_NAME}
+        </title>
       </Head>
       <div className={styles.container}>
         <div className={styles.innerContainer}>
