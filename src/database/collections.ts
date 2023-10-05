@@ -92,6 +92,11 @@ export const getCollectionWithoutCoverImages = async (id: string) => {
           recipe: true,
         },
       },
+      user: {
+        select: {
+          username: true,
+        },
+      },
     },
   });
 

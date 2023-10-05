@@ -27,6 +27,17 @@ export default function CollectionPage({
       }
     >
       {collection.description && <p>{collection.description}</p>}
+      <p>
+        <span>
+          {t("collections:createdBy", { name: collection.user.username })}
+        </span>
+        <span>{" \u2022 "}</span>
+        <span>
+          {t("collections:recipeCount", {
+            count: collection.RecipesOnCollections.length,
+          })}
+        </span>
+      </p>
       <hr />
       {collection.RecipesOnCollections.length ? (
         <RecipeCardGrid

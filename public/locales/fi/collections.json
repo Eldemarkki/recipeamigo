@@ -17,5 +17,8 @@
       "message": "Oletko varma, että haluat poistaa tämän kokoelman? Tätä ei voi peruuttaa."
     }
   },
-  "emptyCollection": "Tämä kokoelma on tyhjä."
+  "emptyCollection": "Tämä kokoelma on tyhjä.",
+  "createdBy": "Luonut {{name}}",
+  "recipeCount_one": "{{count}} resepti",
+  "recipeCount_other": "{{count}} reseptiä"
 }
