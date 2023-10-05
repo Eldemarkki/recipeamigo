@@ -4,6 +4,7 @@ import { Select } from "../../../components/Select";
 import { Button } from "../../../components/button/Button";
 import { ErrorText } from "../../../components/error/ErrorText";
 import { PageWrapper } from "../../../components/misc/PageWrapper";
+import config from "../../../config";
 import { newCollectionPageDataLoader } from "../../../dataLoaders/collections/newCollectionPageDataLoader";
 import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import type { createCollection as createCollectionApi } from "../../../database/collections";
@@ -19,6 +20,7 @@ import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
 import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useId, useState } from "react";
 import type { z } from "zod";
@@ -90,167 +92,174 @@ export default function NewCollectionPage({
     isValidVisibilityConfiguration(visibility, selectedRecipes);
 
   return (
-    <PageWrapper title={t("collections:new.title")}>
-      <form
-        className={styles.container}
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (selectedRecipeIds.length === 0) {
-            return;
-          }
+    <>
+      <Head>
+        <title>
+          {t("collections:pageTitles.new")} | {config.APP_NAME}
+        </title>
+      </Head>
+      <PageWrapper title={t("collections:new.title")}>
+        <form
+          className={styles.container}
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (selectedRecipeIds.length === 0) {
+              return;
+            }
 
-          void (async () => {
-            startLoading();
-            try {
-              const collection = await createCollection({
-                name: collectionName,
-                recipeIds: selectedRecipeIds,
-                visibility,
-                description,
-              });
-              void router.push(`/collections/${collection.id}`);
-            } catch (error) {
-              showErrorToast(error);
-            }
-            stopLoading();
-          })();
-        }}
-      >
-        <h1>
-          <input
-            required
-            minLength={1}
-            className={styles.collectionNameInput}
-            type="text"
-            value={collectionName}
-            onChange={(e) => {
-              setCollectionName(e.target.value);
-            }}
-            placeholder={t("collections.newCollectionNamePlaceholder")}
-          />
-        </h1>
-        <div>
-          <label htmlFor={descriptionId}>
-            {t("collections.descriptionLabel")}
-          </label>
-          <textarea
-            className={styles.descriptionInput}
-            id={descriptionId}
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-            placeholder={t("collections.descriptionPlaceholder")}
-          />
-        </div>
-        <div className={styles.visibilityContainer}>
-          <label htmlFor={visibilitySelectId}>
-            {t("collections.newCollectionVisibility")}
-          </label>
-          <Select
-            inputId={visibilitySelectId}
-            value={{
-              value: visibility,
-              label: visibilityLabelMap[visibility],
-            }}
-            options={Object.entries(RecipeCollectionVisibility).map(
-              ([, value]) => ({
-                label: visibilityLabelMap[value],
-                value,
-              }),
-            )}
-            onChange={(option) => {
-              if (option) {
-                setVisibility(option.value);
-              }
-            }}
-          />
-        </div>
-        {hasAnyRecipes && (
-          <input
-            className={styles.search}
-            type="text"
-            placeholder={t("collections.searchPlaceholder")}
-            value={recipeFilter}
-            onChange={(e) => {
-              setRecipeFilter(e.target.value);
-            }}
-          />
-        )}
-        {recipes.length > 0 ? (
-          <RecipeSelectionGrid
-            recipes={recipes.map((r) => ({
-              id: r.id,
-              name: r.name,
-              coverImageUrl: r.coverImageUrl,
-              visibility: r.visibility,
-              selectable:
-                selectedRecipeIds.includes(r.id) ||
-                isVisibilityValidForCollection(r.visibility, visibility),
-              isSelected: selectedRecipeIds.includes(r.id),
-              onClickSelect: () => {
-                setSelectedRecipeIds((selectedRecipes) => {
-                  if (selectedRecipes.includes(r.id)) {
-                    return selectedRecipes.filter((id) => id !== r.id);
-                  } else {
-                    return [...selectedRecipes, r.id];
-                  }
+            void (async () => {
+              startLoading();
+              try {
+                const collection = await createCollection({
+                  name: collectionName,
+                  recipeIds: selectedRecipeIds,
+                  visibility,
+                  description,
                 });
-              },
-            }))}
-          />
-        ) : (
-          <div className={styles.noResultsContainer}>
-            {hasAnyRecipes ? (
-              <span>
-                {t("collections.noRecipesFound", { query: recipeFilter })}
-              </span>
-            ) : (
-              <>
-                <span>{t("collections.noRecipesExist")}</span>
-                <LinkButton href="/recipe/new">
-                  {t("collections.noRecipesExistCreate")}
-                </LinkButton>
-              </>
-            )}
-          </div>
-        )}
-        {!validVisibilityConfiguration && (
-          <ErrorText>
-            {
-              {
-                [RecipeCollectionVisibility.PRIVATE]: null,
-                [RecipeCollectionVisibility.PUBLIC]: t(
-                  "collections:new.invalidVisibilityConfiguration.public",
-                  {
-                    violatingRecipes: violatingRecipes.map((r) => r.name),
-                  },
-                ),
-                [RecipeCollectionVisibility.UNLISTED]: t(
-                  "collections:new.invalidVisibilityConfiguration.unlisted",
-                  {
-                    violatingRecipes: violatingRecipes.map((r) => r.name),
-                  },
-                ),
-              }[visibility]
-            }
-          </ErrorText>
-        )}
-        <Button
-          type="submit"
-          disabled={
-            selectedRecipeIds.length === 0 ||
-            !collectionName ||
-            !validVisibilityConfiguration
-          }
-          loading={isLoading}
+                void router.push(`/collections/${collection.id}`);
+              } catch (error) {
+                showErrorToast(error);
+              }
+              stopLoading();
+            })();
+          }}
         >
-          {t("collections.createCollection", {
-            count: selectedRecipeIds.length,
-          })}
-        </Button>
-      </form>
-    </PageWrapper>
+          <h1>
+            <input
+              required
+              minLength={1}
+              className={styles.collectionNameInput}
+              type="text"
+              value={collectionName}
+              onChange={(e) => {
+                setCollectionName(e.target.value);
+              }}
+              placeholder={t("collections.newCollectionNamePlaceholder")}
+            />
+          </h1>
+          <div>
+            <label htmlFor={descriptionId}>
+              {t("collections.descriptionLabel")}
+            </label>
+            <textarea
+              className={styles.descriptionInput}
+              id={descriptionId}
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              placeholder={t("collections.descriptionPlaceholder")}
+            />
+          </div>
+          <div className={styles.visibilityContainer}>
+            <label htmlFor={visibilitySelectId}>
+              {t("collections.newCollectionVisibility")}
+            </label>
+            <Select
+              inputId={visibilitySelectId}
+              value={{
+                value: visibility,
+                label: visibilityLabelMap[visibility],
+              }}
+              options={Object.entries(RecipeCollectionVisibility).map(
+                ([, value]) => ({
+                  label: visibilityLabelMap[value],
+                  value,
+                }),
+              )}
+              onChange={(option) => {
+                if (option) {
+                  setVisibility(option.value);
+                }
+              }}
+            />
+          </div>
+          {hasAnyRecipes && (
+            <input
+              className={styles.search}
+              type="text"
+              placeholder={t("collections.searchPlaceholder")}
+              value={recipeFilter}
+              onChange={(e) => {
+                setRecipeFilter(e.target.value);
+              }}
+            />
+          )}
+          {recipes.length > 0 ? (
+            <RecipeSelectionGrid
+              recipes={recipes.map((r) => ({
+                id: r.id,
+                name: r.name,
+                coverImageUrl: r.coverImageUrl,
+                visibility: r.visibility,
+                selectable:
+                  selectedRecipeIds.includes(r.id) ||
+                  isVisibilityValidForCollection(r.visibility, visibility),
+                isSelected: selectedRecipeIds.includes(r.id),
+                onClickSelect: () => {
+                  setSelectedRecipeIds((selectedRecipes) => {
+                    if (selectedRecipes.includes(r.id)) {
+                      return selectedRecipes.filter((id) => id !== r.id);
+                    } else {
+                      return [...selectedRecipes, r.id];
+                    }
+                  });
+                },
+              }))}
+            />
+          ) : (
+            <div className={styles.noResultsContainer}>
+              {hasAnyRecipes ? (
+                <span>
+                  {t("collections.noRecipesFound", { query: recipeFilter })}
+                </span>
+              ) : (
+                <>
+                  <span>{t("collections.noRecipesExist")}</span>
+                  <LinkButton href="/recipe/new">
+                    {t("collections.noRecipesExistCreate")}
+                  </LinkButton>
+                </>
+              )}
+            </div>
+          )}
+          {!validVisibilityConfiguration && (
+            <ErrorText>
+              {
+                {
+                  [RecipeCollectionVisibility.PRIVATE]: null,
+                  [RecipeCollectionVisibility.PUBLIC]: t(
+                    "collections:new.invalidVisibilityConfiguration.public",
+                    {
+                      violatingRecipes: violatingRecipes.map((r) => r.name),
+                    },
+                  ),
+                  [RecipeCollectionVisibility.UNLISTED]: t(
+                    "collections:new.invalidVisibilityConfiguration.unlisted",
+                    {
+                      violatingRecipes: violatingRecipes.map((r) => r.name),
+                    },
+                  ),
+                }[visibility]
+              }
+            </ErrorText>
+          )}
+          <Button
+            type="submit"
+            disabled={
+              selectedRecipeIds.length === 0 ||
+              !collectionName ||
+              !validVisibilityConfiguration
+            }
+            loading={isLoading}
+          >
+            {t("collections.createCollection", {
+              count: selectedRecipeIds.length,
+            })}
+          </Button>
+        </form>
+      </PageWrapper>
+    </>
   );
 }
 

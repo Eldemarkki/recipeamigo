@@ -21,6 +21,7 @@
   "recipeCount_one": "{{count}} recipe",
   "recipeCount_other": "{{count}} recipes",
   "pageTitles": {
+    "new": "New collection",
     "edit": "Editing {{name}}"
   }
 }

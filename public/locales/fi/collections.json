@@ -21,6 +21,7 @@
   "recipeCount_one": "{{count}} resepti",
   "recipeCount_other": "{{count}} reseptiä",
   "pageTitles": {
+    "new": "Uusi kokoelma",
     "edit": "Muokataan {{name}}"
   }
 }
