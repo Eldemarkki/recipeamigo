@@ -92,4 +92,5 @@
 | 1.10.2023 | 1     | Adding tests, refactoring, fix bug with PDF export                                               |
 | 2.10.2023 | 1     | Enable Clerk production mode (only changes in DNS records, Vercel and Clerk. No changes in Git)  |
 | 4.10.2023 | 1     | Bunch of small improvements                                                                      |
-| Total     | 167   |                                                                                                  |
+| 5.10.2023 | 2     | Improvements to recipe and collection page information rows, add titles to pages                 |
+| Total     | 169   |                                                                                                  |
