@@ -5,3 +5,15 @@
   gap: 1rem;
   max-width: 300px;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.username {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

@@ -1,18 +1,13 @@
 import { prisma } from "../../../db";
+import {
+  profilePutHandler,
+  profileSchema,
+} from "../../../handlers/profile/profilePutHandler";
+import { handle, mapMethods } from "../../../utils/apiUtils";
 import { getUserFromRequest } from "../../../utils/auth";
-import type { NextApiHandler } from "next";
-import { z } from "zod";
 
-export const profileSchema = z.object({
-  name: z
-    .string()
-    .min(3)
-    .max(32)
-    .regex(/^[a-zA-Z0-9_]+$/),
-});
-
-const handler: NextApiHandler = async (req, res) => {
-  if (req.method === "POST") {
+const handler = mapMethods({
+  post: async (req, res) => {
     const body = profileSchema.safeParse(req.body);
     if (!body.success) {
       res.status(400).json({ error: body.error });
@@ -50,7 +45,13 @@ const handler: NextApiHandler = async (req, res) => {
 
     res.status(200).json(profile);
     return;
-  }
-};
+  },
+  put: (req, res) =>
+    handle({
+      req,
+      res,
+      ...profilePutHandler,
+    }),
+});
 
 export default handler;

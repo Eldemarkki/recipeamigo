@@ -28,6 +28,12 @@ export class ForbiddenError extends HttpError {
   }
 }
 
+export class ConflictError extends HttpError {
+  constructor(message?: string) {
+    super(message || "Conflict", 409);
+  }
+}
+
 export class RecipeNotFoundError extends NotFoundError {
   constructor(recipeId: string) {
     super(`Recipe with id ${recipeId} not found`);
@@ -139,6 +145,12 @@ export class CannotAddRecipeToCollectionsErrorInvalidVisibility extends BadReque
 export class UserNotFoundError extends NotFoundError {
   constructor(username: string) {
     super(`User with username ${username} not found`);
+  }
+}
+
+export class UsernameAlreadyTakenError extends ConflictError {
+  constructor(username: string) {
+    super(`Username ${username} already taken`);
   }
 }
 

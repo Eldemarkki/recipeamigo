@@ -23,6 +23,9 @@
     "logIn": "Log in",
     "delete": "Delete"
   },
+  "actionResults": {
+    "saved": "Saved"
+  },
   "recipeFilter": {
     "searchPlaceholder": "Search"
   },

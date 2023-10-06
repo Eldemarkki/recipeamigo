@@ -10,5 +10,8 @@
     "languageTitle": "Kieli",
     "en": "Englanti",
     "fi": "Suomi"
-  }
+  },
+  "username": "Käyttäjänimi",
+  "profileTitle": "Profiili",
+  "preferencesTitle": "Asetukset"
 }

@@ -23,6 +23,9 @@
     "logIn": "Kirjaudu",
     "delete": "Poista"
   },
+  "actionResults": {
+    "saved": "Tallennettu"
+  },
   "recipeFilter": {
     "searchPlaceholder": "Etsi"
   },
