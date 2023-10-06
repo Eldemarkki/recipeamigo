@@ -134,7 +134,7 @@ export const IngredientForm = ({
               {t("common:actions.cancel")}
             </Button>
           )}
-          <Button style={{ flex: 1 }} type="submit">
+          <Button style={{ flex: 1 }} type="submit" disabled={!ingredientName}>
             {type === "new"
               ? t("recipeView:edit.ingredients.addIngredientButton")
               : t("common:actions.save")}

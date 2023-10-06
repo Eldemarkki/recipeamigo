@@ -9,7 +9,7 @@ import type { PostPolicyResult } from "minio";
 import { z } from "zod";
 
 export const ingredientSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
   quantity: z.number().nonnegative(),
   unit: z.nativeEnum(IngredientUnit).optional(),
   isOptional: z.boolean().optional(),
