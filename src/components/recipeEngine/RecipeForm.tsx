@@ -215,8 +215,12 @@ export const RecipeForm = ({
           recipeId={initialRecipe?.id || ""}
         />
       )}
-      {/* TODO: Add h1 tag somewhere*/}
       <main className={styles.mainContainer}>
+        <h1>
+          {type === "new"
+            ? t("title")
+            : t("edit.title", { name: initialRecipe?.name || "" })}
+        </h1>
         <div className={styles.splitContainer}>
           <div className={styles.leftPanel}>
             <div

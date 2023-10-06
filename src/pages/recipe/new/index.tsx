@@ -61,7 +61,7 @@ export default function NewRecipePage() {
     <>
       <Head>
         <title>
-          {t("recipeView:pageTitle.new")} | {config.APP_NAME}
+          {t("recipeView:title")} | {config.APP_NAME}
         </title>
       </Head>
       <PageWrapper>
