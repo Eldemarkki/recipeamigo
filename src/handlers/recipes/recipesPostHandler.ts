@@ -15,7 +15,7 @@ export const ingredientSchema = z.object({
   isOptional: z.boolean().optional(),
 });
 export const ingredientSectionSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
   ingredients: z.array(ingredientSchema),
 });
 export const instructionSchema = z.object({

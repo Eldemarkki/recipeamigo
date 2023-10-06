@@ -36,6 +36,7 @@ export const EditIngredientSectionDialog = ({
           onChange={(e) => {
             setNewName(e.target.value);
           }}
+          required
         />
       </div>
       <Button type="submit">{t("actions.save")}</Button>
