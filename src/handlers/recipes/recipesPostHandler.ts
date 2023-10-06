@@ -23,7 +23,7 @@ export const instructionSchema = z.object({
 });
 export const tagSchema = z.string().min(1);
 export const createRecipeSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
   description: z.string(),
   ingredientSections: z.array(ingredientSectionSchema),
   instructions: z.array(instructionSchema),

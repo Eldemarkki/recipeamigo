@@ -374,6 +374,7 @@ export const RecipeForm = ({
             type="submit"
             onClick={(e) => void handleSubmit(e)}
             loading={isLoading}
+            disabled={!name}
           >
             {type === "edit" ? t("edit.saveRecipe") : t("createRecipe")}
           </Button>
