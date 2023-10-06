@@ -61,7 +61,7 @@ const tagSchema = z
   );
 
 export const editRecipeSchema = z.object({
-  name: z.string().optional(),
+  name: z.string().min(1).optional(),
   description: z.string().optional(),
   ingredientSections: z.array(editingIngredientSchema).optional(),
   instructions: z.array(editingInstructionsSchema).optional(),
