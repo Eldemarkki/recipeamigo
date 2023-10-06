@@ -15,6 +15,12 @@
   gap: 1rem;
 }
 
+.ingredientSectionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
 .splitContainer {
   display: grid;
   grid-template-columns: 2fr 3fr;

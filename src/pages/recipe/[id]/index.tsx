@@ -253,7 +253,7 @@ export default function RecipePage(
           <div className={styles.ingredientsContainer}>
             <h2>{t("recipeView:ingredients.title")}</h2>
             {recipe.ingredientSections.length ? (
-              <ul>
+              <ul className={styles.ingredientSectionList}>
                 {recipe.ingredientSections.map((section) => (
                   <li key={section.id}>
                     <IngredientSection
