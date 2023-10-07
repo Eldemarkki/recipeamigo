@@ -1,7 +1,5 @@
-import {
-  deleteRecipeById,
-  getSingleRecipeWithoutCoverImageUrl,
-} from "../../database/recipes";
+import { getSingleRecipeWithoutCoverImageUrl } from "../../database/recipes";
+import { prisma } from "../../db";
 import type { Handler } from "../../utils/apiUtils";
 import { RecipeNotFoundError } from "../../utils/errors";
 import { hasWriteAccessToRecipe } from "../../utils/recipeUtils";
@@ -20,6 +18,10 @@ export const recipesDeleteHandler = {
       throw new RecipeNotFoundError(id);
     }
 
-    await deleteRecipeById(id);
+    await prisma.recipe.delete({
+      where: {
+        id,
+      },
+    });
   },
 } satisfies Handler<never, { id: string }>;

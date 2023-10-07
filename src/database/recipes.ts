@@ -800,11 +800,3 @@ export const getLikedRecipes = async (userId: string) => {
 
   return recipesWithCoverImageUrls;
 };
-
-export const deleteRecipeById = async (id: string) => {
-  await prisma.recipe.delete({
-    where: {
-      id,
-    },
-  });
-};
