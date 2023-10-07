@@ -1,8 +1,39 @@
 # Recipeamigo
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). This is my project for the [Full Stack Open course](https://fullstackopen.com/osa0/yleista#full-stack-harjoitustyo).
+You can visit the deployed demo at https://recipeamigo.eetumaenpaa.fi.
 
-The time logging is at [docs/timelog.md](./docs/timelog.md).
+Recipeamigo is a platform where you can create and share recipes with other people. You can group recipes into collections, such as "Easy to prepare" or "My in-laws' favorites". You can like recipes to save them for later. Each recipe and recipe collection has a visibility that can be set to either public, unlisted or private. Recipes can be tagged with tags, such as "Lactose-free" or "Vegetarian".
+
+The application features localization for English and Finnish, and there are a light and dark theme available. It is also fully responsive on mobile screen sizes.
+
+The recipe editor has an exhaustive list of existing, localized ingredients. It combines the ingredient name, amount and unit into a natural sounding result, such as "2 kilograms of tomatoes" or "1 liter of milk". This works for both languages. The instruction editor allows you to embed timers into the instructions, making the cooking process easier.
+
+The browse page allows you to search all the public recipes that exist. You can filter by many properties, such as title, tags, preparation time or by excluding specific ingredients. The results can be sorted and they are paginated.
+
+There are a total of 200+ integration and unit tests to make sure the API works and is secure. The project has a CI/CD pipeline that checks linting, formatting and tests on each commit, as well as deploys the project to Vercel.
+
+This is my submission for the [Full Stack Open project](https://fullstackopen.com/osa0/yleista#full-stack-harjoitustyo). The time logging is at [docs/timelog.md](./docs/timelog.md).
+
+## Technologies used
+
+- React
+- Next.js
+- TypeScript
+- ESLint + Prettier
+- PostgreSQL (database)
+- Minio (S3/object storage)
+- Clerk (authentication)
+- Vercel (deployment)
+- Vitest (unit & integration testing)
+
+### Libraries worth mentioning
+
+- Prisma (ORM)
+- i18next (localization)
+- Zod (validation)
+- Tiptap (rich text editor for instructions)
+- PDFKit (PDF generation)
+- react-hot-toast (toast notifications)
 
 ## Infrastructure
 
