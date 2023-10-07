@@ -1,36 +1,47 @@
-import config from "../../../config";
+import { generateSearchParams } from "../../../utils/browseUtils";
 import { Link } from "../../link/Link";
+import type { SortKey } from "../sort/BrowseSort";
 import styles from "./BrowsePagination.module.css";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "next-i18next";
 
 export type BrowsePaginationProps = {
-  page: number;
-  pageSize: number;
-  hasPreviousPage: boolean;
-  hasNextPage: boolean;
+  pagination: {
+    page: number;
+    pageSize: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+  };
+  query: {
+    search: string | undefined;
+    tags: string[];
+    excludedIngredients: string[];
+    maximumTime: number | undefined;
+    sort: SortKey;
+  };
 };
 
 export const BrowsePagination = ({
-  page,
-  pageSize,
-  hasNextPage,
-  hasPreviousPage,
+  pagination: { page, pageSize, hasPreviousPage, hasNextPage },
+  query,
 }: BrowsePaginationProps) => {
   const { t } = useTranslation("browse");
 
-  const previousPageParameters = new URLSearchParams();
-  const nextPageParameters = new URLSearchParams();
+  const previousPageParameters = generateSearchParams({
+    ...query,
+    pagination: {
+      page: page - 1,
+      pageSize,
+    },
+  });
 
-  if (page > 2) {
-    previousPageParameters.set("page", `${page - 1}`);
-  }
-  nextPageParameters.set("page", `${page + 1}`);
-
-  if (pageSize !== config.RECIPE_PAGINATION_DEFAULT_PAGE_SIZE) {
-    previousPageParameters.set("pageSize", `${pageSize}`);
-    nextPageParameters.set("pageSize", `${pageSize}`);
-  }
+  const nextPageParameters = generateSearchParams({
+    ...query,
+    pagination: {
+      page: page + 1,
+      pageSize,
+    },
+  });
 
   return (
     <div className={styles.container}>

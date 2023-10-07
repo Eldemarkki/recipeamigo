@@ -589,44 +589,16 @@ export const getSingleRecipe = async (id: string) => {
   };
 };
 
-export const getPublicRecipesPaginated = async (
-  filter: {
-    search?: string;
-    tags?: string[];
-    maximumTime?: number;
-    excludedIngredients?: string[];
-  },
-  sort: SortKey,
-  pagination: {
-    page: number;
-    pageSize: number;
-  },
-) => {
-  // TODO: This could be optimized
-  // - https://www.prisma.io/docs/concepts/components/prisma-client/full-text-search
-  // - ElasticSearch/Algolia/Meilisearch
-
-  const [column, direction] = sort.split(".") as [SortColumn, SortDirection];
-
-  const map = {
-    view: "viewCount",
-    createdAt: "createdAt",
-    updatedAt: "updatedAt",
-    name: "name",
-  } as const;
-
-  const sortObj =
-    column === "like"
-      ? ({
-          likes: {
-            _count: direction,
-          },
-        } as const)
-      : ({
-          [map[column]]: direction,
-        } as const);
-
-  const recipes = await prisma.recipe.findMany({
+// TODO: This could be optimized
+// - https://www.prisma.io/docs/concepts/components/prisma-client/full-text-search
+// - ElasticSearch/Algolia/Meilisearch
+const getBrowseQuery = (filter: {
+  search?: string;
+  tags?: string[];
+  maximumTime?: number;
+  excludedIngredients?: string[];
+}) =>
+  ({
     where: {
       visibility: RecipeVisibility.PUBLIC,
       AND: {
@@ -711,9 +683,53 @@ export const getPublicRecipesPaginated = async (
             : undefined,
       },
     },
-    orderBy: sortObj,
+  }) satisfies Parameters<typeof prisma.recipe.findMany>[0];
+
+export const getPublicRecipesPaginated = async (
+  filter: {
+    search?: string;
+    tags?: string[];
+    maximumTime?: number;
+    excludedIngredients?: string[];
+  },
+  sort: SortKey,
+  pagination: {
+    page: number;
+    pageSize: number;
+  },
+) => {
+  const query = getBrowseQuery(filter);
+  const count = await prisma.recipe.count(query);
+
+  if (pagination.page * pagination.pageSize > count) {
+    pagination.page = 0;
+  }
+
+  const [column, direction] = sort.split(".") as [SortColumn, SortDirection];
+
+  const map = {
+    view: "viewCount",
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
+    name: "name",
+  } as const;
+
+  const sortObj =
+    column === "like"
+      ? ({
+          likes: {
+            _count: direction,
+          },
+        } as const)
+      : ({
+          [map[column]]: direction,
+        } as const);
+
+  const recipes = await prisma.recipe.findMany({
+    ...query,
     skip: pagination.page * pagination.pageSize,
     take: pagination.pageSize,
+    orderBy: sortObj,
   });
 
   const recipesWithCoverImageUrls = await Promise.all(
@@ -729,12 +745,6 @@ export const getPublicRecipesPaginated = async (
       };
     }),
   );
-
-  const count = await prisma.recipe.count({
-    where: {
-      visibility: RecipeVisibility.PUBLIC,
-    },
-  });
 
   return { recipes: recipesWithCoverImageUrls, count };
 };

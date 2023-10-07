@@ -27,10 +27,10 @@ const BrowsePage = ({
       <PageWrapper title={t("title")}>
         <div className={styles.container}>
           <div className={styles.main}>
-            <BrowseFilter query={query} />
+            <BrowseFilter query={query} pagination={pagination} />
             <RecipeCardGrid recipes={recipes} />
           </div>
-          <BrowsePagination {...pagination} />
+          <BrowsePagination query={query} pagination={pagination} />
         </div>
       </PageWrapper>
     </>

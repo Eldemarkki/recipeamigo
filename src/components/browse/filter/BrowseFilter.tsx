@@ -1,47 +1,40 @@
-import config from "../../../config";
-import {
-  isValidSortParam,
-  queryParamToString,
-} from "../../../utils/stringUtils";
+import { generateSearchParams } from "../../../utils/browseUtils";
 import { IngredientSelect } from "../../IngredientSelect";
 import { NumberInput } from "../../forms/NumberInput";
 import { TagSelect } from "../../tag/TagSelect";
-import type { Sort } from "../sort/BrowseSort";
+import type { Sort, SortKey } from "../sort/BrowseSort";
 import { BrowseSort, getSortKey, sorts } from "../sort/BrowseSort";
 import styles from "./BrowseFilter.module.css";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import type { ParsedUrlQuery } from "querystring";
 import { useEffect, useId, useState } from "react";
 
-export type Filter = {
-  search?: string;
-};
-
 export type BrowseFilterProps = {
-  query: ParsedUrlQuery;
+  query: {
+    search: string | undefined;
+    tags: string[];
+    excludedIngredients: string[];
+    maximumTime: number | undefined;
+    sort: SortKey;
+  };
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
 };
 
-export const BrowseFilter = ({ query }: BrowseFilterProps) => {
+const compareStringArrays = (a: string[], b: string[]) => {
+  return a.length === b.length && a.every((value, index) => value === b[index]);
+};
+
+export const BrowseFilter = ({ query, pagination }: BrowseFilterProps) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const initialSearch = queryParamToString(query.search) || "";
-  const initialSortUnchecked = queryParamToString(query.sort) || "";
-  const initialSort = isValidSortParam(initialSortUnchecked)
-    ? initialSortUnchecked
-    : config.RECIPE_PAGINATION_DEFAULT_SORT;
-  const initialTags = Array.isArray(query.tags)
-    ? query.tags
-    : query.tags
-    ? [query.tags]
-    : [];
-  const initialMaximumTime =
-    parseInt(queryParamToString(query.maximumTime) || "0", 10) || undefined;
-  const initialExcludedIngredients = Array.isArray(query.ingredients)
-    ? query.ingredients
-    : query.ingredients
-    ? [query.ingredients]
-    : [];
+  const initialSearch = query.search;
+  const initialSort = query.sort;
+  const initialTags = query.tags;
+  const initialMaximumTime = query.maximumTime;
+  const initialExcludedIngredients = query.excludedIngredients;
 
   // TODO: Navigating to the previous page creates a mismatch between the UI and the actual filter
   const [search, setSearch] = useState(initialSearch);
@@ -55,28 +48,27 @@ export const BrowseFilter = ({ query }: BrowseFilterProps) => {
     sorts.find((sort) => getSortKey(sort) === initialSort) || sorts[0],
   );
 
-  const searchParams = new URLSearchParams();
-  if (search) {
-    searchParams.set("search", search);
-  }
-  if (tags.length > 0) {
-    tags.forEach((tag) => {
-      searchParams.append("tags", tag);
-    });
-  }
-  if (excludedIngredients.length > 0) {
-    excludedIngredients.forEach((ingredient) => {
-      searchParams.append("excludedIngredients", ingredient);
-    });
-  }
+  const newPage =
+    search !== initialSearch ||
+    maximumTime !== initialMaximumTime ||
+    getSortKey(sort) !== initialSort ||
+    !compareStringArrays(tags, initialTags) ||
+    !compareStringArrays(excludedIngredients, initialExcludedIngredients)
+      ? 1
+      : pagination.page;
 
-  if (maximumTime) {
-    searchParams.set("maximumTime", maximumTime.toString());
-  }
+  const searchParams = generateSearchParams({
+    search,
+    tags,
+    maximumTime,
+    excludedIngredients,
+    sort: getSortKey(sort),
+    pagination: {
+      page: newPage,
+      pageSize: pagination.pageSize,
+    },
+  });
 
-  if (getSortKey(sort) !== config.RECIPE_PAGINATION_DEFAULT_SORT) {
-    searchParams.set("sort", getSortKey(sort));
-  }
   const newUrl =
     "/browse" + (searchParams.size > 0 ? "?" + searchParams.toString() : "");
 

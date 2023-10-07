@@ -79,7 +79,13 @@ export const browseRecipesPageDataLoader = {
         hasPreviousPage,
         hasNextPage,
       },
-      query,
+      query: {
+        search,
+        tags,
+        excludedIngredients,
+        maximumTime,
+        sort,
+      },
     };
   },
 } satisfies PropsLoaderHandler<{
