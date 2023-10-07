@@ -40,14 +40,16 @@ export const createUserToDatabase = async () => {
   return userId;
 };
 
-export const createUserToDatabaseAndAuthenticate = async () => {
+export const createUserToDatabaseAndAuthenticate = async (
+  username?: string,
+) => {
   const userId = randomUUID();
-  const username = createRandomString(20);
+  const finalUsername = username ?? createRandomString(20);
 
   await prisma.userProfile.create({
     data: {
       clerkId: userId,
-      username: username,
+      username: finalUsername,
     },
   });
 
@@ -56,7 +58,7 @@ export const createUserToDatabaseAndAuthenticate = async () => {
     userId: userId,
     userProfile: {
       clerkId: userId,
-      username: username,
+      username: finalUsername,
     },
   } satisfies AuthorizedUser;
 };

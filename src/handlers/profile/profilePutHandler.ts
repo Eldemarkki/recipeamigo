@@ -16,13 +16,20 @@ export const profilePutHandler = {
   requireUser: true,
   bodyValidator: profileSchema,
   handler: async (user, body) => {
-    const existingProfile = await prisma.userProfile.findUnique({
+    // Can't use findUnique with case-insensitive search
+    // https://github.com/prisma/prisma/discussions/14449#discussioncomment-3207209
+    const existingProfile = await prisma.userProfile.findFirst({
       where: {
-        username: body.name,
+        username: {
+          equals: body.name,
+          mode: "insensitive",
+        },
       },
     });
 
-    if (existingProfile) {
+    // If someone else has the username, throw an error
+    // We want to allow the user to change to the same username with different case
+    if (existingProfile && existingProfile.clerkId !== user.userId) {
       throw new UsernameAlreadyTakenError(body.name);
     }
 
