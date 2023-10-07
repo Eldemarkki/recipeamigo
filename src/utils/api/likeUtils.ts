@@ -1,5 +1,5 @@
-import { getLikeStatus } from "../../database/likes";
 import { getSingleRecipe } from "../../database/recipes";
+import { prisma } from "../../db";
 import type { AuthorizedUser } from "../auth";
 import {
   CannotLikeOwnRecipeError,
@@ -9,6 +9,17 @@ import {
   RecipeNotFoundError,
 } from "../errors";
 import { hasReadAccessToRecipe } from "../recipeUtils";
+
+export const getLikeStatus = async (userId: string, recipeId: string) => {
+  const like = await prisma.like.findFirst({
+    where: {
+      userId,
+      recipeId,
+    },
+  });
+
+  return like;
+};
 
 export const canLikeOrUnlikeRecipe = async (
   user: AuthorizedUser,

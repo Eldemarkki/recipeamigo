@@ -1,4 +1,4 @@
-import { unlikeRecipe } from "../../../database/likes";
+import { prisma } from "../../../db";
 import { canLikeOrUnlikeRecipe } from "../../../utils/api/likeUtils";
 import type { Handler } from "../../../utils/apiUtils";
 import { z } from "zod";
@@ -13,7 +13,13 @@ export const postUnlikeHandler = {
 
     await canLikeOrUnlikeRecipe(user, recipeId, false);
 
-    await unlikeRecipe(user.userId, recipeId);
+    await prisma.like.deleteMany({
+      where: {
+        userId: user.userId,
+        recipeId,
+      },
+    });
+
     return { message: "Recipe unliked" };
   },
 } satisfies Handler<unknown, { id: string }>;

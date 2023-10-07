@@ -2,11 +2,11 @@ import {
   getUserCollectionsWithMaximumVisibility,
   getUserRecipeCollectionRelationships,
 } from "../../database/collections";
-import { getLikeStatus } from "../../database/likes";
 import {
   getSingleRecipe,
   increaseViewCountForRecipe,
 } from "../../database/recipes";
+import { getLikeStatus } from "../../utils/api/likeUtils";
 import { RecipeNotFoundError } from "../../utils/errors";
 import { hasReadAccessToRecipe } from "../../utils/recipeUtils";
 import type { PropsLoaderHandler } from "../loadProps";

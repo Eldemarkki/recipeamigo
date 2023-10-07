@@ -1,7 +1,7 @@
 import config from "../../../config";
-import { likeRecipe } from "../../../database/likes";
 import { createRecipe, editRecipe } from "../../../database/recipes";
 import { prisma, resetDatabase } from "../../../db";
+import { postLikeHandler } from "../../../handlers/recipes/likes/postLikeHandler";
 import { createRandomRecipe } from "../../../utils/tests/recipes";
 import { createUserToDatabaseAndAuthenticate } from "../../../utils/tests/testUtils";
 import { browseRecipesPageDataLoader } from "./browseRecipesPageDataLoader";
@@ -616,7 +616,7 @@ describe("browseRecipesPageDataLoader", () => {
       null,
     );
 
-    await likeRecipe(user2.userId, recipe1.id);
+    await postLikeHandler.handler(user2, { id: recipe1.id });
 
     const data = await browseRecipesPageDataLoader.handler(user, {
       sort: "like.asc",
@@ -647,7 +647,7 @@ describe("browseRecipesPageDataLoader", () => {
       null,
     );
 
-    await likeRecipe(user2.userId, recipe1.id);
+    await postLikeHandler.handler(user2, { id: recipe1.id });
 
     const data = await browseRecipesPageDataLoader.handler(user, {
       sort: "like.desc",

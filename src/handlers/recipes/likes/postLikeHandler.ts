@@ -1,4 +1,4 @@
-import { likeRecipe } from "../../../database/likes";
+import { prisma } from "../../../db";
 import { canLikeOrUnlikeRecipe } from "../../../utils/api/likeUtils";
 import type { Handler } from "../../../utils/apiUtils";
 import { z } from "zod";
@@ -13,7 +13,13 @@ export const postLikeHandler = {
 
     await canLikeOrUnlikeRecipe(user, recipeId, true);
 
-    await likeRecipe(user.userId, recipeId);
+    await prisma.like.create({
+      data: {
+        userId: user.userId,
+        recipeId,
+      },
+    });
+
     return { message: "Recipe liked" };
   },
 } satisfies Handler<unknown, { id: string }>;
