@@ -3,4 +3,5 @@
   list-style: none;
   padding: 0px;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
