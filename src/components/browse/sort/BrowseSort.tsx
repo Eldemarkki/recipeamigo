@@ -46,12 +46,12 @@ export const sorts = [
   {
     labelTranslationKey: "sort.name.asc",
     sortColumn: "name",
-    sortDirection: "desc",
+    sortDirection: "asc",
   },
   {
     labelTranslationKey: "sort.name.desc",
     sortColumn: "name",
-    sortDirection: "asc",
+    sortDirection: "desc",
   },
 ] as const;
 
