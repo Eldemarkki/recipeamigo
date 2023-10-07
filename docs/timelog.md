@@ -95,4 +95,5 @@
 | 5.10.2023 | 2     | Improvements to recipe and collection page information rows, add titles to pages                 |
 | 6.10.2023 | 2     | Add better form validation to recipe and collection pages, allow editing username                |
 | 7.10.2023 | 2     | Add tests, improve error message handling                                                        |
-| Total     | 173   |                                                                                                  |
+| 7.10.2023 | 2     | Fix bug with browse page pagination, refactor browse page sorting                                |
+| Total     | 175   |                                                                                                  |
