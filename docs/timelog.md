@@ -93,4 +93,6 @@
 | 2.10.2023 | 1     | Enable Clerk production mode (only changes in DNS records, Vercel and Clerk. No changes in Git)  |
 | 4.10.2023 | 1     | Bunch of small improvements                                                                      |
 | 5.10.2023 | 2     | Improvements to recipe and collection page information rows, add titles to pages                 |
-| Total     | 169   |                                                                                                  |
+| 6.10.2023 | 2     | Add better form validation to recipe and collection pages, allow editing username                |
+| 7.10.2023 | 2     | Add tests, improve error message handling                                                        |
+| Total     | 173   |                                                                                                  |
