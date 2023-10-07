@@ -3,7 +3,6 @@ import type en500Page from "../public/locales/en/500.json";
 import type enBrowse from "../public/locales/en/browse.json";
 import type enCollections from "../public/locales/en/collections.json";
 import type enCommon from "../public/locales/en/common.json";
-import type enErrors from "../public/locales/en/errors.json";
 import type enHome from "../public/locales/en/home.json";
 import type enLikes from "../public/locales/en/likes.json";
 import type enProfile from "../public/locales/en/profile.json";
@@ -17,7 +16,6 @@ import type fi500Page from "../public/locales/fi/500.json";
 import type fiBrowse from "../public/locales/fi/browse.json";
 import type fiCollections from "../public/locales/fi/collections.json";
 import type fiCommon from "../public/locales/fi/common.json";
-import type fiErrors from "../public/locales/fi/errors.json";
 import type fiHome from "../public/locales/fi/home.json";
 import type fiLikes from "../public/locales/fi/likes.json";
 import type fiProfile from "../public/locales/fi/profile.json";
@@ -43,7 +41,6 @@ declare module "i18next" {
       likes: typeof enLikes | typeof fiLikes;
       "404": typeof en404Page | typeof fi404Page;
       "500": typeof en500Page | typeof fi500Page;
-      errors: typeof enErrors | typeof fiErrors;
     };
   }
 }

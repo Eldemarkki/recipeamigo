@@ -1,6 +1,6 @@
 import type { AuthorizedUser } from "./auth";
 import { getUserFromRequest } from "./auth";
-import type { HttpStatusCode } from "./errors";
+import { ErrorCode, type HttpStatusCode } from "./errors";
 import {
   BadRequestError,
   HttpError,
@@ -100,12 +100,17 @@ const errorMapper = (
 ): {
   message: string;
   status: HttpStatusCode;
+  code: ErrorCode;
 } => {
   if (error instanceof HttpError) {
-    return { message: error.message, status: error.status };
+    return { message: error.message, status: error.status, code: error.code };
   }
 
-  return { message: "Internal server error", status: 500 };
+  return {
+    message: "Internal server error",
+    status: 500,
+    code: ErrorCode.InternalServerError,
+  };
 };
 
 export const handle = async <BodyType, QueryType, ResponseType>({
@@ -120,19 +125,22 @@ export const handle = async <BodyType, QueryType, ResponseType>({
     if (bodyValidator) {
       const result = bodyValidator.safeParse(req.body);
       if (!result.success) {
-        throw new BadRequestError(result.error.message);
+        throw new BadRequestError(ErrorCode.BadRequest, result.error.message);
       }
 
       const user = await getUserFromRequest(req);
       if (requireUser) {
         if (user.status === "Unauthorized") {
-          throw new UnauthorizedError();
+          throw new UnauthorizedError(ErrorCode.Unauthorized);
         }
 
         if (queryValidator) {
           const queryResult = queryValidator.safeParse(req.query);
           if (!queryResult.success) {
-            throw new InvalidQueryParametersError(queryResult.error.message);
+            throw new InvalidQueryParametersError(
+              ErrorCode.InvalidQueryParameters,
+              queryResult.error.message,
+            );
           }
 
           const query = queryResult.data;
@@ -147,7 +155,10 @@ export const handle = async <BodyType, QueryType, ResponseType>({
         if (queryValidator) {
           const queryResult = queryValidator.safeParse(req.query);
           if (!queryResult.success) {
-            throw new InvalidQueryParametersError(queryResult.error.message);
+            throw new InvalidQueryParametersError(
+              ErrorCode.InvalidQueryParameters,
+              queryResult.error.message,
+            );
           }
 
           const query = queryResult.data;
@@ -162,13 +173,16 @@ export const handle = async <BodyType, QueryType, ResponseType>({
       const user = await getUserFromRequest(req);
       if (requireUser) {
         if (user.status === "Unauthorized") {
-          throw new UnauthorizedError();
+          throw new UnauthorizedError(ErrorCode.Unauthorized);
         }
 
         if (queryValidator) {
           const queryResult = queryValidator.safeParse(req.query);
           if (!queryResult.success) {
-            throw new InvalidQueryParametersError(queryResult.error.message);
+            throw new InvalidQueryParametersError(
+              ErrorCode.InvalidQueryParameters,
+              queryResult.error.message,
+            );
           }
 
           const query = queryResult.data;
@@ -183,7 +197,10 @@ export const handle = async <BodyType, QueryType, ResponseType>({
         if (queryValidator) {
           const queryResult = queryValidator.safeParse(req.query);
           if (!queryResult.success) {
-            throw new InvalidQueryParametersError(queryResult.error.message);
+            throw new InvalidQueryParametersError(
+              ErrorCode.InvalidQueryParameters,
+              queryResult.error.message,
+            );
           }
 
           const query = queryResult.data;
@@ -197,8 +214,8 @@ export const handle = async <BodyType, QueryType, ResponseType>({
     }
   } catch (e) {
     console.error(e);
-    const { message, status } = errorMapper(e);
-    res.status(status).json({ message });
+    const { message, status, code } = errorMapper(e);
+    res.status(status).json({ message, status, code });
   }
 };
 

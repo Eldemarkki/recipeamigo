@@ -1,8 +1,9 @@
 import { Button } from "../../../components/button/Button";
 import config from "../../../config";
 import type { profilePostHandler } from "../../../handlers/profile/profilePostHandler";
+import { useErrors } from "../../../hooks/useErrors";
 import { getUserFromRequest } from "../../../utils/auth";
-import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
+import { ErrorCode, getErrorFromResponse } from "../../../utils/errors";
 import styles from "./page.module.css";
 import type { UserProfile } from "@prisma/client";
 import type { GetServerSideProps } from "next";
@@ -11,7 +12,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import type { z } from "zod";
 
 const saveProfile = async (
@@ -26,28 +26,7 @@ const saveProfile = async (
   });
 
   if (!response.ok) {
-    if (isKnownHttpStatusCode(response.status)) {
-      const errorObj = (await response.json()) as unknown;
-      if (
-        typeof errorObj === "object" &&
-        errorObj &&
-        "message" in errorObj &&
-        typeof errorObj.message === "string"
-      ) {
-        const message = errorObj.message;
-        if (
-          message === "Username already taken" ||
-          message === "Profile already exists" ||
-          message === "Not authenticated"
-        ) {
-          return { message } as const;
-        }
-      }
-
-      throw new HttpError(response.statusText, response.status);
-    } else {
-      throw new Error("Error with status " + response.status);
-    }
+    return getErrorFromResponse(response);
   }
 
   const data = (await response.json()) as UserProfile;
@@ -58,6 +37,7 @@ const saveProfile = async (
 export default function CreateProfilePage() {
   const { t } = useTranslation("profile");
   const [profileName, setProfileName] = useState("");
+  const { showErrorToast } = useErrors();
 
   const router = useRouter();
 
@@ -78,21 +58,12 @@ export default function CreateProfilePage() {
               void (async () => {
                 const data = await saveProfile({ name: profileName });
 
-                if ("message" in data) {
-                  switch (data.message) {
-                    case "Not authenticated":
-                      void router.push("/login");
-                      break;
-                    case "Profile already exists":
-                      setProfileName("");
-                      toast.error(t("errors.profileAlreadyExists"));
-                      break;
-                    case "Username already taken":
-                      toast.error(t("errors.usernameAlreadyTaken"));
-                      break;
-                    default:
-                      toast.error(t("errors.unknownError"));
-                      break;
+                if ("errorCode" in data) {
+                  showErrorToast(data.errorCode);
+                  if (data.errorCode === ErrorCode.ProfileAlreadyExists) {
+                    setProfileName("");
+                  } else if (data.errorCode === ErrorCode.Unauthorized) {
+                    void router.push("/login");
                   }
                 } else {
                   await router.push("/");

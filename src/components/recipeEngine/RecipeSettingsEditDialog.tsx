@@ -1,4 +1,4 @@
-import { HttpError, isKnownHttpStatusCode } from "../../utils/errors";
+import { getErrorFromResponse } from "../../utils/errors";
 import { Select } from "../Select";
 import { Button } from "../button/Button";
 import { ConfirmationDialog } from "../dialog/ConfirmationDialog";
@@ -73,11 +73,7 @@ export const RecipeSettingsEditDialog = ({
       });
 
       if (!response.ok) {
-        if (isKnownHttpStatusCode(response.status)) {
-          throw new HttpError(response.statusText, response.status);
-        } else {
-          throw new Error("Error with status " + response.status);
-        }
+        return getErrorFromResponse(response);
       }
 
       await router.push("/");

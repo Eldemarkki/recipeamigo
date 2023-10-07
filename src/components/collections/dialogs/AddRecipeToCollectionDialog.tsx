@@ -1,5 +1,6 @@
 import { useErrors } from "../../../hooks/useErrors";
 import { useLoadingState } from "../../../hooks/useLoadingState";
+import type { ErrorCode } from "../../../utils/errors";
 import { LinkButton } from "../../LinkButton";
 import { Button } from "../../button/Button";
 import { InfoDisclaimer } from "../../disclaimers/InfoDisclaimer";
@@ -12,7 +13,9 @@ import { useId, useState } from "react";
 
 export type AddRecipeToCollectionDialogProps = {
   collections: RecipeCollection[];
-  onAdd: (collectionIds: string[]) => Promise<void>;
+  onAdd: (
+    collectionIds: string[],
+  ) => Promise<{ errorCode: ErrorCode } | undefined>;
   recipeVisibility: RecipeVisibility;
   selectedCollectionIds: string[];
 };
@@ -89,10 +92,9 @@ export const AddRecipeToCollectionDialog = ({
   const handleAdd = async () => {
     startLoading();
     setErrorText(null);
-    try {
-      await onAdd(selectedCollectionIds);
-    } catch (err) {
-      setErrorText(getErrorMessage(err));
+    const error = await onAdd(selectedCollectionIds);
+    if (error) {
+      setErrorText(getErrorMessage(error.errorCode));
     }
     stopLoading();
   };

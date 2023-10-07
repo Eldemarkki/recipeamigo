@@ -13,7 +13,7 @@ import type { editCollectionSchema } from "../../../../handlers/collections/coll
 import { useErrors } from "../../../../hooks/useErrors";
 import { useLoadingState } from "../../../../hooks/useLoadingState";
 import { isValidVisibilityConfiguration } from "../../../../utils/collectionUtils";
-import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
+import { getErrorFromResponse } from "../../../../utils/errors";
 import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
 import { TrashIcon } from "@radix-ui/react-icons";
@@ -37,11 +37,7 @@ const editCollection = async (
   });
 
   if (!response.ok) {
-    if (isKnownHttpStatusCode(response.status)) {
-      throw new HttpError(response.statusText, response.status);
-    } else {
-      throw new Error("Error with status " + response.status);
-    }
+    return getErrorFromResponse(response);
   }
 
   const data = (await response.json()) as Awaited<
@@ -57,11 +53,7 @@ const deleteCollection = async (collectionId: string) => {
   });
 
   if (!response.ok) {
-    if (isKnownHttpStatusCode(response.status)) {
-      throw new HttpError(response.statusText, response.status);
-    } else {
-      throw new Error("Error with status " + response.status);
-    }
+    return getErrorFromResponse(response);
   }
 };
 
@@ -69,7 +61,7 @@ export default function EditCollectionPage({
   collection,
   allRecipes,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { t } = useTranslation(["collections", "home", "common", "errors"]);
+  const { t } = useTranslation(["collections", "home", "common"]);
   const router = useRouter();
   const { getErrorMessage, showErrorToast } = useErrors();
   const [errorText, setErrorText] = useState<string | null>(null);
@@ -134,12 +126,12 @@ export default function EditCollectionPage({
         }}
         onConfirm={() => {
           void (async () => {
-            try {
-              await deleteCollection(collection.id);
-              await router.push("/browse/collections");
-            } catch (e) {
+            const error = await deleteCollection(collection.id);
+            if (error) {
               setDeleteDialogOpen(false);
-              showErrorToast(e);
+              showErrorToast(error.errorCode);
+            } else {
+              await router.push("/browse/collections");
             }
           })();
         }}
@@ -175,19 +167,21 @@ export default function EditCollectionPage({
             void (async () => {
               startLoading();
               setErrorText(null);
-              try {
-                const editedCollection = await editCollection(collection.id, {
-                  name: collectionName,
-                  recipeIds: selectedRecipeIds,
-                  visibility,
-                  description,
-                });
 
-                void router.push(`/collections/${editedCollection.id}`);
-              } catch (error) {
-                const message = getErrorMessage(error);
+              const editedCollection = await editCollection(collection.id, {
+                name: collectionName,
+                recipeIds: selectedRecipeIds,
+                visibility,
+                description,
+              });
+
+              if ("errorCode" in editedCollection) {
+                const message = getErrorMessage(editedCollection.errorCode);
                 setErrorText(message);
+              } else {
+                void router.push(`/collections/${editedCollection.id}`);
               }
+
               stopLoading();
             })();
           }}
@@ -335,5 +329,5 @@ export default function EditCollectionPage({
 
 export const getServerSideProps = createPropsLoader(
   collectionEditPageDataLoader,
-  ["collections", "home", "common", "recipeView", "errors"],
+  ["collections", "home", "common", "recipeView"],
 );

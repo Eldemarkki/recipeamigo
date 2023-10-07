@@ -77,5 +77,4 @@ export const getServerSideProps = createPropsLoader(collectionPageDataLoader, [
   "home",
   "recipeView",
   "collections",
-  "errors",
 ]);

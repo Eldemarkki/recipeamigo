@@ -2,10 +2,5 @@
   "question": "Millä nimellä haluat meidän kutsuvan sinua?",
   "placeholderName": "VihreäAvaruusPapu123",
   "createProfileButton": "Luo profiili",
-  "errors": {
-    "profileAlreadyExists": "Profiili on jo olemassa",
-    "usernameAlreadyTaken": "Samanniminen käyttäjä on jo olemassa",
-    "unknownError": "Tuntematon virhe"
-  },
   "pageTitle": "Luo profiili"
 }

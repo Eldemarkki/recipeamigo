@@ -1,8 +1,8 @@
 import { createCollection, getCollection } from "../../../database/collections";
 import { createRecipe } from "../../../database/recipes";
 import {
-  CannotAddRecipeToCollectionsErrorDontExistOrNoReadAccess,
-  CannotAddRecipeToCollectionsErrorInvalidVisibility,
+  CannotAddRecipeToCollectionsDontExistOrNoReadAccessError,
+  CannotAddRecipeToCollectionsInvalidVisibilityError,
   CannotAddRecipeToCollectionsNoWriteAccessError,
 } from "../../../utils/errors";
 import { createRandomRecipe } from "../../../utils/tests/recipes";
@@ -72,7 +72,7 @@ describe("recipePostAddToCollectionsHandler", () => {
         },
       ),
     ).rejects.toThrowError(
-      new CannotAddRecipeToCollectionsErrorDontExistOrNoReadAccess(recipe.id, [
+      new CannotAddRecipeToCollectionsDontExistOrNoReadAccessError(recipe.id, [
         collection.id,
       ]),
     );
@@ -223,7 +223,7 @@ describe("recipePostAddToCollectionsHandler", () => {
             },
           ),
         ).rejects.toThrowError(
-          new CannotAddRecipeToCollectionsErrorInvalidVisibility(recipe.id, [
+          new CannotAddRecipeToCollectionsInvalidVisibilityError(recipe.id, [
             collection.id,
           ]),
         );

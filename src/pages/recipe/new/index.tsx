@@ -8,7 +8,7 @@ import type {
   recipesPostHandler,
 } from "../../../handlers/recipes/recipesPostHandler";
 import { useErrors } from "../../../hooks/useErrors";
-import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
+import { getErrorFromResponse } from "../../../utils/errors";
 import { formDataFromS3PostPolicy } from "../../../utils/objectUtils";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
@@ -28,11 +28,7 @@ const saveRecipe = async (
   });
 
   if (!response.ok) {
-    if (isKnownHttpStatusCode(response.status)) {
-      throw new HttpError(response.statusText, response.status);
-    } else {
-      throw new Error("Error with status " + response.status);
-    }
+    return getErrorFromResponse(response);
   }
 
   const data = (await response.json()) as Awaited<
@@ -55,26 +51,24 @@ const saveRecipe = async (
 export default function NewRecipePage() {
   const router = useRouter();
   const { showErrorToast } = useErrors();
-  const { t } = useTranslation(["errors", "recipeView"]);
+  const { t } = useTranslation("recipeView");
 
   return (
     <>
       <Head>
         <title>
-          {t("recipeView:title")} | {config.APP_NAME}
+          {t("title")} | {config.APP_NAME}
         </title>
       </Head>
       <PageWrapper>
         <RecipeForm
           type="new"
           onSubmit={async (recipe, coverImage) => {
-            try {
-              const savedRecipe = await saveRecipe(recipe, coverImage);
-              void router.push("/recipe/" + savedRecipe.id);
-            } catch (e) {
-              showErrorToast(e, {
-                400: t("createRecipe.400"),
-              });
+            const savedRecipe = await saveRecipe(recipe, coverImage);
+            if ("errorCode" in savedRecipe) {
+              showErrorToast(savedRecipe.errorCode);
+            } else {
+              await router.push("/recipe/" + savedRecipe.id);
             }
           }}
         />
@@ -88,5 +82,4 @@ export const getServerSideProps = createPropsLoader(newRecipePageDataLoader, [
   "recipeView",
   "tags",
   "units",
-  "errors",
 ]);

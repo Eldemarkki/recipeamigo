@@ -15,7 +15,7 @@ import {
   isValidVisibilityConfiguration,
   isVisibilityValidForCollection,
 } from "../../../utils/collectionUtils";
-import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
+import { getErrorFromResponse } from "../../../utils/errors";
 import styles from "./index.module.css";
 import { RecipeCollectionVisibility } from "@prisma/client";
 import type { InferGetServerSidePropsType } from "next";
@@ -37,11 +37,7 @@ const createCollection = async (
   });
 
   if (!response.ok) {
-    if (isKnownHttpStatusCode(response.status)) {
-      throw new HttpError(response.statusText, response.status);
-    } else {
-      throw new Error("Error with status " + response.status);
-    }
+    return getErrorFromResponse(response);
   }
 
   const data = (await response.json()) as Awaited<
@@ -109,17 +105,19 @@ export default function NewCollectionPage({
 
             void (async () => {
               startLoading();
-              try {
-                const collection = await createCollection({
-                  name: collectionName,
-                  recipeIds: selectedRecipeIds,
-                  visibility,
-                  description,
-                });
+              const collection = await createCollection({
+                name: collectionName,
+                recipeIds: selectedRecipeIds,
+                visibility,
+                description,
+              });
+
+              if ("errorCode" in collection) {
+                showErrorToast(collection.errorCode);
+              } else {
                 void router.push(`/collections/${collection.id}`);
-              } catch (error) {
-                showErrorToast(error);
               }
+
               stopLoading();
             })();
           }}
@@ -265,5 +263,5 @@ export default function NewCollectionPage({
 
 export const getServerSideProps = createPropsLoader(
   newCollectionPageDataLoader,
-  ["common", "collections", "home", "recipeView", "errors"],
+  ["common", "collections", "home", "recipeView"],
 );

@@ -9,6 +9,7 @@ import {
 import {
   BadRequestError,
   CollectionNotFoundError,
+  ErrorCode,
   RecipesMustBePublicError,
   RecipesMustBePublicOrUnlistedError,
   RecipesNotFoundError,
@@ -57,6 +58,7 @@ export const createCollection = async (
 
     // This should never happen
     throw new BadRequestError(
+      ErrorCode.BadRequest,
       "Invalid visibility configuration. The following recipe ids are in violation: " +
         violations.join(", "),
     );

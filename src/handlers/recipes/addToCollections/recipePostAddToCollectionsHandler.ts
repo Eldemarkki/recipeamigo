@@ -10,8 +10,8 @@ import {
   hasWriteAccessToCollection,
 } from "../../../utils/collectionUtils";
 import {
-  CannotAddRecipeToCollectionsErrorDontExistOrNoReadAccess,
-  CannotAddRecipeToCollectionsErrorInvalidVisibility,
+  CannotAddRecipeToCollectionsDontExistOrNoReadAccessError,
+  CannotAddRecipeToCollectionsInvalidVisibilityError,
   CannotAddRecipeToCollectionsNoWriteAccessError,
   RecipeNotFoundError,
 } from "../../../utils/errors";
@@ -55,7 +55,7 @@ export const recipePostAddToCollectionsHandler = {
     );
 
     if (collectionsWithoutReadAccess.length > 0) {
-      throw new CannotAddRecipeToCollectionsErrorDontExistOrNoReadAccess(
+      throw new CannotAddRecipeToCollectionsDontExistOrNoReadAccessError(
         recipeId,
         collectionsWithoutReadAccess.map(({ collectionId }) => collectionId),
       );
@@ -94,7 +94,7 @@ export const recipePostAddToCollectionsHandler = {
     );
 
     if (collectionsWithInvalidVisibility.length > 0) {
-      throw new CannotAddRecipeToCollectionsErrorInvalidVisibility(
+      throw new CannotAddRecipeToCollectionsInvalidVisibilityError(
         recipeId,
         collectionsWithInvalidVisibility.map(({ requestedId }) => requestedId),
       );

@@ -1,4 +1,4 @@
-import { HttpError, isKnownHttpStatusCode } from "../../utils/errors";
+import { getErrorFromResponse } from "../../utils/errors";
 import { Button } from "../button/Button";
 import { Dialog } from "../dialog/Dialog";
 import { AddRecipeToCollectionDialog } from "./dialogs/AddRecipeToCollectionDialog";
@@ -40,11 +40,7 @@ export const AddToCollectionButton = ({
     );
 
     if (!response.ok) {
-      if (isKnownHttpStatusCode(response.status)) {
-        throw new HttpError(response.statusText, response.status);
-      } else {
-        throw new Error("Error with status " + response.status);
-      }
+      return getErrorFromResponse(response);
     }
 
     setRecipeCollections(collectionIds);

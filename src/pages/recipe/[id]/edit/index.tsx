@@ -8,7 +8,7 @@ import type {
   recipesPutHandler,
 } from "../../../../handlers/recipes/recipePutHandler";
 import { useErrors } from "../../../../hooks/useErrors";
-import { HttpError, isKnownHttpStatusCode } from "../../../../utils/errors";
+import { getErrorFromResponse } from "../../../../utils/errors";
 import { formDataFromS3PostPolicy } from "../../../../utils/objectUtils";
 import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
@@ -30,11 +30,7 @@ const editRecipe = async (
   });
 
   if (!response.ok) {
-    if (isKnownHttpStatusCode(response.status)) {
-      throw new HttpError(response.statusText, response.status);
-    } else {
-      throw new Error("Error with status " + response.status);
-    }
+    return getErrorFromResponse(response);
   }
 
   const data = (await response.json()) as Awaited<
@@ -75,11 +71,15 @@ export default function EditRecipePage({
           type="edit"
           initialRecipe={initialRecipe}
           onSubmit={async (recipe, coverImage) => {
-            try {
-              await editRecipe(initialRecipe.id, recipe, coverImage);
+            const error = await editRecipe(
+              initialRecipe.id,
+              recipe,
+              coverImage,
+            );
+            if (error) {
+              showErrorToast(error.errorCode);
+            } else {
               void router.push("/recipe/" + initialRecipe.id);
-            } catch (error) {
-              showErrorToast(error);
             }
           }}
         />
@@ -92,6 +92,5 @@ export const getServerSideProps = createPropsLoader(editRecipePageDataLoader, [
   "common",
   "recipeView",
   "units",
-  "errors",
   "tags",
 ]);

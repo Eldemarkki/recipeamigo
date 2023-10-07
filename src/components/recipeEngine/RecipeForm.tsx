@@ -361,7 +361,6 @@ export const RecipeForm = ({
         <div className={styles.buttonsContainer}>
           <Button
             onClick={() => {
-              console.log("Aaaa");
               setDialogOpen(true);
             }}
             variant="secondary"

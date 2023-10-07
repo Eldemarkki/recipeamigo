@@ -2,10 +2,5 @@
   "question": "What should we call you?",
   "placeholderName": "GreenSpaceBean123",
   "createProfileButton": "Create profile",
-  "errors": {
-    "profileAlreadyExists": "Profile already exists",
-    "usernameAlreadyTaken": "Username already taken",
-    "unknownError": "Unknown error"
-  },
   "pageTitle": "Create profile"
 }

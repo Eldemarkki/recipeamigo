@@ -14,7 +14,7 @@ import { createPropsLoader } from "../../../dataLoaders/loadProps";
 import { recipePageDataLoader } from "../../../dataLoaders/recipes/recipePageDataLoader";
 import { useErrors } from "../../../hooks/useErrors";
 import type { Locale } from "../../../i18next";
-import { HttpError, isKnownHttpStatusCode } from "../../../utils/errors";
+import { getErrorFromResponse } from "../../../utils/errors";
 import { getTimeEstimateType } from "../../../utils/recipeUtils";
 import styles from "./index.module.css";
 import {
@@ -53,11 +53,7 @@ export default function RecipePage(
     });
 
     if (!response.ok) {
-      if (isKnownHttpStatusCode(response.status)) {
-        throw new HttpError(response.statusText, response.status);
-      } else {
-        throw new Error("Error with status " + response.status);
-      }
+      return getErrorFromResponse(response);
     }
 
     setLikeCount(likeCount + 1);
@@ -68,12 +64,9 @@ export default function RecipePage(
     const response = await fetch(`/api/recipes/${recipe.id}/unlike`, {
       method: "POST",
     });
+
     if (!response.ok) {
-      if (isKnownHttpStatusCode(response.status)) {
-        throw new HttpError(response.statusText, response.status);
-      } else {
-        throw new Error("Error with status " + response.status);
-      }
+      return getErrorFromResponse(response);
     }
 
     setLikeCount(likeCount - 1);
@@ -86,17 +79,11 @@ export default function RecipePage(
 
   const handleLikeButtonClick = async () => {
     setLikeLoading(true);
-    try {
-      if (likeStatus) {
-        await unlikeRecipe();
-      } else {
-        await likeRecipe();
-      }
-    } catch (error) {
-      showErrorToast(error);
-    } finally {
-      setLikeLoading(false);
+    const error = await (likeStatus ? unlikeRecipe() : likeRecipe());
+    if (error) {
+      showErrorToast(error.errorCode);
     }
+    setLikeLoading(false);
   };
 
   const [recipeAmount, setRecipeAmount] = useState(recipe.quantity);
@@ -282,5 +269,4 @@ export const getServerSideProps = createPropsLoader(recipePageDataLoader, [
   "common",
   "recipeView",
   "tags",
-  "errors",
 ]);

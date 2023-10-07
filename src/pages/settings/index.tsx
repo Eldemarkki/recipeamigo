@@ -7,7 +7,7 @@ import { createPropsLoader } from "../../dataLoaders/loadProps";
 import { settingsPageDataLoader } from "../../dataLoaders/settings/settingsPageDataLoader";
 import type { profileSchema } from "../../handlers/profile/profilePutHandler";
 import { useErrors } from "../../hooks/useErrors";
-import { HttpError, isKnownHttpStatusCode } from "../../utils/errors";
+import { getErrorFromResponse } from "../../utils/errors";
 import styles from "./index.module.css";
 import type { InferGetServerSidePropsType } from "next";
 import { useTranslation } from "next-i18next";
@@ -25,11 +25,7 @@ const saveProfile = async (body: z.infer<typeof profileSchema>) => {
   });
 
   if (!response.ok) {
-    if (isKnownHttpStatusCode(response.status)) {
-      throw new HttpError(response.statusText, response.status);
-    } else {
-      throw new Error("Error with status " + response.status);
-    }
+    return getErrorFromResponse(response);
   }
 };
 
@@ -67,20 +63,18 @@ export default function SettingsPage(
                   e.preventDefault();
                   setLoading(true);
                   void (async () => {
-                    try {
-                      await saveProfile({ name: username });
-                      setInitialUsername(username);
-                      setIsSaved(true);
-                      setTimeout(() => {
-                        setIsSaved(false);
-                      }, 3000);
-                    } catch (e) {
-                      showErrorToast(e, {
-                        "409": t("profile:errors.usernameAlreadyTaken"),
-                      });
-                    } finally {
-                      setLoading(false);
+                    const error = await saveProfile({ name: username });
+                    setInitialUsername(username);
+
+                    setIsSaved(true);
+                    setTimeout(() => {
+                      setIsSaved(false);
+                    }, 3000);
+
+                    if (error) {
+                      showErrorToast(error.errorCode);
                     }
+                    setLoading(false);
                   })();
                 }}
               >
@@ -128,6 +122,5 @@ export default function SettingsPage(
 export const getServerSideProps = createPropsLoader(settingsPageDataLoader, [
   "common",
   "settings",
-  "errors",
   "profile",
 ]);
