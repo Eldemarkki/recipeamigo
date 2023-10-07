@@ -177,3 +177,9 @@ export class InstructionsNotFoundError extends NotFoundError {
     );
   }
 }
+
+export class ProfileAlreadyExistsError extends ConflictError {
+  constructor() {
+    super("Profile already exists");
+  }
+}
