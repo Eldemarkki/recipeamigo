@@ -708,14 +708,14 @@ export const getPublicRecipesPaginated = async (
   const [column, direction] = sort.split(".") as [SortColumn, SortDirection];
 
   const map = {
-    view: "viewCount",
+    views: "viewCount",
     createdAt: "createdAt",
     updatedAt: "updatedAt",
     name: "name",
   } as const;
 
   const sortObj =
-    column === "like"
+    column === "likes"
       ? ({
           likes: {
             _count: direction,

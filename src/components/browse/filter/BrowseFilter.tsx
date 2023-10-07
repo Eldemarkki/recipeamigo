@@ -2,8 +2,7 @@ import { generateSearchParams } from "../../../utils/browseUtils";
 import { IngredientSelect } from "../../IngredientSelect";
 import { NumberInput } from "../../forms/NumberInput";
 import { TagSelect } from "../../tag/TagSelect";
-import type { Sort, SortKey } from "../sort/BrowseSort";
-import { BrowseSort, getSortKey, sorts } from "../sort/BrowseSort";
+import { sorts, BrowseSort, type SortKey } from "../sort/BrowseSort";
 import styles from "./BrowseFilter.module.css";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -44,14 +43,14 @@ export const BrowseFilter = ({ query, pagination }: BrowseFilterProps) => {
     initialExcludedIngredients,
   );
 
-  const [sort, setSort] = useState<Sort>(
-    sorts.find((sort) => getSortKey(sort) === initialSort) || sorts[0],
+  const [sort, setSort] = useState<SortKey>(
+    sorts.find((sort) => sort === initialSort) || sorts[0],
   );
 
   const newPage =
     search !== initialSearch ||
     maximumTime !== initialMaximumTime ||
-    getSortKey(sort) !== initialSort ||
+    sort !== initialSort ||
     !compareStringArrays(tags, initialTags) ||
     !compareStringArrays(excludedIngredients, initialExcludedIngredients)
       ? 1
@@ -62,7 +61,7 @@ export const BrowseFilter = ({ query, pagination }: BrowseFilterProps) => {
     tags,
     maximumTime,
     excludedIngredients,
-    sort: getSortKey(sort),
+    sort,
     pagination: {
       page: newPage,
       pageSize: pagination.pageSize,

@@ -619,7 +619,7 @@ describe("browseRecipesPageDataLoader", () => {
     await postLikeHandler.handler(user2, { id: recipe1.id });
 
     const data = await browseRecipesPageDataLoader.handler(user, {
-      sort: "like.asc",
+      sort: "likes.asc",
     });
 
     expect(data.recipes).toHaveLength(2);
@@ -650,7 +650,7 @@ describe("browseRecipesPageDataLoader", () => {
     await postLikeHandler.handler(user2, { id: recipe1.id });
 
     const data = await browseRecipesPageDataLoader.handler(user, {
-      sort: "like.desc",
+      sort: "likes.desc",
     });
 
     expect(data.recipes).toHaveLength(2);
@@ -687,7 +687,7 @@ describe("browseRecipesPageDataLoader", () => {
     );
 
     const data = await browseRecipesPageDataLoader.handler(user, {
-      sort: "view.asc",
+      sort: "views.asc",
     });
 
     expect(data.recipes).toHaveLength(2);
@@ -724,7 +724,7 @@ describe("browseRecipesPageDataLoader", () => {
     );
 
     const data = await browseRecipesPageDataLoader.handler(user, {
-      sort: "view.desc",
+      sort: "views.desc",
     });
 
     expect(data.recipes).toHaveLength(2);

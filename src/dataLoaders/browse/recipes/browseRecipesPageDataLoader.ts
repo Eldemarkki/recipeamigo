@@ -1,3 +1,7 @@
+import {
+  sorts,
+  type SortKey,
+} from "../../../components/browse/sort/BrowseSort";
 import config from "../../../config";
 import { getPublicRecipesPaginated } from "../../../database/recipes";
 import {
@@ -21,7 +25,7 @@ export const browseRecipesPageDataLoader = {
     search: z.string().optional().default(""),
     tags: z.string().optional().or(z.array(z.string())),
     maximumTime: z.string().optional(),
-    sort: z.string().optional(),
+    sort: z.enum(sorts).optional(),
   }),
   handler: async (_user, query) => {
     const { page: pageStr, pageSize: pageSizeStr } = query;
@@ -95,5 +99,5 @@ export const browseRecipesPageDataLoader = {
   search?: string;
   tags?: string | string[];
   maximumTime?: string;
-  sort?: string;
+  sort?: SortKey;
 }>;

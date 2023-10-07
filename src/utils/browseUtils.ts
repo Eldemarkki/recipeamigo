@@ -1,4 +1,4 @@
-import { type SortKey } from "../components/browse/sort/BrowseSort";
+import type { SortKey } from "../components/browse/sort/BrowseSort";
 import config from "../config";
 
 export const generateSearchParams = ({
