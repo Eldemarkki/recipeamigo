@@ -10,15 +10,6 @@ import {
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import type { z } from "zod";
 
-export type HandlerParameters<
-  BodyType = unknown,
-  QueryType = unknown,
-  ResponseType = unknown,
-> = {
-  req: NextApiRequest;
-  res: NextApiResponse;
-} & Handler<BodyType, QueryType, ResponseType>;
-
 export type Handler<
   BodyType = unknown,
   QueryType = unknown,
@@ -113,14 +104,17 @@ const errorMapper = (
   };
 };
 
-export const handle = async <BodyType, QueryType, ResponseType>({
+const handle = async <BodyType, QueryType, ResponseType>({
   req,
   res,
   handler,
   bodyValidator,
   queryValidator,
   requireUser,
-}: HandlerParameters<BodyType, QueryType, ResponseType>) => {
+}: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+} & Handler<BodyType, QueryType, ResponseType>) => {
   try {
     if (bodyValidator) {
       const result = bodyValidator.safeParse(req.body);
@@ -219,35 +213,48 @@ export const handle = async <BodyType, QueryType, ResponseType>({
   }
 };
 
-export const mapMethods = ({
+export const mapMethods = <
+  GetBodyType = unknown,
+  GetQueryType = unknown,
+  GetResponseType = unknown,
+  PostBodyType = unknown,
+  PostQueryType = unknown,
+  PostResponseType = unknown,
+  PutBodyType = unknown,
+  PutQueryType = unknown,
+  PutResponseType = unknown,
+  DeleteBodyType = unknown,
+  DeleteQueryType = unknown,
+  DeleteResponseType = unknown,
+>({
   get,
   post,
   put,
   delete: deleteHandler,
 }: {
-  get?: NextApiHandler;
-  post?: NextApiHandler;
-  put?: NextApiHandler;
-  delete?: NextApiHandler;
+  get?: Handler<GetBodyType, GetQueryType, GetResponseType>;
+  post?: Handler<PostBodyType, PostQueryType, PostResponseType>;
+  put?: Handler<PutBodyType, PutQueryType, PutResponseType>;
+  delete?: Handler<DeleteBodyType, DeleteQueryType, DeleteResponseType>;
 }) =>
   (async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "GET" && get) {
-      await get(req, res);
+      await handle({ req, res, ...get });
       return;
     }
 
     if (req.method === "POST" && post) {
-      await post(req, res);
+      await handle({ req, res, ...post });
       return;
     }
 
     if (req.method === "PUT" && put) {
-      await put(req, res);
+      await handle({ req, res, ...put });
       return;
     }
 
     if (req.method === "DELETE" && deleteHandler) {
-      await deleteHandler(req, res);
+      await handle({ req, res, ...deleteHandler });
       return;
     }
 
