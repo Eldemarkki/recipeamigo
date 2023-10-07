@@ -37,7 +37,7 @@
 .descriptionInput {
   width: 100%;
   resize: vertical;
-  min-height: 2rem;
+  min-height: 6rem;
 }
 
 .timeEstimateContainer {
