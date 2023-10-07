@@ -2,10 +2,8 @@ import {
   getUserCollectionsWithMaximumVisibility,
   getUserRecipeCollectionRelationships,
 } from "../../database/collections";
-import {
-  getSingleRecipe,
-  increaseViewCountForRecipe,
-} from "../../database/recipes";
+import { getSingleRecipe } from "../../database/recipes";
+import { prisma } from "../../db";
 import { getLikeStatus } from "../../utils/api/likeUtils";
 import { RecipeNotFoundError } from "../../utils/errors";
 import { hasReadAccessToRecipe } from "../../utils/recipeUtils";
@@ -46,8 +44,20 @@ export const recipePageDataLoader = {
       replacement: "_",
     });
 
+    // Increase view count
     // No need to run as `await` since we don't care about the result
-    void increaseViewCountForRecipe(recipeId).then(() => {});
+    void prisma.recipe
+      .update({
+        where: {
+          id: recipeId,
+        },
+        data: {
+          viewCount: {
+            increment: 1,
+          },
+        },
+      })
+      .then(() => {});
 
     return {
       recipe,

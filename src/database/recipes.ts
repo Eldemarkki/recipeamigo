@@ -589,18 +589,6 @@ export const getSingleRecipe = async (id: string) => {
   };
 };
 
-export const increaseViewCountForRecipe = (id: string) =>
-  prisma.recipe.update({
-    where: {
-      id,
-    },
-    data: {
-      viewCount: {
-        increment: 1,
-      },
-    },
-  });
-
 export const getPublicRecipesPaginated = async (
   filter: {
     search?: string;
