@@ -9,6 +9,9 @@ export type RecipeCardGridProps = {
     name: string;
     description: string;
     coverImageUrl?: string | undefined | null;
+    username?: string | undefined | null;
+    viewCount?: number | undefined | null;
+    likeCount?: number | undefined | null;
   }[];
 };
 
@@ -17,13 +20,7 @@ export const RecipeCardGrid = (props: RecipeCardGridProps) => {
     <div className={styles.grid}>
       {props.showCreateButton && <NewRecipeCard />}
       {props.recipes.map((recipe) => (
-        <RecipeCard
-          key={recipe.id}
-          id={recipe.id}
-          name={recipe.name}
-          description={recipe.description}
-          coverImageUrl={recipe.coverImageUrl}
-        />
+        <RecipeCard key={recipe.id} {...recipe} />
       ))}
     </div>
   );

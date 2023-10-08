@@ -3,12 +3,20 @@
   flex-direction: column;
   border: 1px solid var(--text);
   border-radius: 0.5rem;
-  gap: 1rem;
   min-height: 16rem;
 }
 
+.recipeTopContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
 .recipeInfoContainer {
-  padding: 0px 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .coverImageContainer {
@@ -26,4 +34,22 @@
 .coverImage {
   object-fit: cover;
   object-position: center;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.viewCount,
+.likeCount {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.username {
+  word-break: break-all;
 }

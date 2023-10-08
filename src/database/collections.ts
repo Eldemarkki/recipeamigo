@@ -91,7 +91,15 @@ export const getCollectionWithoutCoverImages = async (id: string) => {
     include: {
       RecipesOnCollections: {
         include: {
-          recipe: true,
+          recipe: {
+            include: {
+              _count: {
+                select: {
+                  likes: true,
+                },
+              },
+            },
+          },
         },
       },
       user: {

@@ -62,7 +62,10 @@ export default function CollectionPage({
         <hr />
         {collection.RecipesOnCollections.length ? (
           <RecipeCardGrid
-            recipes={collection.RecipesOnCollections.map((r) => r.recipe)}
+            recipes={collection.RecipesOnCollections.map((r) => ({
+              ...r.recipe,
+              likeCount: r.recipe._count.likes,
+            }))}
           />
         ) : (
           <p>{t("collections:emptyCollection")}</p>

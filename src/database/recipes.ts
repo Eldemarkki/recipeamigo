@@ -727,6 +727,18 @@ export const getPublicRecipesPaginated = async (
 
   const recipes = await prisma.recipe.findMany({
     ...query,
+    include: {
+      user: {
+        select: {
+          username: true,
+        },
+      },
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
+    },
     skip: pagination.page * pagination.pageSize,
     take: pagination.pageSize,
     orderBy: sortObj,
