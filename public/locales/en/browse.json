@@ -55,5 +55,6 @@
   "pageTitle": {
     "collection": "Browse collections",
     "recipe": "Browse recipes"
-  }
+  },
+  "noRecipes": "No recipes found"
 }

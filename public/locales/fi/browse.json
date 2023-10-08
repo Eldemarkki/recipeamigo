@@ -55,5 +55,6 @@
   "pageTitle": {
     "collection": "Selaa kokoelmia",
     "recipe": "Selaa reseptejä"
-  }
+  },
+  "noRecipes": "Reseptejä ei löytynyt"
 }

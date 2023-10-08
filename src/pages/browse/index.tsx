@@ -28,15 +28,21 @@ const BrowsePage = ({
         <div className={styles.container}>
           <div className={styles.main}>
             <BrowseFilter query={query} pagination={pagination} />
-            <RecipeCardGrid
-              recipes={recipes.map((r) => ({
-                ...r,
-                username: r.user.username,
-                likeCount: r._count.likes,
-              }))}
-            />
+            {recipes.length > 0 ? (
+              <RecipeCardGrid
+                recipes={recipes.map((r) => ({
+                  ...r,
+                  username: r.user.username,
+                  likeCount: r._count.likes,
+                }))}
+              />
+            ) : (
+              <div>{t("noRecipes")}</div>
+            )}
           </div>
-          <BrowsePagination query={query} pagination={pagination} />
+          {(pagination.hasNextPage || pagination.hasPreviousPage) && (
+            <BrowsePagination query={query} pagination={pagination} />
+          )}
         </div>
       </PageWrapper>
     </>
