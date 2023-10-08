@@ -13,10 +13,8 @@
 }
 
 .landingContainer {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   align-items: center;
-  justify-items: center;
   height: 100%;
   gap: 3rem;
 }
@@ -24,16 +22,6 @@
 .heroImage {
   width: 100%;
   max-width: 500px;
-}
-
-@media screen and (max-width: 960px) {
-  .landingContainer {
-    grid-template-columns: 1fr;
-  }
-
-  .heroImage {
-    display: none;
-  }
 }
 
 .tagline {
@@ -57,10 +45,33 @@
   height: 100%;
 }
 
+@media screen and (max-width: 960px) {
+  .landingContainer {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .tagline {
+    font-size: 3rem;
+  }
+  .heroImage {
+    width: 50%;
+    height: fit-content;
+  }
+  .landingLeft {
+    height: auto;
+  }
+}
+
 @media screen and (max-width: 660px) {
   .recipesTitleRow {
     flex-direction: column;
     gap: 1rem;
     align-items: center;
+  }
+
+  .tagline {
+    font-size: 2.3rem;
   }
 }
