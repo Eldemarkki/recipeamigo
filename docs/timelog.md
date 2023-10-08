@@ -97,4 +97,5 @@
 | 7.10.2023 | 2     | Add tests, improve error message handling                                                        |
 | 7.10.2023 | 2     | Fix bug with browse page pagination, refactor browse page sorting                                |
 | 8.10.2023 | 1     | Add documentation to README                                                                      |
-| Total     | 176   |                                                                                                  |
+| 8.10.2023 | 1     | Design and add favicon                                                                           |
+| Total     | 177   |                                                                                                  |
