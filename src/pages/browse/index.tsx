@@ -20,9 +20,7 @@ const BrowsePage = ({
   return (
     <>
       <Head>
-        <title>
-          {t("pageTitle.recipe")} | {config.APP_NAME}
-        </title>
+        <title>{`${t("pageTitle.recipe")} | ${config.APP_NAME}`}</title>
       </Head>
       <PageWrapper title={t("title")}>
         <div className={styles.container}>

@@ -49,9 +49,7 @@ export default function Home(
     return (
       <>
         <Head>
-          <title>
-            {t("pageTitle")} | {config.APP_NAME}
-          </title>
+          <title>{`${t("pageTitle")} | ${config.APP_NAME}`}</title>
         </Head>
         <PageWrapper
           titleRow={

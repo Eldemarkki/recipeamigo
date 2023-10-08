@@ -48,9 +48,7 @@ export default function SettingsPage(
   return (
     <>
       <Head>
-        <title>
-          {t("settings:settingsTitle")} | {config.APP_NAME}
-        </title>
+        <title>{`${t("settings:settingsTitle")} | ${config.APP_NAME}`}</title>
       </Head>
       <PageWrapper title={t("settings:settingsTitle")}>
         <div className={styles.container}>

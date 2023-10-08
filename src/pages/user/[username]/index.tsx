@@ -17,9 +17,7 @@ export default function UserPage({
   return (
     <>
       <Head>
-        <title>
-          {user.username} | {config.APP_NAME}
-        </title>
+        <title>{`${user.username} | ${config.APP_NAME}`}</title>
       </Head>
       <PageWrapper title={user.username} mainClass={styles.content}>
         <section className={styles.section}>

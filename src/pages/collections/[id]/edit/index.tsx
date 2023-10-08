@@ -113,8 +113,9 @@ export default function EditCollectionPage({
     <>
       <Head>
         <title>
-          {t("collections:pageTitles.edit", { name: collection.name })} |{" "}
-          {config.APP_NAME}
+          {`${t("collections:pageTitles.edit", { name: collection.name })} | ${
+            config.APP_NAME
+          }`}
         </title>
       </Head>
       <ConfirmationDialog

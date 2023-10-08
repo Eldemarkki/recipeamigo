@@ -63,7 +63,9 @@ export default function EditRecipePage({
     <>
       <Head>
         <title>
-          {t("edit.title", { name: initialRecipe.name })} | {config.APP_NAME}
+          {`${t("edit.title", { name: initialRecipe.name })} | ${
+            config.APP_NAME
+          }`}
         </title>
       </Head>
       <PageWrapper>

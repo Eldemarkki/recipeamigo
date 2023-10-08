@@ -16,9 +16,7 @@ export default function LikesPage({
   return (
     <>
       <Head>
-        <title>
-          {t("title")} | {config.APP_NAME}
-        </title>
+        <title>{`${t("title")} | ${config.APP_NAME}`}</title>
       </Head>
       <PageWrapper title={t("title")}>
         <div className={styles.container}>

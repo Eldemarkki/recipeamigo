@@ -117,9 +117,7 @@ export default function RecipePage(
         {recipe.tags.map((tag) => (
           <meta property="article:tag" content={tag.text} key={tag.order} />
         ))}
-        <title>
-          {recipe.name} | {config.APP_NAME}
-        </title>
+        <title>{`${recipe.name} | ${config.APP_NAME}`}</title>
       </Head>
       <PageWrapper mainClass={styles.container} maxWidth={1000}>
         {recipe.coverImageUrl && (

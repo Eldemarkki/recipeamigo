@@ -18,9 +18,7 @@ export default function BrowseCollectionsPage({
   return (
     <>
       <Head>
-        <title>
-          {t("pageTitle.collection")} | {config.APP_NAME}
-        </title>
+        <title>{`${t("pageTitle.collection")} | ${config.APP_NAME}`}</title>
       </Head>
       <PageWrapper
         titleRow={

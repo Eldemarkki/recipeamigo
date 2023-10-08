@@ -56,9 +56,7 @@ export default function NewRecipePage() {
   return (
     <>
       <Head>
-        <title>
-          {t("title")} | {config.APP_NAME}
-        </title>
+        <title>{`${t("title")} | ${config.APP_NAME}`}</title>
       </Head>
       <PageWrapper>
         <RecipeForm

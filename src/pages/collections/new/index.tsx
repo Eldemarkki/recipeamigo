@@ -91,7 +91,7 @@ export default function NewCollectionPage({
     <>
       <Head>
         <title>
-          {t("collections:pageTitles.new")} | {config.APP_NAME}
+          {`${t("collections:pageTitles.new")} | ${config.APP_NAME}`}
         </title>
       </Head>
       <PageWrapper title={t("collections:new.title")}>

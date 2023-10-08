@@ -44,9 +44,7 @@ export default function CreateProfilePage() {
   return (
     <>
       <Head>
-        <title>
-          {t("pageTitle")} | {config.APP_NAME}
-        </title>
+        <title>{`${t("pageTitle")} | ${config.APP_NAME}`}</title>
       </Head>
       <div className={styles.container}>
         <div className={styles.innerContainer}>

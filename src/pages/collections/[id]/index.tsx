@@ -21,9 +21,7 @@ export default function CollectionPage({
   return (
     <>
       <Head>
-        <title>
-          {collection.name} | {config.APP_NAME}
-        </title>
+        <title>{`${collection.name} | ${config.APP_NAME}`}</title>
       </Head>
       <PageWrapper
         titleRow={

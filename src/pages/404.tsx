@@ -11,9 +11,7 @@ export default function NotFoundPage() {
   return (
     <>
       <Head>
-        <title>
-          {t("title")} | {config.APP_NAME}
-        </title>
+        <title>{`${t("title")} | ${config.APP_NAME}`}</title>
       </Head>
       <div className={styles.page}>
         <h1 className={styles.title}>{t("title")}</h1>
