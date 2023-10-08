@@ -89,6 +89,9 @@ const getRequiredAmountType = (amount: number, unit: IngredientUnit | null) => {
   }
 };
 
+const beautifyNumber = (n: number, decimals = 2) =>
+  parseFloat(n.toFixed(decimals)).toString();
+
 export const getIngredientText = (
   ingredient: string,
   amount: number | null,
@@ -111,17 +114,21 @@ export const getIngredientText = (
   const optionalText = isOptional ? ` (${optionalTranslations[language]})` : "";
 
   if (unit === null) {
-    return `${amount} ${finalIngredientText}${optionalText}`;
+    return `${beautifyNumber(amount)} ${finalIngredientText}${optionalText}`;
   }
   const unitText = unitsLocaleMap[language][unit];
 
   const finalUnitText = amount === 1 ? unitText.singular : unitText.plural;
 
   if (language === "en") {
-    return `${amount} ${finalUnitText} of ${finalIngredientText}${optionalText}`;
+    return `${beautifyNumber(
+      amount,
+    )} ${finalUnitText} of ${finalIngredientText}${optionalText}`;
   }
 
-  return `${amount} ${finalUnitText} ${finalIngredientText}${optionalText}`;
+  return `${beautifyNumber(
+    amount,
+  )} ${finalUnitText} ${finalIngredientText}${optionalText}`;
 };
 
 export const isIngredientType = (
