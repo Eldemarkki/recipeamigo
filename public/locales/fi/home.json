@@ -32,5 +32,8 @@
     "heroImageAlt": "Kaksi ihmistä sekoittamassa kulhoa.",
     "getStartedButton": "Rekisteröidy nyt"
   },
-  "pageTitle": "Etusivu"
+  "pageTitle": "Etusivu",
+  "metaTags": {
+    "description": "Recipeamigo on alusta, jossa voit luoda ja jakaa reseptejä muiden ihmisten kanssa"
+  }
 }

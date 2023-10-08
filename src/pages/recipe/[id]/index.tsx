@@ -107,7 +107,7 @@ export default function RecipePage(
         {/* TODO: Add og:url */}
         <meta property="og:type" content="article" />
         <meta property="og:locale" content={locales[i18n.language as Locale]} />
-        <meta property="og:site_name" content="Recipeamigo" />
+        <meta property="og:site_name" content={config.APP_NAME} />
         <meta
           property="article:published_time"
           content={recipe.createdAt.toISOString()}

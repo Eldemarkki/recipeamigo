@@ -4,6 +4,7 @@ import { RecipeCardGrid } from "../components/RecipeCardGrid";
 import { PageWrapper } from "../components/misc/PageWrapper";
 import config from "../config";
 import { getAllRecipesForUser } from "../database/recipes";
+import type { Locale } from "../i18next";
 import { getUserFromRequest } from "../utils/auth";
 import styles from "./page.module.css";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -12,16 +13,30 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import Image from "next/image";
 
+const locales: Record<Locale, string> = {
+  en: "en_US",
+  fi: "fi_FI",
+};
+
 export default function Home(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const { t } = useTranslation("home");
+  const { t, i18n } = useTranslation("home");
 
   if (!props.loggedIn) {
     return (
       <>
         <Head>
           <title>{config.APP_NAME}</title>
+          <meta property="og:title" content={config.APP_NAME} />
+          <meta property="og:type" content="website" />
+          <meta
+            property="og:locale"
+            content={locales[i18n.language as Locale]}
+          />
+          <meta property="og:description" content={t("metaTags.description")} />
+          <meta name="description" content={t("metaTags.description")} />
+          <meta property="og:site_name" content={config.APP_NAME} />
         </Head>
         <PageWrapper mainClass={styles.main}>
           <div className={styles.landingContainer}>

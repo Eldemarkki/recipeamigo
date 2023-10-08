@@ -32,5 +32,9 @@
     "heroImageAlt": "Two people mixing a bowl.",
     "getStartedButton": "Get started"
   },
-  "pageTitle": "Home"
+  "pageTitle": "Home",
+  "metaTags": {
+    "description": "Recipeamigo is a platform where you can create and share recipes with other people"
+
+  }
 }
