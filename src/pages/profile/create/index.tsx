@@ -2,6 +2,7 @@ import { Button } from "../../../components/button/Button";
 import config from "../../../config";
 import type { profilePostHandler } from "../../../handlers/profile/profilePostHandler";
 import { useErrors } from "../../../hooks/useErrors";
+import { useLoadingState } from "../../../hooks/useLoadingState";
 import { getUserFromRequest } from "../../../utils/auth";
 import { ErrorCode, getErrorFromResponse } from "../../../utils/errors";
 import styles from "./page.module.css";
@@ -38,6 +39,7 @@ export default function CreateProfilePage() {
   const { t } = useTranslation("profile");
   const [profileName, setProfileName] = useState("");
   const { showErrorToast } = useErrors();
+  const { isLoading, startLoading, stopLoading } = useLoadingState();
 
   const router = useRouter();
 
@@ -53,11 +55,13 @@ export default function CreateProfilePage() {
             className={styles.form}
             onSubmit={(e) => {
               e.preventDefault();
+              startLoading();
               void (async () => {
                 const data = await saveProfile({ name: profileName });
 
                 if ("errorCode" in data) {
                   showErrorToast(data.errorCode);
+                  stopLoading();
                   if (data.errorCode === ErrorCode.ProfileAlreadyExists) {
                     setProfileName("");
                   } else if (data.errorCode === ErrorCode.Unauthorized) {
@@ -81,7 +85,9 @@ export default function CreateProfilePage() {
               pattern="[a-zA-Z0-9_]+"
               required
             />
-            <Button type="submit">{t("createProfileButton")}</Button>
+            <Button type="submit" loading={isLoading}>
+              {t("createProfileButton")}
+            </Button>
           </form>
         </div>
       </div>
