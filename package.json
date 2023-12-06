@@ -15,7 +15,7 @@
     "migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
     "test:unit": "dotenv -e .env.local.test -- vitest unit.test.ts",
     "test:integration": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts -c vite.local.config.ts",
-    "test": "dotenv -e .env.local.test -- vitest run --threads false -c vite.local.config.ts",
+    "test": "dotenv -e .env.local.test -- vitest run --poolOptions.threads.singleThread -c vite.local.config.ts",
     "test:unit:ci": "vitest unit.test.ts",
     "test:integration:ci": "dotenv -e .env.local.test -- prisma migrate deploy && dotenv -e .env.local.test -- vitest run integration.test.ts",
     "sumHours": "node ./sumHours.js",
@@ -76,6 +76,6 @@
     "prisma": "^5.4.2",
     "sass": "^1.69.4",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "vitest": "^1.0.1"
   }
 }
